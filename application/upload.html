@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Upload CSV File</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			font-size: 14px;
+			padding: 20px;
+		}
+
+		form {
+			border: 1px solid #ccc;
+			padding: 10px;
+		}
+
+		label {
+			display: block;
+			margin-bottom: 5px;
+		}
+
+		input[type=file] {
+			display: block;
+			margin-bottom: 10px;
+		}
+
+		input[type=submit] {
+			background-color: #007bff;
+			color: #fff;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+
+		input[type=submit]:hover {
+			background-color: #0069d9;
+		}
+	</style>
+</head>
+<body>
+	<h1>Upload CSV File</h1>
+	<form action="/upload" method="post" enctype="multipart/form-data">
+		<label for="csv_file">Select a CSV file:</label>
+		<input type="file" id="csv_file" name="csv_file">
+		<input type="submit" value="Upload">
+	</form>
+</body>
+</html>
