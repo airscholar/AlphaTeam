@@ -11,10 +11,14 @@ app = Flask(__name__, template_folder='.')
 
 @app.route('/')
 def index():
-    return render_template('upload.html')
+    return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
 def upload():
+    # Check if a file was uploaded
+    if 'csv_file' not in request.files:
+        return 'No file was uploaded.', 400
+    
     # Get the uploaded file
     file = request.files.get('csv_file')
     print(file)  # Debugging statement
@@ -28,7 +32,7 @@ def upload():
     thread.start()
 
     # Return a response to the user
-    return 'Processing the uploaded file...'
+    return jsonify({'message': 'Processing the uploaded file...'})
 
 def run_machine_learning(file):
     # Read the contents of the uploaded file
