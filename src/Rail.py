@@ -103,8 +103,8 @@ class Railway:
             else:
                 # Find paths from all nodes co-accessible to the target.
                 if self.G.is_directed():
-                    G = self.G.reverse(copy=False)
-                paths = nx.single_source_dijkstra_path(G, target, weight=weight)
+                    self.G = self.G.reverse(copy=False)
+                paths = nx.single_source_dijkstra_path(self.G, target, weight=weight)
                 # Now flip the paths so they go from a source to the target.
                 for target in paths:
                     paths[target] = list(reversed(paths[target]))
@@ -126,16 +126,16 @@ class Railway:
         pos = nx.get_node_attributes(self.G, 'pos')
         nx.draw(self.G, pos, with_labels=False, node_size=1, node_color='red')
 
-        nx.draw_networkx_nodes(self.G, pos, nodelist=shortest_path, node_size=10, node_color='yellow')
-        nx.draw_networkx_edges(self.G, pos, edgelist=list(zip(shortest_path, shortest_path[1:])), edge_color='yellow',
+        nx.draw_networkx_nodes(self.G, pos, nodelist=path, node_size=10, node_color='yellow')
+        nx.draw_networkx_edges(self.G, pos, edgelist=list(zip(path, path[1:])), edge_color='yellow',
                                width=3)
         plt.axis('on')
-        plt.title(f"Shortest Path between {shortest_path[0]} and {shortest_path[-1]}")
+        plt.title(f"Shortest Path between {path[0]} and {path[-1]}")
         plt.show()
 
 
 if __name__ == '__main__':
-    r = Railway('datasets/Railway.csv')
+    r = Railway('../datasets/Railway.csv')
     r.load_data()
     r.set_station_id()
     r.create_network_graph()
@@ -143,8 +143,3 @@ if __name__ == '__main__':
     shortest_path = r.get_shortest_path(1136, 1095)
     print(shortest_path)
     r.plot_shortest_path(shortest_path)
-
-
-
-
-
