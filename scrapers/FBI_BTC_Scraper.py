@@ -10,7 +10,8 @@ soup.find_all('ul')
 fbi_addresses = []
 for ul in soup.find_all('ul'):
     for li in ul.find_all('li'):
-        if li.text != '' and (li.text.startswith('bc') or li.text.startswith('0x')):
+        # scraping addresses that are 30+ characters long and have no spaces
+        if len(li.text) > 30 and ' ' not in li.text:
             fbi_addresses.append(li.text)
 
 #write to file
