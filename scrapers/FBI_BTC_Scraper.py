@@ -14,6 +14,6 @@ for ul in soup.find_all('ul'):
             fbi_addresses.append(li.text)
 
 #write to file
-with open('FBI_BTC_wallets.csv', 'w') as f:
+with open('../datasets/FBI_BTC_wallets.csv', 'w') as f:
     for address in fbi_addresses:
         f.write(address + '\n')
