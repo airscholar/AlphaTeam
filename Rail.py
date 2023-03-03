@@ -143,8 +143,3 @@ if __name__ == '__main__':
     shortest_path = r.get_shortest_path(1136, 1095)
     print(shortest_path)
     r.plot_shortest_path(shortest_path)
-
-
-
-
-
