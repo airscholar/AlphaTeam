@@ -135,7 +135,7 @@ class Railway:
 
 
 if __name__ == '__main__':
-    r = Railway('datasets/Railway.csv')
+    r = Railway('../datasets/Railway.csv')
     r.load_data()
     r.set_station_id()
     r.create_network_graph()
