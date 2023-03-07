@@ -45,12 +45,13 @@ def plot_metrics_on_map(NetworkX_, dataFrame_, title_):
 
     if id == 1:
         '''Degree Centrality'''
-        # Calculate the eigen vector centrality for each node
-        eigen_centralities = nx.eigenvector_centrality(NetworkX_)
+        # Calculate the degree centrality for each node
+        degree_centralities = nx.degree_centrality(G)
 
-        # Plot the graph with node size proportional to eigen vector centrality
-        nx.draw(G, with_labels=True, node_size=[v * 1000 for v in eigen_centralities.values()])
+        # Plot the graph with node size proportional to degree centrality
+        nx.draw(G, with_labels=True, node_size=[v * 1000 for v in degree_centralities.values()])
         plt.show()
+
 
     elif id == 2:
         '''Closeness Centrality'''
@@ -71,12 +72,12 @@ def plot_metrics_on_map(NetworkX_, dataFrame_, title_):
         plt.show()
 
     elif id == 4:
-        '''Closeness Centrality'''
-        # Calculate the closeness centrality for each node
-        closeness_centralities = nx.closeness_centrality(G)
+        '''Eigenvector Centrality'''
+        # Calculate the eigen vector centrality for each node
+        eigen_centralities = nx.eigenvector_centrality(NetworkX_)
 
-        # Plot the graph with node size proportional to closeness centrality
-        nx.draw(G, with_labels=True, node_size=[v * 1000 for v in closeness_centralities.values()])
+        # Plot the graph with node size proportional to eigen vector centrality
+        nx.draw(G, with_labels=True, node_size=[v * 1000 for v in eigen_centralities.values()])
         plt.show()
 
     # return plotly figure
