@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alpha Software Tool</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <form action="/upload" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+      <div class="file-upload">
+        <div class="file-select">
+          <div class="file-select-button" id="fileName">Choose File</div>
+          <div class="file-select-name" id="noFile">No file chosen...</div> 
+          <input type="file" name="csv_file" id="csv_file" accept=".csv">
+        </div>
+      </div>
+      <input type="submit" value="Upload">
+    </form>
+  </div>
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
