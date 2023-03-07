@@ -94,3 +94,7 @@ def compute_closeness_centrality(networkx_):
 
 def compute_betweeness_centrality(networkx_):
     return nx.betweenness_centrality(networkx_)
+
+
+def get_shortest_path(networkx_, source, target, weight=None):
+    return nx.shortest_path(networkx_, source=source, target=target, weight=weight)
