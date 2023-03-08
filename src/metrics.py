@@ -15,14 +15,14 @@ import numpy as np
 # ----------------------------------------------------------------------------------------
 
 
-def compute_global_metrics(network_graphs):
+def compute_global_metrics(networkGraphs):
     """
     :Function: Compute the global metrics for the NetworkX graph (directed and undirected)
     :param network_graphs: Network Graphs
     :return: Pandas dataframe with the metrics and values (directed and undirected)
     """
-    directed = compute_metrics(network_graphs.DiGraph)  # compute for directed
-    undirected = compute_metrics(network_graphs.Graph)  # compute for undirected
+    directed = compute_metrics(networkGraphs.DiGraph)  # compute for directed
+    undirected = compute_metrics(networkGraphs.Graph)  # compute for undirected
 
     return pd.merge(directed, undirected, how='inner',
                     on='Metrics').rename(columns={'Values_x': 'Directed', 'Values_y': 'Undirected'})
@@ -126,7 +126,7 @@ def compute_node_metrics(networkGraphs, directed=True):
 # ----------------------------------------------------------------------------------------
 
 
-def compute_degree_centrality(network_graphs, directed=True):
+def compute_degree_centrality(networkGraphs, directed=True):
     """
     :Function: Compute the degree centrality for the NetworkX graph
     :param network_graphs: Network Graphs
@@ -135,9 +135,9 @@ def compute_degree_centrality(network_graphs, directed=True):
     """
 
     if not directed:
-        degree_centrality = nx.degree_centrality(network_graphs.Graph)
+        degree_centrality = nx.degree_centrality(networkGraphs.Graph)
     else:
-        degree_centrality = nx.degree_centrality(network_graphs.DiGraph)
+        degree_centrality = nx.degree_centrality(networkGraphs.DiGraph)
 
     df = pd.DataFrame(degree_centrality.items(), columns=['Node', 'Degree Centrality'])
 
@@ -147,7 +147,7 @@ def compute_degree_centrality(network_graphs, directed=True):
 # ----------------------------------------------------------------------------------------
 
 
-def compute_eigen_centrality(network_graphs, directed=True):
+def compute_eigen_centrality(networkGraphs, directed=True):
     """
     :Function: Compute the eigenvector centrality for the NetworkX graph
     :param network_graphs: Network Graphs
@@ -156,9 +156,9 @@ def compute_eigen_centrality(network_graphs, directed=True):
     """
 
     if not directed:
-        eigen_centrality = nx.eigenvector_centrality(network_graphs.Graph)
+        eigen_centrality = nx.eigenvector_centrality(networkGraphs.Graph)
     else:
-        eigen_centrality = nx.eigenvector_centrality(network_graphs.DiGraph)
+        eigen_centrality = nx.eigenvector_centrality(networkGraphs.DiGraph)
 
     df = pd.DataFrame(eigen_centrality.items(), columns=['Node', 'Eigenvector Centrality'])
 
@@ -168,7 +168,7 @@ def compute_eigen_centrality(network_graphs, directed=True):
 # ----------------------------------------------------------------------------------------
 
 
-def compute_closeness_centrality(network_graphs, directed=True):
+def compute_closeness_centrality(networkGraphs, directed=True):
     """
     :Function: Compute the closeness centrality for the NetworkX graph
     :param network_graphs: Network Graphs
@@ -177,9 +177,9 @@ def compute_closeness_centrality(network_graphs, directed=True):
     """
 
     if not directed:
-        closeness_centrality = nx.closeness_centrality(network_graphs.Graph)
+        closeness_centrality = nx.closeness_centrality(networkGraphs.Graph)
     else:
-        closeness_centrality = nx.closeness_centrality(network_graphs.DiGraph)
+        closeness_centrality = nx.closeness_centrality(networkGraphs.DiGraph)
 
     df = pd.DataFrame(closeness_centrality.items(), columns=['Node', 'Closeness Centrality'])
     return df
@@ -188,7 +188,7 @@ def compute_closeness_centrality(network_graphs, directed=True):
 # ----------------------------------------------------------------------------------------
 
 
-def compute_betweeness_centrality(network_graphs, directed=True):
+def compute_betweeness_centrality(networkGraphs, directed=True):
     """
     :Function: Compute the betweeness centrality for the NetworkX graph
     :param network_graphs: Network Graphs
@@ -196,9 +196,9 @@ def compute_betweeness_centrality(network_graphs, directed=True):
     :return: Pandas dataframe with the metrics and values
     """
     if not directed:
-        betweeness_centrality = nx.betweenness_centrality(network_graphs.Graph)
+        betweeness_centrality = nx.betweenness_centrality(networkGraphs.Graph)
     else:
-        betweeness_centrality = nx.betweenness_centrality(network_graphs.DiGraph)
+        betweeness_centrality = nx.betweenness_centrality(networkGraphs.DiGraph)
 
     df = pd.DataFrame(betweeness_centrality.items(),
                       columns=['Node', 'Betweeness Centrality'])
