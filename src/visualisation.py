@@ -33,21 +33,20 @@ def dyn_visualisation(networkX_):
 def plot_static_on_map(networkGraphs, title, directed=True):
     """
     :Function: Plot the NetworkX graph on a map
-    :param networkx_: NetworkX Digraph
+    :param networkGraphs: Network graphs
     :param title: Title of the plot
     :param directed: Boolean to indicate if the graph is directed or not
     :return: Matplotlib plot
     """
     world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
     china = world[world['name'] == 'China']
-    china.plot(figsize=(10, 10))
 
     if directed:
-        pos = nx.get_node_attributes(networkGraphs.DiGraph, 'pos')
-        nx.draw(networkGraphs.DiGraph, pos, with_labels=False, node_size=2, node_color='red')
+        china.plot(figsize=(10, 10), color='white', edgecolor='black')
+        nx.draw(networkGraphs.DiGraph, networkGraphs.pos, with_labels=False, node_size=1, edge_color=networkGraphs.colors, node_color='red', width=0.5)
     else:
-        pos = nx.get_node_attributes(networkGraphs.Graph, 'pos')
-        nx.draw(networkGraphs.Graph, pos, with_labels=False, node_size=2, node_color='red')
+        china.plot(figsize=(10, 10), edgecolor='black')
+        nx.draw(networkGraphs.Graph, networkGraphs.pos, with_labels=False, node_size=1, node_color='red')
 
     # plot axes
     plt.axis('on')
@@ -71,8 +70,9 @@ def plot_temporal_graphs(temporal_graphs):
     china = world[world['name'] == 'China']
     # Draw the first graph
     china.plot(ax=ax)
-    nx.draw(temporal_graphs[0], pos=nx.get_node_attributes(temporal_graphs[0], 'pos'), with_labels=False, node_size=1,
-            node_color='red', ax=ax)
+    colors = nx.get_edge_attributes(temporal_graphs[0], 'color').values()
+    nx.draw(temporal_graphs[0], pos=nx.get_node_attributes(temporal_graphs[0], 'pos'), edge_color=colors, with_labels=False, node_size=1,
+            node_color='red', width=0.5, ax=ax)
     ax.set_title(f"Temporal Graph at {0 // 1440}:{(0 // 60) % 24:02d}:{0 % 60:02d}")
 
     # Create a slider widget
@@ -83,8 +83,9 @@ def plot_temporal_graphs(temporal_graphs):
         val = val['new']
         ax.clear()
         china.plot(ax=ax)
+        colors = nx.get_edge_attributes(temporal_graphs[0], 'color').values()
         nx.draw(temporal_graphs[val], pos=nx.get_node_attributes(temporal_graphs[0], 'pos'), with_labels=False,
-                node_size=1, node_color='red', ax=ax)
+                node_size=1, node_color='red', edge_color=colors, width=0.5, ax=ax)
         ax.set_title(f"Temporal Graph at {val // 1440}:{(val // 60) % 24:02d}:{val % 60:02d}")
         plt.show()
 
