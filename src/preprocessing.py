@@ -70,21 +70,29 @@ def preprocess_railway(filename_: str):
             lat = float(lat)
             lon = float(lon)
 
-            # convert h;m to minutes
             try:
                 dep_time = int(dep_time.split(":")[0]) * 60 + int(dep_time.split(":")[1])
-                arr_time = int(arr_time.split(":")[0]) * 60 + int(arr_time.split(":")[1])
-                if date == "Day 2":
-                    arr_time += 24 * 60
-                    dep_time += 24 * 60
-
-                elif date == "Day 3":
-                    arr_time += 48 * 60
-                    dep_time += 48 * 60
             except:
-                excluded += 1
-                dep_time = None
-                arr_time = None
+                print(f"Converting {dep_time} to {int(float(dep_time) * 24 * 60)}")
+                dep_time = int(float(dep_time) * 24 * 60)
+
+            try:
+                arr_time = int(arr_time.split(":")[0]) * 60 + int(arr_time.split(":")[1])
+            except:
+                print(f"Converting {arr_time} to {int(float(arr_time) * 24 * 60)}")
+                arr_time = int(float(arr_time) * 24 * 60)
+
+            if date == "Day 2":
+                arr_time += 24 * 60
+                dep_time += 24 * 60
+
+            elif date == "Day 3":
+                arr_time += 48 * 60
+                dep_time += 48 * 60
+
+            elif date == "Day 4":
+                arr_time += 72 * 60
+                dep_time += 72 * 60
 
             if train != prev_train:
                 prev_station = None
@@ -220,17 +228,6 @@ def create_temporal_subgraph(networkGraphs, start_time, end_time,step):
 
         temporal_graphs.append(G)
 
-        # china.plot(figsize=(10,10))
-        # nx.draw(G, pos=nx.get_node_attributes(G, 'pos'),with_labels=False, node_size=1, node_color='red')
-        # plt.axis('on')
-        # plt.title(f"Temporal Graph at {i//1440}:{(i//60)%24:02d}:{i%60:02d}")
-        # plt.savefig(f"frames/{i}.png")
-        # # plt.show()
-        # plt.close()
-
-        # delete the graph to free up memory
-
-        # print progress bar
         print(f"\rCreating temporal graphs: {i-start_time+1}/{end_time-start_time} ({(i-start_time+1)/(end_time-start_time)*100:.2f}%)", end="")
     return temporal_graphs
 

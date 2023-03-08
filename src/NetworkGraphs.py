@@ -14,6 +14,7 @@ EDGES:
 - 'value': value of the edge (float) for value graphs
 - 'start': time of the start of the edge (int) for temporal graphs
 - 'end': time of the end of the edge (int) for temporal graphs
+- 'color': color of the edge (string) for trajectory graphs
 
 GRAPHS:
 - 'name': name of the graph (string)
