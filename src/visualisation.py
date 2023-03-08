@@ -1,6 +1,7 @@
 import geopandas as gpd
 import networkx as nx
 import matplotlib.pyplot as plt
+
 def static_visualisation(NetworkX_):
 # return plotly figure
     return 0
@@ -9,19 +10,19 @@ def dyn_visualisation(NetworkX_):
 #return html file
     return 0
 
-def static_on_map(Networkx_, title, directed=True):
+def static_on_map(NetworkX_, title, directed=True):
     world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
     china = world[world['name'] == 'China']
     china.plot(figsize=(10, 10))
 
     if directed:
-        pos = nx.get_node_attributes(Networkx_, 'pos')
-        nx.draw(Networkx_, pos, with_labels=False, node_size=3, node_color='red')
+        pos = nx.get_node_attributes(NetworkX_, 'pos')
+        nx.draw(NetworkX_, pos, with_labels=False, node_size=3, node_color='red')
     else:
         # convert to undirected
-        Networkx_ = Networkx_.to_undirected()
-        pos = nx.get_node_attributes(Networkx_, 'pos')
-        nx.draw(Networkx_, pos, with_labels=False, node_size=3, node_color='red')
+        NetworkX_ = NetworkX_.to_undirected()
+        pos = nx.get_node_attributes(NetworkX_, 'pos')
+        nx.draw(NetworkX_, pos, with_labels=False, node_size=3, node_color='red')
 
     # plot axes
     plt.axis('on')
@@ -31,7 +32,22 @@ def static_on_map(Networkx_, title, directed=True):
     return 0
 
 def plot_shortest_distance(NetworkX_, path_):
-# return plotly figure
+    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+    china = world[world['name'] == 'China']
+    china.plot(figsize=(10, 10))
+    pos = nx.get_node_attributes(NetworkX_, 'pos')
+    nx.draw(NetworkX_, pos, with_labels=False, node_size=3, node_color='red')
+
+    #Plot the Shortest Path
+    source = input("\nEnter the Start Node: ")
+    target = input("\nEnter the Target Node: ")
+    nx.shortest_path(NetworkX_, source=source, target=target)
+
+    plt.axis('on')
+    plt.title("Shortest Path between the entered source and target:")
+    plt.show()
+
+    # return plotly figure
     return 0
 
 def plot_metrics(NetworkX_, dataFrame_, title_):
