@@ -18,7 +18,7 @@ import numpy as np
 def compute_global_metrics(networkGraphs):
     """
     :Function: Compute the global metrics for the NetworkX graph (directed and undirected)
-    :param network_graphs: Network Graphs
+    :param networkGraphs: Network Graphs
     :return: Pandas dataframe with the metrics and values (directed and undirected)
     """
     directed = compute_metrics(networkGraphs.DiGraph)  # compute for directed
@@ -129,7 +129,7 @@ def compute_node_metrics(networkGraphs, directed=True):
 def compute_degree_centrality(networkGraphs, directed=True):
     """
     :Function: Compute the degree centrality for the NetworkX graph
-    :param network_graphs: Network Graphs
+    :param networkGraphs: Network Graphs
     :param directed: Boolean
     :return: Pandas dataframe with the metrics and values
     """
@@ -150,7 +150,7 @@ def compute_degree_centrality(networkGraphs, directed=True):
 def compute_eigen_centrality(networkGraphs, directed=True):
     """
     :Function: Compute the eigenvector centrality for the NetworkX graph
-    :param network_graphs: Network Graphs
+    :param networkGraphs: Network Graphs
     :param directed: Boolean
     :return: Pandas dataframe with the metrics and values
     """
@@ -171,7 +171,7 @@ def compute_eigen_centrality(networkGraphs, directed=True):
 def compute_closeness_centrality(networkGraphs, directed=True):
     """
     :Function: Compute the closeness centrality for the NetworkX graph
-    :param network_graphs: Network Graphs
+    :param networkGraphs: Network Graphs
     :param directed: Boolean
     :return: Pandas dataframe with the metrics and values
     """
@@ -191,7 +191,7 @@ def compute_closeness_centrality(networkGraphs, directed=True):
 def compute_betweeness_centrality(networkGraphs, directed=True):
     """
     :Function: Compute the betweeness centrality for the NetworkX graph
-    :param network_graphs: Network Graphs
+    :param networkGraphs: Network Graphs
     :param directed: Boolean
     :return: Pandas dataframe with the metrics and values
     """
