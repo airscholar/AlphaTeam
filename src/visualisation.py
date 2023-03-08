@@ -30,7 +30,7 @@ def dyn_visualisation(networkX_):
 # ----------------------------------------------------------------------------------------
 
 
-def plot_static_on_map(networkx_, title, directed=True):
+def plot_static_on_map(networkGraphs, title, directed=True):
     """
     :Function: Plot the NetworkX graph on a map
     :param networkx_: NetworkX Digraph
@@ -43,13 +43,11 @@ def plot_static_on_map(networkx_, title, directed=True):
     china.plot(figsize=(10, 10))
 
     if directed:
-        pos = nx.get_node_attributes(networkx_, 'pos')
-        nx.draw(networkx_, pos, with_labels=False, node_size=3, node_color='red')
+        pos = nx.get_node_attributes(networkGraphs.DiGraph, 'pos')
+        nx.draw(networkGraphs.DiGraph, pos, with_labels=False, node_size=2, node_color='red')
     else:
-        # convert to undirected
-        networkx_ = networkx_.to_undirected()
-        pos = nx.get_node_attributes(networkx_, 'pos')
-        nx.draw(networkx_, pos, with_labels=False, node_size=3, node_color='red')
+        pos = nx.get_node_attributes(networkGraphs.Graph, 'pos')
+        nx.draw(networkGraphs.Graph, pos, with_labels=False, node_size=2, node_color='red')
 
     # plot axes
     plt.axis('on')

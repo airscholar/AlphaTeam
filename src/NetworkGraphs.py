@@ -54,6 +54,7 @@ class NetworkGraphs:
         if type == 'RAILWAY':
             self.DiGraph, self.MultiDiGraph = preprocess_railway(filename)
             self.Graph, self.MultiGraph = self.DiGraph.to_undirected(), self.MultiDiGraph.to_undirected()
+            self.colors = nx.get_edge_attributes(self.DiGraph,'color').values()
 
         if self.is_spatial():
             self.pos = nx.get_node_attributes(self.Graph, 'pos')
