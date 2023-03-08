@@ -1,21 +1,44 @@
+"""
+Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Compute the metrics for the NetworkX graphs
+"""
+
+# ----------------------------------------------------------------------------------------
+
+# Imports
 import pandas as pd
 import networkx as nx
 import numpy as np
 
 
+# ----------------------------------------------------------------------------------------
+
+
 def compute_global_metrics(networkx_):
-    # compute for directed
-    directed = compute_metrics(networkx_)
-    # compute for undirected
-    undirected = compute_metrics(networkx_.to_undirected())
+    """
+    :Function: Compute the global metrics for the NetworkX graph (directed and undirected)
+    :param networkx_: NetworkX Digraph
+    :return: Pandas dataframe with the metrics and values (directed and undirected)
+    """
+    directed = compute_metrics(networkx_)  # compute for directed
+    undirected = compute_metrics(networkx_.to_undirected())  # compute for undirected
 
     return pd.merge(directed, undirected, how='inner',
                     on='Metrics').rename(columns={'Values_x': 'Directed', 'Values_y': 'Undirected'})
 
 
+# ----------------------------------------------------------------------------------------
+
+
 def compute_metrics(networkx_):
-    # return pandas dataframe
-    df = pd.DataFrame()
+    """
+    :Function: Compute the generals metrics for the NetworkX graph
+    :param networkx_: NetworkX Digraph
+    :return: Pandas dataframe with the metrics and values
+    """
+
+    df = pd.DataFrame()  # return pandas dataframe
 
     try:
         clustering_coefficient = nx.average_clustering(networkx_)
@@ -63,37 +86,100 @@ def compute_metrics(networkx_):
 
     return df
 
+# ----------------------------------------------------------------------------------------
+
 
 def compute_connectivity(networkx_):
     return 0
 
+# ----------------------------------------------------------------------------------------
 
-def compute_node_metrics(networkx):
-    degree_centrality = compute_degree_centrality(networkx)
-    closeness_centrality = compute_closeness_centrality(networkx)
-    betweeness_centrality = compute_betweeness_centrality(networkx)
-    eigen_centrality = compute_eigen_centrality(networkx)
+# def compute_node_metrics(networkx, directed=True):
+#     """
+#     :Function: Compute the node metrics for the NetworkX graph
+#     :param networkx: NetworkX Digraph
+#     :param directed: Boolean
+#     :return: Pandas dataframe with the metrics and values
+#     """
+#     if not directed:
+#         return compute_node_metrics(networkx.to_undirected(), directed=True)
+#
+#     degree_centrality = compute_degree_centrality(networkx)
+#     closeness_centrality = compute_closeness_centrality(networkx)
+#     betweeness_centrality = compute_betweeness_centrality(networkx)
+#     eigen_centrality = compute_eigen_centrality(networkx)
+#
+#     df = pd.DataFrame([degree_centrality, closeness_centrality, betweeness_centrality, eigen_centrality]).T
+#     df.columns = ['Degree Centrality', 'Closeness Centrality', 'Betweeness Centrality', 'Eigenvector Centrality']
+#
+#     return df
 
-    df = pd.DataFrame([degree_centrality, closeness_centrality, betweeness_centrality, eigen_centrality]).T
-    df.columns = ['Degree Centrality', 'Closeness Centrality', 'Betweeness Centrality', 'Eigenvector Centrality']
+# ----------------------------------------------------------------------------------------
 
+
+def compute_degree_centrality(networkx_, directed=True):
+    """
+    :Function: Compute the degree centrality for the NetworkX graph
+    :param networkx_: NetworkX Digraph
+    :param directed: Boolean
+    :return: Pandas dataframe with the metrics and values
+    """
+    if not directed:
+        return compute_degree_centrality(networkx_.to_undirected(), directed=True)
+
+    df = pd.DataFrame(nx.degree_centrality(networkx_).items(), columns=['Node', 'Degree Centrality'])
     return df
 
 
-def compute_degree_centrality(networkx_):
-    return nx.degree_centrality(networkx_)
+# ----------------------------------------------------------------------------------------
 
 
-def compute_eigen_centrality(networkx_):
-    return nx.eigenvector_centrality(networkx_)
+def compute_eigen_centrality(networkx_, directed=True):
+    """
+    :Function: Compute the eigenvector centrality for the NetworkX graph
+    :param networkx_: NetworkX Digraph
+    :param directed: Boolean
+    :return: Pandas dataframe with the metrics and values
+    """
+    if not directed:
+        return compute_eigen_centrality(networkx_.to_undirected(), directed=True)
+
+    df = pd.DataFrame(nx.eigenvector_centrality(networkx_).items(), columns=['Node', 'Eigenvector Centrality'])
+    return df
+
+# ----------------------------------------------------------------------------------------
 
 
-def compute_closeness_centrality(networkx_):
-    return nx.closeness_centrality(networkx_)
+def compute_closeness_centrality(networkx_, directed=True):
+    """
+    :Function: Compute the closeness centrality for the NetworkX graph
+    :param networkx_: NetworkX Digraph
+    :param directed: Boolean
+    :return: Pandas dataframe with the metrics and values
+    """
+    if not directed:
+        return compute_closeness_centrality(networkx_.to_undirected(), directed=True)
+
+    df = pd.DataFrame(nx.closeness_centrality(networkx_).items(), columns=['Node', 'Closeness Centrality'])
+    return df
+
+# ----------------------------------------------------------------------------------------
 
 
-def compute_betweeness_centrality(networkx_):
-    return nx.betweenness_centrality(networkx_)
+def compute_betweeness_centrality(networkx_, directed=True):
+    """
+    :Function: Compute the betweeness centrality for the NetworkX graph
+    :param networkx_: NetworkX Digraph
+    :param directed: Boolean
+    :return: Pandas dataframe with the metrics and values
+    """
+    if not directed:
+        return compute_betweeness_centrality(networkx_.to_undirected(), directed=True)
+
+    df = pd.DataFrame(nx.betweenness_centrality(networkx_).items(), columns=['Node', 'Betweeness Centrality'])
+    return df
+
+# ----------------------------------------------------------------------------------------
 
 
 def get_shortest_path(networkx_, source, target, weight=None):
