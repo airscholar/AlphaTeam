@@ -1,15 +1,34 @@
+"""
+:Author: Alpha Team Group Project
+:Date: March 2023
+:Purpose: Preprocess the datasets and create generals NetworkX graphs
+"""
+
+# ----------------------------------------------------------------------------------------
+
+# Imports
 from enum import Enum
 from typing import Type
 import networkx as nx
 
+
+# ----------------------------------------------------------------------------------------
 
 class DatasetType(Enum):
     RAILWAY = 'RAILWAY'
     CRYPTO = 'CRYPTO'
     CUSTOM = 'CUSTOM'
 
+# ----------------------------------------------------------------------------------------
+
 
 def preprocess(filename_: str, dataset_type: Type[DatasetType]):
+    """
+    :Function: Preprocess the dataset
+    :param filename_: Path to the file
+    :param dataset_type: Type of the dataset
+    :return: NetworkX graph
+    """
     switch = {
         DatasetType.RAILWAY: preprocess_railway,
         DatasetType.CRYPTO: preprocess_crypto,
@@ -18,7 +37,15 @@ def preprocess(filename_: str, dataset_type: Type[DatasetType]):
     func = switch.get(dataset_type, lambda _: None)
     return func(filename_)
 
+# ----------------------------------------------------------------------------------------
+
+
 def preprocess_railway(filename_: str):
+    """
+    :Function: Preprocess the railway dataset
+    :param filename_: Path to the file
+    :return: NetworkX graphs (DiGraph and MultiDiGraph)
+    """
     network = {}
     station_id = {}
     excluded = 0
@@ -83,8 +110,15 @@ def preprocess_railway(filename_: str):
     return [di_graph, multi_di_graph]
 
 
+# ----------------------------------------------------------------------------------------
 
 def create_multi_DiGraph(network, station_id):
+    """
+    :Function: Create a MultiDiGraph from the railway dataset
+    :param network: JSON object of the railway dataset
+    :param station_id: Dictionary of station id per location
+    :return: NetworkX MultiDiGraph
+    """
     multi_graph = nx.MultiDiGraph()
 
     # add nodes to the graph
@@ -106,8 +140,15 @@ def create_multi_DiGraph(network, station_id):
 
     return multi_graph
 
+# ----------------------------------------------------------------------------------------
+
 
 def convert_to_DiGraph(multi_graph):
+    """
+    :Function: Convert a MultiDiGraph to a DiGraph with the same nodes and edges
+    :param multi_graph: NetworkX MultiDiGraph
+    :return: NetworkX DiGraph
+    """
     g_directed = nx.DiGraph()
     for u, v in multi_graph.nodes(data=True):
         g_directed.add_node(u, pos=v['pos'])
@@ -118,13 +159,26 @@ def convert_to_DiGraph(multi_graph):
             g_directed.add_edge(u, v)
     return g_directed
 
+# ----------------------------------------------------------------------------------------
+
 
 def convert_to_undirected(g_directed):
+    """
+    :Function: Convert a DiGraph to an undirected graph
+    :param g_directed: NetworkX DiGraph
+    :return: NetworkX Graph
+    """
     return g_directed.to_undirected()
+
+# ----------------------------------------------------------------------------------------
 
 
 def create_temporal_subgraph(networkx):
-    # %%
+    """
+    :Function: Create a temporal subgraph for each minute of the 3 day
+    :param networkx: NetworkX Digraph
+    :return: List of NetworkX Digraphs (one for each minute)
+    """
     temporal_graphs = []
     for i in range(0, 48 * 60, 1):
         G = nx.DiGraph()
@@ -152,8 +206,13 @@ def create_temporal_subgraph(networkx):
         print(f"\r{i / 48 / 60 * 100:.2f}%", end="")
     return temporal_graphs
 
+# ----------------------------------------------------------------------------------------
+
+
 def preprocess_crypto(filename_: str):
     return 0
+
+# ----------------------------------------------------------------------------------------
 
 
 def preprocess_custom(filename_: str):

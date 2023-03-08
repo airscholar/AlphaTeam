@@ -1,21 +1,44 @@
+"""
+Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Compute the metrics for the NetworkX graphs
+"""
+
+# ----------------------------------------------------------------------------------------
+
+# Imports
 import pandas as pd
 import networkx as nx
 import numpy as np
 
 
+# ----------------------------------------------------------------------------------------
+
+
 def compute_global_metrics(networkx_):
-    # compute for directed
-    directed = compute_metrics(networkx_)
-    # compute for undirected
-    undirected = compute_metrics(networkx_.to_undirected())
+    """
+    :Function: Compute the global metrics for the NetworkX graph (directed and undirected)
+    :param networkx_: NetworkX Digraph
+    :return: Pandas dataframe with the metrics and values (directed and undirected)
+    """
+    directed = compute_metrics(networkx_)  # compute for directed
+    undirected = compute_metrics(networkx_.to_undirected())  # compute for undirected
 
     return pd.merge(directed, undirected, how='inner',
                     on='Metrics').rename(columns={'Values_x': 'Directed', 'Values_y': 'Undirected'})
 
 
+# ----------------------------------------------------------------------------------------
+
+
 def compute_metrics(networkx_):
-    # return pandas dataframe
-    df = pd.DataFrame()
+    """
+    :Function: Compute the generals metrics for the NetworkX graph
+    :param networkx_: NetworkX Digraph
+    :return: Pandas dataframe with the metrics and values
+    """
+
+    df = pd.DataFrame()  # return pandas dataframe
 
     try:
         clustering_coefficient = nx.average_clustering(networkx_)
@@ -63,11 +86,17 @@ def compute_metrics(networkx_):
 
     return df
 
+# ----------------------------------------------------------------------------------------
+
 
 def compute_connectivity(networkx_):
     return 0
 
+# ----------------------------------------------------------------------------------------
 
+# TODO: Compute the metrics in individual functions and return a pandas
+#  dataframe for the single metrics, the goal is to have a single page in
+#  the GUI per metric so we will need single functions for each metric
 def compute_node_metrics(networkx):
     degree_centrality = compute_degree_centrality(networkx)
     closeness_centrality = compute_closeness_centrality(networkx)
@@ -79,21 +108,31 @@ def compute_node_metrics(networkx):
 
     return df
 
+# ----------------------------------------------------------------------------------------
+
 
 def compute_degree_centrality(networkx_):
     return nx.degree_centrality(networkx_)
+
+# ----------------------------------------------------------------------------------------
 
 
 def compute_eigen_centrality(networkx_):
     return nx.eigenvector_centrality(networkx_)
 
+# ----------------------------------------------------------------------------------------
+
 
 def compute_closeness_centrality(networkx_):
     return nx.closeness_centrality(networkx_)
 
+# ----------------------------------------------------------------------------------------
+
 
 def compute_betweeness_centrality(networkx_):
     return nx.betweenness_centrality(networkx_)
+
+# ----------------------------------------------------------------------------------------
 
 
 def get_shortest_path(networkx_, source, target, weight=None):

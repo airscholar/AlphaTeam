@@ -1,3 +1,8 @@
+"""
+Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Machine Learning for the NetworkX graphs
+"""
 
 def short_path_distance(networkx_, from_, to_):
     # return dataframe
