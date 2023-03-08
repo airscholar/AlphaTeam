@@ -11,7 +11,6 @@ from enum import Enum
 from typing import Type
 import networkx as nx
 
-
 # ----------------------------------------------------------------------------------------
 
 class DatasetType(Enum):
@@ -36,6 +35,7 @@ def preprocess(filename_: str, dataset_type: Type[DatasetType]):
     }
     func = switch.get(dataset_type, lambda _: None)
     return func(filename_)
+
 
 # ----------------------------------------------------------------------------------------
 
@@ -105,14 +105,14 @@ def preprocess_railway(filename_: str):
 
     print(f"Excluded {excluded} stations")
 
-    multi_di_graph = create_multi_DiGraph(network, station_id)
+    multi_di_graph = create_multi_DiGraph_railway(network, station_id)
     di_graph = convert_to_DiGraph(multi_di_graph)
     return [di_graph, multi_di_graph]
 
 
 # ----------------------------------------------------------------------------------------
 
-def create_multi_DiGraph(network, station_id):
+def create_multi_DiGraph_railway(network, station_id):
     """
     :Function: Create a MultiDiGraph from the railway dataset
     :param network: JSON object of the railway dataset
@@ -140,6 +140,7 @@ def create_multi_DiGraph(network, station_id):
 
     return multi_graph
 
+
 # ----------------------------------------------------------------------------------------
 
 
@@ -150,14 +151,21 @@ def convert_to_DiGraph(multi_graph):
     :return: NetworkX DiGraph
     """
     g_directed = nx.DiGraph()
-    for u, v in multi_graph.nodes(data=True):
-        g_directed.add_node(u, pos=v['pos'])
-    for u, v in multi_graph.edges():
+    for u, data in multi_graph.nodes(data=True):
+        g_directed.add_node(u)
+        for k_, v_ in data.items():
+            g_directed.nodes[u][k_] = v_
+
+    for u, v, data in multi_graph.edges(data=True):
         if g_directed.has_edge(u, v):
             continue
         else:
             g_directed.add_edge(u, v)
+            for k_, v_ in data.items():
+                g_directed.edges[u, v][k_] = v_
+
     return g_directed
+
 
 # ----------------------------------------------------------------------------------------
 
@@ -170,10 +178,11 @@ def convert_to_undirected(g_directed):
     """
     return g_directed.to_undirected()
 
+
 # ----------------------------------------------------------------------------------------
 
 
-def create_temporal_subgraph(networkx):
+def create_temporal_subgraph(networkGraphs):
     """
     :Function: Create a temporal subgraph for each minute of the 3 day
     :param networkx: NetworkX Digraph
@@ -182,14 +191,14 @@ def create_temporal_subgraph(networkx):
     temporal_graphs = []
     for i in range(0, 48 * 60, 1):
         G = nx.DiGraph()
-        for u, v, d in networkx.edges(data=True):
+        for u, v, d in networkGraphs.DiGraph.edges(data=True):
             if d['start'] is None or d['end'] is None:
                 continue
             if d['start'] <= i and d['end'] >= i:
                 G.add_edge(u, v)
         # add node positions
-        for u, v in networkx.nodes(data=True):
-            G.add_node(u, pos=networkx.nodes[u]['pos'])
+        for u, v in networkGraphs.DiGraph.nodes(data=True):
+            G.add_node(u, pos=networkGraphs.DiGraph.nodes[u]['pos'])
         temporal_graphs.append(G)
 
         # china.plot(figsize=(10,10))
@@ -206,11 +215,13 @@ def create_temporal_subgraph(networkx):
         print(f"\r{i / 48 / 60 * 100:.2f}%", end="")
     return temporal_graphs
 
+
 # ----------------------------------------------------------------------------------------
 
 
 def preprocess_crypto(filename_: str):
     return 0
+
 
 # ----------------------------------------------------------------------------------------
 
