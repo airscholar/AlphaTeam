@@ -198,7 +198,7 @@ def create_temporal_subgraph(networkGraphs):
                 G.add_edge(u, v)
         # add node positions
         for u, v in networkGraphs.DiGraph.nodes(data=True):
-            G.add_node(u, pos=networkGraphs.DiGraph.nodes[u]['pos'])
+            G.add_node(u, pos=networkGraphs.pos[u])
         temporal_graphs.append(G)
 
         # china.plot(figsize=(10,10))

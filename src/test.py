@@ -1,12 +1,12 @@
 # FILE TO TEST THE FUNCTIONS IN THE SRC FOLDER
-
+from src.NetworkGraphs import NetworkGraphs
 from src.preprocessing import *
 from src.metrics import *
 from src.visualisation import *
 
 # ----------------------------------------------------------------------------------------
 
-networkx, multi_networkx = preprocess('../datasets/Railway.csv', DatasetType.RAILWAY)
+networkGraphs = NetworkGraphs('../datasets/Railway.csv', type="RAILWAY", spatial =True)
 
 # ----------------------------------------------------------------------------------------
 
@@ -15,7 +15,7 @@ networkx, multi_networkx = preprocess('../datasets/Railway.csv', DatasetType.RAI
 
 # ----------------------------------------------------------------------------------------
 
-# directed_node_metrics = compute_node_metrics(networkx)
+# directed_node_metrics = compute_node_metrics(networkGraphs, directed=False)
 # print(directed_node_metrics.head())
 
 # ----------------------------------------------------------------------------------------
@@ -43,25 +43,25 @@ networkx, multi_networkx = preprocess('../datasets/Railway.csv', DatasetType.RAI
 
 # ----------------------------------------------------------------------------------------
 
-degree_centrality = compute_degree_centrality(networkx)
-print(degree_centrality.head())
-un_directed_degree_centrality = compute_degree_centrality(networkx, directed=False)
-print(un_directed_degree_centrality.head())
-
-betweenes_centrality = compute_betweeness_centrality(networkx)
-print(betweenes_centrality.head())
-un_directed_betweenes_centrality = compute_betweeness_centrality(networkx, directed=False)
-print(un_directed_betweenes_centrality.head())
-
-closeness_centrality = compute_closeness_centrality(networkx)
-print(closeness_centrality.head())
-un_directed_closeness_centrality = compute_closeness_centrality(networkx, directed=False)
-print(un_directed_closeness_centrality.head())
-
-eigenvector_centrality = compute_eigen_centrality(networkx)
-print(eigenvector_centrality.head())
-un_directed_eigenvector_centrality = compute_eigen_centrality(networkx, directed=False)
-print(un_directed_eigenvector_centrality.head())
+# degree_centrality = compute_degree_centrality(networkGraphs, directed=False)
+# print(degree_centrality.head())
+# un_directed_degree_centrality = compute_degree_centrality(networkx, directed=False)
+# print(un_directed_degree_centrality.head())
+#
+# betweenes_centrality = compute_betweeness_centrality(networkx)
+# print(betweenes_centrality.head())
+# un_directed_betweenes_centrality = compute_betweeness_centrality(networkx, directed=False)
+# print(un_directed_betweenes_centrality.head())
+#
+# closeness_centrality = compute_closeness_centrality(networkx)
+# print(closeness_centrality.head())
+# un_directed_closeness_centrality = compute_closeness_centrality(networkx, directed=False)
+# print(un_directed_closeness_centrality.head())
+#
+# eigenvector_centrality = compute_eigen_centrality(networkx)
+# print(eigenvector_centrality.head())
+# un_directed_eigenvector_centrality = compute_eigen_centrality(networkx, directed=False)
+# print(un_directed_eigenvector_centrality.head())
 
 # ----------------------------------------------------------------------------------------
 
