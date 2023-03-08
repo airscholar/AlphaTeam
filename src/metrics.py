@@ -94,43 +94,90 @@ def compute_connectivity(networkx_):
 
 # ----------------------------------------------------------------------------------------
 
-# TODO: Compute the metrics in individual functions and return a pandas
-#  dataframe for the single metrics, the goal is to have a single page in
-#  the GUI per metric so we will need single functions for each metric
-def compute_node_metrics(networkx):
-    degree_centrality = compute_degree_centrality(networkx)
-    closeness_centrality = compute_closeness_centrality(networkx)
-    betweeness_centrality = compute_betweeness_centrality(networkx)
-    eigen_centrality = compute_eigen_centrality(networkx)
+# def compute_node_metrics(networkx, directed=True):
+#     """
+#     :Function: Compute the node metrics for the NetworkX graph
+#     :param networkx: NetworkX Digraph
+#     :param directed: Boolean
+#     :return: Pandas dataframe with the metrics and values
+#     """
+#     if not directed:
+#         return compute_node_metrics(networkx.to_undirected(), directed=True)
+#
+#     degree_centrality = compute_degree_centrality(networkx)
+#     closeness_centrality = compute_closeness_centrality(networkx)
+#     betweeness_centrality = compute_betweeness_centrality(networkx)
+#     eigen_centrality = compute_eigen_centrality(networkx)
+#
+#     df = pd.DataFrame([degree_centrality, closeness_centrality, betweeness_centrality, eigen_centrality]).T
+#     df.columns = ['Degree Centrality', 'Closeness Centrality', 'Betweeness Centrality', 'Eigenvector Centrality']
+#
+#     return df
 
-    df = pd.DataFrame([degree_centrality, closeness_centrality, betweeness_centrality, eigen_centrality]).T
-    df.columns = ['Degree Centrality', 'Closeness Centrality', 'Betweeness Centrality', 'Eigenvector Centrality']
+# ----------------------------------------------------------------------------------------
 
+
+def compute_degree_centrality(networkx_, directed=True):
+    """
+    :Function: Compute the degree centrality for the NetworkX graph
+    :param networkx_: NetworkX Digraph
+    :param directed: Boolean
+    :return: Pandas dataframe with the metrics and values
+    """
+    if not directed:
+        return compute_degree_centrality(networkx_.to_undirected(), directed=True)
+
+    df = pd.DataFrame(nx.degree_centrality(networkx_).items(), columns=['Node', 'Degree Centrality'])
+    return df
+
+
+# ----------------------------------------------------------------------------------------
+
+
+def compute_eigen_centrality(networkx_, directed=True):
+    """
+    :Function: Compute the eigenvector centrality for the NetworkX graph
+    :param networkx_: NetworkX Digraph
+    :param directed: Boolean
+    :return: Pandas dataframe with the metrics and values
+    """
+    if not directed:
+        return compute_eigen_centrality(networkx_.to_undirected(), directed=True)
+
+    df = pd.DataFrame(nx.eigenvector_centrality(networkx_).items(), columns=['Node', 'Eigenvector Centrality'])
     return df
 
 # ----------------------------------------------------------------------------------------
 
 
-def compute_degree_centrality(networkx_):
-    return nx.degree_centrality(networkx_)
+def compute_closeness_centrality(networkx_, directed=True):
+    """
+    :Function: Compute the closeness centrality for the NetworkX graph
+    :param networkx_: NetworkX Digraph
+    :param directed: Boolean
+    :return: Pandas dataframe with the metrics and values
+    """
+    if not directed:
+        return compute_closeness_centrality(networkx_.to_undirected(), directed=True)
+
+    df = pd.DataFrame(nx.closeness_centrality(networkx_).items(), columns=['Node', 'Closeness Centrality'])
+    return df
 
 # ----------------------------------------------------------------------------------------
 
 
-def compute_eigen_centrality(networkx_):
-    return nx.eigenvector_centrality(networkx_)
+def compute_betweeness_centrality(networkx_, directed=True):
+    """
+    :Function: Compute the betweeness centrality for the NetworkX graph
+    :param networkx_: NetworkX Digraph
+    :param directed: Boolean
+    :return: Pandas dataframe with the metrics and values
+    """
+    if not directed:
+        return compute_betweeness_centrality(networkx_.to_undirected(), directed=True)
 
-# ----------------------------------------------------------------------------------------
-
-
-def compute_closeness_centrality(networkx_):
-    return nx.closeness_centrality(networkx_)
-
-# ----------------------------------------------------------------------------------------
-
-
-def compute_betweeness_centrality(networkx_):
-    return nx.betweenness_centrality(networkx_)
+    df = pd.DataFrame(nx.betweenness_centrality(networkx_).items(), columns=['Node', 'Betweeness Centrality'])
+    return df
 
 # ----------------------------------------------------------------------------------------
 
