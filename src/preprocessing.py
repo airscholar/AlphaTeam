@@ -10,6 +10,7 @@
 from enum import Enum
 from typing import Type
 import networkx as nx
+import pandas as pd
 
 # ----------------------------------------------------------------------------------------
 
@@ -203,7 +204,7 @@ def convert_to_undirected(g_directed):
 # ----------------------------------------------------------------------------------------
 
 
-def create_temporal_subgraph(networkGraphs, start_time, end_time,step):
+def create_temporal_subgraph(networkGraphs, start_time, end_time, step):
     """
     :Function: Create a temporal subgraph for each minute of the 3 day
     :param networkx: NetworkX Digraph
@@ -236,8 +237,17 @@ def create_temporal_subgraph(networkGraphs, start_time, end_time,step):
 
 
 def preprocess_crypto(filename_: str):
-    return 0
+    df = pd.read_csv('../datasets/Dune_Eth_transaction.csv')
 
+    MultiDiGraph = nx.MultiDiGraph()
+    MultiDiGraph.add_nodes_from(df['from'].unique())
+    MultiDiGraph.add_nodes_from(df['to'].unique())
+    for from_, to_, value_, time_ in df[['from', 'to', 'value', 'block_time']].values:
+        MultiDiGraph.add_edge(from_, to_, weight=value_, start=time_, end=time_)
+
+    DiGraph = convert_to_DiGraph(MultiDiGraph)
+
+    return [DiGraph, MultiDiGraph]
 
 # ----------------------------------------------------------------------------------------
 
