@@ -1,46 +1,69 @@
-const form = document.querySelector('form');
+$(function () {
+    var form = $('#upload-form');
+    var progressBar = $('#progress-bar');
 
-form.addEventListener('submit', (e) => {
-	e.preventDefault();
+    form.on('submit', function (event) {
+        event.preventDefault();
 
-	const file = document.querySelector('#csv_file').files[0];
+        // Get the CSV file and the selected option
+        var csvFile = $('#csv_file')[0].files[0];
+        var option = $('#dropdown-menu').val();
 
-	if (file && file.size) {
-		const fileSize = file.size / 1024 / 1024;
-		if (fileSize > 10) {
-			alert('The file size is too large. Please select a file that is smaller than 10MB.');
-			return;
-		}
-	}
-	else {
-		alert('Please select a file.');
-		return;
-	}
+        // Validate the CSV file and the selected option
+        if (!csvFile || !csvFile.size) {
+            alert('Please select a CSV file.');
+            return;
+        }
 
+        if (option === 'option1') {
+            alert('Please Select Dataset Type.');
+            return;
+        }
 
-	// Submit the form using AJAX
-    const xhr = new XMLHttpRequest();
-    const formData = new FormData();
-    formData.append('csv_file', file);
-    xhr.open('POST', '/upload');
-    xhr.onload = function() {
-        const response = JSON.parse(xhr.responseText);
-        alert(response.message);
-    };
-    xhr.send(formData);
+        // Create a FormData object to send the data
+        var formData = new FormData();
+        formData.append('csv_file', csvFile);
+        formData.append('option', option);
 
-    return false;
+        // Send the data using AJAX
+        $.ajax({
+            url: '/upload',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            xhr: function () {
+                var xhr = new XMLHttpRequest();
+                xhr.upload.addEventListener('progress', function (event) {
+                    if (event.lengthComputable) {
+                        var percent = Math.round((event.loaded / event.total) * 100);
+                        progressBar.val(percent);
+                    }
+                }, false);
+                return xhr;
+            },
+            beforeSend: function () {
+                progressBar.show();
+                progressBar.val(0);
+            },
+            success: function (response) {
+                // Redirect the user to the success page
+                window.location.href = '/home';
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Handle errors
+                console.log('Error:', errorThrown);
+            },
+            complete: function () {
+                // Hide the progress bar
+                progressBar.hide();
+            }
+        });
+    });
+
+    // Update the selected file name in the file input field
+    $('#csv_file').on('change', function () {
+        var filename = $(this).val().split('\\').pop();
+        $('#noFile').text(filename);
+    });
 });
-
-$('#csv_file').bind('change', function () {
-	var filename = $("#csv_file").val();
-	if (/^\s*$/.test(filename)) {
-	  $(".file-upload").removeClass('active');
-	  $("#noFile").text("No file chosen..."); 
-	}
-	else {
-	  $(".file-upload").addClass('active');
-	  $("#noFile").text(filename.replace("C:\\fakepath\\", "")); 
-	}
-  });
-  

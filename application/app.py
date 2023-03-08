@@ -1,53 +1,62 @@
-from flask import Flask, request, jsonify, send_file, render_template
-from threading import Thread
-import nbformat
-from nbconvert import PythonExporter
-import io
-from pyvis.network import Network
-import networkx as nx # import networkx package
-import os
-import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+from flask import Flask, request, render_template, redirect, url_for, session
+import csv
 
-from Rail import Railway
-
-app = Flask(__name__, template_folder='.')
+app = Flask(__name__)
+app.secret_key = 'my-secret-key' # set a secret key for the session
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-def process_file(file_path):
-    # Create an instance of the Railway class
-    r = Railway(file_path)
-    r.load_data()
-    r.set_station_id()
-    r.create_network_graph()
-    r.plot_graph()
-
 @app.route('/upload', methods=['POST'])
 def upload():
-    # Check if a file was uploaded
-    if 'csv_file' not in request.files:
-        return 'No file was uploaded.', 400
-    
-    # Get the uploaded file
-    file = request.files.get('csv_file')
-    # Save the uploaded file to the datasets directory
-    file_path = os.path.join(os.path.dirname(__file__), '..', 'datasets', 'Railway.csv')
-    file.save(file_path)
+    # Get the CSV file and the selected option
+    csv_file = request.files['csv_file']
+    option = request.form['option']
 
-    # Start the process_file function in the background
-    thread = Thread(target=process_file, args=(file_path,))
-    thread.start()
+    # Save the CSV file to a folder on the server with a filename based on the selected option and file extension
+    if option != 'General':
+        filename = option + '.csv'
+    else:
+        filename = option + '.mtx'
 
-    # Return a response to the user
-    return jsonify({'message': 'Processing the uploaded file...'})
+    csv_file.save('uploads/' + filename)
+    # Do something with the CSV file and selected option
+    # (e.g., process the file data and store it in a database)
 
-@app.route('/graph')
-def serve_graph():
-    # Render the graph HTML on the page
-    return render_template('graph.html')
+    # Store the filename in a session variable
+    session['filename'] = filename
+
+    # Redirect the user to the success page
+    return redirect(url_for('home'))
+
+@app.route('/home')
+def home():
+    # Get the filename from the session variable
+    filename = session['filename']
+
+    # Open the CSV file and read its contents
+    with open('uploads/' + filename, 'r') as file:
+        reader = csv.reader(file)
+        header = next(reader)  # skip the header row
+        data = [header]  # initialize the data list with the header row
+        for i, row in enumerate(reader):
+            if i < 50:
+                data.append(row)
+            else:
+                break
+
+    # Pass the data to the HTML template
+    return render_template('home.html', data=data)
+
+@app.route('/visualise/static', endpoint='my_static')
+def static():
+    image_path = '/img/example.png'
+    return render_template('static.html', image_path=image_path)
+
+@app.route('/visualise/dynamic', endpoint='my_dynamic')
+def dynamic():
+    return render_template('dynamic.html')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
