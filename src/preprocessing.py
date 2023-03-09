@@ -74,13 +74,13 @@ def preprocess_railway(filename_: str):
             try:
                 dep_time = int(dep_time.split(":")[0]) * 60 + int(dep_time.split(":")[1])
             except:
-                print(f"Converting {dep_time} to {int(float(dep_time) * 24 * 60)}")
+                # print(f"Converting {dep_time} to {int(float(dep_time) * 24 * 60)}")
                 dep_time = int(float(dep_time) * 24 * 60)
 
             try:
                 arr_time = int(arr_time.split(":")[0]) * 60 + int(arr_time.split(":")[1])
             except:
-                print(f"Converting {arr_time} to {int(float(arr_time) * 24 * 60)}")
+                # print(f"Converting {arr_time} to {int(float(arr_time) * 24 * 60)}")
                 arr_time = int(float(arr_time) * 24 * 60)
 
             if date == "Day 2":

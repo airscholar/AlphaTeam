@@ -91,8 +91,13 @@ histogram(kcore_cdf, 'CDF',title='K-Core CDF Histogram')
 # ----------------------------------------------------------------------------------------
 
 
-
-
-
-
-
+import geopandas as gpd
+world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+#
+# #plot the section of the map with min and max lat and long
+ax = world.plot(edgecolor='black')
+ax.set_xlim(networkGraphs.get_min_long(), networkGraphs.get_max_long())
+ax.set_ylim(networkGraphs.get_min_lat(), networkGraphs.get_max_lat())
+ax.set_title('Railway Network')
+plt.show()
+plot_static_on_map(networkGraphs, 'Railway Network Undirected Graph', directed=False).show()

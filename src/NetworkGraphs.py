@@ -29,8 +29,8 @@ GRAPHS:
 
 # Imports
 from src.preprocessing import *
-from src.metrics import *
 from src.visualisation import *
+
 
 # ----------------------------------------------------------------------------------------
 
@@ -44,7 +44,7 @@ class NetworkGraphs:
         if name is None:
             name = filename.split('/')[-1].split('.')[0]
             self.set_name(name)
-        else :
+        else:
             self.set_name(name)
 
         self.set_type(type)
@@ -59,7 +59,7 @@ class NetworkGraphs:
             self.set_weighted(False)
             self.DiGraph, self.MultiDiGraph = preprocess_railway(filename)
             self.Graph, self.MultiGraph = self.DiGraph.to_undirected(), self.MultiDiGraph.to_undirected()
-            self.colors = nx.get_edge_attributes(self.MultiDiGraph,'color').values()
+            self.colors = nx.get_edge_attributes(self.MultiDiGraph, 'color').values()
 
         elif type == 'CRYPTO':
             self.set_spatial(False)
@@ -79,6 +79,12 @@ class NetworkGraphs:
 
         if self.is_spatial():
             self.pos = nx.get_node_attributes(self.DiGraph, 'pos')
+            location = self.pos.values()
+            # add a little bit of space around the graph
+            self.set_min_long(min(location, key=lambda x: x[0])[0] - 0.5)
+            self.set_min_lat(min(location, key=lambda x: x[1])[1] - 0.5)
+            self.set_max_long(max(location, key=lambda x: x[0])[0] + 0.5)
+            self.set_max_lat(max(location, key=lambda x: x[1])[1] + 0.5)
 
         if self.is_temporal():
             self.start = min(nx.get_edge_attributes(self.MultiDiGraph, 'start').values())
@@ -148,10 +154,35 @@ class NetworkGraphs:
     def standardize_weights(self):
         if self.is_weighted():
             for weight in self.weights:
-                self.weights[weight] = [(weight - self.min_weight) / (self.max_weight - self.min_weight) for weight in self.weights[weight]]
+                self.weights[weight] = [(weight - self.min_weight) / (self.max_weight - self.min_weight) for weight in
+                                        self.weights[weight]]
         else:
             raise ValueError("The graph is not weighted")
 
+    def set_min_long(self, min_long):
+        self.min_long = min_long
+
+    def get_min_long(self):
+        return self.min_long
+
+    def set_max_long(self, max_long):
+        self.max_long = max_long
+
+    def get_max_long(self):
+        return self.max_long
+
+    def set_min_lat(self, min_lat):
+        self.min_lat = min_lat
+
+    def get_min_lat(self):
+        return self.min_lat
+
+    def set_max_lat(self, max_lat):
+        self.max_lat = max_lat
+
+    def get_max_lat(self):
+        return self.max_lat
 
     def __str__(self):
-        return "Name: " + self.get_name() + "\nType: " + self.get_type() + "\nTemporal: " + str(self.is_temporal()) + "\nSpatial: " + str(self.is_spatial())
+        return "Name: " + self.get_name() + "\nType: " + self.get_type() + "\nTemporal: " + str(
+            self.is_temporal()) + "\nSpatial: " + str(self.is_spatial())
