@@ -1,33 +1,53 @@
+"""
+Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Visualisation for the NetworkX graphs
+"""
+
+# ----------------------------------------------------------------------------------------
+
+# Imports
 import geopandas as gpd
 import networkx as nx
 import matplotlib.pyplot as plt
 import ipywidgets as widgets
 from IPython.display import display
 
+# ----------------------------------------------------------------------------------------
 
-def static_visualisation(NetworkX_):
+
+def static_visualisation(networkX_):
     # return plotly figure
     return 0
 
+# ----------------------------------------------------------------------------------------
 
-def dyn_visualisation(NetworkX_):
+
+def dyn_visualisation(networkX_):
     # return html file
     return 0
 
+# ----------------------------------------------------------------------------------------
 
-def plot_static_on_map(networkx_, title, directed=True):
+
+def plot_static_on_map(networkGraphs, title, directed=True):
+    """
+    :Function: Plot the NetworkX graph on a map
+    :param networkx_: NetworkX Digraph
+    :param title: Title of the plot
+    :param directed: Boolean to indicate if the graph is directed or not
+    :return: Matplotlib plot
+    """
     world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
     china = world[world['name'] == 'China']
     china.plot(figsize=(10, 10))
 
     if directed:
-        pos = nx.get_node_attributes(networkx_, 'pos')
-        nx.draw(networkx_, pos, with_labels=False, node_size=3, node_color='red')
+        pos = nx.get_node_attributes(networkGraphs.DiGraph, 'pos')
+        nx.draw(networkGraphs.DiGraph, pos, with_labels=False, node_size=2, node_color='red')
     else:
-        # convert to undirected
-        networkx_ = networkx_.to_undirected()
-        pos = nx.get_node_attributes(networkx_, 'pos')
-        nx.draw(networkx_, pos, with_labels=False, node_size=3, node_color='red')
+        pos = nx.get_node_attributes(networkGraphs.Graph, 'pos')
+        nx.draw(networkGraphs.Graph, pos, with_labels=False, node_size=2, node_color='red')
 
     # plot axes
     plt.axis('on')
@@ -35,8 +55,15 @@ def plot_static_on_map(networkx_, title, directed=True):
 
     return plt
 
+# ----------------------------------------------------------------------------------------
+
 
 def plot_temporal_graphs(temporal_graphs):
+    """
+    :Function: Plot the dynamic temporal graphs on a map using a slider
+    :param temporal_graphs: List of NetworkX Digraphs
+    :return: Matplotlib plot with slider
+    """
     # Create a figure and subplot
     fig, ax = plt.subplots()
 
@@ -69,20 +96,28 @@ def plot_temporal_graphs(temporal_graphs):
     # display(slider)
     # plt.show()
 
+# ----------------------------------------------------------------------------------------
+
 
 def plot_shortest_distance(NetworkX_, path_):
     # return plotly figure
     return 0
+
+# ----------------------------------------------------------------------------------------
 
 
 def plot_metrics(NetworkX_, dataFrame_, title_):
     # return plotly figure
     return 0
 
+# ----------------------------------------------------------------------------------------
+
 
 def plot_metrics_on_map(NetworkX_, dataFrame_, title_):
     # return plotly figure
     return 0
+
+# ----------------------------------------------------------------------------------------
 
 
 def plot_histogram(NetworkX_, dataFrame_, title_):
