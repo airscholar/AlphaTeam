@@ -126,9 +126,33 @@ def plot_metrics(NetworkX_, dataFrame_, title_):
 # ----------------------------------------------------------------------------------------
 
 
-def plot_metrics_on_map(NetworkX_, dataFrame_, title_):
+def plot_metrics_on_map(networkGraphs, title_, directed=True):
+    # Load the shapefile
+    china = gpd.read_file('china.shp')
+
+    if title_ == "Degree Centrality":
+        df = compute_degree_centrality(networkGraphs, directed=True)
+
+    elif title_ == "Eigen Centrality":
+        df = compute_eigen_centrality(networkGraphs, directed=True)
+
+    elif title_ == "Closeness Centrality":
+        df = compute_closeness_centrality(networkGraphs, directed=True)
+
+    elif title_ == "Betweenness Centrality":
+        df = compute_betweeness_centrality(networkGraphs, directed=True)
+
+    # Merge the shapefile with the dataframe
+    china_df = china.merge(df, on='Node')
+
+    # Plot the centrality on the map
+    fig, ax = plt.subplots(figsize=(10, 10))
+    ax.set_aspect('equal')
+    china_df.plot(column=title_, cmap='OrRd', linewidth=0.5, ax=ax, edgecolor='black', legend=True)
+    plt.title(f"{title_} in China")
+
     # return plotly figure
-    return 0
+    return plt
 
 
 # ----------------------------------------------------------------------------------------
@@ -147,6 +171,7 @@ def histogram(df, column, log=False, title=None):
     bins = np.linspace(-5, 5, 50)
 
     if log:
+        #y-axis of the histogram will be displayed on a logarithmic scale
         plt.hist(df[column], bins=bins, log=True, color='blue', alpha=0.5, edgecolor='black')
     else:
         plt.hist(df[column], bins=bins, color='blue', alpha=0.5, edgecolor='black')
@@ -217,4 +242,3 @@ def create_mp4():
     print('\nVideo saved as output.mp4')
 
     return 1
-
