@@ -124,3 +124,13 @@ webencodings==0.5.1
 websocket-client==1.5.1
 Werkzeug==2.2.3
 widgetsnbextension==4.0.5
+flask==2.2.3
+Werkzeug==2.2.3
+jinja2==3.1.2
+WTForms==3.0.1
+flask_wtf==1.1.1
+gunicorn==20.1.0
+flask-restx==1.1.0
+python-dotenv==1.0.0
+Flask-Minify==0.41
+
