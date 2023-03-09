@@ -72,7 +72,7 @@ def plot_histogram(NetworkX_, dataFrame_, title_):
     :param NetworkX_: NetworkX Graph
     :param dataFrame_: Data frame of the file
     :param title: Title of the graph
-    :return: 0
+    :return: None
     '''
 
     id = input("\nEnter ID of the below options:"
@@ -137,7 +137,7 @@ def degree_distribution(dataFrame_):
     '''
     :Function degree_distribution: Plot Degree distribution graph
     :param dataFrame_: Data frame of the file
-    :return: 0
+    :return: None
     '''
     # Calculate the frequency of each degree
     degree_counts = dataFrame_['st_id'].value_counts().reset_index()
@@ -161,7 +161,7 @@ def cumulative_distribution(dataFrame_):
     '''
     :Function cumulative_distribution(): Plot cumulative distribution graph
     :param dataFrame_: Data Frame of the file
-    :return: 0
+    :return: None
     '''
     # create a dictionary to store the degrees of each node
     degree_dict = {}
@@ -192,7 +192,7 @@ def comp_cumulative_distribution(dataFrame_):
     '''
     :Function comp_cumulative_distribution(): Plot complementary distribution graph
     :param dataFrame_: Data frame of the file
-    :return: 0
+    :return: None
     '''
     # create a dictionary to store the degrees of each node
     degree_dict = {}
@@ -224,7 +224,7 @@ def kcore_distribution(NetworkX_, dataFrame_):
     :Function kcore_distribution(): Plot k-core distribution graph
     :param NetworkX_: NetworkX Graph
     :param dataFrame_: Data frame of the file
-    :return: 0
+    :return: None
     '''
     # Compute the K-core distribution of the graph
     kcore = nx.core_number(NetworkX_)
@@ -246,7 +246,7 @@ def kcore_cumulative_distribution(NetworkX_, dataFrame_):
     :Function kcore_cumulative_distribution(): Plot k-core cumulative distribution graph
     :param NetworkX_: NetworkX Graph
     :param dataFrame_: Data frame of the file
-    :return: 0
+    :return: None
     '''
     # Calculate the k-core decomposition and get the core number for each node
     core_numbers = nx.core_number(NetworkX_)
@@ -267,7 +267,7 @@ def kcore_comp_cumulative_distribution(NetworkX_, dataFrame_):
     :Function kcore_cumulative_distribution(): Plot k-core complementary cumulative distribution graph
     :param NetworkX_: NetworkX Graph
     :param dataFrame_: Data frame of the file
-    :return: 0
+    :return: None
     '''
     # Calculate the k-core decomposition and get the core number for each node
     core_numbers = nx.core_number(NetworkX_)
@@ -287,10 +287,10 @@ def kcore_comp_cumulative_distribution(NetworkX_, dataFrame_):
 
 def triangle_distribution(NetworkX_,dataFrame_):
     '''
-    :Function triangle_distribution(): Plot traingle distribution graph
+    :Function triangle_distribution(): Plot triangle distribution graph
     :param NetworkX_: NetworkX Graph
     :param dataFrame_: Data frame of the file
-    :return: 0
+    :return: None
     '''
     # Create an empty graph and add nodes
     NetworkX_ = nx.Graph()
@@ -318,10 +318,10 @@ def triangle_distribution(NetworkX_,dataFrame_):
 
 def triangle_cumulative_distribution(NetworkX_,dataFrame_):
     '''
-    :Function triangle_cumulative_distribution(): Plot traingle cumulative distribution graph
+    :Function triangle_cumulative_distribution(): Plot triangle cumulative distribution graph
     :param NetworkX_: NetworkX Graph
     :param dataFrame_: Data frame of the file
-    :return: 0
+    :return: None
     '''
     # Create an empty graph and add nodes
     NetworkX_ = nx.Graph()
@@ -352,10 +352,10 @@ def triangle_cumulative_distribution(NetworkX_,dataFrame_):
 
 def triangle_comp_cumulative_distribution(NetworkX_,dataFrame_):
     '''
-    :Function triangle_comp_cumulative_distribution(): Plot traingle complemenatry cumulative distribution graph
+    :Function triangle_comp_cumulative_distribution(): Plot triangle complementary cumulative distribution graph
     :param NetworkX_: NetworkX Graph
     :param dataFrame_: Data frame of the file
-    :return: 0
+    :return: None
     '''
     # Create an empty graph and add nodes
     NetworkX_ = nx.Graph()
