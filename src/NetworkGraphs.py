@@ -69,6 +69,14 @@ class NetworkGraphs:
             self.Graph, self.MultiGraph = self.DiGraph.to_undirected(), self.MultiDiGraph.to_undirected()
             self.colors = None
 
+        elif type == 'CUSTOM':
+            self.set_spatial(False)
+            self.set_temporal(False)
+            self.set_weighted(False)
+            self.DiGraph, self.MultiDiGraph = preprocess_custom(filename)
+            self.Graph, self.MultiGraph = self.DiGraph.to_undirected(), self.MultiDiGraph.to_undirected()
+            self.colors = None
+
         if self.is_spatial():
             self.pos = nx.get_node_attributes(self.DiGraph, 'pos')
 
