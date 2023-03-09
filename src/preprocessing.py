@@ -129,6 +129,9 @@ def preprocess_railway(filename_: str):
 
     multi_di_graph = create_multi_DiGraph_railway(network, station_id)
     di_graph = convert_to_DiGraph(multi_di_graph)
+
+    multi_di_graph.remove_edges_from(nx.selfloop_edges(multi_di_graph))
+    di_graph.remove_edges_from(nx.selfloop_edges(di_graph))
     return [di_graph, multi_di_graph]
 
 
