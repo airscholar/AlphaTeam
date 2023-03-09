@@ -11,6 +11,7 @@ import geopandas as gpd
 import networkx as nx
 import matplotlib.pyplot as plt
 import ipywidgets as widgets
+import numpy as np
 from IPython.display import display
 import cv2
 import os
@@ -133,9 +134,28 @@ def plot_metrics_on_map(NetworkX_, dataFrame_, title_):
 # ----------------------------------------------------------------------------------------
 
 
-def plot_histogram(NetworkX_, dataFrame_, title_):
+def histogram(df, column, log=False, title=None):
+    """
+    :Function: Plot the histogram for a given column
+    :param df: Pandas dataframe
+    :param column: Column name
+    :param log: Boolean
+    :return: Histogram
+    """
+
+    # Define the histogram bins and their edges
+    bins = np.linspace(-5, 5, 50)
+
+    if log:
+        plt.hist(df[column], bins=bins, log=True, color='blue', alpha=0.5, edgecolor='black')
+    else:
+        plt.hist(df[column], bins=bins, color='blue', alpha=0.5, edgecolor='black')
+
+    if title:
+        plt.title(title)
+
     # return plotly figure
-    return 0
+    return plt
 
 
 # ----------------------------------------------------------------------------------------
