@@ -10,6 +10,7 @@
 from enum import Enum
 from typing import Type
 import networkx as nx
+import pandas as pd
 
 # ----------------------------------------------------------------------------------------
 
@@ -49,6 +50,17 @@ def preprocess_railway(filename_: str):
     network = {}
     station_id = {}
     excluded = 0
+
+    colormap = {
+        "G": "red",
+        "C": "yellow",
+        "D": "green",
+        "Z": "blue",
+        "T": "purple",
+        "K": "orange",
+        "Y": "pink",
+        "1": "grey", "2": "grey", "3": "grey", "4": "grey", "5": "grey", "6": "grey", "7": "grey", "8": "grey", "9": "grey"}
+
     with open(filename_, 'r') as f:
         excluded = 0
         prev_train = None
@@ -59,21 +71,29 @@ def preprocess_railway(filename_: str):
             lat = float(lat)
             lon = float(lon)
 
-            # convert h;m to minutes
             try:
                 dep_time = int(dep_time.split(":")[0]) * 60 + int(dep_time.split(":")[1])
-                arr_time = int(arr_time.split(":")[0]) * 60 + int(arr_time.split(":")[1])
-                if date == "Day 2":
-                    arr_time += 24 * 60
-                    dep_time += 24 * 60
-
-                elif date == "Day 3":
-                    arr_time += 48 * 60
-                    dep_time += 48 * 60
             except:
-                excluded += 1
-                dep_time = None
-                arr_time = None
+                print(f"Converting {dep_time} to {int(float(dep_time) * 24 * 60)}")
+                dep_time = int(float(dep_time) * 24 * 60)
+
+            try:
+                arr_time = int(arr_time.split(":")[0]) * 60 + int(arr_time.split(":")[1])
+            except:
+                print(f"Converting {arr_time} to {int(float(arr_time) * 24 * 60)}")
+                arr_time = int(float(arr_time) * 24 * 60)
+
+            if date == "Day 2":
+                arr_time += 24 * 60
+                dep_time += 24 * 60
+
+            elif date == "Day 3":
+                arr_time += 48 * 60
+                dep_time += 48 * 60
+
+            elif date == "Day 4":
+                arr_time += 72 * 60
+                dep_time += 72 * 60
 
             if train != prev_train:
                 prev_station = None
@@ -88,6 +108,7 @@ def preprocess_railway(filename_: str):
                 "end": None,
                 "from": prev_station["lat"] if prev_station else None,
                 "to": None,
+                "color": None,
             }
 
             network[train].append(station)
@@ -95,6 +116,7 @@ def preprocess_railway(filename_: str):
             if prev_station:
                 prev_station["to"] = (lat, lon)
                 prev_station["end"] = arr_time
+                prev_station["color"] = colormap[train[0]]
 
             prev_train = train
             prev_station = station
@@ -134,7 +156,7 @@ def create_multi_DiGraph_railway(network, station_id):
                 # if the 'to' value is a tuple, create a new node
                 to_node = station_id[station['to']]
                 # add time interval to the edge
-                multi_graph.add_edge(from_node, to_node, start=station['start'], end=station['end'])
+                multi_graph.add_edge(from_node, to_node, start=station['start'], end=station['end'], color=station['color'])
             else:
                 continue
 
@@ -182,37 +204,32 @@ def convert_to_undirected(g_directed):
 # ----------------------------------------------------------------------------------------
 
 
-def create_temporal_subgraph(networkGraphs):
+def create_temporal_subgraph(networkGraphs, start_time, end_time, step):
     """
     :Function: Create a temporal subgraph for each minute of the 3 day
     :param networkx: NetworkX Digraph
     :return: List of NetworkX Digraphs (one for each minute)
     """
     temporal_graphs = []
-    for i in range(0, 48 * 60, 1):
+    for i in range(start_time, end_time, step):
         G = nx.DiGraph()
+        # add edges
         for u, v, d in networkGraphs.DiGraph.edges(data=True):
             if d['start'] is None or d['end'] is None:
                 continue
             if d['start'] <= i and d['end'] >= i:
                 G.add_edge(u, v)
+                for k_, v_ in d.items():
+                    G.edges[u, v][k_] = v_
         # add node positions
-        for u, v in networkGraphs.DiGraph.nodes(data=True):
-            G.add_node(u, pos=networkGraphs.pos[u])
+        for u, d in networkGraphs.DiGraph.nodes(data=True):
+            G.add_node(u)
+            for k_, v_ in d.items():
+                G.nodes[u][k_] = v_
+
         temporal_graphs.append(G)
 
-        # china.plot(figsize=(10,10))
-        # nx.draw(G, pos=nx.get_node_attributes(G, 'pos'),with_labels=False, node_size=1, node_color='red')
-        # plt.axis('on')
-        # plt.title(f"Temporal Graph at {i//1440}:{(i//60)%24:02d}:{i%60:02d}")
-        # plt.savefig(f"frames/{i}.png")
-        # # plt.show()
-        # plt.close()
-
-        # delete the graph to free up memory
-
-        # print progress bar
-        print(f"\r{i / 48 / 60 * 100:.2f}%", end="")
+        print(f"\rCreating temporal graphs: {i-start_time+1}/{end_time-start_time} ({(i-start_time+1)/(end_time-start_time)*100:.2f}%)", end="")
     return temporal_graphs
 
 
@@ -220,8 +237,17 @@ def create_temporal_subgraph(networkGraphs):
 
 
 def preprocess_crypto(filename_: str):
-    return 0
+    df = pd.read_csv('../datasets/Dune_Eth_transaction.csv')
 
+    MultiDiGraph = nx.MultiDiGraph()
+    MultiDiGraph.add_nodes_from(df['from'].unique())
+    MultiDiGraph.add_nodes_from(df['to'].unique())
+    for from_, to_, value_, time_ in df[['from', 'to', 'value', 'block_time']].values:
+        MultiDiGraph.add_edge(from_, to_, weight=value_, start=time_, end=time_)
+
+    DiGraph = convert_to_DiGraph(MultiDiGraph)
+
+    return [DiGraph, MultiDiGraph]
 
 # ----------------------------------------------------------------------------------------
 
