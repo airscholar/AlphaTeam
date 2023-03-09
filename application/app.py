@@ -1,8 +1,16 @@
 from flask import Flask, request, render_template, redirect, url_for, session
 import csv
+from src.NetworkGraphs import *
+import scipy as sp
 
 app = Flask(__name__)
 app.secret_key = 'my-secret-key' # set a secret key for the session
+
+filepath = './datasets/Railway.csv'
+
+cols = ['train', 'st_no', 'st_id', 'date', 'arr_time', 'dep_time', 'stay_time', 'mileage', 'lat', 'lon']
+df = pd.read_csv(filepath, names=cols, header=None)
+networkGraphs = NetworkGraphs(filepath, type="RAILWAY", spatial=True)
 
 @app.route('/')
 def index():
@@ -46,8 +54,12 @@ def home():
             else:
                 break
 
+    global_metrics = compute_global_metrics(networkGraphs)
+
     # Pass the data to the HTML template
-    return render_template('home.html', data=data)
+    return render_template('home.html', data=data,  metrics_table=
+                           global_metrics.to_html(classes='table', table_id="datatablesSimple", header="true"),
+                           datasetDf=df[:100].to_html(classes='table', table_id="datasetSimple", header="true"))
 
 @app.route('/visualise/static', endpoint='my_static')
 def static():
@@ -57,6 +69,12 @@ def static():
 @app.route('/visualise/dynamic', endpoint='my_dynamic')
 def dynamic():
     return render_template('dynamic.html')
+
+@app.route('/centrality', endpoint='centrality')
+def dynamic():
+    allCentralityDF = compute_node_metrics(networkGraphs, directed=False)
+    return render_template('centrality.html',  datasetDf=allCentralityDF.to_html(classes='table', table_id="datatablesSimple",
+                                                             header="true"))
 
 if __name__ == '__main__':
     app.run(debug=True)
