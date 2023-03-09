@@ -3,13 +3,19 @@ import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
 
+#----------------------------------------------------------------------
+
 def static_visualisation(NetworkX_):
 # return plotly figure
     return 0
 
+#----------------------------------------------------------------------
+
 def dyn_visualisation(NetworkX_):
 #return html file
     return 0
+
+#----------------------------------------------------------------------
 
 def static_on_map(NetworkX_, title, directed=True):
     '''
@@ -40,97 +46,32 @@ def static_on_map(NetworkX_, title, directed=True):
 
     return 0
 
+#----------------------------------------------------------------------
+
 def plot_shortest_distance(NetworkX_, path_):
-    '''
-    :Function plot_shortest_distance():
-    :param NetworkX_:
-    :param path_:
-    :return: 0
-    '''
-
-    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-    china = world[world['name'] == 'China']
-    china.plot(figsize=(10, 10))
-    pos = nx.get_node_attributes(NetworkX_, 'pos')
-    nx.draw(NetworkX_, pos, with_labels=False, node_size=3, node_color='red')
-
-    #Plot the Shortest Path
-    source = input("\nEnter the Start Node: ")
-    target = input("\nEnter the Target Node: ")
-    nx.shortest_path(NetworkX_, source=source, target=target)
-
-    plt.axis('on')
-    plt.title("Shortest Path between the entered source and target:")
-    plt.show()
-
-    # return plotly figure
+# return plotly figure
     return 0
+
+#----------------------------------------------------------------------
 
 def plot_metrics(NetworkX_, dataFrame_, title_):
 # return plotly figure
     return 0
 
+#----------------------------------------------------------------------
+
 def plot_metrics_on_map(NetworkX_, dataFrame_, title_):
-    '''
-    :Function: plot_metrics_on_map()
-    :param NetworkX:
-    :param path_:
-    :return: 0
-    '''
-
-    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-    china = world[world['name'] == 'China']
-    china.plot(figsize=(10, 10))
-
-    id = input("\nEnter your desired metrics to be displayed:"
-               "\n1.Degree Centrality \n2.Closeness Centrality "
-               "\n3.Betweenness Centrality \n4.Eigenvector Centrality \n")
-
-    if id == 1:
-        '''Degree Centrality'''
-        # Calculate the degree centrality for each node
-        degree_centralities = nx.degree_centrality(NetworkX_)
-
-        # Plot the graph with node size proportional to degree centrality
-        nx.draw(NetworkX_, with_labels=True, node_size=[v * 1000 for v in degree_centralities.values()])
-        plt.show()
-
-
-    elif id == 2:
-        '''Closeness Centrality'''
-        # Calculate the closeness centrality for each node
-        closeness_centralities = nx.closeness_centrality(NetworkX_)
-
-        # Plot the graph with node size proportional to closeness centrality
-        nx.draw(NetworkX_, with_labels=True, node_size=[v * 1000 for v in closeness_centralities.values()])
-        plt.show()
-
-    elif id == 3:
-        '''Betweenness Centrality'''
-        # Calculate the betweenness centrality for each node
-        betweenness_centralities = nx.betweenness_centrality(NetworkX_)
-
-        # Plot the graph with node size proportional to betweenness centrality
-        nx.draw(NetworkX_, with_labels=True, node_size=[v * 1000 for v in betweenness_centralities.values()])
-        plt.show()
-
-    elif id == 4:
-        '''Eigenvector Centrality'''
-        # Calculate the eigen vector centrality for each node
-        eigen_centralities = nx.eigenvector_centrality(NetworkX_)
-
-        # Plot the graph with node size proportional to eigen vector centrality
-        nx.draw(NetworkX_, with_labels=True, node_size=[v * 1000 for v in eigen_centralities.values()])
-        plt.show()
-
-    # return plotly figure
+# return plotly figure
     return 0
+
+#----------------------------------------------------------------------
 
 def plot_histogram(NetworkX_, dataFrame_, title_):
     '''
-    :Function plot_histogram():
-    :param NetworkX_:
-    :param path_:
+    :Function plot_histogram(): Plot histogram
+    :param NetworkX_: NetworkX Graph
+    :param dataFrame_: Data frame of the file
+    :param title: Title of the graph
     :return: 0
     '''
 
@@ -190,7 +131,14 @@ def plot_histogram(NetworkX_, dataFrame_, title_):
     # return plotly figure
     return 0
 
+#----------------------------------------------------------------------
+
 def degree_distribution(dataFrame_):
+    '''
+    :Function degree_distribution: Plot Degree distribution graph
+    :param dataFrame_: Data frame of the file
+    :return: 0
+    '''
     # Calculate the frequency of each degree
     degree_counts = dataFrame_['st_id'].value_counts().reset_index()
     degree_counts.columns = ['st_id', 'frequency']
@@ -207,7 +155,14 @@ def degree_distribution(dataFrame_):
 
     return 0
 
+#----------------------------------------------------------------------
+
 def cumulative_distribution(dataFrame_):
+    '''
+    :Function cumulative_distribution(): Plot cumulative distribution graph
+    :param dataFrame_: Data Frame of the file
+    :return: 0
+    '''
     # create a dictionary to store the degrees of each node
     degree_dict = {}
 
@@ -231,7 +186,14 @@ def cumulative_distribution(dataFrame_):
 
     return 0
 
+#----------------------------------------------------------------------
+
 def comp_cumulative_distribution(dataFrame_):
+    '''
+    :Function comp_cumulative_distribution: Plot complementary distribution graph
+    :param dataFrame_: Data frame of the file
+    :return: 0
+    '''
     # create a dictionary to store the degrees of each node
     degree_dict = {}
 
@@ -255,7 +217,15 @@ def comp_cumulative_distribution(dataFrame_):
 
     return 0
 
+#----------------------------------------------------------------------
+
 def kcore_distribution(NetworkX_, dataFrame_):
+    '''
+    :Function kcore_distribution: Plot k-core distribution graph
+    :param NetworkX_: NetworkX Graph
+    :param dataFrame_: Data frame of the file
+    :return: 0
+    '''
     # Compute the K-core distribution of the graph
     kcore = nx.core_number(NetworkX_)
     hist = nx.classes.function.degree_histogram(kcore)
@@ -269,7 +239,15 @@ def kcore_distribution(NetworkX_, dataFrame_):
 
     return 0
 
+#----------------------------------------------------------------------
+
 def kcore_cumulative_distribution(NetworkX_, dataFrame_):
+    '''
+    :Function kcore_cumulative_distribution: Plot k-core cumulative distribution graph
+    :param NetworkX_: NetworkX Graph
+    :param dataFrame_: Data frame of the file
+    :return: 0
+    '''
     # Calculate the k-core decomposition and get the core number for each node
     core_numbers = nx.core_number(NetworkX_)
 
@@ -283,3 +261,125 @@ def kcore_cumulative_distribution(NetworkX_, dataFrame_):
     plt.show()
 
     return 0
+
+def kcore_comp_cumulative_distribution(NetworkX_, dataFrame_):
+    '''
+    :Function kcore_cumulative_distribution: Plot k-core complementary cumulative distribution graph
+    :param NetworkX_: NetworkX Graph
+    :param dataFrame_: Data frame of the file
+    :return: 0
+    '''
+    # Calculate the k-core decomposition and get the core number for each node
+    core_numbers = nx.core_number(NetworkX_)
+
+    # Calculate the CCDF of the core numbers
+    ccdf = pd.Series(core_numbers).value_counts().sort_index(ascending=False).cumsum()
+
+    # Plot the CCDF
+    plt.loglog(ccdf.index, 1 - ccdf / ccdf.max(), '-o')
+    plt.xlabel('Core number')
+    plt.ylabel('Complementary cumulative distribution function')
+    plt.show()
+
+    return 0
+
+#----------------------------------------------------------------------
+
+def triangle_distribution(NetworkX_,dataFrame_):
+    '''
+    :Function triangle_distribution: Plot traingle distribution graph
+    :param NetworkX_: NetworkX Graph
+    :param dataFrame_: Data frame of the file
+    :return: 0
+    '''
+    # Create an empty graph and add nodes
+    NetworkX_ = nx.Graph()
+    NetworkX_.add_nodes_from(dataFrame_['st_id'])
+
+    # Generate a random graph with the same number of nodes
+    H = nx.gnm_random_graph(len(dataFrame_), len(dataFrame_))
+
+    # Merge the two graphs
+    NetworkX_.add_edges_from(H.edges())
+
+    # Calculate the triangle distribution
+    triangles = nx.triangles(NetworkX_)
+    triangle_distribution = pd.Series(triangles).value_counts().sort_index()
+
+    # Plot the triangle distribution
+    plt.plot(triangle_distribution.index, triangle_distribution.values, '-o')
+    plt.xlabel('Number of triangles')
+    plt.ylabel('Number of nodes')
+    plt.show()
+
+    return 0
+
+#----------------------------------------------------------------------
+
+def triangle_cumulative_distribution(NetworkX_,dataFrame_):
+    '''
+    :Function triangle_cumulative_distribution: Plot traingle cumulative distribution graph
+    :param NetworkX_: NetworkX Graph
+    :param dataFrame_: Data frame of the file
+    :return: 0
+    '''
+    # Create an empty graph and add nodes
+    NetworkX_ = nx.Graph()
+    NetworkX_.add_nodes_from(dataFrame_['st_id'])
+
+    # Generate a random graph with the same number of nodes
+    H = nx.gnm_random_graph(len(dataFrame_), len(dataFrame_))
+
+    # Merge the two graphs
+    NetworkX_.add_edges_from(H.edges())
+
+    # Calculate the triangle distribution
+    triangles = nx.triangles(NetworkX_)
+    triangle_distribution = pd.Series(triangles).value_counts().sort_index()
+
+    # Calculate the triangle CDF
+    triangle_cdf = triangle_distribution.cumsum() / triangle_distribution.sum()
+
+    # Plot the triangle CDF
+    plt.plot(triangle_cdf.index, triangle_cdf.values)
+    plt.xlabel('Number of triangles')
+    plt.ylabel('Cumulative probability')
+    plt.show()
+
+    return 0
+
+#----------------------------------------------------------------------
+
+def triangle_comp_cumulative_distribution(NetworkX_,dataFrame_):
+    '''
+    :Function triangle_comp_cumulative_distribution: Plot traingle complemenatry cumulative distribution graph
+    :param NetworkX_: NetworkX Graph
+    :param dataFrame_: Data frame of the file
+    :return: 0
+    '''
+    # Create an empty graph and add nodes
+    NetworkX_ = nx.Graph()
+    NetworkX_.add_nodes_from(dataFrame_['st_id'])
+
+    # Generate a random graph with the same number of nodes
+    H = nx.gnm_random_graph(len(dataFrame_), len(dataFrame_))
+
+    # Merge the two graphs
+    NetworkX_.add_edges_from(H.edges())
+
+    # Calculate the triangle distribution
+    triangles = nx.triangles(NetworkX_)
+    triangle_distribution = pd.Series(triangles).value_counts().sort_index()
+
+    # Calculate the triangle CCDF
+    triangle_ccdf = 1 - triangle_distribution.cumsum() / triangle_distribution.sum()
+
+    # Plot the triangle CCDF
+    plt.plot(triangle_ccdf.index, triangle_ccdf.values)
+    plt.xlabel('Number of triangles')
+    plt.ylabel('Complementary cumulative probability')
+    plt.show()
+
+    return 0
+
+#----------------------------------------------------------------------
