@@ -190,7 +190,7 @@ def cumulative_distribution(dataFrame_):
 
 def comp_cumulative_distribution(dataFrame_):
     '''
-    :Function comp_cumulative_distribution: Plot complementary distribution graph
+    :Function comp_cumulative_distribution(): Plot complementary distribution graph
     :param dataFrame_: Data frame of the file
     :return: 0
     '''
@@ -221,7 +221,7 @@ def comp_cumulative_distribution(dataFrame_):
 
 def kcore_distribution(NetworkX_, dataFrame_):
     '''
-    :Function kcore_distribution: Plot k-core distribution graph
+    :Function kcore_distribution(): Plot k-core distribution graph
     :param NetworkX_: NetworkX Graph
     :param dataFrame_: Data frame of the file
     :return: 0
@@ -243,7 +243,7 @@ def kcore_distribution(NetworkX_, dataFrame_):
 
 def kcore_cumulative_distribution(NetworkX_, dataFrame_):
     '''
-    :Function kcore_cumulative_distribution: Plot k-core cumulative distribution graph
+    :Function kcore_cumulative_distribution(): Plot k-core cumulative distribution graph
     :param NetworkX_: NetworkX Graph
     :param dataFrame_: Data frame of the file
     :return: 0
@@ -264,7 +264,7 @@ def kcore_cumulative_distribution(NetworkX_, dataFrame_):
 
 def kcore_comp_cumulative_distribution(NetworkX_, dataFrame_):
     '''
-    :Function kcore_cumulative_distribution: Plot k-core complementary cumulative distribution graph
+    :Function kcore_cumulative_distribution(): Plot k-core complementary cumulative distribution graph
     :param NetworkX_: NetworkX Graph
     :param dataFrame_: Data frame of the file
     :return: 0
@@ -287,7 +287,7 @@ def kcore_comp_cumulative_distribution(NetworkX_, dataFrame_):
 
 def triangle_distribution(NetworkX_,dataFrame_):
     '''
-    :Function triangle_distribution: Plot traingle distribution graph
+    :Function triangle_distribution(): Plot traingle distribution graph
     :param NetworkX_: NetworkX Graph
     :param dataFrame_: Data frame of the file
     :return: 0
@@ -318,7 +318,7 @@ def triangle_distribution(NetworkX_,dataFrame_):
 
 def triangle_cumulative_distribution(NetworkX_,dataFrame_):
     '''
-    :Function triangle_cumulative_distribution: Plot traingle cumulative distribution graph
+    :Function triangle_cumulative_distribution(): Plot traingle cumulative distribution graph
     :param NetworkX_: NetworkX Graph
     :param dataFrame_: Data frame of the file
     :return: 0
@@ -352,7 +352,7 @@ def triangle_cumulative_distribution(NetworkX_,dataFrame_):
 
 def triangle_comp_cumulative_distribution(NetworkX_,dataFrame_):
     '''
-    :Function triangle_comp_cumulative_distribution: Plot traingle complemenatry cumulative distribution graph
+    :Function triangle_comp_cumulative_distribution(): Plot traingle complemenatry cumulative distribution graph
     :param NetworkX_: NetworkX Graph
     :param dataFrame_: Data frame of the file
     :return: 0
