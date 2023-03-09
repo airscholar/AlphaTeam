@@ -43,14 +43,20 @@ def plot_static_on_map(networkGraphs, title, directed=True):
     :return: Matplotlib plot
     """
     world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-    china = world[world['name'] == 'China']
+    world = world[(world.pop_est > 0) & (world.name != "Antarctica")]
 
     if directed:
-        china.plot(figsize=(10, 10), color='white', edgecolor='black')
+        ax = world.plot(figsize=(10, 10), color='white', edgecolor='black')
+        if networkGraphs.is_spatial():
+            ax.set_xlim(networkGraphs.get_min_long(), networkGraphs.get_max_long())
+            ax.set_ylim(networkGraphs.get_min_lat(), networkGraphs.get_max_lat())
         nx.draw(networkGraphs.DiGraph, networkGraphs.pos, with_labels=False, node_size=1,
                 edge_color=networkGraphs.colors, node_color='red', width=0.5)
     else:
-        china.plot(figsize=(10, 10), edgecolor='black')
+        ax = world.plot(figsize=(10, 10), edgecolor='black')
+        if networkGraphs.is_spatial():
+            ax.set_xlim(networkGraphs.get_min_long(), networkGraphs.get_max_long())
+            ax.set_ylim(networkGraphs.get_min_lat(), networkGraphs.get_max_lat())
         nx.draw(networkGraphs.Graph, networkGraphs.pos, with_labels=False, node_size=1, node_color='red')
 
     # plot axes
