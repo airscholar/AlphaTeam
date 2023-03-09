@@ -7,6 +7,31 @@ from src.visualisation import *
 # ----------------------------------------------------------------------------------------
 
 networkGraphs = NetworkGraphs('../datasets/Railway.csv', type="RAILWAY", spatial =True)
+# plot_static_on_map(networkGraphs, 'Railway Network Undirected Graph', directed=False).show()
+kcore = compute_kcore(networkGraphs)
+print(kcore.head())
+un_kcore = compute_kcore(networkGraphs, directed=False)
+print(un_kcore.head())
+triangle = compute_triangles(networkGraphs, directed=False)
+print(triangle.head())
+un_triangle = compute_triangles(networkGraphs, directed=False)
+print(un_triangle.head())
+degree = compute_nodes_degree(networkGraphs, directed=False)
+print(degree.head())
+un_degree = compute_nodes_degree(networkGraphs, directed=False)
+print(un_degree.head())
+kcore_cdf = compute_CCDF(kcore,kcore.columns[1])
+print(kcore_cdf.head())
+
+histogram(kcore, 'K-Core',title='K-Core Histogram')
+histogram(un_kcore, 'K-Core',title='UnK-Core Histogram')
+histogram(triangle, 'Triangle',title='Triangle Histogram')
+histogram(un_triangle, 'Triangle',title='UnTriangle Histogram')
+histogram(degree, 'Degree',title='Degree Histogram')
+histogram(un_degree, 'Degree',title='UnDegree Histogram')
+histogram(kcore_cdf, 'CCDF',title='K-Core CCDF Histogram')
+histogram(kcore_cdf, 'CDF',title='K-Core CDF Histogram')
+
 
 # ----------------------------------------------------------------------------------------
 
