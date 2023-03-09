@@ -1,7 +1,7 @@
 from flask import render_template, request
 from jinja2 import TemplateNotFound
 
-from application.home import blueprint
+from application2.home import blueprint
 from src.NetworkGraphs import *
 
 filename = './datasets/Railway.csv'

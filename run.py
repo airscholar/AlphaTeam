@@ -4,8 +4,8 @@ from sys import exit
 
 from flask_minify import Minify
 
-from application import create_app
-from application.config import config_dict
+from application2 import create_app
+from application2.config import config_dict
 
 # WARNING: Don't run with debug turned on in production!
 # DEBUG = (os.getenv('DEBUG', 'False') == 'True')

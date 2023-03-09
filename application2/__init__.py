@@ -4,7 +4,7 @@ from flask import Flask
 
 
 def register_blueprints(app):
-    app.register_blueprint(import_module('application.home.routes').blueprint)
+    app.register_blueprint(import_module('application2.home.routes').blueprint)
 
 
 def create_app(config):
