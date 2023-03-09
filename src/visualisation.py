@@ -1,385 +1,200 @@
+"""
+Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Visualisation for the NetworkX graphs
+"""
+
+# ----------------------------------------------------------------------------------------
+
+# Imports
 import geopandas as gpd
-import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
+import ipywidgets as widgets
+from IPython.display import display
+import cv2
+import os
 
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
 
-def static_visualisation(NetworkX_):
-# return plotly figure
+
+def static_visualisation(networkX_):
+    # return plotly figure
     return 0
 
-#----------------------------------------------------------------------
 
-def dyn_visualisation(NetworkX_):
-#return html file
+# ----------------------------------------------------------------------------------------
+
+
+def dyn_visualisation(networkX_):
+    # return html file
     return 0
 
-#----------------------------------------------------------------------
 
-def static_on_map(NetworkX_, title, directed=True):
-    '''
-    :Function static_on_map(): Plot static map
-    :param NetworkX_: NetworkX Graph
+# ----------------------------------------------------------------------------------------
+
+
+def plot_static_on_map(networkGraphs, title, directed=True):
+    """
+    :Function: Plot the NetworkX graph on a map
+    :param networkGraphs: Network graphs
     :param title: Title of the plot
-    :param directed:
-    :return: 0
-    '''
-
+    :param directed: Boolean to indicate if the graph is directed or not
+    :return: Matplotlib plot
+    """
     world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
     china = world[world['name'] == 'China']
-    china.plot(figsize=(10, 10))
 
     if directed:
-        pos = nx.get_node_attributes(NetworkX_, 'pos')
-        nx.draw(NetworkX_, pos, with_labels=False, node_size=3, node_color='red')
+        china.plot(figsize=(10, 10), color='white', edgecolor='black')
+        nx.draw(networkGraphs.DiGraph, networkGraphs.pos, with_labels=False, node_size=1,
+                edge_color=networkGraphs.colors, node_color='red', width=0.5)
     else:
-        # convert to undirected
-        NetworkX_ = NetworkX_.to_undirected()
-        pos = nx.get_node_attributes(NetworkX_, 'pos')
-        nx.draw(NetworkX_, pos, with_labels=False, node_size=3, node_color='red')
+        china.plot(figsize=(10, 10), edgecolor='black')
+        nx.draw(networkGraphs.Graph, networkGraphs.pos, with_labels=False, node_size=1, node_color='red')
 
     # plot axes
     plt.axis('on')
     plt.title(title)
+
+    return plt
+
+
+# ----------------------------------------------------------------------------------------
+
+
+def plot_temporal_graphs(temporal_graphs):
+    """
+    :Function: Plot the dynamic temporal graphs on a map using a slider
+    :param temporal_graphs: List of NetworkX Digraphs
+    :return: Matplotlib plot with slider
+    """
+    # Create a figure and subplot
+    fig, ax = plt.subplots()
+
+    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+    china = world[world['name'] == 'China']
+    # Draw the first graph
+    china.plot(ax=ax, color='white', edgecolor='black')
+    colors = nx.get_edge_attributes(temporal_graphs[0], 'color').values()
+    nx.draw(temporal_graphs[0], pos=nx.get_node_attributes(temporal_graphs[0], 'pos'), edge_color=colors,
+            with_labels=False, node_size=1,
+            node_color='red', width=0.5, ax=ax)
+    ax.set_title(f"Temporal Graph at {0 // 1440}:{(0 // 60) % 24:02d}:{0 % 60:02d}")
+
+    # Create a slider widget
+    slider = widgets.IntSlider(min=0, max=len(temporal_graphs) - 1, value=0, description='Timeframe')
+
+    # Define a function to update the plot when the slider is changed
+    def update_plot(val):
+        val = val['new']
+        ax.clear()
+        china.plot(ax=ax, color='white', edgecolor='black')
+        colors = nx.get_edge_attributes(temporal_graphs[val], 'color').values()
+        nx.draw(temporal_graphs[val], pos=nx.get_node_attributes(temporal_graphs[0], 'pos'), with_labels=False,
+                node_size=1, node_color='red', edge_color=colors, width=0.5, ax=ax)
+        ax.set_title(f"Temporal Graph at {val // 1440}:{(val // 60) % 24:02d}:{val % 60:02d}")
+        plt.show()
+
+    # Attach the update function to the slider
+    slider.observe(update_plot, names='value')
+    display(slider)
     plt.show()
+    return [slider, plt]
+    # # Display the slider widget and plot
+    # display(slider)
+    # plt.show()
 
-    return 0
 
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
+
 
 def plot_shortest_distance(NetworkX_, path_):
-# return plotly figure
-    return 0
-
-#----------------------------------------------------------------------
-
-def plot_metrics(NetworkX_, dataFrame_, title_):
-# return plotly figure
-    return 0
-
-#----------------------------------------------------------------------
-
-def plot_metrics_on_map(NetworkX_, dataFrame_, title_):
-# return plotly figure
-    return 0
-
-#----------------------------------------------------------------------
-
-def plot_histogram(NetworkX_, dataFrame_, title_):
-    '''
-    :Function plot_histogram(): Plot histogram
-    :param NetworkX_: NetworkX Graph
-    :param dataFrame_: Data frame of the file
-    :param title: Title of the graph
-    :return: None
-    '''
-
-    id = input("\nEnter ID of the below options:"
-               "\n1.Histogram of Longitude \n2.Histogram of Latitude "
-               "\n3.Histogram of Station Number \n4.Histogram of Station ID \n")
-
-
-    if id == 1:
-        column_name = dataFrame_['lon']
-
-        # Create a histogram of the column data
-        plt.hist(column_name)
-        plt.title('Histogram of Longitude')
-        plt.xlabel('Longitude')
-        plt.ylabel('Frequency')
-
-        # Display the plot
-        plt.show()
-
-    elif id == 2:
-        column_name = dataFrame_['lat']
-
-        # Create a histogram of the column data
-        plt.hist(column_name)
-        plt.title('Histogram of Latitude')
-        plt.xlabel('Latitude')
-        plt.ylabel('Frequency')
-
-        # Display the plot
-        plt.show()
-
-    elif id == 3:
-        column_name = dataFrame_['st_no']
-
-        # Create a histogram of the column data
-        plt.hist(column_name)
-        plt.title('Histogram of Station Number')
-        plt.xlabel('Station Number')
-        plt.ylabel('Frequency')
-
-        # Display the plot
-        plt.show()
-
-    elif id == 4:
-        column_name = dataFrame_['st_id']
-
-        # Create a histogram of the column data
-        plt.hist(column_name)
-        plt.title('Histogram of Station ID')
-        plt.xlabel('Station ID')
-        plt.ylabel('Frequency')
-
-        # Display the plot
-        plt.show()
-
     # return plotly figure
     return 0
 
-#----------------------------------------------------------------------
 
-def degree_distribution(dataFrame_):
-    '''
-    :Function degree_distribution: Plot Degree distribution graph
-    :param dataFrame_: Data frame of the file
-    :return: None
-    '''
-    # Calculate the frequency of each degree
-    degree_counts = dataFrame_['st_id'].value_counts().reset_index()
-    degree_counts.columns = ['st_id', 'frequency']
+# ----------------------------------------------------------------------------------------
 
-    # Normalize the frequency
-    degree_counts['frequency'] = degree_counts['frequency'] / degree_counts['frequency'].sum()
 
-    # Plot the degree distribution
-    plt.scatter(degree_counts['st_id'], degree_counts['frequency'], color='blue')
-    plt.xlabel('Number of Nodes(st_id)')
-    plt.ylabel('Frequency')
-    plt.title('Degree Distribution')
-    plt.show()
-
+def plot_metrics(NetworkX_, dataFrame_, title_):
+    # return plotly figure
     return 0
 
-#----------------------------------------------------------------------
 
-def cumulative_distribution(dataFrame_):
-    '''
-    :Function cumulative_distribution(): Plot cumulative distribution graph
-    :param dataFrame_: Data Frame of the file
-    :return: None
-    '''
-    # create a dictionary to store the degrees of each node
-    degree_dict = {}
+# ----------------------------------------------------------------------------------------
 
-    # loop over the nodes in the dataframe and count their degrees
-    for node in dataFrame_['st_id']:
-        degree = dataFrame_[dataFrame_['st_id'] == node].index.size
-        degree_dict[node] = degree
 
-    # create a dataframe from the degree dictionary
-    degree_df = pd.DataFrame.from_dict(degree_dict, orient='index', columns=['degree'])
-
-    # calculate the degree CDF
-    degree_cdf = degree_df['degree'].value_counts(normalize=True).sort_index().cumsum()
-
-    # plot the degree CDF
-    plt.plot(degree_cdf.index, degree_cdf.values, marker='o')
-    plt.xlabel('Degree')
-    plt.ylabel('CDF')
-    plt.title('Degree CDF Plot')
-    plt.show()
-
+def plot_metrics_on_map(NetworkX_, dataFrame_, title_):
+    # return plotly figure
     return 0
 
-#----------------------------------------------------------------------
 
-def comp_cumulative_distribution(dataFrame_):
-    '''
-    :Function comp_cumulative_distribution(): Plot complementary distribution graph
-    :param dataFrame_: Data frame of the file
-    :return: None
-    '''
-    # create a dictionary to store the degrees of each node
-    degree_dict = {}
+# ----------------------------------------------------------------------------------------
 
-    # loop over the nodes in the dataframe and count their degrees
-    for node in dataFrame_['st_id']:
-        degree = dataFrame_[dataFrame_['st_id'] == node].index.size
-        degree_dict[node] = degree
 
-    # create a dataframe from the degree dictionary
-    degree_df = pd.DataFrame.from_dict(degree_dict, orient='index', columns=['degree'])
-
-    # calculate the degree CCDF
-    degree_ccdf = 1 - degree_df['degree'].value_counts(normalize=True).sort_index().cumsum()
-
-    # plot the degree CCDF
-    plt.loglog(degree_ccdf.index, degree_ccdf.values, marker='o')
-    plt.xlabel('Degree')
-    plt.ylabel('CCDF')
-    plt.title('Degree CCDF Plot')
-    plt.show()
-
+def plot_histogram(NetworkX_, dataFrame_, title_):
+    # return plotly figure
     return 0
 
-#----------------------------------------------------------------------
 
-def kcore_distribution(NetworkX_, dataFrame_):
-    '''
-    :Function kcore_distribution(): Plot k-core distribution graph
-    :param NetworkX_: NetworkX Graph
-    :param dataFrame_: Data frame of the file
-    :return: None
-    '''
-    # Compute the K-core distribution of the graph
-    kcore = nx.core_number(NetworkX_)
-    hist = nx.classes.function.degree_histogram(kcore)
+# ----------------------------------------------------------------------------------------
 
-    # Plot the K-core distribution using Matplotlib
-    plt.loglog(range(len(hist)), hist, 'o', label='K-core')
-    plt.xlabel('K')
-    plt.ylabel('Number of nodes')
-    plt.legend()
-    plt.show()
+def create_frames(temporal_graphs):
+    """
+    :Function: Create a list of frames for the dynamic temporal graphs
+    :param temporal_graphs: List of NetworkX Digraphs
+    :return: List of frames
+    """
+    path = "frames/"
+    for i in range(len(temporal_graphs)):
+        fig, ax = plt.subplots()
+        world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+        china = world[world['name'] == 'China']
+        china.plot(ax=ax, color='white', edgecolor='black')
+        colors = nx.get_edge_attributes(temporal_graphs[i], 'color').values()
+        nx.draw(temporal_graphs[i], pos=nx.get_node_attributes(temporal_graphs[i], 'pos'), edge_color=colors,
+                with_labels=False, node_size=0.5,
+                node_color='red', width=1.5, ax=ax)
+        ax.set_title(f"Temporal Graph")
+        plt.savefig(path + f"{i}.png")
+        plt.close()
+        # free memory
+        del fig
+        del ax
+        print(f"\rCreating frames: {i + 1}/{len(temporal_graphs)}", end="")
 
-    return 0
+    return 1
 
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
 
-def kcore_cumulative_distribution(NetworkX_, dataFrame_):
-    '''
-    :Function kcore_cumulative_distribution(): Plot k-core cumulative distribution graph
-    :param NetworkX_: NetworkX Graph
-    :param dataFrame_: Data frame of the file
-    :return: None
-    '''
-    # Calculate the k-core decomposition and get the core number for each node
-    core_numbers = nx.core_number(NetworkX_)
+def create_mp4():
+    """
+    :Function: Create a video from the frames
+    :return: 1 if successful
+    """
+    frames_folder = 'frames/'
+    frame_filenames = os.listdir(frames_folder)
+    frame_filenames.sort(key=lambda x: int(x[:-4]))
 
-    # Calculate the CDF of the core numbers
-    cdf = pd.Series(core_numbers).value_counts().sort_index().cumsum()
+    # Read the first frame to get its dimensions
+    frame = cv2.imread(frames_folder + frame_filenames[0])
+    height, width, layers = frame.shape
 
-    # Plot the CDF
-    plt.plot(cdf.index, cdf / cdf.max(), '-o')
-    plt.xlabel('Core number')
-    plt.ylabel('Cumulative distribution function')
-    plt.show()
+    # Create a VideoWriter object to write the video
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    video = cv2.VideoWriter('output.mp4', fourcc, 30, (width, height))
 
-    return 0
+    # Loop through the frames and add them to the video
+    i=0
+    for filename in frame_filenames:
+        frame = cv2.imread(frames_folder + filename)
+        video.write(frame)
+        print(f"\r{i/2764*100:.2f}%", end="")
+        i+=1
 
-def kcore_comp_cumulative_distribution(NetworkX_, dataFrame_):
-    '''
-    :Function kcore_cumulative_distribution(): Plot k-core complementary cumulative distribution graph
-    :param NetworkX_: NetworkX Graph
-    :param dataFrame_: Data frame of the file
-    :return: None
-    '''
-    # Calculate the k-core decomposition and get the core number for each node
-    core_numbers = nx.core_number(NetworkX_)
+    video.release()
+    print('\nVideo saved as output.mp4')
 
-    # Calculate the CCDF of the core numbers
-    ccdf = pd.Series(core_numbers).value_counts().sort_index(ascending=False).cumsum()
+    return 1
 
-    # Plot the CCDF
-    plt.loglog(ccdf.index, 1 - ccdf / ccdf.max(), '-o')
-    plt.xlabel('Core number')
-    plt.ylabel('Complementary cumulative distribution function')
-    plt.show()
-
-    return 0
-
-#----------------------------------------------------------------------
-
-def triangle_distribution(NetworkX_,dataFrame_):
-    '''
-    :Function triangle_distribution(): Plot triangle distribution graph
-    :param NetworkX_: NetworkX Graph
-    :param dataFrame_: Data frame of the file
-    :return: None
-    '''
-    # Create an empty graph and add nodes
-    NetworkX_ = nx.Graph()
-    NetworkX_.add_nodes_from(dataFrame_['st_id'])
-
-    # Generate a random graph with the same number of nodes
-    H = nx.gnm_random_graph(len(dataFrame_), len(dataFrame_))
-
-    # Merge the two graphs
-    NetworkX_.add_edges_from(H.edges())
-
-    # Calculate the triangle distribution
-    triangles = nx.triangles(NetworkX_)
-    triangle_distribution = pd.Series(triangles).value_counts().sort_index()
-
-    # Plot the triangle distribution
-    plt.plot(triangle_distribution.index, triangle_distribution.values, '-o')
-    plt.xlabel('Number of triangles')
-    plt.ylabel('Number of nodes')
-    plt.show()
-
-    return 0
-
-#----------------------------------------------------------------------
-
-def triangle_cumulative_distribution(NetworkX_,dataFrame_):
-    '''
-    :Function triangle_cumulative_distribution(): Plot triangle cumulative distribution graph
-    :param NetworkX_: NetworkX Graph
-    :param dataFrame_: Data frame of the file
-    :return: None
-    '''
-    # Create an empty graph and add nodes
-    NetworkX_ = nx.Graph()
-    NetworkX_.add_nodes_from(dataFrame_['st_id'])
-
-    # Generate a random graph with the same number of nodes
-    H = nx.gnm_random_graph(len(dataFrame_), len(dataFrame_))
-
-    # Merge the two graphs
-    NetworkX_.add_edges_from(H.edges())
-
-    # Calculate the triangle distribution
-    triangles = nx.triangles(NetworkX_)
-    triangle_distribution = pd.Series(triangles).value_counts().sort_index()
-
-    # Calculate the triangle CDF
-    triangle_cdf = triangle_distribution.cumsum() / triangle_distribution.sum()
-
-    # Plot the triangle CDF
-    plt.plot(triangle_cdf.index, triangle_cdf.values)
-    plt.xlabel('Number of triangles')
-    plt.ylabel('Cumulative probability')
-    plt.show()
-
-    return 0
-
-#----------------------------------------------------------------------
-
-def triangle_comp_cumulative_distribution(NetworkX_,dataFrame_):
-    '''
-    :Function triangle_comp_cumulative_distribution(): Plot triangle complementary cumulative distribution graph
-    :param NetworkX_: NetworkX Graph
-    :param dataFrame_: Data frame of the file
-    :return: None
-    '''
-    # Create an empty graph and add nodes
-    NetworkX_ = nx.Graph()
-    NetworkX_.add_nodes_from(dataFrame_['st_id'])
-
-    # Generate a random graph with the same number of nodes
-    H = nx.gnm_random_graph(len(dataFrame_), len(dataFrame_))
-
-    # Merge the two graphs
-    NetworkX_.add_edges_from(H.edges())
-
-    # Calculate the triangle distribution
-    triangles = nx.triangles(NetworkX_)
-    triangle_distribution = pd.Series(triangles).value_counts().sort_index()
-
-    # Calculate the triangle CCDF
-    triangle_ccdf = 1 - triangle_distribution.cumsum() / triangle_distribution.sum()
-
-    # Plot the triangle CCDF
-    plt.plot(triangle_ccdf.index, triangle_ccdf.values)
-    plt.xlabel('Number of triangles')
-    plt.ylabel('Complementary cumulative probability')
-    plt.show()
-
-    return 0
-
-#----------------------------------------------------------------------
