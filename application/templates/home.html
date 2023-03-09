@@ -1,0 +1,63 @@
+{% extends "base.html "%}
+{% block title %}Home{% endblock %}
+{% block span %}Home Page{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Global Metrics</h3>
+            <hr> <!-- Add a horizontal rule for visual separation -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-body">
+                {{ metrics_table|safe }}
+            </div>
+
+
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Dataset</h3>
+            <hr> <!-- Add a horizontal rule for visual separation -->
+            <div class="card card-body" style="margin-bottom: 50px;">
+
+                <table id="example" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            {% for cell in data[0] %}
+                            <th>{{ cell }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in data[1:] %}
+                        <tr>
+                            {% for cell in row %}
+                            <td>{{ cell }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+
+            <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+            <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('#example').DataTable({
+                        "pageLength": 10, // Show 10 rows per page
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]] // Customize page length menu
+                    });
+                });
+
+            </script>
+        </div>
+    </div>
+</div>
+{% endblock %}
