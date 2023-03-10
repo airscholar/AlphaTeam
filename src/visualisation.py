@@ -19,14 +19,6 @@ import os
 # ----------------------------------------------------------------------------------------
 
 
-def static_visualisation(networkX_):
-    # return plotly figure
-    return 0
-
-
-# ----------------------------------------------------------------------------------------
-
-
 def dyn_visualisation(networkX_):
     # return html file
     return 0
@@ -34,8 +26,27 @@ def dyn_visualisation(networkX_):
 
 # ----------------------------------------------------------------------------------------
 
+def plot_map(networkGraphs):
+    """
+    :Function: Plot the map of the location of the graphs
+    :param networkGraphs: Network graphs
+    :return: Matplotlib plot
+    """
+    if not networkGraphs.is_spatial():
+        return 0
 
-def plot_static_on_map(networkGraphs, title, directed=True):
+    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+    world = world[(world.pop_est > 0) & (world.name != "Antarctica")]
+    ax = world.plot(figsize=(10, 10), edgecolor='black')
+    ax.set_xlim(networkGraphs.get_min_long(), networkGraphs.get_max_long())
+    ax.set_ylim(networkGraphs.get_min_lat(), networkGraphs.get_max_lat())
+
+    return plt
+
+# ----------------------------------------------------------------------------------------
+
+
+def static_visualisation(networkGraphs, title, directed=True, multi=False):
     """
     :Function: Plot the NetworkX graph on a map
     :param networkGraphs: Network graphs
@@ -43,22 +54,24 @@ def plot_static_on_map(networkGraphs, title, directed=True):
     :param directed: Boolean to indicate if the graph is directed or not
     :return: Matplotlib plot
     """
-    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-    world = world[(world.pop_est > 0) & (world.name != "Antarctica")]
-
     if directed:
-        ax = world.plot(figsize=(10, 10), color='white', edgecolor='black')
         if networkGraphs.is_spatial():
-            ax.set_xlim(networkGraphs.get_min_long(), networkGraphs.get_max_long())
-            ax.set_ylim(networkGraphs.get_min_lat(), networkGraphs.get_max_lat())
-        nx.draw(networkGraphs.DiGraph, networkGraphs.pos, with_labels=False, node_size=1,
-                edge_color=networkGraphs.colors, node_color='red', width=0.5)
+            plot_map(networkGraphs)
+
+        if multi:
+            nx.draw(networkGraphs.MultiDiGraph, networkGraphs.pos, with_labels=False, node_size=1,
+                    edge_color=networkGraphs.colors['MultiDiGraph'], node_color='red', width=0.5)
+        else:
+            nx.draw(networkGraphs.DiGraph, networkGraphs.pos, with_labels=False, node_size=1,
+                    edge_color=networkGraphs.colors['DiGraph'], node_color='red', width=0.5)
     else:
-        ax = world.plot(figsize=(10, 10), edgecolor='black')
         if networkGraphs.is_spatial():
-            ax.set_xlim(networkGraphs.get_min_long(), networkGraphs.get_max_long())
-            ax.set_ylim(networkGraphs.get_min_lat(), networkGraphs.get_max_lat())
-        nx.draw(networkGraphs.Graph, networkGraphs.pos, with_labels=False, node_size=1, node_color='red')
+            plot_map(networkGraphs)
+
+        if multi:
+            nx.draw(networkGraphs.MultiGraph, networkGraphs.pos, with_labels=False, node_size=1,node_color='red', width=0.5)
+        else:
+            nx.draw(networkGraphs.Graph, networkGraphs.pos, with_labels=False, node_size=1, node_color='red', width=0.5)
 
     # plot axes
     plt.axis('on')
