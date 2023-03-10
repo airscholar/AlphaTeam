@@ -30,7 +30,8 @@ GRAPHS:
 # Imports
 from src.preprocessing import *
 from src.visualisation import *
-
+import scipy.io
+from math import sqrt
 
 # ----------------------------------------------------------------------------------------
 
@@ -90,12 +91,14 @@ class NetworkGraphs:
             self.set_temporal(False)
             self.set_weighted(False)
 
-            self.DiGraph, self.MultiDiGraph = preprocess_custom(filename)
+            self.DiGraph, self.MultiDiGraph = preprocess_mtx(filename)
             self.Graph, self.MultiGraph = self.DiGraph.to_undirected(), self.MultiDiGraph.to_undirected()
 
             self.colors = None
 
-            self.df = pd.read_csv(filename)
+            mtx = scipy.io.mmread('../datasets/inf-USAir97.mtx')
+            coo = mtx.tocoo()
+            self.df = pd.DataFrame({'source': coo.row, 'target': coo.col, 'weight': coo.data})
 
         # ---------------------------------------------- SPATIAL -------------------------------------------------------
 
@@ -107,6 +110,8 @@ class NetworkGraphs:
             self.set_min_lat(min(location, key=lambda x: x[1])[1] - 0.5)
             self.set_max_long(max(location, key=lambda x: x[0])[0] + 0.5)
             self.set_max_lat(max(location, key=lambda x: x[1])[1] + 0.5)
+        else:
+            self.pos = nx.spring_layout(self.Graph, k=4/sqrt(self.Graph.number_of_nodes()), iterations=150, weight=None)
 
         # ---------------------------------------------- TEMPORAL ------------------------------------------------------
 
