@@ -88,6 +88,60 @@ def centrality():
     table_rows = allCentralityDF.values.tolist()
     return render_template('centrality.html', table_headers=table_headers, table_rows=table_rows)
 
+@app.route('/degree', endpoint='degree')
+@cache.cached(timeout=3600) # Cache the result for 1 hour
+def degree():
+    degreeDF = cache.get('degreeDF')
+    if degreeDF is None:
+        degreeDF = compute_degree_centrality(networkGraphs, directed=False)
+        cache.set('degreeDF', degreeDF)
+    table_headers = list(degreeDF.columns.values)
+    table_rows = degreeDF.values.tolist()
+    return render_template('centrality_degree.html', table_headers=table_headers, table_rows=table_rows)
+
+@app.route('/eigenvector', endpoint='eigenvector')
+@cache.cached(timeout=3600) # Cache the result for 1 hour
+def eigenvector():
+    eigenvectorDF = cache.get('eigenvectorDF')
+    if eigenvectorDF is None:
+        eigenvectorDF = compute_eigen_centrality(networkGraphs, directed=False)
+        cache.set('eigenvectorDF', eigenvectorDF)
+    table_headers = list(eigenvectorDF.columns.values)
+    table_rows = eigenvectorDF.values.tolist()
+    return render_template('centrality_eigenvector.html', table_headers=table_headers, table_rows=table_rows)
+
+@app.route('/closeness', endpoint='closeness')
+@cache.cached(timeout=3600) # Cache the result for 1 hour
+def closeness():
+    closenessDF = cache.get('closenessDF')
+    if closenessDF is None:
+        closenessDF = compute_closeness_centrality(networkGraphs, directed=False)
+        cache.set('closenessDF', closenessDF)
+    table_headers = list(closenessDF.columns.values)
+    table_rows = closenessDF.values.tolist()
+    return render_template('centrality_closeness.html', table_headers=table_headers, table_rows=table_rows)
+
+@app.route('/betwenness', endpoint='betwenness')
+@cache.cached(timeout=3600) # Cache the result for 1 hour
+def betwenness():
+    betwennessDF = cache.get('betwennessDF')
+    if betwennessDF is None:
+        betwennessDF = compute_betweeness_centrality(networkGraphs, directed=False)
+        cache.set('betwennessDF', betwennessDF)
+    table_headers = list(betwennessDF.columns.values)
+    table_rows = betwennessDF.values.tolist()
+    return render_template('centrality_betwenness.html', table_headers=table_headers, table_rows=table_rows)
+
+@app.route('/load', endpoint='load')
+@cache.cached(timeout=3600) # Cache the result for 1 hour
+def load():
+    loadDF = cache.get('loadDF')
+    if loadDF is None:
+        loadDF = compute_load_centrality(networkGraphs, directed=False)
+        cache.set('loadDF', loadDF)
+    table_headers = list(loadDF.columns.values)
+    table_rows = loadDF.values.tolist()
+    return render_template('centrality_load.html', table_headers=table_headers, table_rows=table_rows)
 
 if __name__ == '__main__':
     app.run(debug=True)
