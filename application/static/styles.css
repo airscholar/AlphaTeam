@@ -29,6 +29,13 @@
 	margin-top: 25px;
 	height: 1rem;
 	border-radius: 0.5rem;
+	width: 100%;
+}
+
+progress {
+	height: 5px;
+	width: 100%;
+	vertical-align: baseline;
 }
 
 .progress-bar {
@@ -37,7 +44,7 @@
 
 
 .dropdown {
-	margin-top: 15px;
+	margin-top: 5px;
 	width: 100%;
 	margin-bottom: 15px;
 }
@@ -49,7 +56,6 @@
 	border-radius: 5px;
 	padding: 5px;
 	font-size: 16px;
-	color: #555;
 	background-color: #fff;
 	-webkit-appearance: none;
 	-moz-appearance: none;

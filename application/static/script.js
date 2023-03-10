@@ -42,6 +42,9 @@ $(function () {
                 }, false);
                 return xhr;
             },
+            success: function () {
+                alert('File Uploaded!');
+            },
             beforeSend: function () {
                 progressBar.show();
                 progressBar.val(0);
