@@ -65,5 +65,9 @@ $(function () {
     $('#csv_file').on('change', function () {
         var filename = $(this).val().split('\\').pop();
         $('#noFile').text(filename);
+
+        // Update the supported formats text with the selected file type
+        $('#file-type').text(filename);
     });
+
 });
