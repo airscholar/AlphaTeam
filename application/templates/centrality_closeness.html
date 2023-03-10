@@ -1,0 +1,44 @@
+{% extends "base.html "%}
+{% block title %}Centrality{% endblock %}
+{% block span %}Centrality Page{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Closeness Centrality</h3>
+            <hr> <!-- Add a horizontal rule for visual separation -->
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="example" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    {% for header in table_headers %}
+                    <th>{{ header }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in table_rows %}
+                <tr>
+                    {% for cell in row %}
+                    <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#example').DataTable({
+                "pageLength": 10, // Show 10 rows per page
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]] // Customize page length menu
+            });
+        });
+
+    </script>
+</div>
+{% endblock %}
