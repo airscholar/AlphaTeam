@@ -11,6 +11,8 @@ import pandas as pd
 import networkx as nx
 import numpy as np
 
+import matplotlib.pyplot as plt
+
 # ----------------------------------------------------------------------------------------
 # ------------------------------------ GLOBAL METRICS ------------------------------------
 # ----------------------------------------------------------------------------------------
@@ -231,11 +233,11 @@ def compute_nodes_degree(networkGraphs, directed=True):
     :return: Pandas dataframe with the metrics and values
     """
     if not directed:
-        degree = nx.degree(networkGraphs.MultiGraph)
+        degree = nx.degree(networkGraphs.Graph)
     else:
-        degree = nx.degree(networkGraphs.MultiDiGraph)
+        degree = nx.degree(networkGraphs.DiGraph)
 
-    df = pd.DataFrame(degree.items(), columns=['Node', 'Degree'])
+    df = pd.DataFrame(degree, columns=['Node', 'Degree'])
     return df
 
 
@@ -250,9 +252,9 @@ def compute_kcore(networkGraphs, directed=True):
     :return: Pandas dataframe with the k-core
     """
     if not directed:
-        kcore = nx.core_number(networkGraphs.MultiGraph)
+        kcore = nx.core_number(networkGraphs.Graph)
     else:
-        kcore = nx.core_number(networkGraphs.MultiDiGraph)
+        kcore = nx.core_number(networkGraphs.DiGraph)
 
     df = pd.DataFrame(kcore.items(), columns=['Node', 'K-Core'])
     return df
@@ -268,9 +270,9 @@ def compute_triangles(networkGraphs, directed=True):
     :return: Pandas dataframe with the triangle
     """
     if not directed:
-        triangle = nx.triangles(networkGraphs.MultiGraph)
+        triangle = nx.triangles(networkGraphs.Graph)
     else:
-        triangle = nx.triangles(networkGraphs.MultiDiGraph)
+        triangle = nx.triangles(networkGraphs.DiGraph)
 
     df = pd.DataFrame(triangle.items(), columns=['Node', 'Triangle'])
     return df
@@ -329,3 +331,24 @@ def export_to_csv(df, filename):
     """
     df.to_csv(filename, index=False)
     return 1
+
+# ----------------------------------------------------------------------------------------
+
+# TEST FUNCTIONS VISUALIZATION SHOULD BE IN ANOTHER FILE
+def histogram(df, column, bins=100, log=False,title=None):
+    """
+    :Function: Plot the histogram for a given column
+    :param df: Pandas dataframe
+    :param column: Column name
+    :param bins: Number of bins
+    :param log: Boolean
+    :return: Histogram
+    """
+    if log:
+        plt.hist(df[column], bins=bins, log=True)
+    else:
+        plt.hist(df[column], bins=bins)
+
+    if title:
+        plt.title(title)
+    plt.show()

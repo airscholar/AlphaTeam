@@ -67,6 +67,11 @@ def preprocess_railway(filename_: str):
         prev_station = None
 
         for line in f:
+
+            # skip header
+            if line.startswith("train"):
+                continue
+
             train, st_no, st_id, date, arr_time, dep_time, stay_time, mileage, lat, lon = line.split(",")
             lat = float(lat)
             lon = float(lon)
@@ -74,13 +79,13 @@ def preprocess_railway(filename_: str):
             try:
                 dep_time = int(dep_time.split(":")[0]) * 60 + int(dep_time.split(":")[1])
             except:
-                print(f"Converting {dep_time} to {int(float(dep_time) * 24 * 60)}")
+                # print(f"Converting {dep_time} to {int(float(dep_time) * 24 * 60)}")
                 dep_time = int(float(dep_time) * 24 * 60)
 
             try:
                 arr_time = int(arr_time.split(":")[0]) * 60 + int(arr_time.split(":")[1])
             except:
-                print(f"Converting {arr_time} to {int(float(arr_time) * 24 * 60)}")
+                # print(f"Converting {arr_time} to {int(float(arr_time) * 24 * 60)}")
                 arr_time = int(float(arr_time) * 24 * 60)
 
             if date == "Day 2":
@@ -129,6 +134,9 @@ def preprocess_railway(filename_: str):
 
     multi_di_graph = create_multi_DiGraph_railway(network, station_id)
     di_graph = convert_to_DiGraph(multi_di_graph)
+
+    multi_di_graph.remove_edges_from(nx.selfloop_edges(multi_di_graph))
+    di_graph.remove_edges_from(nx.selfloop_edges(di_graph))
     return [di_graph, multi_di_graph]
 
 
