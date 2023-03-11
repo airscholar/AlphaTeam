@@ -1,8 +1,83 @@
 # FILE TO TEST THE FUNCTIONS IN THE SRC FOLDER
+import matplotlib.pyplot as plt
+
 from src.NetworkGraphs import NetworkGraphs
 from src.preprocessing import *
 from src.metrics import *
 from src.visualisation import *
+
+customGraphs = NetworkGraphs('../datasets/inf-USAir97.mtx', type="CUSTOM")
+
+nx.draw(customGraphs.Graph, customGraphs.pos['neato'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
+plt.title('USAir97 Graph NEATO')
+plt.show()
+
+# nx.draw(customGraphs.Graph, customGraphs.pos['dot'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
+# plt.title('USAir97 Graph DOT')
+# plt.show()
+
+nx.draw(customGraphs.Graph, customGraphs.pos['twopi'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
+plt.title('USAir97 Graph TWOPI')
+plt.show()
+
+# nx.draw(customGraphs.Graph, customGraphs.pos['fdp'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
+# plt.title('USAir97 Graph FDP')
+# plt.show()
+
+nx.draw(customGraphs.Graph, customGraphs.pos['sfdp'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
+plt.title('USAir97 Graph SFDP')
+plt.show()
+
+cryptoGraphs = NetworkGraphs('../datasets/Dune_Eth_transaction.csv', type="CRYPTO")
+
+nx.draw(cryptoGraphs.Graph, cryptoGraphs.pos['neato'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
+plt.title('Dune_Eth_transaction Graph NEATO')
+plt.show()
+
+# nx.draw(cryptoGraphs.Graph, cryptoGraphs.pos['dot'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
+# plt.title('Dune_Eth_transaction Graph DOT')
+# plt.show()
+
+nx.draw(cryptoGraphs.Graph, cryptoGraphs.pos['twopi'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
+plt.title('Dune_Eth_transaction Graph TWOPI')
+plt.show()
+
+# nx.draw(cryptoGraphs.Graph, cryptoGraphs.pos['fdp'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
+# plt.title('Dune_Eth_transaction Graph FDP')
+# plt.show()
+
+nx.draw(cryptoGraphs.Graph, cryptoGraphs.pos['sfdp'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
+plt.title('Dune_Eth_transaction Graph SFDP')
+plt.show()
+
+railwayGraphs = NetworkGraphs('../datasets/Railway.csv', type="RAILWAY")
+
+plot_map(railwayGraphs)
+nx.draw(railwayGraphs.Graph, railwayGraphs.pos['map'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
+plt.title('Railway Graph MAP')
+plt.show()
+
+nx.draw(railwayGraphs.Graph, railwayGraphs.pos['neato'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
+plt.title('Railway Graph NEATO')
+plt.show()
+
+# nx.draw(railwayGraphs.Graph, railwayGraphs.pos['dot'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
+# plt.title('Railway Graph DOT')
+# plt.show()
+
+nx.draw(railwayGraphs.Graph, railwayGraphs.pos['twopi'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
+plt.title('Railway Graph TWOPI')
+plt.show()
+
+# nx.draw(railwayGraphs.Graph, railwayGraphs.pos['fdp'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
+# plt.title('Railway Graph FDP')
+# plt.show()
+
+nx.draw(railwayGraphs.Graph, railwayGraphs.pos['sfdp'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
+plt.title('Railway Graph SFDP')
+plt.show()
+
+
 
 # ----------------------------------------------------------------------------------------
 
