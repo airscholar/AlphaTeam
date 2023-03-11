@@ -6,15 +6,17 @@ Purpose: Visualisation for the NetworkX graphs
 
 # ----------------------------------------------------------------------------------------
 
+import os
+
+import cv2
 # Imports
 import geopandas as gpd
-import networkx as nx
-import matplotlib.pyplot as plt
 import ipywidgets as widgets
-import numpy as np
 from IPython.display import display
-import cv2
-import os
+import plotly.graph_objs as go
+
+from src.metrics import *
+
 
 # ----------------------------------------------------------------------------------------
 
@@ -26,10 +28,12 @@ def dyn_visualisation(networkX_):
 
 # ----------------------------------------------------------------------------------------
 
-def plot_map(networkGraphs):
+def plot_map(networkGraphs, background=True, edges=True):
     """
     :Function: Plot the map of the location of the graphs
     :param networkGraphs: Network graphs
+    :param background: Boolean to indicate if the background is to be plotted or not
+    :param edges: Boolean to indicate if the edges are to be plotted or not
     :return: Matplotlib plot
     """
     if not networkGraphs.is_spatial():
@@ -37,26 +41,32 @@ def plot_map(networkGraphs):
 
     world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
     world = world[(world.pop_est > 0) & (world.name != "Antarctica")]
-    ax = world.plot(figsize=(10, 10), edgecolor='black')
+    ax = world.plot(figsize=(10, 10), edgecolor='black' if edges else 'white',
+                    color='white' if background else None)
     ax.set_xlim(networkGraphs.get_min_long(), networkGraphs.get_max_long())
     ax.set_ylim(networkGraphs.get_min_lat(), networkGraphs.get_max_lat())
 
     return plt
 
+
 # ----------------------------------------------------------------------------------------
 
 
-def static_visualisation(networkGraphs, title, directed=True, multi=False):
+@memoize
+def static_visualisation(networkGraphs, title, directed=True, multi=False, background=True, edges=True):
     """
     :Function: Plot the NetworkX graph on a map
     :param networkGraphs: Network graphs
     :param title: Title of the plot
     :param directed: Boolean to indicate if the graph is directed or not
+    :param multi: for multi graphs
+    :param background: Boolean to indicate if the background is to be plotted or not
+    :param edges: Boolean to indicate if the edges are to be plotted or not
     :return: Matplotlib plot
     """
     if directed:
         if networkGraphs.is_spatial():
-            plot_map(networkGraphs)
+            plot_map(networkGraphs, background=background, edges=edges)
 
         if multi:
             nx.draw(networkGraphs.MultiDiGraph, networkGraphs.pos, with_labels=False, node_size=1,
@@ -66,10 +76,11 @@ def static_visualisation(networkGraphs, title, directed=True, multi=False):
                     edge_color=networkGraphs.colors['DiGraph'], node_color='red', width=0.5)
     else:
         if networkGraphs.is_spatial():
-            plot_map(networkGraphs)
+            plot_map(networkGraphs, background=background, edges=edges)
 
         if multi:
-            nx.draw(networkGraphs.MultiGraph, networkGraphs.pos, with_labels=False, node_size=1,node_color='red', width=0.5)
+            nx.draw(networkGraphs.MultiGraph, networkGraphs.pos, with_labels=False, node_size=1, node_color='red',
+                    width=0.5)
         else:
             nx.draw(networkGraphs.Graph, networkGraphs.pos, with_labels=False, node_size=1, node_color='red', width=0.5)
 
@@ -145,33 +156,61 @@ def plot_metrics(NetworkX_, dataFrame_, title_):
 # ----------------------------------------------------------------------------------------
 
 
-def plot_metrics_on_map(networkGraphs, title_, directed=True):
-    # Load the shapefile
-    china = gpd.read_file('china.shp')
+def plot_metrics_on_map(networkGraphs, metrics, title_, directed=False):
+    G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
 
-    if title_ == "Degree Centrality":
-        df = compute_degree_centrality(networkGraphs, directed=True)
+    pos = networkGraphs.pos
+    edge_trace = go.Scatter(x=[], y=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
 
-    elif title_ == "Eigen Centrality":
-        df = compute_eigen_centrality(networkGraphs, directed=True)
+    for idx, edge in enumerate(G.edges()):
+        x0, y0 = pos[edge[0]]
+        x1, y1 = pos[edge[1]]
+        edge_trace['x'] += tuple([x0, x1, None])
+        edge_trace['y'] += tuple([y0, y1, None])
 
-    elif title_ == "Closeness Centrality":
-        df = compute_closeness_centrality(networkGraphs, directed=True)
+    node_trace = go.Scatter(x=[], y=[], text=[], mode='markers', hoverinfo='text',
+                            marker=dict(showscale=True, color=['red'], size=3,
+                                        colorbar=dict(thickness=10, title='Node Connections', xanchor='left',
+                                                      titleside='right'), line=dict(width=2, color='#FF0000')))
+    for node in G.nodes():
+        x, y = pos[node]
+        node_trace['x'] += tuple([x])
+        node_trace['y'] += tuple([y])
+        node_centrality = metrics[metrics['Node'] == node]
+        node_info = f"Node: {node}<br>Connections: {str(G.degree[node])}<br>" \
+                    f"Degree Centrality: {str(node_centrality['Degree Centrality'].values[0])}<br>" \
+                    f"Eigenvector Centrality: {str(node_centrality['Eigenvector Centrality'].values[0])}<br>" \
+                    f"Closeness Centrality: {str(node_centrality['Closeness Centrality'].values[0])}<br>" \
+                    f"Betweenness Centrality: {str(node_centrality['Betweeness Centrality'].values[0])}"
+        node_trace['text'] += tuple([node_info])
 
-    elif title_ == "Betweenness Centrality":
-        df = compute_betweeness_centrality(networkGraphs, directed=True)
+    layout = go.Layout(
+        title=f'<br>{title_}',
+        titlefont=dict(size=16, color='White'),
+        showlegend=False,
+        hovermode='closest',
+        annotations=[
+            dict(
+                text="Alpha Team - 2023",
+                showarrow=False,
+                xref="paper", yref="paper",
+                x=0.005, y=-0.002,
+                font=dict(color='black')
+            )
+        ],
+        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+        plot_bgcolor='white',
+        height=1000
+    )
+    # plot the figure
+    fig = go.Figure(data=[edge_trace, node_trace],
+                    layout=layout)
+    # export to html
+    filename = f'metrics_map_directed.html' if directed else f'metrics_map_undirected.html'
+    fig.write_html(filename)
 
-    # Merge the shapefile with the dataframe
-    china_df = china.merge(df, on='Node')
-
-    # Plot the centrality on the map
-    fig, ax = plt.subplots(figsize=(10, 10))
-    ax.set_aspect('equal')
-    china_df.plot(column=title_, cmap='OrRd', linewidth=0.5, ax=ax, edgecolor='black', legend=True)
-    plt.title(f"{title_} in China")
-
-    # return plotly figure
-    return plt
+    return fig
 
 
 # ----------------------------------------------------------------------------------------
@@ -190,7 +229,7 @@ def histogram(df, column, log=False, title=None):
     bins = np.linspace(-5, 5, 50)
 
     if log:
-        #y-axis of the histogram will be displayed on a logarithmic scale
+        # y-axis of the histogram will be displayed on a logarithmic scale
         plt.hist(df[column], bins=bins, log=True, color='blue', alpha=0.5, edgecolor='black')
     else:
         plt.hist(df[column], bins=bins, color='blue', alpha=0.5, edgecolor='black')
@@ -230,6 +269,7 @@ def create_frames(temporal_graphs):
 
     return 1
 
+
 # ----------------------------------------------------------------------------------------
 
 def create_mp4():
@@ -250,12 +290,12 @@ def create_mp4():
     video = cv2.VideoWriter('output.mp4', fourcc, 30, (width, height))
 
     # Loop through the frames and add them to the video
-    i=0
+    i = 0
     for filename in frame_filenames:
         frame = cv2.imread(frames_folder + filename)
         video.write(frame)
-        print(f"\r{i/2764*100:.2f}%", end="")
-        i+=1
+        print(f"\r{i / 2764 * 100:.2f}%", end="")
+        i += 1
 
     video.release()
     print('\nVideo saved as output.mp4')

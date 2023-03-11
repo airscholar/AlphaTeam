@@ -6,18 +6,18 @@ Purpose: Compute the metrics for the NetworkX graphs
 
 # ----------------------------------------------------------------------------------------
 
-# Imports
-import pandas as pd
+import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+import pandas as pd
 
-import matplotlib.pyplot as plt
+from src.utils import memoize
+
 
 # ----------------------------------------------------------------------------------------
 # ------------------------------------ GLOBAL METRICS ------------------------------------
 # ----------------------------------------------------------------------------------------
-
-
+@memoize
 def compute_global_metrics(networkGraphs):
     """
     :Function: Compute the global metrics for the NetworkX graph (directed and undirected)
@@ -34,6 +34,7 @@ def compute_global_metrics(networkGraphs):
 # ----------------------------------------------------------------------------------------
 
 
+@memoize
 def compute_metrics(networkx_):
     """
     :Function: Compute the generals metrics for the NetworkX graph
@@ -89,6 +90,7 @@ def compute_metrics(networkx_):
 
     return df
 
+
 # ----------------------------------------------------------------------------------------
 
 
@@ -120,10 +122,11 @@ def compute_node_metrics(networkGraphs, directed=True):
 
     return df
 
+
 # ----------------------------------------------------------------------------------------
 # ------------------------------ CENTRALITY METRICS --------------------------------------
 # ----------------------------------------------------------------------------------------
-
+@memoize
 def compute_degree_centrality(networkGraphs, directed=True):
     """
     :Function: Compute the degree centrality for the NetworkX graph
@@ -144,7 +147,7 @@ def compute_degree_centrality(networkGraphs, directed=True):
 
 # ----------------------------------------------------------------------------------------
 
-
+@memoize
 def compute_eigen_centrality(networkGraphs, directed=True):
     """
     :Function: Compute the eigenvector centrality for the NetworkX graph
@@ -165,7 +168,7 @@ def compute_eigen_centrality(networkGraphs, directed=True):
 
 # ----------------------------------------------------------------------------------------
 
-
+@memoize
 def compute_closeness_centrality(networkGraphs, directed=True):
     """
     :Function: Compute the closeness centrality for the NetworkX graph
@@ -185,7 +188,7 @@ def compute_closeness_centrality(networkGraphs, directed=True):
 
 # ----------------------------------------------------------------------------------------
 
-
+@memoize
 def compute_betweeness_centrality(networkGraphs, directed=True):
     """
     :Function: Compute the betweeness centrality for the NetworkX graph
@@ -204,7 +207,7 @@ def compute_betweeness_centrality(networkGraphs, directed=True):
 
 
 # ----------------------------------------------------------------------------------------
-
+@memoize
 def compute_load_centrality(networkGraphs, directed=True):
     """
     :Function: Compute the load centrality for the NetworkX graph
@@ -220,11 +223,12 @@ def compute_load_centrality(networkGraphs, directed=True):
     df = pd.DataFrame(load_centrality.items(), columns=['Node', 'Load Centrality'])
     return df
 
+
 # ----------------------------------------------------------------------------------------
 # ------------------------------ NODES METRICS ------------------------------------------
 # ----------------------------------------------------------------------------------------
 
-
+@memoize
 def compute_nodes_degree(networkGraphs, directed=True):
     """
     :Function: Compute the node degree for the NetworkX graph
@@ -243,7 +247,7 @@ def compute_nodes_degree(networkGraphs, directed=True):
 
 # ----------------------------------------------------------------------------------------
 
-
+@memoize
 def compute_kcore(networkGraphs, directed=True):
     """
     :Function: Compute the k-core
@@ -259,9 +263,10 @@ def compute_kcore(networkGraphs, directed=True):
     df = pd.DataFrame(kcore.items(), columns=['Node', 'K-Core'])
     return df
 
+
 # ----------------------------------------------------------------------------------------
 
-
+@memoize
 def compute_triangles(networkGraphs, directed=True):
     """
     :Function: Compute the triangle
@@ -281,7 +286,7 @@ def compute_triangles(networkGraphs, directed=True):
 # ----------------------------------------------------------------------------------------
 # --------------------------- CONVERT TO HISTOGRAM ---------------------------------------
 # ----------------------------------------------------------------------------------------
-
+@memoize
 def compute_CDF(df, column):
     """
     :Function: Compute the Cumulative Distribution Function for a given column
@@ -293,9 +298,10 @@ def compute_CDF(df, column):
     df['CDF'] = np.cumsum(df[column]) / np.sum(df[column])
     return df
 
+
 # ----------------------------------------------------------------------------------------
 
-
+@memoize
 def compute_CCDF(df, column):
     """
     :Function: Compute the Complementary Cumulative Distribution Function for a given column
@@ -312,7 +318,7 @@ def compute_CCDF(df, column):
 # ----------------------------------- OTHERS ---------------------------------------------
 # ----------------------------------------------------------------------------------------
 
-
+@memoize
 def get_shortest_path(networkGraphs, source, target, weight=None, directed=False):
     if not directed:
         return nx.shortest_path(networkGraphs.Graph, source, target, weight=weight)
@@ -332,10 +338,11 @@ def export_to_csv(df, filename):
     df.to_csv(filename, index=False)
     return 1
 
+
 # ----------------------------------------------------------------------------------------
 
 # TEST FUNCTIONS VISUALIZATION SHOULD BE IN ANOTHER FILE
-def histogram(df, column, bins=100, log=False,title=None):
+def histogram(df, column, bins=100, log=False, title=None):
     """
     :Function: Plot the histogram for a given column
     :param df: Pandas dataframe
