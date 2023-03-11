@@ -17,6 +17,16 @@ cache.init_app(app)
 # Define the global variable
 networkGraphs = None
 
+# Define a custom error page for 500 Internal Server Error
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html')
+
+# Define a custom error page for 404 Not Found Error
+@app.errorhandler(404)
+def not_found_error(e):
+    return render_template('404.html')
+
 @app.route('/')
 def index():
     # Check if global_metrics is present in the cache and filename is present in the session
