@@ -30,7 +30,8 @@ GRAPHS:
 # Imports
 from src.preprocessing import *
 from src.visualisation import *
-
+import scipy.io
+from math import sqrt
 
 # ----------------------------------------------------------------------------------------
 
@@ -81,7 +82,7 @@ class NetworkGraphs:
 
             self.colors = None
 
-            self.df = pd.read_csv(filename)
+            self.df = pd.read_csv(filename,low_memory=False)
 
         # ---------------------------------------------- CUSTOM --------------------------------------------------------
 
@@ -90,18 +91,32 @@ class NetworkGraphs:
             self.set_temporal(False)
             self.set_weighted(False)
 
-            self.DiGraph, self.MultiDiGraph = preprocess_custom(filename)
+            self.DiGraph, self.MultiDiGraph = preprocess_mtx(filename)
             self.Graph, self.MultiGraph = self.DiGraph.to_undirected(), self.MultiDiGraph.to_undirected()
 
             self.colors = None
 
-            self.df = pd.read_csv(filename)
+            mtx = scipy.io.mmread('../datasets/inf-USAir97.mtx')
+            coo = mtx.tocoo()
+            self.df = pd.DataFrame({'source': coo.row, 'target': coo.col, 'weight': coo.data})
 
         # ---------------------------------------------- SPATIAL -------------------------------------------------------
 
+        self.pos = {}
+        self.pos['neato'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='neato')
+        print('neato')
+        # self.pos['dot'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='dot')
+        # print('dot')
+        self.pos['twopi'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='twopi')
+        print('twopi')
+        # self.pos['fdp'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='fdp')
+        # print('fdp')
+        self.pos['sfdp'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='sfdp')
+        print('sfdp')
+
         if self.is_spatial():
-            self.pos = nx.get_node_attributes(self.Graph, 'pos')
-            location = self.pos.values()
+            self.pos['map'] = nx.get_node_attributes(self.Graph, 'pos')
+            location = self.pos['map'].values()
             # add space around the graph
             self.set_min_long(min(location, key=lambda x: x[0])[0] - 0.5)
             self.set_min_lat(min(location, key=lambda x: x[1])[1] - 0.5)

@@ -11,6 +11,7 @@ from enum import Enum
 from typing import Type
 import networkx as nx
 import pandas as pd
+import scipy.io
 
 # ----------------------------------------------------------------------------------------
 
@@ -245,7 +246,12 @@ def create_temporal_subgraph(networkGraphs, start_time, end_time, step):
 
 
 def preprocess_crypto(filename_: str):
-    df = pd.read_csv('../datasets/Dune_Eth_transaction.csv')
+    """
+    :Function: Preprocess the crypto dataset
+    :param filename_: Path to the crypto dataset
+    :return: List of NetworkX DiGraphs and MultiDiGraphs
+    """
+    df = pd.read_csv(filename_)
 
     MultiDiGraph = nx.MultiDiGraph()
     MultiDiGraph.add_nodes_from(df['from'].unique())
@@ -255,10 +261,27 @@ def preprocess_crypto(filename_: str):
 
     DiGraph = convert_to_DiGraph(MultiDiGraph)
 
+    MultiDiGraph.remove_edges_from(nx.selfloop_edges(MultiDiGraph))
+    DiGraph.remove_edges_from(nx.selfloop_edges(DiGraph))
+
     return [DiGraph, MultiDiGraph]
 
 # ----------------------------------------------------------------------------------------
 
 
-def preprocess_custom(filename_: str):
-    return 0
+def preprocess_mtx(filename_: str):
+    """
+    :Function: Preprocess the mtx dataset
+    :param filename_: Path to the mtx dataset
+    :return: List of NetworkX DiGraphs and MultiDiGraphs
+    """
+    
+    mtx = scipy.io.mmread(filename_)
+
+    MultiDiGraph = nx.MultiDiGraph(mtx)
+    DiGraph = convert_to_DiGraph(MultiDiGraph)
+
+    MultiDiGraph.remove_edges_from(nx.selfloop_edges(MultiDiGraph))
+    DiGraph.remove_edges_from(nx.selfloop_edges(DiGraph))
+
+    return [DiGraph, MultiDiGraph]
