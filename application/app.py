@@ -3,6 +3,10 @@ import csv
 import sys
 sys.path.insert(1, '../')
 from src.NetworkGraphs import *
+from src.metrics import *
+from src.preprocessing import *
+from src.visualisation import *
+
 import scipy as sp
 from flask_caching import Cache
 import matplotlib.pyplot as plt
@@ -100,8 +104,8 @@ def home():
 @app.route('/visualise/static', endpoint='my_static')
 def static():
     filename = session['filename']
-    obj = plot_static_on_map(networkGraphs, "My Plot", directed=False)
-    plot = plot_static_on_map(networkGraphs, "My Plot", directed=False)
+    obj = plot_metrics_on_map(networkGraphs, "My Plot", directed=False)
+    plot = plot_metrics_on_map(networkGraphs, "My Plot", directed=False)
     image_path = 'img/' + filename + '.png'
     if not os.path.exists(app.root_path + '/static/img/' + filename + '.png'):
         plot.savefig(app.root_path + '/static/img/' + filename + '.png', bbox_inches='tight')
