@@ -89,8 +89,9 @@ class Railway:
         # plot axes
         plt.axis('on')
         plt.title("Alpha Team")
-        # plot title
-        plt.show()
+        # Return the plt object
+        return plt
+
 
     def get_shortest_path(self, source, target):
         method = "dijkstra"

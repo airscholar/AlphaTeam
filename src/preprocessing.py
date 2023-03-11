@@ -67,6 +67,11 @@ def preprocess_railway(filename_: str):
         prev_station = None
 
         for line in f:
+
+            # skip header
+            if line.startswith("train"):
+                continue
+
             train, st_no, st_id, date, arr_time, dep_time, stay_time, mileage, lat, lon = line.split(",")
             lat = float(lat)
             lon = float(lon)

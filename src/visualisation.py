@@ -11,17 +11,10 @@ import geopandas as gpd
 import networkx as nx
 import matplotlib.pyplot as plt
 import ipywidgets as widgets
+import numpy as np
 from IPython.display import display
 import cv2
 import os
-
-# ----------------------------------------------------------------------------------------
-
-
-def static_visualisation(networkX_):
-    # return plotly figure
-    return 0
-
 
 # ----------------------------------------------------------------------------------------
 
@@ -33,8 +26,27 @@ def dyn_visualisation(networkX_):
 
 # ----------------------------------------------------------------------------------------
 
+def plot_map(networkGraphs):
+    """
+    :Function: Plot the map of the location of the graphs
+    :param networkGraphs: Network graphs
+    :return: Matplotlib plot
+    """
+    if not networkGraphs.is_spatial():
+        return 0
 
-def plot_static_on_map(networkGraphs, title, directed=True):
+    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+    world = world[(world.pop_est > 0) & (world.name != "Antarctica")]
+    ax = world.plot(figsize=(10, 10), edgecolor='black')
+    ax.set_xlim(networkGraphs.get_min_long(), networkGraphs.get_max_long())
+    ax.set_ylim(networkGraphs.get_min_lat(), networkGraphs.get_max_lat())
+
+    return plt
+
+# ----------------------------------------------------------------------------------------
+
+
+def static_visualisation(networkGraphs, title, directed=True, multi=False):
     """
     :Function: Plot the NetworkX graph on a map
     :param networkGraphs: Network graphs
@@ -42,22 +54,24 @@ def plot_static_on_map(networkGraphs, title, directed=True):
     :param directed: Boolean to indicate if the graph is directed or not
     :return: Matplotlib plot
     """
-    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-    world = world[(world.pop_est > 0) & (world.name != "Antarctica")]
-
     if directed:
-        ax = world.plot(figsize=(10, 10), color='white', edgecolor='black')
         if networkGraphs.is_spatial():
-            ax.set_xlim(networkGraphs.get_min_long(), networkGraphs.get_max_long())
-            ax.set_ylim(networkGraphs.get_min_lat(), networkGraphs.get_max_lat())
-        nx.draw(networkGraphs.DiGraph, networkGraphs.pos, with_labels=False, node_size=1,
-                edge_color=networkGraphs.colors, node_color='red', width=0.5)
+            plot_map(networkGraphs)
+
+        if multi:
+            nx.draw(networkGraphs.MultiDiGraph, networkGraphs.pos, with_labels=False, node_size=1,
+                    edge_color=networkGraphs.colors['MultiDiGraph'], node_color='red', width=0.5)
+        else:
+            nx.draw(networkGraphs.DiGraph, networkGraphs.pos, with_labels=False, node_size=1,
+                    edge_color=networkGraphs.colors['DiGraph'], node_color='red', width=0.5)
     else:
-        ax = world.plot(figsize=(10, 10), edgecolor='black')
         if networkGraphs.is_spatial():
-            ax.set_xlim(networkGraphs.get_min_long(), networkGraphs.get_max_long())
-            ax.set_ylim(networkGraphs.get_min_lat(), networkGraphs.get_max_lat())
-        nx.draw(networkGraphs.Graph, networkGraphs.pos, with_labels=False, node_size=1, node_color='red')
+            plot_map(networkGraphs)
+
+        if multi:
+            nx.draw(networkGraphs.MultiGraph, networkGraphs.pos, with_labels=False, node_size=1,node_color='red', width=0.5)
+        else:
+            nx.draw(networkGraphs.Graph, networkGraphs.pos, with_labels=False, node_size=1, node_color='red', width=0.5)
 
     # plot axes
     plt.axis('on')
@@ -131,17 +145,61 @@ def plot_metrics(NetworkX_, dataFrame_, title_):
 # ----------------------------------------------------------------------------------------
 
 
-def plot_metrics_on_map(NetworkX_, dataFrame_, title_):
+def plot_metrics_on_map(networkGraphs, title_, directed=True):
+    # Load the shapefile
+    china = gpd.read_file('china.shp')
+
+    if title_ == "Degree Centrality":
+        df = compute_degree_centrality(networkGraphs, directed=True)
+
+    elif title_ == "Eigen Centrality":
+        df = compute_eigen_centrality(networkGraphs, directed=True)
+
+    elif title_ == "Closeness Centrality":
+        df = compute_closeness_centrality(networkGraphs, directed=True)
+
+    elif title_ == "Betweenness Centrality":
+        df = compute_betweeness_centrality(networkGraphs, directed=True)
+
+    # Merge the shapefile with the dataframe
+    china_df = china.merge(df, on='Node')
+
+    # Plot the centrality on the map
+    fig, ax = plt.subplots(figsize=(10, 10))
+    ax.set_aspect('equal')
+    china_df.plot(column=title_, cmap='OrRd', linewidth=0.5, ax=ax, edgecolor='black', legend=True)
+    plt.title(f"{title_} in China")
+
     # return plotly figure
-    return 0
+    return plt
 
 
 # ----------------------------------------------------------------------------------------
 
 
-def plot_histogram(NetworkX_, dataFrame_, title_):
+def histogram(df, column, log=False, title=None):
+    """
+    :Function: Plot the histogram for a given column
+    :param df: Pandas dataframe
+    :param column: Column name
+    :param log: Boolean
+    :return: Histogram
+    """
+
+    # Define the histogram bins and their edges
+    bins = np.linspace(-5, 5, 50)
+
+    if log:
+        #y-axis of the histogram will be displayed on a logarithmic scale
+        plt.hist(df[column], bins=bins, log=True, color='blue', alpha=0.5, edgecolor='black')
+    else:
+        plt.hist(df[column], bins=bins, color='blue', alpha=0.5, edgecolor='black')
+
+    if title:
+        plt.title(title)
+
     # return plotly figure
-    return 0
+    return plt
 
 
 # ----------------------------------------------------------------------------------------
@@ -203,4 +261,3 @@ def create_mp4():
     print('\nVideo saved as output.mp4')
 
     return 1
-
