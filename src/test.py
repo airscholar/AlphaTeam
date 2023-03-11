@@ -8,29 +8,29 @@ from src.visualisation import *
 
 networkGraphs = NetworkGraphs('../datasets/Railway.csv', type="RAILWAY", spatial =True)
 # plot_static_on_map(networkGraphs, 'Railway Network Undirected Graph', directed=False).show()
-kcore = compute_kcore(networkGraphs)
-print(kcore.head())
-un_kcore = compute_kcore(networkGraphs, directed=False)
-print(un_kcore.head())
-triangle = compute_triangles(networkGraphs, directed=False)
-print(triangle.head())
-un_triangle = compute_triangles(networkGraphs, directed=False)
-print(un_triangle.head())
-degree = compute_nodes_degree(networkGraphs, directed=False)
-print(degree.head())
-un_degree = compute_nodes_degree(networkGraphs, directed=False)
-print(un_degree.head())
-kcore_cdf = compute_CCDF(kcore,kcore.columns[1])
-print(kcore_cdf.head())
-
-histogram(kcore, 'K-Core',title='K-Core Histogram')
-histogram(un_kcore, 'K-Core',title='UnK-Core Histogram')
-histogram(triangle, 'Triangle',title='Triangle Histogram')
-histogram(un_triangle, 'Triangle',title='UnTriangle Histogram')
-histogram(degree, 'Degree',title='Degree Histogram')
-histogram(un_degree, 'Degree',title='UnDegree Histogram')
-histogram(kcore_cdf, 'CCDF',title='K-Core CCDF Histogram')
-histogram(kcore_cdf, 'CDF',title='K-Core CDF Histogram')
+# kcore = compute_kcore(networkGraphs)
+# print(kcore.head())
+# un_kcore = compute_kcore(networkGraphs, directed=False)
+# print(un_kcore.head())
+# triangle = compute_triangles(networkGraphs, directed=False)
+# print(triangle.head())
+# un_triangle = compute_triangles(networkGraphs, directed=False)
+# print(un_triangle.head())
+# degree = compute_nodes_degree(networkGraphs, directed=False)
+# print(degree.head())
+# un_degree = compute_nodes_degree(networkGraphs, directed=False)
+# print(un_degree.head())
+# kcore_cdf = compute_CCDF(kcore,kcore.columns[1])
+# print(kcore_cdf.head())
+#
+# histogram(kcore, 'K-Core',title='K-Core Histogram')
+# histogram(un_kcore, 'K-Core',title='UnK-Core Histogram')
+# histogram(triangle, 'Triangle',title='Triangle Histogram')
+# histogram(un_triangle, 'Triangle',title='UnTriangle Histogram')
+# histogram(degree, 'Degree',title='Degree Histogram')
+# histogram(un_degree, 'Degree',title='UnDegree Histogram')
+# histogram(kcore_cdf, 'CCDF',title='K-Core CCDF Histogram')
+# histogram(kcore_cdf, 'CDF',title='K-Core CDF Histogram')
 
 
 # ----------------------------------------------------------------------------------------
@@ -91,13 +91,22 @@ histogram(kcore_cdf, 'CDF',title='K-Core CDF Histogram')
 # ----------------------------------------------------------------------------------------
 
 
-import geopandas as gpd
-world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-#
-# #plot the section of the map with min and max lat and long
-ax = world.plot(edgecolor='black')
-ax.set_xlim(networkGraphs.get_min_long(), networkGraphs.get_max_long())
-ax.set_ylim(networkGraphs.get_min_lat(), networkGraphs.get_max_lat())
-ax.set_title('Railway Network')
-plt.show()
-plot_static_on_map(networkGraphs, 'Railway Network Undirected Graph', directed=False).show()
+# import geopandas as gpd
+# world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+# #
+# # #plot the section of the map with min and max lat and long
+# ax = world.plot(edgecolor='black')
+# ax.set_xlim(networkGraphs.get_min_long(), networkGraphs.get_max_long())
+# ax.set_ylim(networkGraphs.get_min_lat(), networkGraphs.get_max_lat())
+# ax.set_title('Railway Network')
+# plt.show()
+# plot_static_on_map(networkGraphs, 'Railway Network Undirected Graph', directed=False).show()
+# static_visualisation(networkGraphs, 'Railway Network Undirected Graph', directed=False, multi=False, background=False, edges=False).show()
+
+# china = world[world['name'] == 'China']
+# print(china)
+metrics = compute_node_metrics(networkGraphs, directed=False)
+plot_metrics_on_map(networkGraphs, metrics, 'Metrics Centrality Undirected', directed=False).show()
+metrics = compute_node_metrics(networkGraphs, directed=True)
+plot_metrics_on_map(networkGraphs, metrics, 'Metrics Centrality Directed', directed=True).show()
+

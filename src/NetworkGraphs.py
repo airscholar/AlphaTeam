@@ -1,3 +1,8 @@
+# Imports
+from src.preprocessing import *
+from src.visualisation import *
+
+# ----------------------------------------------------------------------------------------
 """
 Author: Alpha Team Group Project
 Date: March 2023
@@ -25,12 +30,6 @@ GRAPHS:
 
 """
 
-# ----------------------------------------------------------------------------------------
-
-# Imports
-from src.preprocessing import *
-from src.visualisation import *
-
 
 # ----------------------------------------------------------------------------------------
 
@@ -42,6 +41,21 @@ class NetworkGraphs:
     # -----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, filename, type, name=None, temporal=False, spatial=False, weighted=False):
+
+        self.name = None
+        self.type = None
+        self.max_lat = None
+        self.min_lat = None
+        self.max_long = None
+        self.min_long = None
+        self.temporal = None
+        self.spatial = None
+        self.weighted = None
+        self.DiGraph = None
+        self.MultiDiGraph = None
+        self.Graph = None
+        self.MultiGraph = None
+        self.colors = None
 
         self.filename = filename
         if name is None:
@@ -61,13 +75,12 @@ class NetworkGraphs:
             self.DiGraph, self.MultiDiGraph = preprocess_railway(filename)
             self.Graph, self.MultiGraph = self.DiGraph.to_undirected(), self.MultiDiGraph.to_undirected()
 
-            self.colors = {}
-            self.colors['MultiDiGraph'] = nx.get_edge_attributes(self.MultiDiGraph, 'color').values()
-            self.colors['MultiGraph'] = nx.get_edge_attributes(self.MultiGraph, 'color').values()
-            self.colors['DiGraph'] = nx.get_edge_attributes(self.DiGraph, 'color').values()
-            self.colors['Graph'] = nx.get_edge_attributes(self.Graph, 'color').values()
+            self.colors = {'MultiDiGraph': nx.get_edge_attributes(self.MultiDiGraph, 'color').values(),
+                           'MultiGraph': nx.get_edge_attributes(self.MultiGraph, 'color').values(),
+                           'DiGraph': nx.get_edge_attributes(self.DiGraph, 'color').values(),
+                           'Graph': nx.get_edge_attributes(self.Graph, 'color').values()}
 
-            self.df = pd.read_csv(filename)
+            self.df = pd.read_csv(filename, low_memory=False)
 
         # ---------------------------------------------- CRYPTO --------------------------------------------------------
 
@@ -117,12 +130,10 @@ class NetworkGraphs:
         # ---------------------------------------------- WEIGHTED ------------------------------------------------------
 
         if self.is_weighted():
-            self.weights = {}
-
-            self.weights['Graph'] = list(nx.get_edge_attributes(self.Graph, 'weight').values())
-            self.weights['MultiGraph'] = list(nx.get_edge_attributes(self.MultiGraph, 'weight').values())
-            self.weights['DiGraph'] = list(nx.get_edge_attributes(self.DiGraph, 'weight').values())
-            self.weights['MultiDiGraph'] = list(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())
+            self.weights = {'Graph': list(nx.get_edge_attributes(self.Graph, 'weight').values()),
+                            'MultiGraph': list(nx.get_edge_attributes(self.MultiGraph, 'weight').values()),
+                            'DiGraph': list(nx.get_edge_attributes(self.DiGraph, 'weight').values()),
+                            'MultiDiGraph': list(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())}
 
             self.min_weight = min(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())
             self.max_weight = max(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())
@@ -151,9 +162,9 @@ class NetworkGraphs:
     def set_name(self, name):
         self.name = name
 
-    def set_type(self, type):
-        if type in ['RAILWAY', 'CRYPTO', 'CUSTOM']:
-            self.type = type
+    def set_type(self, data_type):
+        if data_type in ['RAILWAY', 'CRYPTO', 'CUSTOM']:
+            self.type = data_type
         else:
             raise ValueError("The type must be 'RAILWAY', 'CRYPTO' or 'CUSTOM'")
 
