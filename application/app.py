@@ -1,22 +1,61 @@
 from flask import Flask, request, render_template, redirect, url_for, session
 import csv
+import sys
+sys.path.insert(1, '../')
 from src.NetworkGraphs import *
+from src.metrics import *
+from src.preprocessing import *
+from src.visualisation import *
+
 import scipy as sp
 from flask_caching import Cache
+import matplotlib.pyplot as plt
+import re
+import time
 
 app = Flask(__name__)
 app.secret_key = 'my-secret-key' # set a secret key for the session
 cache = Cache(config={'CACHE_TYPE': 'simple'})
 cache.init_app(app)
 
-filepath = './datasets/Railway.csv'
+# Define the global variable
+networkGraphs = None
 
-cols = ['train', 'st_no', 'st_id', 'date', 'arr_time', 'dep_time', 'stay_time', 'mileage', 'lat', 'lon']
-df = pd.read_csv(filepath, names=cols, header=None)
-networkGraphs = NetworkGraphs(filepath, type="RAILWAY", spatial=True)
+# Define a custom error page for 500 Internal Server Error
+@app.errorhandler(500)
+def internal_server_error(e):
+    if cache.has('global_metrics') and 'filename' in session:
+        # Clear the cache
+        cache.clear()
+        # Delete the file
+        filename = session['filename']
+        filepath = './uploads/'+filename
+        if os.path.exists(filepath):
+            os.remove(filepath)
+        imagepath = app.root_path + '/static/img/' + filename + '.png'
+        if os.path.exists(imagepath):
+            os.remove(imagepath)
+    return render_template('500.html')
+
+# Define a custom error page for 404 Not Found Error
+@app.errorhandler(404)
+def not_found_error(e):
+    return render_template('404.html')
 
 @app.route('/')
 def index():
+    # Check if global_metrics is present in the cache and filename is present in the session
+    if cache.has('global_metrics') and 'filename' in session:
+        # Clear the cache
+        cache.clear()
+        # Delete the file
+        filename = session['filename']
+        filepath = './uploads/'+filename
+        if os.path.exists(filepath):
+            os.remove(filepath)
+        imagepath = app.root_path + '/static/img/' + filename + '.png'
+        if os.path.exists(imagepath):
+            os.remove(imagepath)
     return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
@@ -26,10 +65,11 @@ def upload():
     option = request.form['option']
 
     # Save the CSV file to a folder on the server with a filename based on the selected option and file extension
+    timestamp = str(int(time.time()))
     if option != 'General':
-        filename = option + '.csv'
+        filename = option + re.sub(r'\W+', '', timestamp) + '.csv'
     else:
-        filename = option + '.mtx'
+        filename = option + re.sub(r'\W+', '', timestamp) + '.mtx'
 
     csv_file.save('uploads/' + filename)
     # Do something with the CSV file and selected option
@@ -38,6 +78,10 @@ def upload():
     # Store the filename in a session variable
     session['filename'] = filename
 
+    filepath = './uploads/'+filename
+    # Assign the value to the global variable
+    global networkGraphs
+    networkGraphs = NetworkGraphs(filepath, type=option, spatial=True)
     # Redirect the user to the success page
     return redirect(url_for('home'))
 
@@ -70,7 +114,13 @@ def home():
 
 @app.route('/visualise/static', endpoint='my_static')
 def static():
-    image_path = '/img/example.png'
+    filename = session['filename']
+    obj = static_visualisation(networkGraphs, "My Plot", directed=False)
+    plot = static_visualisation(networkGraphs, "My Plot", directed=False)
+    image_path = 'img/' + filename + '.png'
+    if not os.path.exists(app.root_path + '/static/img/' + filename + '.png'):
+        plot.savefig(app.root_path + '/static/img/' + filename + '.png', bbox_inches='tight')
+    print(image_path)
     return render_template('static.html', image_path=image_path)
 
 @app.route('/visualise/dynamic', endpoint='my_dynamic')
