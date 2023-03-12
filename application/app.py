@@ -24,6 +24,17 @@ networkGraphs = None
 # Define a custom error page for 500 Internal Server Error
 @app.errorhandler(500)
 def internal_server_error(e):
+    if cache.has('global_metrics') and 'filename' in session:
+        # Clear the cache
+        cache.clear()
+        # Delete the file
+        filename = session['filename']
+        filepath = './uploads/'+filename
+        if os.path.exists(filepath):
+            os.remove(filepath)
+        imagepath = app.root_path + '/static/img/' + filename + '.png'
+        if os.path.exists(imagepath):
+            os.remove(imagepath)
     return render_template('500.html')
 
 # Define a custom error page for 404 Not Found Error
@@ -104,8 +115,8 @@ def home():
 @app.route('/visualise/static', endpoint='my_static')
 def static():
     filename = session['filename']
-    obj = plot_metrics_on_map(networkGraphs, "My Plot", directed=False)
-    plot = plot_metrics_on_map(networkGraphs, "My Plot", directed=False)
+    obj = static_visualisation(networkGraphs, "My Plot", directed=False)
+    plot = static_visualisation(networkGraphs, "My Plot", directed=False)
     image_path = 'img/' + filename + '.png'
     if not os.path.exists(app.root_path + '/static/img/' + filename + '.png'):
         plot.savefig(app.root_path + '/static/img/' + filename + '.png', bbox_inches='tight')
