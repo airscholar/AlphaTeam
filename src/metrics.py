@@ -47,22 +47,57 @@ def compute_metrics(networkx_):
     try:
         clustering_coefficient = nx.average_clustering(networkx_)
     except:
-        clustering_coefficient = 0
+        clustering_coefficient = None
 
     try:
         avg_shortest_path_length = nx.average_shortest_path_length(networkx_)
     except:
-        avg_shortest_path_length = 0
+        avg_shortest_path_length = None
 
     try:
         diameter = nx.diameter(networkx_)
     except:
-        diameter = 0
+        diameter = None
 
     try:
         radius = nx.radius(networkx_)
     except:
-        radius = 0
+        radius = None
+
+    try:
+        avg_eigenvector_centrality = np.mean(list(nx.eigenvector_centrality(networkx_).values()))
+    except:
+        avg_eigenvector_centrality = None
+
+    try:
+        avg_closeness_centrality = np.mean(list(nx.closeness_centrality(networkx_).values()))
+    except:
+        avg_closeness_centrality = None
+
+    try:
+        avg_betweenness_centrality = np.mean(list(nx.betweenness_centrality(networkx_).values()))
+    except:
+        avg_betweenness_centrality = None
+
+    try:
+        avg_degree_centrality = np.mean(list(nx.degree_centrality(networkx_).values()))
+    except:
+        avg_degree_centrality = None
+
+    try:
+        avg_load_centrality = np.mean(list(nx.load_centrality(networkx_).values()))
+    except:
+        avg_load_centrality = None
+
+    try:
+        avg_pagerank = np.mean(list(nx.pagerank(networkx_).values()))
+    except:
+        avg_pagerank = None
+
+    try:
+        avg_clustering = np.mean(list(nx.clustering(networkx_).values()))
+    except:
+        avg_clustering = None
 
     records = [
         {"Metrics": "Clustering Coefficient", "Values": clustering_coefficient},
@@ -74,15 +109,15 @@ def compute_metrics(networkx_):
         {"Metrics": "Density", "Values": nx.density(networkx_)},
         {"Metrics": "Transitivity", "Values": nx.transitivity(networkx_)},
         {"Metrics": "Avg. Degree", "Values": np.mean(list(dict(networkx_.degree()).values()))},
-        {"Metrics": "Avg. Clustering", "Values": np.mean(list(nx.clustering(networkx_).values()))},
+        {"Metrics": "Avg. Clustering", "Values": avg_clustering},
         {"Metrics": "Avg. Eigenvector Centrality",
-         "Values": np.mean(list(nx.eigenvector_centrality(networkx_).values()))},
+         "Values": avg_eigenvector_centrality},
         {"Metrics": "Avg. Betweenness Centrality",
-         "Values": np.mean(list(nx.betweenness_centrality(networkx_).values()))},
-        {"Metrics": "Avg. Closeness Centrality", "Values": np.mean(list(nx.closeness_centrality(networkx_).values()))},
-        {"Metrics": "Avg. Degree Centrality", "Values": np.mean(list(nx.degree_centrality(networkx_).values()))},
-        {"Metrics": "Avg. Page Rank", "Values": np.mean(list(nx.pagerank(networkx_).values()))},
-        {"Metrics": "Avg. Load Centrality", "Values": np.mean(list(nx.load_centrality(networkx_).values()))}
+         "Values": avg_betweenness_centrality},
+        {"Metrics": "Avg. Closeness Centrality", "Values": avg_closeness_centrality},
+        {"Metrics": "Avg. Degree Centrality", "Values": avg_degree_centrality},
+        {"Metrics": "Avg. Page Rank", "Values": avg_pagerank},
+        {"Metrics": "Avg. Load Centrality", "Values": avg_load_centrality},
     ]
 
     for record in records:
