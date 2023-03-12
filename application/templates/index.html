@@ -7,29 +7,44 @@
   <title>Alpha Software Tool</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 
 <body>
 
-  <div class="container-fluid d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+  <div class="container-fluid d-flex align-items-center justify-content-center"
+    style="min-height: 100vh; background-color: #f6f6f6;">
     <div class="row">
-      <div class="col-md-5 mx-auto">
-        <div class="card card-body" style="width: 18rem;">
+      <div class="col-md-5">
+        <div class="card card-body" style="width: 30rem;">
           <div class="row">
-            <h4 class="mx-auto">Upload</h4>
+            <div class="col-md-12 text-center">
+              <h4 class="mx-auto" style="margin-bottom: 25px">Upload</h4>
+            </div>
             <div class="image-upload-wrap mx-auto">
               <form id="upload-form" enctype="multipart/form-data">
-                <label for="csv_file" id="dropzone" class="dropzone">
-                  <div class="file-select">
-                    <div class="file-select-button" id="fileName" style="display: none;">Choose File</div>
-                    <div class="file-select-name" id="noFile" style="display: none;">No file chosen...</div>
+                <div class="row d-flex justify-content-center">
+                  <div class="col-md-12">
+                    <label for="csv_file" id="dropzone" class="dropzone">
+                      <div class="file-select" style="position: absolute;">
+                        <div class="file-select-button" id="fileName" style="display: none;">Choose File</div>
+                        <div class="file-select-name" id="noFile" style="display: none;">No file chosen...</div>
+                      </div>
+                      <input type="file" name="csv_file" id="csv_file" accept=".csv, .mtx" style="display:none;">
+                      <div class="drag-text text-center"> <!-- add text-center class here -->
+                        <img src="{{ url_for('static', filename='app_images/cloud.png') }}"
+                          class="img-fluid mx-auto d-block" alt="Image" style="margin-top: 1rem;">
+                        <!-- use Flask's url_for function here -->
+                        <p>Drag & drop files or <span class="black-text">Browse</span></p>
+                        <p style="text-decoration-line: underline;
+                        color: #676767;
+                        font-weight: 400;
+                        font-size: 12px;"> <span id="file-type">Supported formates: CSV, MTX</span></p>
+                      </div>
+                    </label>
                   </div>
-                  <input type="file" name="csv_file" id="csv_file" accept=".csv" style="display:none;">
-                  <div class="drag-text">
-                    <p>Drag and drop file</p>
-                  </div>
-                </label>
+                </div>
+                <progress id="progress-bar" value="0" max="100"></progress>
                 <div class="dropdown">
                   <select id="dropdown-menu" class="mx-auto">
                     <option value="option1">Select Dataset Type</option>
@@ -38,10 +53,13 @@
                     <option value="CUSTOM">General</option>
                   </select>
                 </div>
-                <input type="submit" value="Upload" class="mx-auto">
+                <div class="d-grid gap-2">
+                  <input type="submit" value="Upload File" class="btn btn-primary" style="background-color: #483EA8;   border-color: #483EA8;
+                  text-transform: uppercase; font-weight: 500; font-size: 14px; line-height: 18px;">
+                </div>
               </form>
             </div>
-            <progress id="progress-bar" value="0" max="100"></progress>
+
           </div>
         </div>
       </div>
@@ -59,7 +77,7 @@
     integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
     crossorigin="anonymous"></script>
   <script type="text/javascript" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 
 </html>

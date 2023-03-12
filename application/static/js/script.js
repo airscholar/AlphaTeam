@@ -42,6 +42,9 @@ $(function () {
                 }, false);
                 return xhr;
             },
+            success: function () {
+                alert('File Uploaded!');
+            },
             beforeSend: function () {
                 progressBar.show();
                 progressBar.val(0);
@@ -65,5 +68,9 @@ $(function () {
     $('#csv_file').on('change', function () {
         var filename = $(this).val().split('\\').pop();
         $('#noFile').text(filename);
+
+        // Update the supported formats text with the selected file type
+        $('#file-type').text(filename);
     });
+
 });
