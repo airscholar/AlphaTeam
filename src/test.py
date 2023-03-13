@@ -6,113 +6,81 @@ from src.preprocessing import *
 from src.metrics import *
 from src.visualisation import *
 
-customGraphs = NetworkGraphs('../datasets/Railway.csv', type="RAILWAY")
-print('done')
-metric = compute_node_metrics(customGraphs)
-html = plot_metrics_on_map(customGraphs, metric,'TEST')
+customGraphs = NetworkGraphs('../datasets/Dune_Eth_transaction.csv', type="CRYPTO")
+
+degree = compute_degree_centrality(customGraphs, directed=False)
+print(degree.head())
+plt = plot_metrics(customGraphs, degree)
+plt.show()
+
+kcore = compute_kcore(customGraphs, directed=False)
+print(kcore.head())
+plt =plot_metrics(customGraphs, kcore)
+plt.show()
+
+triangle = compute_triangles(customGraphs, directed=False)
+print(triangle.head())
+plt = plot_metrics(customGraphs, triangle)
+plt.show()
+
+degree = compute_degree_centrality(customGraphs, directed=False)
+print(degree.head())
+plt = plot_metrics(customGraphs, degree,'neato')
+plt.show()
+
+kcore = compute_kcore(customGraphs, directed=False)
+print(kcore.head())
+plt = plot_metrics(customGraphs, kcore,'neato')
+plt.show()
+
+triangle = compute_triangles(customGraphs, directed=False)
+print(triangle.head())
+plt = plot_metrics(customGraphs, triangle,'neato')
+plt.show()
+
+degree = compute_degree_centrality(customGraphs, directed=False)
+print(degree.head())
+plt = plot_metrics(customGraphs, degree,'twopi')
+plt.show()
+
+kcore = compute_kcore(customGraphs, directed=False)
+print(kcore.head())
+plt = plot_metrics(customGraphs, kcore,'twopi')
+plt.show()
+
+triangle = compute_triangles(customGraphs, directed=False)
+print(triangle.head())
+plt = plot_metrics(customGraphs, triangle,'twopi')
+plt.show()
+
+degree = compute_degree_centrality(customGraphs, directed=False)
+print(degree.head())
+plt = plot_metrics(customGraphs, degree,'sfdp')
+plt.show()
+
+kcore = compute_kcore(customGraphs, directed=False)
+print(kcore.head())
+plt = plot_metrics(customGraphs, kcore,'sfdp')
+plt.show()
+
+triangle = compute_triangles(customGraphs, directed=False)
+print(triangle.head())
+plt = plot_metrics(customGraphs, triangle,'sfdp')
+plt.show()
+
+# plt = static_visualisation(customGraphs, layout='neato', title='Railway Graph NEATO')
+# plt.show()
+#
+# plt = static_visualisation(customGraphs, layout='twopi', title='Railway Graph TWOPI')
+# plt.show()
+#
+# plt = static_visualisation(customGraphs, layout='sfdp', title='Railway Graph SFDP')
+# plt.show()
+#
+# plt = static_visualisation(customGraphs, layout='map', title='Railway Graph MAP')
+# plt.show()
 
 
-
-# nx.draw(customGraphs.Graph, customGraphs.pos['neato'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
-# plt.title('USAir97 Graph NEATO')
-# plt.show()
-#
-# # nx.draw(customGraphs.Graph, customGraphs.pos['dot'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
-# # plt.title('USAir97 Graph DOT')
-# # plt.show()
-#
-# nx.draw(customGraphs.Graph, customGraphs.pos['twopi'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
-# plt.title('USAir97 Graph TWOPI')
-# plt.show()
-#
-# # nx.draw(customGraphs.Graph, customGraphs.pos['fdp'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
-# # plt.title('USAir97 Graph FDP')
-# # plt.show()
-#
-# nx.draw(customGraphs.Graph, customGraphs.pos['sfdp'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
-# plt.title('USAir97 Graph SFDP')
-# plt.show()
-#
-# cryptoGraphs = NetworkGraphs('../datasets/Dune_Eth_transaction.csv', type="CRYPTO")
-#
-# nx.draw(cryptoGraphs.Graph, cryptoGraphs.pos['neato'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
-# plt.title('Dune_Eth_transaction Graph NEATO')
-# plt.show()
-#
-# # nx.draw(cryptoGraphs.Graph, cryptoGraphs.pos['dot'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
-# # plt.title('Dune_Eth_transaction Graph DOT')
-# # plt.show()
-#
-# nx.draw(cryptoGraphs.Graph, cryptoGraphs.pos['twopi'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
-# plt.title('Dune_Eth_transaction Graph TWOPI')
-# plt.show()
-#
-# # nx.draw(cryptoGraphs.Graph, cryptoGraphs.pos['fdp'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
-# # plt.title('Dune_Eth_transaction Graph FDP')
-# # plt.show()
-#
-# nx.draw(cryptoGraphs.Graph, cryptoGraphs.pos['sfdp'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
-# plt.title('Dune_Eth_transaction Graph SFDP')
-# plt.show()
-#
-# railwayGraphs = NetworkGraphs('../datasets/Railway.csv', type="RAILWAY")
-#
-# plot_map(railwayGraphs)
-# nx.draw(railwayGraphs.Graph, railwayGraphs.pos['map'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
-# plt.title('Railway Graph MAP')
-# plt.show()
-#
-# nx.draw(railwayGraphs.Graph, railwayGraphs.pos['neato'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
-# plt.title('Railway Graph NEATO')
-# plt.show()
-#
-# # nx.draw(railwayGraphs.Graph, railwayGraphs.pos['dot'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
-# # plt.title('Railway Graph DOT')
-# # plt.show()
-#
-# nx.draw(railwayGraphs.Graph, railwayGraphs.pos['twopi'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
-# plt.title('Railway Graph TWOPI')
-# plt.show()
-#
-# # nx.draw(railwayGraphs.Graph, railwayGraphs.pos['fdp'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
-# # plt.title('Railway Graph FDP')
-# # plt.show()
-#
-# nx.draw(railwayGraphs.Graph, railwayGraphs.pos['sfdp'], with_labels=False, arrows=True, node_size=1, node_color='red', width=0.5)
-# plt.title('Railway Graph SFDP')
-# plt.show()
-#
-#
-#
-# # ----------------------------------------------------------------------------------------
-#
-# networkGraphs = NetworkGraphs('../datasets/Railway.csv', type="RAILWAY", spatial =True)
-# # plot_static_on_map(networkGraphs, 'Railway Network Undirected Graph', directed=False).show()
-# # kcore = compute_kcore(networkGraphs)
-# # print(kcore.head())
-# # un_kcore = compute_kcore(networkGraphs, directed=False)
-# # print(un_kcore.head())
-# # triangle = compute_triangles(networkGraphs, directed=False)
-# # print(triangle.head())
-# # un_triangle = compute_triangles(networkGraphs, directed=False)
-# # print(un_triangle.head())
-# # degree = compute_nodes_degree(networkGraphs, directed=False)
-# # print(degree.head())
-# # un_degree = compute_nodes_degree(networkGraphs, directed=False)
-# # print(un_degree.head())
-# # kcore_cdf = compute_CCDF(kcore,kcore.columns[1])
-# # print(kcore_cdf.head())
-# #
-# # histogram(kcore, 'K-Core',title='K-Core Histogram')
-# # histogram(un_kcore, 'K-Core',title='UnK-Core Histogram')
-# # histogram(triangle, 'Triangle',title='Triangle Histogram')
-# # histogram(un_triangle, 'Triangle',title='UnTriangle Histogram')
-# # histogram(degree, 'Degree',title='Degree Histogram')
-# # histogram(un_degree, 'Degree',title='UnDegree Histogram')
-# # histogram(kcore_cdf, 'CCDF',title='K-Core CCDF Histogram')
-# # histogram(kcore_cdf, 'CDF',title='K-Core CDF Histogram')
-#
-#
 # # ----------------------------------------------------------------------------------------
 #
 # # global_metrics = compute_global_metrics(networkx)

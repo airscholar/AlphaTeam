@@ -141,17 +141,18 @@ class NetworkGraphs:
 
         # ---------------------------------------------- SPATIAL -------------------------------------------------------
 
+        print('start layout computation')
         self.pos = {}
-        # self.pos['neato'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='neato')
-        # print('neato')
-        # # self.pos['dot'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='dot')
-        # # print('dot')
-        # self.pos['twopi'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='twopi')
-        # print('twopi')
-        # # self.pos['fdp'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='fdp')
-        # # print('fdp')
-        # self.pos['sfdp'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='sfdp')
-        # print('sfdp')
+        self.pos['neato'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='neato')
+        print('neato')
+        # self.pos['dot'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='dot')
+        # print('dot')
+        self.pos['twopi'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='twopi')
+        print('twopi')
+        # self.pos['fdp'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='fdp')
+        # print('fdp')
+        self.pos['sfdp'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='sfdp')
+        print('sfdp')
 
         if self.is_spatial():
             self.pos['map'] = nx.get_node_attributes(self.Graph, 'pos')

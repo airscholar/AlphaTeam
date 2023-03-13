@@ -6,17 +6,17 @@ Purpose: Visualisation for the NetworkX graphs
 
 # ----------------------------------------------------------------------------------------
 
-import os
-
-import cv2
 # Imports
+import os
+import cv2
 import geopandas as gpd
 import ipywidgets as widgets
+import matplotlib.pyplot as plt
+import matplotlib as mpl
 from IPython.display import display
 import plotly.graph_objs as go
 import plotly.express as px
 from src.metrics import *
-
 
 # ----------------------------------------------------------------------------------------
 
@@ -53,7 +53,7 @@ def plot_map(networkGraphs, background=True, edges=True):
 
 
 @memoize
-def static_visualisation(networkGraphs, title, directed=True, multi=False, background=True, edges=True):
+def static_visualisation(networkGraphs, title, directed=True, multi=False, background=True, edges=True, layout='map'):
     """
     :Function: Plot the NetworkX graph on a map
     :param networkGraphs: Network graphs
@@ -64,25 +64,29 @@ def static_visualisation(networkGraphs, title, directed=True, multi=False, backg
     :param edges: Boolean to indicate if the edges are to be plotted or not
     :return: Matplotlib plot
     """
+    if not networkGraphs.is_spatial() and layout == 'map':
+        ValueError("Graph is not spatial with coordinates")
+
+    if layout == 'map':
+        plot_map(networkGraphs, background=background, edges=edges)
+
+    pos = networkGraphs.pos[layout]
+
     if directed:
-        if networkGraphs.is_spatial():
-            plot_map(networkGraphs, background=background, edges=edges)
 
         if multi:
-            nx.draw(networkGraphs.MultiDiGraph, networkGraphs.pos, with_labels=False, node_size=1,
+            nx.draw(networkGraphs.MultiDiGraph, pos, with_labels=False, node_size=1,
                     edge_color=networkGraphs.colors['MultiDiGraph'], node_color='red', width=0.5)
         else:
-            nx.draw(networkGraphs.DiGraph, networkGraphs.pos, with_labels=False, node_size=1,
+            nx.draw(networkGraphs.DiGraph,pos, with_labels=False, node_size=1,
                     edge_color=networkGraphs.colors['DiGraph'], node_color='red', width=0.5)
     else:
-        if networkGraphs.is_spatial():
-            plot_map(networkGraphs, background=background, edges=edges)
 
         if multi:
-            nx.draw(networkGraphs.MultiGraph, networkGraphs.pos, with_labels=False, node_size=1, node_color='red',
+            nx.draw(networkGraphs.MultiGraph, pos, with_labels=False, node_size=1, node_color='red',
                     width=0.5)
         else:
-            nx.draw(networkGraphs.Graph, networkGraphs.pos, with_labels=False, node_size=1, node_color='red', width=0.5)
+            nx.draw(networkGraphs.Graph, pos, with_labels=False, node_size=1, node_color='red', width=0.5)
 
     # plot axes
     plt.axis('on')
@@ -148,9 +152,40 @@ def plot_shortest_distance(NetworkX_, path_):
 # ----------------------------------------------------------------------------------------
 
 
-def plot_metrics(NetworkX_, dataFrame_, title_):
-    # return plotly figure
-    return 0
+def plot_metrics(networkGraphs, df_, layout='map'):
+    """
+    :Function: Plot the metrics on the graph
+    :param networkGraphs: Network graphs
+    :param df_: Dataframe with the metrics (first column is the node id) (second column is the metric)
+    :param layout: Layout to be used
+    :return: Matplotlib plot
+    """
+    if not networkGraphs.is_spatial() and layout == 'map':
+        ValueError("Graph is not spatial with coordinates")
+        plt.title("Graph is not spatial with coordinates")
+        return plt
+
+    if layout == 'map':
+        plot_map(networkGraphs)
+    pos = networkGraphs.pos[layout]
+
+    # get the metrics and standardise them
+    metrics_names = df_.columns[1]
+    metric_ = df_[metrics_names]
+    metric_ = (metric_ - metric_.min()) / (metric_.max() - metric_.min())
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    cmap = plt.cm.plasma
+    nx.draw(networkGraphs.Graph, pos, node_color=metric_, cmap= cmap, node_size=metric_*15, with_labels=False, width=0.5)
+    plt.title(f"{metrics_names} visualisation using {layout} layout")
+
+    # Add colobar
+    sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin=metric_.min(), vmax=metric_.max()))
+    sm.set_array([])
+    cbar = plt.colorbar(sm)
+    cbar.set_label(f"{metrics_names} values", rotation=270, labelpad=15)
+
+    return plt
 
 
 # ----------------------------------------------------------------------------------------
