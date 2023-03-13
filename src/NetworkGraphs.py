@@ -23,7 +23,7 @@ EDGES:
 
 GRAPHS:
 - 'name': name of the graph (string)
-- 'type': type of the graph (string) - 'RAILWAY', 'CRYPTO' or 'CUSTOM'
+- 'type': type of the graph (string) - 'RAILWAY', 'CRYPTO' 'MTX' or 'CUSTOM'
 - 'temporal': True if the graph is temporal, False otherwise
 - 'spatial': True if the graph is spatial, False otherwise
 - 'weighted': True if the graph is weighted, False otherwise

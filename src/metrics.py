@@ -176,7 +176,7 @@ def compute_degree_centrality(networkGraphs, directed=True):
         degree_centrality = nx.degree_centrality(networkGraphs.DiGraph)
 
     df = pd.DataFrame(degree_centrality.items(), columns=['Node', 'Degree Centrality'])
-
+    df = clean_df(df)
     return df
 
 
@@ -197,7 +197,7 @@ def compute_eigen_centrality(networkGraphs, directed=True):
         eigen_centrality = nx.eigenvector_centrality(networkGraphs.DiGraph)
 
     df = pd.DataFrame(eigen_centrality.items(), columns=['Node', 'Eigenvector Centrality'])
-
+    df = clean_df(df)
     return df
 
 
@@ -218,6 +218,7 @@ def compute_closeness_centrality(networkGraphs, directed=True):
         closeness_centrality = nx.closeness_centrality(networkGraphs.DiGraph)
 
     df = pd.DataFrame(closeness_centrality.items(), columns=['Node', 'Closeness Centrality'])
+    df = clean_df(df)
     return df
 
 
@@ -238,6 +239,7 @@ def compute_betweeness_centrality(networkGraphs, directed=True):
 
     df = pd.DataFrame(betweeness_centrality.items(),
                       columns=['Node', 'Betweeness Centrality'])
+    df = clean_df(df)
     return df
 
 
@@ -256,6 +258,7 @@ def compute_load_centrality(networkGraphs, directed=True):
         load_centrality = nx.load_centrality(networkGraphs.DiGraph)
 
     df = pd.DataFrame(load_centrality.items(), columns=['Node', 'Load Centrality'])
+    df = clean_df(df)
     return df
 
 
@@ -277,6 +280,7 @@ def compute_nodes_degree(networkGraphs, directed=True):
         degree = nx.degree(networkGraphs.DiGraph)
 
     df = pd.DataFrame(degree, columns=['Node', 'Degree'])
+    df = clean_df(df)
     return df
 
 
@@ -296,6 +300,7 @@ def compute_kcore(networkGraphs, directed=True):
         kcore = nx.core_number(networkGraphs.DiGraph)
 
     df = pd.DataFrame(kcore.items(), columns=['Node', 'K-Core'])
+    df = clean_df(df)
     return df
 
 
@@ -315,6 +320,7 @@ def compute_triangles(networkGraphs, directed=True):
         triangle = nx.triangles(networkGraphs.DiGraph)
 
     df = pd.DataFrame(triangle.items(), columns=['Node', 'Triangle'])
+    df = clean_df(df)
     return df
 
 
@@ -394,3 +400,25 @@ def histogram(df, column, bins=100, log=False, title=None):
     if title:
         plt.title(title)
     plt.show()
+
+# ----------------------------------------------------------------------------------------
+
+def clean_df(df):
+    """
+    :Function: Clean the dataframe
+    :param df: Pandas dataframe
+    :param column: Column name
+    :return: Pandas dataframe
+    """
+
+    # if the columns is float round it to 6 decimals
+    for column in df.columns:
+        if df[column].dtype == float:
+            df[column] = df[column].round(6)
+
+        if df[column].dtype == object:
+            df[column] = df[column].apply(lambda x: x[:6] + '...' + x[-6:] if len(x) > 15 and x[:2] == '0x' else x[:12])
+
+    return df
+
+

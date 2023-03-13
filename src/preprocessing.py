@@ -285,3 +285,67 @@ def preprocess_mtx(filename_: str):
     DiGraph.remove_edges_from(nx.selfloop_edges(DiGraph))
 
     return [DiGraph, MultiDiGraph]
+
+def preprocess_custom(filename_:str):
+    """
+    :Function: Preprocess the custom dataset
+    :param Dataset must have the following columns:
+        - from: Source node
+        - to: Target node
+    :param Dataset could have the following columns:
+        - value: Edge weight
+        - start: Start time of the edge
+        - end: End time of the edge
+        - color: Color of the edge
+        - lat1: Latitude of the source node
+        - lon1: Longitude of the source node
+        - lat2: Latitude of the target node
+        - lon2: Longitude of the target node
+    :param filename_: Path to the custom dataset
+    :return: List of NetworkX DiGraphs and MultiDiGraphs
+    """
+    df = pd.read_csv(filename_)
+    MultiDiGraph = nx.MultiDiGraph()
+
+    if not 'from' in df.columns and not 'to' in df.columns:
+        print('No "from" and "to" columns in the dataset')
+        return None
+
+    MultiDiGraph.add_nodes_from(df['from'].unique())
+    MultiDiGraph.add_nodes_from(df['to'].unique())
+
+    for from_, to_ in df[['from', 'to']].values:
+        MultiDiGraph.add_edge(from_, to_)
+
+    if 'lat1' in df.columns and 'lon1' in df.columns:
+        for node, lat, lon in df[['from', 'lat1', 'lon1']].values:
+            MultiDiGraph.nodes[node]['lat'] = lat
+            MultiDiGraph.nodes[node]['lon'] = lon
+
+    if 'lat2' in df.columns and 'lon2' in df.columns:
+        for node, lat, lon in df[['to', 'lat2', 'lon2']].values:
+            MultiDiGraph.nodes[node]['lat'] = lat
+            MultiDiGraph.nodes[node]['lon'] = lon
+
+    if 'value' in df.columns:
+        for from_, to_, value_ in df[['from', 'to', 'value']].values:
+            MultiDiGraph.edges[from_, to_]['weight'] = value_
+
+    if 'start' in df.columns and not 'end' in df.columns:
+        for from_, to_, start_ in df[['from', 'to', 'start']].values:
+            MultiDiGraph.edges[from_, to_]['start'] = start_
+            MultiDiGraph.edges[from_, to_]['end'] = start_
+
+    if 'start' in df.columns and 'end' in df.columns:
+        for from_, to_, start_, end_ in df[['from', 'to', 'start', 'end']].values:
+            MultiDiGraph.edges[from_, to_]['start'] = start_
+            MultiDiGraph.edges[from_, to_]['end'] = end_
+
+    if 'color' in df.columns:
+        for from_, to_, color_ in df[['from', 'to', 'color']].values:
+            MultiDiGraph.edges[from_, to_]['color'] = color_
+
+    DiGraph = convert_to_DiGraph(MultiDiGraph)
+    MultiDiGraph.remove_edges_from(nx.selfloop_edges(MultiDiGraph))
+    DiGraph.remove_edges_from(nx.selfloop_edges(DiGraph))
+    return [DiGraph, MultiDiGraph]
