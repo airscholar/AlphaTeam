@@ -134,6 +134,4 @@ flask-restx==1.1.0
 python-dotenv==1.0.0
 Flask-Minify==0.41
 flask_caching>=1.10.1
-
-
 plotly~=5.13.1

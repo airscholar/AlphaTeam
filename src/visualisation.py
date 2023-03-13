@@ -6,15 +6,17 @@ Purpose: Visualisation for the NetworkX graphs
 
 # ----------------------------------------------------------------------------------------
 
+# Imports
 import os
 
 import cv2
-# Imports
 import geopandas as gpd
 import ipywidgets as widgets
-import plotly.graph_objs as go
+import matplotlib.pyplot as plt
+import matplotlib as mpl
 from IPython.display import display
-
+import plotly.graph_objs as go
+import plotly.express as px
 from src.metrics import *
 
 
@@ -53,7 +55,7 @@ def plot_map(networkGraphs, background=True, edges=True):
 
 
 @memoize
-def static_visualisation(networkGraphs, title, directed=True, multi=False, background=True, edges=True):
+def static_visualisation(networkGraphs, title, directed=True, multi=False, background=True, edges=True, layout='map'):
     """
     :Function: Plot the NetworkX graph on a map
     :param networkGraphs: Network graphs
@@ -64,26 +66,29 @@ def static_visualisation(networkGraphs, title, directed=True, multi=False, backg
     :param edges: Boolean to indicate if the edges are to be plotted or not
     :return: Matplotlib plot
     """
+    if not networkGraphs.is_spatial() and layout == 'map':
+        ValueError("Graph is not spatial with coordinates")
+
+    if layout == 'map':
+        plot_map(networkGraphs, background=background, edges=edges)
+
+    pos = networkGraphs.pos[layout]
+
     if directed:
-        if networkGraphs.is_spatial():
-            plot_map(networkGraphs, background=background, edges=edges)
 
         if multi:
-            nx.draw(networkGraphs.MultiDiGraph, networkGraphs.pos['MultiDiGraph'], with_labels=False, node_size=1,
+            nx.draw(networkGraphs.MultiDiGraph, pos, with_labels=False, node_size=1,
                     edge_color=networkGraphs.colors['MultiDiGraph'], node_color='red', width=0.5)
         else:
-            nx.draw(networkGraphs.DiGraph, networkGraphs.pos['DiGraph'], with_labels=False, node_size=1,
+            nx.draw(networkGraphs.DiGraph,pos, with_labels=False, node_size=1,
                     edge_color=networkGraphs.colors['DiGraph'], node_color='red', width=0.5)
     else:
-        if networkGraphs.is_spatial():
-            plot_map(networkGraphs, background=background, edges=edges)
 
         if multi:
-            nx.draw(networkGraphs.MultiGraph, networkGraphs.pos['MultiGraph'], with_labels=False, node_size=1,
+            nx.draw(networkGraphs.MultiGraph, pos, with_labels=False, node_size=1, node_color='red',
                     width=0.5)
         else:
-            nx.draw(networkGraphs.Graph, networkGraphs.pos['Graph'], with_labels=False, node_size=1, node_color='red',
-                    width=0.5)
+            nx.draw(networkGraphs.Graph, pos, with_labels=False, node_size=1, node_color='red', width=0.5)
 
     # plot axes
     plt.axis('on')
@@ -149,9 +154,40 @@ def plot_shortest_distance(NetworkX_, path_):
 # ----------------------------------------------------------------------------------------
 
 
-def plot_metrics(NetworkX_, dataFrame_, title_):
-    # return plotly figure
-    return 0
+def plot_metrics(networkGraphs, df_, layout='map'):
+    """
+    :Function: Plot the metrics on the graph
+    :param networkGraphs: Network graphs
+    :param df_: Dataframe with the metrics (first column is the node id) (second column is the metric)
+    :param layout: Layout to be used
+    :return: Matplotlib plot
+    """
+    if not networkGraphs.is_spatial() and layout == 'map':
+        ValueError("Graph is not spatial with coordinates")
+        plt.title("Graph is not spatial with coordinates")
+        return plt
+
+    if layout == 'map':
+        plot_map(networkGraphs)
+    pos = networkGraphs.pos[layout]
+
+    # get the metrics and standardise them
+    metrics_names = df_.columns[1]
+    metric_ = df_[metrics_names]
+    metric_ = (metric_ - metric_.min()) / (metric_.max() - metric_.min())
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    cmap = plt.cm.plasma
+    nx.draw(networkGraphs.Graph, pos, node_color=metric_, cmap= cmap, node_size=metric_*30, with_labels=False, width=0.5)
+    plt.title(f"{metrics_names} visualisation using {layout} layout")
+
+    # Add colobar
+    sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin=metric_.min(), vmax=metric_.max()))
+    sm.set_array([])
+    cbar = plt.colorbar(sm)
+    cbar.set_label(f"{metrics_names} values", rotation=270, labelpad=15)
+
+    return plt
 
 
 # ----------------------------------------------------------------------------------------
@@ -160,23 +196,23 @@ def plot_metrics(NetworkX_, dataFrame_, title_):
 def plot_metrics_on_map(networkGraphs, metrics, title_, directed=False):
     G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
 
-    pos = networkGraphs.pos
-    edge_trace = go.Scatter(x=[], y=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
+    pos = networkGraphs.pos['map']
+    edge_trace = go.Scattergeo(lon=[], lat=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
 
     for idx, edge in enumerate(G.edges()):
         x0, y0 = pos[edge[0]]
         x1, y1 = pos[edge[1]]
-        edge_trace['x'] += tuple([x0, x1, None])
-        edge_trace['y'] += tuple([y0, y1, None])
+        edge_trace['lon'] += tuple([x0, x1, None])
+        edge_trace['lat'] += tuple([y0, y1, None])
 
-    node_trace = go.Scatter(x=[], y=[], text=[], mode='markers', hoverinfo='text',
+    node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
                             marker=dict(showscale=True, color=['red'], size=3,
                                         colorbar=dict(thickness=10, title='Node Connections', xanchor='left',
                                                       titleside='right'), line=dict(width=2, color='#FF0000')))
     for node in G.nodes():
         x, y = pos[node]
-        node_trace['x'] += tuple([x])
-        node_trace['y'] += tuple([y])
+        node_trace['lon'] += tuple([x])
+        node_trace['lat'] += tuple([y])
         node_centrality = metrics[metrics['Node'] == node]
         node_info = f"Node: {node}<br>Connections: {str(G.degree[node])}<br>" \
                     f"Degree Centrality: {str(node_centrality['Degree Centrality'].values[0])}<br>" \
@@ -199,6 +235,13 @@ def plot_metrics_on_map(networkGraphs, metrics, title_, directed=False):
                 font=dict(color='black')
             )
         ],
+        geo=dict(
+            scope='world',
+            lataxis_range=[networkGraphs.min_lat, networkGraphs.max_lat],
+            lonaxis_range=[networkGraphs.min_long, networkGraphs.max_long],
+            center=dict(lat=networkGraphs.mid_lat, lon=networkGraphs.mid_long),
+
+        ),
         xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
         yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
         plot_bgcolor='white',
