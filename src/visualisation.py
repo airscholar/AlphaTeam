@@ -12,8 +12,8 @@ import cv2
 # Imports
 import geopandas as gpd
 import ipywidgets as widgets
-from IPython.display import display
 import plotly.graph_objs as go
+from IPython.display import display
 
 from src.metrics import *
 
@@ -69,20 +69,21 @@ def static_visualisation(networkGraphs, title, directed=True, multi=False, backg
             plot_map(networkGraphs, background=background, edges=edges)
 
         if multi:
-            nx.draw(networkGraphs.MultiDiGraph, networkGraphs.pos, with_labels=False, node_size=1,
+            nx.draw(networkGraphs.MultiDiGraph, networkGraphs.pos['MultiDiGraph'], with_labels=False, node_size=1,
                     edge_color=networkGraphs.colors['MultiDiGraph'], node_color='red', width=0.5)
         else:
-            nx.draw(networkGraphs.DiGraph, networkGraphs.pos, with_labels=False, node_size=1,
+            nx.draw(networkGraphs.DiGraph, networkGraphs.pos['DiGraph'], with_labels=False, node_size=1,
                     edge_color=networkGraphs.colors['DiGraph'], node_color='red', width=0.5)
     else:
         if networkGraphs.is_spatial():
             plot_map(networkGraphs, background=background, edges=edges)
 
         if multi:
-            nx.draw(networkGraphs.MultiGraph, networkGraphs.pos, with_labels=False, node_size=1, node_color='red',
+            nx.draw(networkGraphs.MultiGraph, networkGraphs.pos['MultiGraph'], with_labels=False, node_size=1,
                     width=0.5)
         else:
-            nx.draw(networkGraphs.Graph, networkGraphs.pos, with_labels=False, node_size=1, node_color='red', width=0.5)
+            nx.draw(networkGraphs.Graph, networkGraphs.pos['Graph'], with_labels=False, node_size=1, node_color='red',
+                    width=0.5)
 
     # plot axes
     plt.axis('on')
