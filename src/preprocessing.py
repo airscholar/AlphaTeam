@@ -308,6 +308,7 @@ def preprocess_custom(filename_:str):
     :return: List of NetworkX DiGraphs and MultiDiGraphs
     """
     df = pd.read_csv(filename_)
+    df.sort_values(by=['from', 'to'], inplace=True)
     MultiDiGraph = nx.MultiDiGraph()
 
     if not 'from' in df.columns and not 'to' in df.columns:
