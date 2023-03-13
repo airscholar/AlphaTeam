@@ -56,6 +56,8 @@ class NetworkGraphs:
         self.Graph = None
         self.MultiGraph = None
         self.colors = None
+        self.mid_lat = None
+        self.mid_long = None
 
         self.filename = filename
         if name is None:
@@ -140,16 +142,16 @@ class NetworkGraphs:
         # ---------------------------------------------- SPATIAL -------------------------------------------------------
 
         self.pos = {}
-        self.pos['neato'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='neato')
-        print('neato')
-        # self.pos['dot'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='dot')
-        # print('dot')
-        self.pos['twopi'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='twopi')
-        print('twopi')
-        # self.pos['fdp'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='fdp')
-        # print('fdp')
-        self.pos['sfdp'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='sfdp')
-        print('sfdp')
+        # self.pos['neato'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='neato')
+        # print('neato')
+        # # self.pos['dot'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='dot')
+        # # print('dot')
+        # self.pos['twopi'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='twopi')
+        # print('twopi')
+        # # self.pos['fdp'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='fdp')
+        # # print('fdp')
+        # self.pos['sfdp'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='sfdp')
+        # print('sfdp')
 
         if self.is_spatial():
             self.pos['map'] = nx.get_node_attributes(self.Graph, 'pos')
@@ -159,6 +161,8 @@ class NetworkGraphs:
             self.set_min_lat(min(location, key=lambda x: x[1])[1] - 0.5)
             self.set_max_long(max(location, key=lambda x: x[0])[0] + 0.5)
             self.set_max_lat(max(location, key=lambda x: x[1])[1] + 0.5)
+            self.set_mid_long()
+            self.set_mid_lat()
 
         # ---------------------------------------------- TEMPORAL ------------------------------------------------------
 
@@ -227,6 +231,12 @@ class NetworkGraphs:
 
     def set_max_long(self, max_long):
         self.max_long = max_long
+
+    def set_mid_long(self):
+        self.mid_long = (self.max_long + self.min_long) / 2
+
+    def set_mid_lat(self):
+        self.mid_lat = (self.max_lat + self.min_lat) / 2
 
     # ---------------------------------------------- IS  -----------------------------------------------------------
 

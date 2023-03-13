@@ -14,7 +14,7 @@ import geopandas as gpd
 import ipywidgets as widgets
 from IPython.display import display
 import plotly.graph_objs as go
-
+import plotly.express as px
 from src.metrics import *
 
 
@@ -159,23 +159,23 @@ def plot_metrics(NetworkX_, dataFrame_, title_):
 def plot_metrics_on_map(networkGraphs, metrics, title_, directed=False):
     G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
 
-    pos = networkGraphs.pos
-    edge_trace = go.Scatter(x=[], y=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
+    pos = networkGraphs.pos['map']
+    edge_trace = go.Scattergeo(lon=[], lat=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
 
     for idx, edge in enumerate(G.edges()):
         x0, y0 = pos[edge[0]]
         x1, y1 = pos[edge[1]]
-        edge_trace['x'] += tuple([x0, x1, None])
-        edge_trace['y'] += tuple([y0, y1, None])
+        edge_trace['lon'] += tuple([x0, x1, None])
+        edge_trace['lat'] += tuple([y0, y1, None])
 
-    node_trace = go.Scatter(x=[], y=[], text=[], mode='markers', hoverinfo='text',
+    node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
                             marker=dict(showscale=True, color=['red'], size=3,
                                         colorbar=dict(thickness=10, title='Node Connections', xanchor='left',
                                                       titleside='right'), line=dict(width=2, color='#FF0000')))
     for node in G.nodes():
         x, y = pos[node]
-        node_trace['x'] += tuple([x])
-        node_trace['y'] += tuple([y])
+        node_trace['lon'] += tuple([x])
+        node_trace['lat'] += tuple([y])
         node_centrality = metrics[metrics['Node'] == node]
         node_info = f"Node: {node}<br>Connections: {str(G.degree[node])}<br>" \
                     f"Degree Centrality: {str(node_centrality['Degree Centrality'].values[0])}<br>" \
@@ -198,6 +198,13 @@ def plot_metrics_on_map(networkGraphs, metrics, title_, directed=False):
                 font=dict(color='black')
             )
         ],
+        geo=dict(
+            scope='world',
+            lataxis_range=[networkGraphs.min_lat, networkGraphs.max_lat],
+            lonaxis_range=[networkGraphs.min_long, networkGraphs.max_long],
+            center=dict(lat=networkGraphs.mid_lat, lon=networkGraphs.mid_long),
+
+        ),
         xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
         yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
         plot_bgcolor='white',
