@@ -174,9 +174,9 @@ def plot_metrics(networkGraphs, df_, layout='map'):
     metric_ = df_[metrics_names]
     metric_ = (metric_ - metric_.min()) / (metric_.max() - metric_.min())
 
-    fig, ax = plt.subplots(figsize=(8, 6))
+    fig, ax = plt.subplots(figsize=(10, 6))
     cmap = plt.cm.plasma
-    nx.draw(networkGraphs.Graph, pos, node_color=metric_, cmap= cmap, node_size=metric_*15, with_labels=False, width=0.5)
+    nx.draw(networkGraphs.Graph, pos, node_color=metric_, cmap= cmap, node_size=metric_*30, with_labels=False, width=0.5)
     plt.title(f"{metrics_names} visualisation using {layout} layout")
 
     # Add colobar
