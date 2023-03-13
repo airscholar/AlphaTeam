@@ -8,6 +8,7 @@ Purpose: Visualisation for the NetworkX graphs
 
 # Imports
 import os
+
 import cv2
 import geopandas as gpd
 import ipywidgets as widgets
@@ -17,6 +18,7 @@ from IPython.display import display
 import plotly.graph_objs as go
 import plotly.express as px
 from src.metrics import *
+
 
 # ----------------------------------------------------------------------------------------
 
