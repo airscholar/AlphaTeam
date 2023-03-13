@@ -98,7 +98,7 @@ class NetworkGraphs:
 
         # ---------------------------------------------- CUSTOM --------------------------------------------------------
 
-        elif type == 'CUSTOM':
+        elif type == 'MTX':
             self.set_spatial(False)
             self.set_temporal(False)
             self.set_weighted(False)
@@ -108,9 +108,34 @@ class NetworkGraphs:
 
             self.colors = None
 
-            mtx = scipy.io.mmread('../datasets/inf-USAir97.mtx')
+            mtx = scipy.io.mmread(filename)
             coo = mtx.tocoo()
             self.df = pd.DataFrame({'source': coo.row, 'target': coo.col, 'weight': coo.data})
+
+        # ---------------------------------------------- CUSTOM --------------------------------------------------------
+
+        elif type == 'CUSTOM':
+
+            self.DiGraph, self.MultiDiGraph = preprocess_custom(filename)
+            self.Graph, self.MultiGraph = self.DiGraph.to_undirected(), self.MultiDiGraph.to_undirected()
+
+            self.df = pd.read_csv(filename,low_memory=False)
+
+            if 'lat1' in self.df.columns and 'long1' in self.df.columns:
+                self.set_spatial(True)
+
+            if 'start' in self.df.columns:
+                self.set_temporal(True)
+
+            if 'weight' in self.df.columns:
+                self.set_weighted(True)
+
+            if 'color' in self.df.columns:
+                self.colors = {'MultiDiGraph': nx.get_edge_attributes(self.MultiDiGraph, 'color').values(),
+                               'MultiGraph': nx.get_edge_attributes(self.MultiGraph, 'color').values(),
+                               'DiGraph': nx.get_edge_attributes(self.DiGraph, 'color').values(),
+                               'Graph': nx.get_edge_attributes(self.Graph, 'color').values()}
+
 
         # ---------------------------------------------- SPATIAL -------------------------------------------------------
 

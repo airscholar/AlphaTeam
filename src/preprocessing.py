@@ -293,7 +293,7 @@ def preprocess_custom(filename_:str):
         - from: Source node
         - to: Target node
     :param Dataset could have the following columns:
-        - value: Edge weight
+        - weight: Edge weight
         - start: Start time of the edge
         - end: End time of the edge
         - color: Color of the edge
@@ -327,9 +327,9 @@ def preprocess_custom(filename_:str):
             MultiDiGraph.nodes[node]['lat'] = lat
             MultiDiGraph.nodes[node]['lon'] = lon
 
-    if 'value' in df.columns:
-        for from_, to_, value_ in df[['from', 'to', 'value']].values:
-            MultiDiGraph.edges[from_, to_]['weight'] = value_
+    if 'weight' in df.columns:
+        for from_, to_, weight_ in df[['from', 'to', 'weight']].values:
+            MultiDiGraph.edges[from_, to_]['weight'] = weight_
 
     if 'start' in df.columns and not 'end' in df.columns:
         for from_, to_, start_ in df[['from', 'to', 'start']].values:
