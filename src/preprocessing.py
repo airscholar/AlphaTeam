@@ -165,7 +165,7 @@ def create_multi_DiGraph_railway(network, station_id):
                 # if the 'to' value is a tuple, create a new node
                 to_node = station_id[station['to']]
                 # add time interval to the edge
-                multi_graph.add_edge(from_node, to_node, start=station['start'], end=station['end'], color=station['color'])
+                multi_graph.add_edge(from_node, to_node, start=station['start'], end=station['end'], color=station['color'], weight=1)
             else:
                 continue
 
@@ -189,6 +189,9 @@ def convert_to_DiGraph(multi_graph):
 
     for u, v, data in multi_graph.edges(data=True):
         if g_directed.has_edge(u, v):
+            # if weight exists, add the new weight to the existing one
+            if 'weight' in g_directed.edges[u, v]:
+                g_directed.edges[u, v]['weight'] += data['weight']
             continue
         else:
             g_directed.add_edge(u, v)
