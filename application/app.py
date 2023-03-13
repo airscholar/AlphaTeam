@@ -79,9 +79,6 @@ def upload():
     session['filename'] = filename
 
     filepath = './uploads/'+filename
-    # Assign the value to the global variable
-    global networkGraphs
-    networkGraphs = NetworkGraphs(filepath, type=option, spatial=True)
     # Redirect the user to the success page
     return redirect(url_for('home'))
 
@@ -90,6 +87,10 @@ def upload():
 def home():
     # Get the filename from the session variable
     filename = session['filename']
+    
+    # Assign the value to the global variable
+    global networkGraphs
+    networkGraphs = NetworkGraphs(filepath, type=option, spatial=True)
     
     global_metrics = cache.get('global_metrics')
     if global_metrics is None:
