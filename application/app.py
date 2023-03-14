@@ -183,7 +183,7 @@ def dynamic():
 def centrality():
     allCentralityDF = cache.get('allCentralityDF')
     if allCentralityDF is None:
-        allCentralityDF = compute_node_metrics(networkGraphs, directed=False)
+        allCentralityDF = compute_node_centralities(networkGraphs, directed=False)
         cache.set('allCentralityDF', allCentralityDF)
     table_headers = list(allCentralityDF.columns.values)
     table_rows = allCentralityDF.values.tolist()
