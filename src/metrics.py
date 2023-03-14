@@ -26,10 +26,14 @@ def compute_global_metrics(networkGraphs):
     """
     directed = compute_metrics(networkGraphs.DiGraph)  # compute for directed
     undirected = compute_metrics(networkGraphs.Graph)  # compute for undirected
+    multidi = compute_metrics(networkGraphs.MultiDiGraph)  # compute for multidi
+    multi = compute_metrics(networkGraphs.MultiGraph)  # compute for multi
 
-    return pd.merge(directed, undirected, how='inner',
-                    on='Metrics').rename(columns={'Values_x': 'Directed', 'Values_y': 'Undirected'})
-
+    df = pd.merge(directed, undirected, how='inner', on='Metrics').\
+        merge(multidi, how='inner', on='Metrics').\
+        merge(multi, how='inner', on='Metrics')
+    df.columns = ['Metrics', 'Directed', 'Undirected', 'MultiDi', 'Multi']
+    return df
 
 # ----------------------------------------------------------------------------------------
 
@@ -145,6 +149,7 @@ def compute_metrics(networkx_):
 # ------------------------------- ALL METRICS FUNCTION -----------------------------------
 # ----------------------------------------------------------------------------------------
 
+@memoize
 def compute_node_centralities(networkGraphs, directed=True, multi=True):
     """
     :Function: Compute the node metrics for the NetworkX graph
@@ -166,7 +171,7 @@ def compute_node_centralities(networkGraphs, directed=True, multi=True):
 
 # ----------------------------------------------------------------------------------------
 
-
+@memoize
 def compute_node_metrics(networkGraphs, directed=True, multi=True):
     """
     :Function: Compute the node metrics for the NetworkX graph
@@ -291,6 +296,7 @@ def compute_betweeness_centrality(networkGraphs, directed=True, multi=True):
 
 # ----------------------------------------------------------------------------------------
 
+@memoize
 def compute_load_centrality(networkGraphs, directed=True, multi=True):
     """
     :Function: Compute the load centrality for the NetworkX graph
