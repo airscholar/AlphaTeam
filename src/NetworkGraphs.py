@@ -7,23 +7,35 @@ from src.visualisation import *
 Author: Alpha Team Group Project
 Date: March 2023
 Purpose: Class containing the NetworkX graphs
-"""
 
-"""
+----------------------------------------------------------------------------------------
+
 INFORMATION ABOUT GRAPH ATTRIBUTES
 
 NODES:
-- 'pos': position of the node (x, y) as a tuple for spatial graphs
-
+- 'pos': position of the node (x, y) as a tuple, POS IS A DICTIONARY WITH LAYOUTS AS KEYS AND POSITIONS AS VALUES
+    - pos['map'] = (lat, long)
+    - pos['neato'] = (x, y)
+    - pos['twopi'] = (x, y)
+    - pos['sfdp'] = (x, y)
+    
 EDGES:
-- 'weight': value of the edge (float) for value graphs
+- 'weight': value of the edge (float) for value graphs, WEIGHT IS A DICTIONARY WITH GRAPH AS KEYS AND WEIGHTS AS VALUES
+    - weight['MultiDiGraph'] = float
+    - weight['MultiGraph'] = float
+    - weight['DiGraph'] = float
+    - weight['Graph'] = float
 - 'start': time of the start of the edge (int) for temporal graphs
 - 'end': time of the end of the edge (int) for temporal graphs
-- 'color': color of the edge (string) for trajectory graphs
+- 'color': color of the edge (string), COLOR IS A DICTIONARY WITH GRAPH AS KEYS AND COLORS AS VALUES
+    - color['MultiDiGraph'] = string
+    - color['MultiGraph'] = string
+    - color['DiGraph'] = string
+    - color['Graph'] = string
 
 GRAPHS:
 - 'name': name of the graph (string)
-- 'type': type of the graph (string) - 'RAILWAY', 'CRYPTO' or 'CUSTOM'
+- 'type': type of the graph (string) - 'RAILWAY', 'CRYPTO' 'MTX' or 'CUSTOM'
 - 'temporal': True if the graph is temporal, False otherwise
 - 'spatial': True if the graph is spatial, False otherwise
 - 'weighted': True if the graph is weighted, False otherwise
@@ -56,6 +68,8 @@ class NetworkGraphs:
         self.Graph = None
         self.MultiGraph = None
         self.colors = None
+        self.mid_lat = None
+        self.mid_long = None
 
         self.filename = filename
         if name is None:
@@ -98,23 +112,49 @@ class NetworkGraphs:
 
         # ---------------------------------------------- CUSTOM --------------------------------------------------------
 
-        elif type == 'CUSTOM':
+        elif type == 'MTX':
             self.set_spatial(False)
             self.set_temporal(False)
-            self.set_weighted(False)
+            self.set_weighted(True)
 
             self.DiGraph, self.MultiDiGraph = preprocess_mtx(filename)
             self.Graph, self.MultiGraph = self.DiGraph.to_undirected(), self.MultiDiGraph.to_undirected()
 
             self.colors = None
 
-            mtx = scipy.io.mmread('../datasets/inf-USAir97.mtx')
+            mtx = scipy.io.mmread(filename)
             coo = mtx.tocoo()
             self.df = pd.DataFrame({'source': coo.row, 'target': coo.col, 'weight': coo.data})
+
+        # ---------------------------------------------- CUSTOM --------------------------------------------------------
+
+        elif type == 'CUSTOM':
+
+            self.DiGraph, self.MultiDiGraph = preprocess_custom(filename)
+            self.Graph, self.MultiGraph = self.DiGraph.to_undirected(), self.MultiDiGraph.to_undirected()
+
+            self.df = pd.read_csv(filename,low_memory=False)
+
+            if 'lat1' in self.df.columns and 'lon1' in self.df.columns:
+                self.set_spatial(True)
+
+            if 'start' in self.df.columns:
+                self.set_temporal(True)
+
+            if 'weight' in self.df.columns:
+                self.set_weighted(True)
+
+            if 'color' in self.df.columns:
+                self.colors = {'MultiDiGraph': nx.get_edge_attributes(self.MultiDiGraph, 'color').values(),
+                               'MultiGraph': nx.get_edge_attributes(self.MultiGraph, 'color').values(),
+                               'DiGraph': nx.get_edge_attributes(self.DiGraph, 'color').values(),
+                               'Graph': nx.get_edge_attributes(self.Graph, 'color').values()}
+
 
         # ---------------------------------------------- SPATIAL -------------------------------------------------------
 
         self.pos = {}
+        print('start layout computation')
         self.pos['neato'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='neato')
         print('neato')
         # self.pos['dot'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='dot')
@@ -134,6 +174,8 @@ class NetworkGraphs:
             self.set_min_lat(min(location, key=lambda x: x[1])[1] - 0.5)
             self.set_max_long(max(location, key=lambda x: x[0])[0] + 0.5)
             self.set_max_lat(max(location, key=lambda x: x[1])[1] + 0.5)
+            self.set_mid_long()
+            self.set_mid_lat()
 
         # ---------------------------------------------- TEMPORAL ------------------------------------------------------
 
@@ -177,7 +219,7 @@ class NetworkGraphs:
         self.name = name
 
     def set_type(self, data_type):
-        if data_type in ['RAILWAY', 'CRYPTO', 'CUSTOM']:
+        if data_type in ['RAILWAY', 'CRYPTO', 'CUSTOM', 'MTX']:
             self.type = data_type
         else:
             raise ValueError("The type must be 'RAILWAY', 'CRYPTO' or 'CUSTOM'")
@@ -202,6 +244,12 @@ class NetworkGraphs:
 
     def set_max_long(self, max_long):
         self.max_long = max_long
+
+    def set_mid_long(self):
+        self.mid_long = (self.max_long + self.min_long) / 2
+
+    def set_mid_lat(self):
+        self.mid_lat = (self.max_lat + self.min_lat) / 2
 
     # ---------------------------------------------- IS  -----------------------------------------------------------
 
