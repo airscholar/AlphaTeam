@@ -154,9 +154,9 @@ class NetworkGraphs:
         # ---------------------------------------------- SPATIAL -------------------------------------------------------
 
         self.pos = {}
-        print('start layout computation')
-        self.pos['neato'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='neato')
-        print('neato')
+        # print('start layout computation')
+        # self.pos['neato'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='neato')
+        # print('neato')
         # self.pos['dot'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='dot')
         # print('dot')
         self.pos['twopi'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='twopi')
