@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 import pandas as pd
-
+from pandas.api.types import is_numeric_dtype
 from src.utils import memoize
 
 
@@ -99,6 +99,21 @@ def compute_metrics(networkx_):
     except:
         avg_clustering = None
 
+    try:
+        transitivity = nx.transitivity(networkx_)
+    except:
+        transitivity = None
+
+    try :
+        avg_degree = np.mean(list(dict(networkx_.degree()).values()))
+    except:
+        avg_degree = None
+
+    try:
+        density = nx.density(networkx_)
+    except:
+        density = None
+
     records = [
         {"Metrics": "Clustering Coefficient", "Values": clustering_coefficient},
         {"Metrics": "Avg. Shortest Path Length", "Values": avg_shortest_path_length},
@@ -106,9 +121,9 @@ def compute_metrics(networkx_):
         {"Metrics": "Radius", "Values": radius},
         {"Metrics": "Number of Nodes", "Values": networkx_.number_of_nodes()},
         {"Metrics": "Number of Edges", "Values": networkx_.number_of_edges()},
-        {"Metrics": "Density", "Values": nx.density(networkx_)},
-        {"Metrics": "Transitivity", "Values": nx.transitivity(networkx_)},
-        {"Metrics": "Avg. Degree", "Values": np.mean(list(dict(networkx_.degree()).values()))},
+        {"Metrics": "Density", "Values": density},
+        {"Metrics": "Transitivity", "Values": transitivity},
+        {"Metrics": "Avg. Degree", "Values": avg_degree},
         {"Metrics": "Avg. Clustering", "Values": avg_clustering},
         {"Metrics": "Avg. Eigenvector Centrality",
          "Values": avg_eigenvector_centrality},
@@ -127,9 +142,10 @@ def compute_metrics(networkx_):
 
 
 # ----------------------------------------------------------------------------------------
+# ------------------------------- ALL METRICS FUNCTION -----------------------------------
+# ----------------------------------------------------------------------------------------
 
-
-def compute_node_metrics(networkGraphs, directed=True):
+def compute_node_centralities(networkGraphs, directed=True, multi=False):
     """
     :Function: Compute the node metrics for the NetworkX graph
     :param networkGraphs: Network Graphs
@@ -149,14 +165,37 @@ def compute_node_metrics(networkGraphs, directed=True):
         betweenness_centrality = compute_betweeness_centrality(networkGraphs, directed=True)
         load_centrality = compute_load_centrality(networkGraphs, directed=True)
 
-    # merge all into a single dataframe
     df = pd.merge(degree_centrality, eigen_centrality, how='inner', on='Node')
     df = pd.merge(df, closeness_centrality, how='inner', on='Node')
     df = pd.merge(df, betweenness_centrality, how='inner', on='Node')
     df = pd.merge(df, load_centrality, how='inner', on='Node')
-
     return df
 
+# ----------------------------------------------------------------------------------------
+
+
+def compute_node_metrics(networkGraphs, directed=True):
+    """
+    :Function: Compute the node metrics for the NetworkX graph
+    :param networkGraphs: Network Graphs
+    :param directed: Boolean
+    :return: Pandas dataframe with the metrics and values
+    """
+    if not directed:
+        kcore = compute_kcore(networkGraphs, directed=False)
+        triangle = compute_triangles(networkGraphs, directed=False)
+        degree = compute_nodes_degree(networkGraphs, directed=False)
+        pagerank = compute_page_rank(networkGraphs, directed=False)
+    else:
+        kcore = compute_kcore(networkGraphs, directed=True)
+        triangle = compute_triangles(networkGraphs, directed=True)
+        degree = compute_nodes_degree(networkGraphs, directed=True)
+        pagerank = compute_page_rank(networkGraphs, directed=True)
+
+    df = pd.merge(kcore, triangle, how='inner', on='Node')
+    df = pd.merge(df, degree, how='inner', on='Node')
+    df = pd.merge(df, pagerank, how='inner', on='Node')
+    return df
 
 # ----------------------------------------------------------------------------------------
 # ------------------------------ CENTRALITY METRICS --------------------------------------
@@ -169,13 +208,17 @@ def compute_degree_centrality(networkGraphs, directed=True):
     :param directed: Boolean
     :return: Pandas dataframe with the metrics and values
     """
+    try:
+        if not directed:
+            degree_centrality = nx.degree_centrality(networkGraphs.Graph)
+        else:
+            degree_centrality = nx.degree_centrality(networkGraphs.DiGraph)
+        df = pd.DataFrame(degree_centrality.items(), columns=['Node', 'Degree Centrality'])
+    except:
+        df = pd.DataFrame(columns=['Node', 'Degree Centrality'])
+        df['Node'] = list(networkGraphs.Graph.nodes())
+        df['Degree Centrality'] = np.nan
 
-    if not directed:
-        degree_centrality = nx.degree_centrality(networkGraphs.Graph)
-    else:
-        degree_centrality = nx.degree_centrality(networkGraphs.DiGraph)
-
-    df = pd.DataFrame(degree_centrality.items(), columns=['Node', 'Degree Centrality'])
     df = clean_df(df)
     return df
 
@@ -190,13 +233,17 @@ def compute_eigen_centrality(networkGraphs, directed=True):
     :param directed: Boolean
     :return: Pandas dataframe with the metrics and values
     """
+    try:
+        if not directed:
+            eigen_centrality = nx.eigenvector_centrality(networkGraphs.Graph)
+        else:
+            eigen_centrality = nx.eigenvector_centrality(networkGraphs.DiGraph)
+        df = pd.DataFrame(eigen_centrality.items(), columns=['Node', 'Eigenvector Centrality'])
+    except:
+        df = pd.DataFrame(columns=['Node', 'Eigenvector Centrality'])
+        df['Node'] = list(networkGraphs.Graph.nodes())
+        df['Eigenvector Centrality'] = np.nan
 
-    if not directed:
-        eigen_centrality = nx.eigenvector_centrality(networkGraphs.Graph)
-    else:
-        eigen_centrality = nx.eigenvector_centrality(networkGraphs.DiGraph)
-
-    df = pd.DataFrame(eigen_centrality.items(), columns=['Node', 'Eigenvector Centrality'])
     df = clean_df(df)
     return df
 
@@ -211,13 +258,17 @@ def compute_closeness_centrality(networkGraphs, directed=True):
     :param directed: Boolean
     :return: Pandas dataframe with the metrics and values
     """
+    try:
+        if not directed:
+            closeness_centrality = nx.closeness_centrality(networkGraphs.Graph)
+        else:
+            closeness_centrality = nx.closeness_centrality(networkGraphs.DiGraph)
+        df = pd.DataFrame(closeness_centrality.items(), columns=['Node', 'Closeness Centrality'])
+    except:
+        df = pd.DataFrame(columns=['Node', 'Closeness Centrality'])
+        df['Node'] = list(networkGraphs.Graph.nodes())
+        df['Closeness Centrality'] = np.nan
 
-    if not directed:
-        closeness_centrality = nx.closeness_centrality(networkGraphs.Graph)
-    else:
-        closeness_centrality = nx.closeness_centrality(networkGraphs.DiGraph)
-
-    df = pd.DataFrame(closeness_centrality.items(), columns=['Node', 'Closeness Centrality'])
     df = clean_df(df)
     return df
 
@@ -232,19 +283,23 @@ def compute_betweeness_centrality(networkGraphs, directed=True):
     :param directed: Boolean
     :return: Pandas dataframe with the metrics and values
     """
-    if not directed:
-        betweeness_centrality = nx.betweenness_centrality(networkGraphs.Graph)
-    else:
-        betweeness_centrality = nx.betweenness_centrality(networkGraphs.DiGraph)
+    try:
+        if not directed:
+            betweeness_centrality = nx.betweenness_centrality(networkGraphs.Graph)
+        else:
+            betweeness_centrality = nx.betweenness_centrality(networkGraphs.DiGraph)
+        df = pd.DataFrame(betweeness_centrality.items(), columns=['Node', 'Betweeness Centrality'])
+    except:
+        df = pd.DataFrame(columns=['Node', 'Betweeness Centrality'])
+        df['Node'] = list(networkGraphs.Graph.nodes())
+        df['Betweeness Centrality'] = np.nan
 
-    df = pd.DataFrame(betweeness_centrality.items(),
-                      columns=['Node', 'Betweeness Centrality'])
     df = clean_df(df)
     return df
 
 
 # ----------------------------------------------------------------------------------------
-@memoize
+
 def compute_load_centrality(networkGraphs, directed=True):
     """
     :Function: Compute the load centrality for the NetworkX graph
@@ -252,12 +307,17 @@ def compute_load_centrality(networkGraphs, directed=True):
     :param directed: Boolean
     :return: Pandas dataframe with the metrics and values
     """
-    if not directed:
-        load_centrality = nx.load_centrality(networkGraphs.Graph)
-    else:
-        load_centrality = nx.load_centrality(networkGraphs.DiGraph)
+    try:
+        if not directed:
+            load_centrality = nx.load_centrality(networkGraphs.Graph)
+        else:
+            load_centrality = nx.load_centrality(networkGraphs.DiGraph)
+        df = pd.DataFrame(load_centrality.items(), columns=['Node', 'Load Centrality'])
+    except:
+        df = pd.DataFrame(columns=['Node', 'Load Centrality'])
+        df['Node'] = list(networkGraphs.Graph.nodes())
+        df['Load Centrality'] = np.nan
 
-    df = pd.DataFrame(load_centrality.items(), columns=['Node', 'Load Centrality'])
     df = clean_df(df)
     return df
 
@@ -274,12 +334,17 @@ def compute_nodes_degree(networkGraphs, directed=True):
     :param directed: Boolean
     :return: Pandas dataframe with the metrics and values
     """
-    if not directed:
-        degree = nx.degree(networkGraphs.Graph)
-    else:
-        degree = nx.degree(networkGraphs.DiGraph)
+    try:
+        if not directed:
+            degree = nx.degree(networkGraphs.Graph)
+        else:
+            degree = nx.degree(networkGraphs.DiGraph)
+        df = pd.DataFrame(degree, columns=['Node', 'Degree'])
+    except:
+        df = pd.DataFrame(columns=['Node', 'Degree'])
+        df['Node'] = list(networkGraphs.Graph.nodes())
+        df['Degree'] = np.nan
 
-    df = pd.DataFrame(degree, columns=['Node', 'Degree'])
     df = clean_df(df)
     return df
 
@@ -294,12 +359,17 @@ def compute_kcore(networkGraphs, directed=True):
     :param directed: Boolean
     :return: Pandas dataframe with the k-core
     """
-    if not directed:
-        kcore = nx.core_number(networkGraphs.Graph)
-    else:
-        kcore = nx.core_number(networkGraphs.DiGraph)
+    try:
+        if not directed:
+            kcore = nx.core_number(networkGraphs.Graph)
+        else:
+            kcore = nx.core_number(networkGraphs.DiGraph)
+        df = pd.DataFrame(kcore.items(), columns=['Node', 'K-Core'])
+    except:
+        df = pd.DataFrame(columns=['Node', 'K-Core'])
+        df['Node'] = list(networkGraphs.Graph.nodes())
+        df['K-Core'] = np.nan
 
-    df = pd.DataFrame(kcore.items(), columns=['Node', 'K-Core'])
     df = clean_df(df)
     return df
 
@@ -314,12 +384,41 @@ def compute_triangles(networkGraphs, directed=True):
     :param directed: Boolean
     :return: Pandas dataframe with the triangle
     """
-    if not directed:
-        triangle = nx.triangles(networkGraphs.Graph)
-    else:
-        triangle = nx.triangles(networkGraphs.DiGraph)
+    try:
+        if not directed:
+            triangle = nx.triangles(networkGraphs.Graph)
+        else:
+            triangle = nx.triangles(networkGraphs.DiGraph)
+        df = pd.DataFrame(triangle.items(), columns=['Node', 'Triangle'])
+    except:
+        df = pd.DataFrame(columns=['Node', 'Triangle'])
+        df['Node'] = list(networkGraphs.Graph.nodes())
+        df['Triangle'] = np.nan
 
-    df = pd.DataFrame(triangle.items(), columns=['Node', 'Triangle'])
+    df = clean_df(df)
+    return df
+
+# ----------------------------------------------------------------------------------------
+
+@memoize
+def compute_page_rank(networkGraphs, directed=True):
+    """
+    :Function: Compute the page rank
+    :param networkGraphs: NetworkGraphs
+    :param directed: Boolean
+    :return: Pandas dataframe with the page rank
+    """
+    try:
+        if not directed:
+            page_rank = nx.pagerank(networkGraphs.Graph)
+        else:
+            page_rank = nx.pagerank(networkGraphs.DiGraph)
+        df = pd.DataFrame(page_rank.items(), columns=['Node', 'Page Rank'])
+    except:
+        df = pd.DataFrame(columns=['Node', 'Page Rank'])
+        df['Node'] = list(networkGraphs.Graph.nodes())
+        df['Page Rank'] = np.nan
+
     df = clean_df(df)
     return df
 
@@ -413,7 +512,8 @@ def clean_df(df):
 
     # if the columns is float round it to 6 decimals
     for column in df.columns:
-        if df[column].dtype == float:
+        # if the columns is a number round it to 6 decimals
+        if is_numeric_dtype(df[column]):
             df[column] = df[column].round(6)
 
         if df[column].dtype == object:
