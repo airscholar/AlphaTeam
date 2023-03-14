@@ -308,6 +308,7 @@ def preprocess_custom(filename_:str):
     :return: List of NetworkX DiGraphs and MultiDiGraphs
     """
     df = pd.read_csv(filename_)
+    df.sort_values(by=['from', 'to'], inplace=True)
     MultiDiGraph = nx.MultiDiGraph()
 
     if not 'from' in df.columns and not 'to' in df.columns:
@@ -318,21 +319,21 @@ def preprocess_custom(filename_:str):
     MultiDiGraph.add_nodes_from(df['to'].unique())
 
     for from_, to_ in df[['from', 'to']].values:
-        MultiDiGraph.add_edge(from_, to_)
+        MultiDiGraph.add_edge(from_, to_, weight=1)
 
     if 'lat1' in df.columns and 'lon1' in df.columns:
         for node, lat, lon in df[['from', 'lat1', 'lon1']].values:
-            MultiDiGraph.nodes[node]['lat'] = lat
-            MultiDiGraph.nodes[node]['lon'] = lon
+            MultiDiGraph.nodes[node]['pos'] = (lon, lat)
 
     if 'lat2' in df.columns and 'lon2' in df.columns:
         for node, lat, lon in df[['to', 'lat2', 'lon2']].values:
-            MultiDiGraph.nodes[node]['lat'] = lat
-            MultiDiGraph.nodes[node]['lon'] = lon
+            if not 'pos' in MultiDiGraph.nodes[node]:
+                MultiDiGraph.nodes[node]['pos'] = (lon, lat)
 
     if 'weight' in df.columns:
-        for from_, to_, weight_ in df[['from', 'to', 'weight']].values:
-            MultiDiGraph.edges[from_, to_]['weight'] = weight_
+        idx = [(u, v, k) for u, v, k in MultiDiGraph.edges(keys=True)]
+        for i, weight_ in enumerate(df['weight'].values):
+            MultiDiGraph.edges[idx[i]]['weight'] = weight_
 
     if 'start' in df.columns and not 'end' in df.columns:
         for from_, to_, start_ in df[['from', 'to', 'start']].values:
@@ -345,8 +346,9 @@ def preprocess_custom(filename_:str):
             MultiDiGraph.edges[from_, to_]['end'] = end_
 
     if 'color' in df.columns:
-        for from_, to_, color_ in df[['from', 'to', 'color']].values:
-            MultiDiGraph.edges[from_, to_]['color'] = color_
+        idx = [(u, v, k) for u, v, k in MultiDiGraph.edges(keys=True)]
+        for i, color_ in enumerate(df['color'].values):
+            MultiDiGraph.edges[idx[i]]['color'] = color_
 
     DiGraph = convert_to_DiGraph(MultiDiGraph)
     MultiDiGraph.remove_edges_from(nx.selfloop_edges(MultiDiGraph))
