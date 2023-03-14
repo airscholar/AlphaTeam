@@ -8,16 +8,19 @@ Purpose: Visualisation for the NetworkX graphs
 
 # Imports
 import os
+from itertools import zip_longest
 
 import cv2
 import geopandas as gpd
 import ipywidgets as widgets
 import matplotlib.pyplot as plt
-import matplotlib as mpl
-from IPython.display import display
+import networkx as nx
+import numpy as np
 import plotly.graph_objs as go
-import plotly.express as px
-from src.metrics import *
+from IPython.display import display
+
+import src.machineLearning as ml
+from src.utils import *
 
 
 # ----------------------------------------------------------------------------------------
@@ -75,20 +78,19 @@ def static_visualisation(networkGraphs, title, directed=True, multi=False, backg
     pos = networkGraphs.pos[layout]
 
     if directed:
-
         if multi:
             nx.draw(networkGraphs.MultiDiGraph, pos, with_labels=False, node_size=1,
                     edge_color=networkGraphs.colors['MultiDiGraph'], node_color='red', width=0.5)
         else:
-            nx.draw(networkGraphs.DiGraph,pos, with_labels=False, node_size=1,
+            nx.draw(networkGraphs.DiGraph, pos, with_labels=False, node_size=1,
                     edge_color=networkGraphs.colors['DiGraph'], node_color='red', width=0.5)
     else:
-
         if multi:
-            nx.draw(networkGraphs.MultiGraph, pos, with_labels=False, node_size=1, node_color='red',
+            nx.draw(networkGraphs.MultiGraph, pos, with_labels=False, node_size=1,
                     width=0.5)
         else:
-            nx.draw(networkGraphs.Graph, pos, with_labels=False, node_size=1, node_color='red', width=0.5)
+            nx.draw(networkGraphs.Graph, pos, with_labels=False, node_size=1, node_color='red',
+                    width=0.5)
 
     # plot axes
     plt.axis('on')
@@ -178,7 +180,8 @@ def plot_metrics(networkGraphs, df_, layout='map'):
 
     fig, ax = plt.subplots(figsize=(10, 6))
     cmap = plt.cm.plasma
-    nx.draw(networkGraphs.Graph, pos, node_color=metric_, cmap= cmap, node_size=metric_*30, with_labels=False, width=0.5)
+    nx.draw(networkGraphs.Graph, pos, node_color=metric_, cmap=cmap, node_size=metric_ * 30, with_labels=False,
+            width=0.5)
     plt.title(f"{metrics_names} visualisation using {layout} layout")
 
     # Add colobar
@@ -193,7 +196,7 @@ def plot_metrics(networkGraphs, df_, layout='map'):
 # ----------------------------------------------------------------------------------------
 
 
-def plot_metrics_on_map(networkGraphs, metrics, title_, directed=False):
+def plot_metrics_on_map(networkGraphs, metrics, title, directed=False):
     G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
 
     pos = networkGraphs.pos['map']
@@ -206,9 +209,9 @@ def plot_metrics_on_map(networkGraphs, metrics, title_, directed=False):
         edge_trace['lat'] += tuple([y0, y1, None])
 
     node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
-                            marker=dict(showscale=True, color=['red'], size=3,
-                                        colorbar=dict(thickness=10, title='Node Connections', xanchor='left',
-                                                      titleside='right'), line=dict(width=2, color='#FF0000')))
+                               marker=dict(showscale=True, color=['red'], size=3,
+                                           colorbar=dict(thickness=10, title='Node Connections', xanchor='left',
+                                                         titleside='right'), line=dict(width=2, color='#FF0000')))
     for node in G.nodes():
         x, y = pos[node]
         node_trace['lon'] += tuple([x])
@@ -221,32 +224,7 @@ def plot_metrics_on_map(networkGraphs, metrics, title_, directed=False):
                     f"Betweenness Centrality: {str(node_centrality['Betweeness Centrality'].values[0])}"
         node_trace['text'] += tuple([node_info])
 
-    layout = go.Layout(
-        title=f'<br>{title_}',
-        titlefont=dict(size=16, color='White'),
-        showlegend=False,
-        hovermode='closest',
-        annotations=[
-            dict(
-                text="Alpha Team - 2023",
-                showarrow=False,
-                xref="paper", yref="paper",
-                x=0.005, y=-0.002,
-                font=dict(color='black')
-            )
-        ],
-        geo=dict(
-            scope='world',
-            lataxis_range=[networkGraphs.min_lat, networkGraphs.max_lat],
-            lonaxis_range=[networkGraphs.min_long, networkGraphs.max_long],
-            center=dict(lat=networkGraphs.mid_lat, lon=networkGraphs.mid_long),
-
-        ),
-        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-        plot_bgcolor='white',
-        height=1000
-    )
+    layout = get_map_layout(networkGraphs, title)
     # plot the figure
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
@@ -312,6 +290,84 @@ def create_frames(temporal_graphs):
         print(f"\rCreating frames: {i + 1}/{len(temporal_graphs)}", end="")
 
     return 1
+
+
+def plot_cluster(networkGraphs, clusterType, title=None, dynamic=False):
+    cluster = ml.get_communities(networkGraphs, clusterType)
+
+    color_map = {
+        k: (cluster[cluster['node'] == k]['color'].values[0], cluster[cluster['node'] == k]['cluster_id'].values[0])
+        for k in networkGraphs.Graph.nodes}
+
+    plot_clustering_on_map(networkGraphs, cluster, color_map, title, 'map', directed=False)
+
+
+def get_map_layout(networkGraphs, title=None):
+    return go.Layout(
+        title=f'<br>{title}',
+        titlefont=dict(size=16, color='White'),
+        showlegend=False,
+        hovermode='closest',
+        annotations=[
+            dict(
+                text="Alpha Team - 2023",
+                showarrow=False,
+                xref="paper", yref="paper",
+                x=0.005, y=-0.002,
+                font=dict(color='black')
+            )
+        ],
+        geo=dict(
+            scope='world',
+            lataxis_range=[networkGraphs.min_lat, networkGraphs.max_lat],
+            lonaxis_range=[networkGraphs.min_long, networkGraphs.max_long],
+            center=dict(lat=networkGraphs.mid_lat, lon=networkGraphs.mid_long),
+            showland=True,
+        ),
+        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+        plot_bgcolor='white',
+        height=1000
+    )
+
+
+def plot_clustering_on_map(networkGraphs, cluster_df, color_map, title, layout='map', directed=False):
+    G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
+
+    pos = networkGraphs.pos[layout]
+
+    edge_trace = go.Scattergeo(lon=[], lat=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
+    node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
+                               marker=dict(showscale=True, color=['red'], size=5,
+                                           colorbar=dict(thickness=10, title='Node Connections', xanchor='left',
+                                                         titleside='right')))
+
+    for idx, vals in enumerate(zip_longest(G.edges(), G.nodes())):
+        edge, node = vals
+        x0, y0 = pos[edge[0]]
+        x1, y1 = pos[edge[1]]
+        edge_trace['lon'] += tuple([x0, x1, None])
+        edge_trace['lat'] += tuple([y0, y1, None])
+
+        if idx < len(G.nodes()):
+            x, y = pos[node]
+            node_trace['lon'] += tuple([x])
+            node_trace['lat'] += tuple([y])
+            cluster = color_map[node]
+            node_info = f"Node: {node}<br>Cluster Id: {str(cluster[1])}<br>"
+            node_trace['text'] += tuple([node_info])
+            node_trace['marker']['color'] += tuple([cluster[0]])
+
+    layout = get_map_layout(networkGraphs, title)
+
+    # plot the figure
+    fig = go.Figure(data=[edge_trace, node_trace],
+                    layout=layout)
+    # export to html
+    filename = f'{title}_map_directed.html' if directed else f'{title}_map_undirected.html'
+    fig.write_html(filename)
+
+    return fig
 
 
 # ----------------------------------------------------------------------------------------
