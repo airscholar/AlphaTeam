@@ -195,7 +195,7 @@ def load():
         loadDF = compute_load_centrality(networkGraphs, directed=False)
         cache.set('loadDF', loadDF)
     table_headers = list(loadDF.columns.values)
-    table_rows = loadDF.values.tolist()
+    table_rows = loadDF.round(6).values.tolist()
     return render_template('centrality_load.html', table_headers=table_headers, table_rows=table_rows)
 
 if __name__ == '__main__':

@@ -69,20 +69,20 @@ def static_visualisation(networkGraphs, title, directed=True, multi=False, backg
             plot_map(networkGraphs, background=background, edges=edges)
 
         if multi:
-            nx.draw(networkGraphs.MultiDiGraph, networkGraphs.pos['MultiDiGraph'], with_labels=False, node_size=1,
+            nx.draw(networkGraphs.MultiDiGraph, networkGraphs.pos['map'], with_labels=False, node_size=1,
                     edge_color=networkGraphs.colors['MultiDiGraph'], node_color='red', width=0.5)
         else:
-            nx.draw(networkGraphs.DiGraph, networkGraphs.pos['DiGraph'], with_labels=False, node_size=1,
+            nx.draw(networkGraphs.DiGraph, networkGraphs.pos['map'], with_labels=False, node_size=1,
                     edge_color=networkGraphs.colors['DiGraph'], node_color='red', width=0.5)
     else:
         if networkGraphs.is_spatial():
             plot_map(networkGraphs, background=background, edges=edges)
 
         if multi:
-            nx.draw(networkGraphs.MultiGraph, networkGraphs.pos['MultiGraph'], with_labels=False, node_size=1,
+            nx.draw(networkGraphs.MultiGraph, networkGraphs.pos['map'], with_labels=False, node_size=1,
                     width=0.5)
         else:
-            nx.draw(networkGraphs.Graph, networkGraphs.pos['Graph'], with_labels=False, node_size=1, node_color='red',
+            nx.draw(networkGraphs.Graph, networkGraphs.pos['map'], with_labels=False, node_size=1, node_color='red',
                     width=0.5)
 
     # plot axes
