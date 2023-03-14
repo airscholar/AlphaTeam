@@ -13,6 +13,44 @@ import pandas as pd
 from pandas.api.types import is_numeric_dtype
 from src.utils import memoize
 
+
+# ----------------------------------------------------------------------------------------
+# --------------------------------------- GETTER -----------------------------------------
+# ----------------------------------------------------------------------------------------
+
+def get_metrics(networkGraphs, method):
+    """
+    :Function: Get the metrics for the given graph
+    :param networkGraphs: Network graphs
+    :param method: Method to compute the metrics
+    :return: Pandas dataframe with the metrics and values
+    """
+    if method not in ['kcore', 'degree', 'triangles', 'pagerank', 'betweenness_centrality', 'closeness_centrality',
+                      'eigenvector_centrality', 'load_centrality', 'degree_centrality']:
+        raise ValueError("Method not supported")
+
+    if method == 'kcore':
+        return compute_kcore(networkGraphs)
+    elif method == 'degree':
+        return compute_nodes_degree(networkGraphs)
+    elif method == 'triangles':
+        return compute_triangles(networkGraphs)
+    elif method == 'pagerank':
+        return compute_page_rank(networkGraphs)
+    elif method == 'betweenness_centrality':
+        return compute_betweeness_centrality(networkGraphs)
+    elif method == 'closeness_centrality':
+        return compute_closeness_centrality(networkGraphs)
+    elif method == 'eigenvector_centrality':
+        return compute_eigen_centrality(networkGraphs)
+    elif method == 'load_centrality':
+        return compute_load_centrality(networkGraphs)
+    elif method == 'degree_centrality':
+        return compute_degree_centrality(networkGraphs)
+    else:
+        raise ValueError("Method not supported")
+
+
 # ----------------------------------------------------------------------------------------
 # ------------------------------------ GLOBAL METRICS ------------------------------------
 # ----------------------------------------------------------------------------------------
@@ -28,11 +66,12 @@ def compute_global_metrics(networkGraphs):
     multidi = compute_metrics(networkGraphs.MultiDiGraph)  # compute for multidi
     multi = compute_metrics(networkGraphs.MultiGraph)  # compute for multi
 
-    df = pd.merge(directed, undirected, how='inner', on='Metrics').\
-        merge(multidi, how='inner', on='Metrics').\
+    df = pd.merge(directed, undirected, how='inner', on='Metrics'). \
+        merge(multidi, how='inner', on='Metrics'). \
         merge(multi, how='inner', on='Metrics')
     df.columns = ['Metrics', 'Directed', 'Undirected', 'MultiDi', 'Multi']
     return df
+
 
 # ----------------------------------------------------------------------------------------
 
@@ -107,7 +146,7 @@ def compute_metrics(networkx_):
     except:
         transitivity = None
 
-    try :
+    try:
         avg_degree = np.mean(list(dict(networkx_.degree()).values()))
     except:
         avg_degree = None
@@ -168,6 +207,7 @@ def compute_node_centralities(networkGraphs, directed=True, multi=True):
     df = pd.merge(df, load_centrality, how='inner', on='Node')
     return df
 
+
 # ----------------------------------------------------------------------------------------
 
 @memoize
@@ -187,6 +227,7 @@ def compute_node_metrics(networkGraphs, directed=True, multi=True):
     df = pd.merge(df, degree, how='inner', on='Node')
     df = pd.merge(df, pagerank, how='inner', on='Node')
     return df
+
 
 # ----------------------------------------------------------------------------------------
 # ------------------------------ CENTRALITY METRICS --------------------------------------
@@ -324,17 +365,15 @@ def compute_load_centrality(networkGraphs, directed=True, multi=True):
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_nodes_degree(networkGraphs, directed=True, multi=True):
+def compute_nodes_degree(networkGraphs, directed=True):
     """
     :Function: Compute the node degree for the NetworkX graph
     :param networkGraphs: NetworkGraphs
     :param directed: Boolean
     :return: Pandas dataframe with the metrics and values
     """
-    if not multi:
-        G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
-    else:
-        G = networkGraphs.MultiGraph if not directed else networkGraphs.MultiDiGraph
+    G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
+
     try:
         degree = nx.degree(G)
         df = pd.DataFrame(degree, columns=['Node', 'Degree'])
@@ -350,17 +389,15 @@ def compute_nodes_degree(networkGraphs, directed=True, multi=True):
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_kcore(networkGraphs, directed=True, multi=True):
+def compute_kcore(networkGraphs, directed=True):
     """
     :Function: Compute the k-core
     :param networkGraphs: NetworkGraphs
     :param directed: Boolean
     :return: Pandas dataframe with the k-core
     """
-    if not multi:
-        G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
-    else:
-        G = networkGraphs.MultiGraph if not directed else networkGraphs.MultiDiGraph
+    G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
+
     try:
         kcore = nx.core_number(G)
         df = pd.DataFrame(kcore.items(), columns=['Node', 'K-Core'])
@@ -376,17 +413,15 @@ def compute_kcore(networkGraphs, directed=True, multi=True):
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_triangles(networkGraphs, directed=True, multi=True):
+def compute_triangles(networkGraphs, directed=True):
     """
     :Function: Compute the triangle
     :param networkGraphs: NetworkGraphs
     :param directed: Boolean
     :return: Pandas dataframe with the triangle
     """
-    if not multi:
-        G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
-    else:
-        G = networkGraphs.MultiGraph if not directed else networkGraphs.MultiDiGraph
+    G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
+
     try:
         triangle = nx.triangles(G)
         df = pd.DataFrame(triangle.items(), columns=['Node', 'Triangle'])
@@ -397,6 +432,7 @@ def compute_triangles(networkGraphs, directed=True, multi=True):
 
     df = clean_df(df)
     return df
+
 
 # ----------------------------------------------------------------------------------------
 
@@ -501,6 +537,7 @@ def histogram(df, column, bins=100, log=False, title=None):
         plt.title(title)
     plt.show()
 
+
 # ----------------------------------------------------------------------------------------
 
 def clean_df(df):
@@ -521,5 +558,3 @@ def clean_df(df):
             df[column] = df[column].apply(lambda x: x[:6] + '...' + x[-6:] if len(x) > 15 and x[:2] == '0x' else x[:12])
 
     return df
-
-
