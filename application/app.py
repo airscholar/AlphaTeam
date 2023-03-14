@@ -24,7 +24,7 @@ networkGraphs = None
 # Define a custom error page for 500 Internal Server Error
 @app.errorhandler(500)
 def internal_server_error(e):
-    if cache.has('global_metrics') and 'filename' in session:
+    if cache.has('global_metrics') or 'filename' in session:
         # Clear the cache
         cache.clear()
         # Delete the file
@@ -45,7 +45,7 @@ def not_found_error(e):
 @app.route('/')
 def index():
     # Check if global_metrics is present in the cache and filename is present in the session
-    if cache.has('global_metrics') and 'filename' in session:
+    if cache.has('global_metrics') or 'filename' in session:
         # Clear the cache
         cache.clear()
         # Delete the file
@@ -75,13 +75,12 @@ def upload():
     # Do something with the CSV file and selected option
     # (e.g., process the file data and store it in a database)
 
+    filepath = './uploads/'+filename
     # Store the filename in a session variable
     session['filename'] = filename
+    session['filepath'] = filepath
+    session['option'] = option
 
-    filepath = './uploads/'+filename
-    # Assign the value to the global variable
-    global networkGraphs
-    networkGraphs = NetworkGraphs(filepath, type=option, spatial=True)
     # Redirect the user to the success page
     return redirect(url_for('home'))
 
@@ -90,7 +89,13 @@ def upload():
 def home():
     # Get the filename from the session variable
     filename = session['filename']
-    
+    filepath = session['filepath']
+    option = session['option']
+
+    # Assign the value to the global variable
+    global networkGraphs
+    networkGraphs = NetworkGraphs(filepath, type=option, spatial=True)
+
     global_metrics = cache.get('global_metrics')
     if global_metrics is None:
         global_metrics = compute_global_metrics(networkGraphs)
@@ -190,7 +195,7 @@ def load():
         loadDF = compute_load_centrality(networkGraphs, directed=False)
         cache.set('loadDF', loadDF)
     table_headers = list(loadDF.columns.values)
-    table_rows = loadDF.values.tolist()
+    table_rows = loadDF.round(6).values.tolist()
     return render_template('centrality_load.html', table_headers=table_headers, table_rows=table_rows)
 
 if __name__ == '__main__':
