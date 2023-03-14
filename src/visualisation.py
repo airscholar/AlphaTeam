@@ -6,17 +6,19 @@ Purpose: Visualisation for the NetworkX graphs
 
 # ----------------------------------------------------------------------------------------
 
-from visualisation_src.metrics_visualisation import *
-from visualisation_src.basic_network_visualisation import *
-from visualisation_src.ML_visualisation import *
-from visualisation_src.temporal_visualisation import *
+from src.visualisation_src.metrics_visualisation import *
+from src.visualisation_src.basic_network_visualisation import *
+from src.visualisation_src.ML_visualisation import *
+from src.visualisation_src.temporal_visualisation import *
 import src.machineLearning as ml
 import numpy as np
 import src.metrics as m
+from pandas.api.types import is_numeric_dtype
+from src.utils import memoize
 
 # ----------------------------------------------------------------------------------------
 
-
+@memoize
 def plot_cluster(networkGraphs, clusterType, title=None, dynamic=False):
     cluster = ml.get_communities(networkGraphs, clusterType)
 
@@ -29,6 +31,7 @@ def plot_cluster(networkGraphs, clusterType, title=None, dynamic=False):
 
 # ----------------------------------------------------------------------------------------
 
+@memoize
 def plot_metrics(networkGraphs, metrics, dynamic=False, layout='map'):
     """
     :Function: Plot the metrics for the given graph
@@ -37,10 +40,11 @@ def plot_metrics(networkGraphs, metrics, dynamic=False, layout='map'):
     :param dynamic: Boolean to indicate if the plot is dynamic or not
     :return: Pyplot plot
     """
-    if metrics not in ['degree', 'betweenness', 'closeness', 'eigenvector', 'pagerank', 'clustering', 'community']:
-        raise ValueError("Metrics not supported")
-
     df = m.get_metrics(networkGraphs, metrics)
+
+    # check if df['Node'] is nan
+    if df[df.columns.values[1]].isnull().values.any():
+        return ValueError('Metric column is empty. Please select a different metric.')
 
     if dynamic:
         return generate_dynamic_metrics(networkGraphs, metrics)

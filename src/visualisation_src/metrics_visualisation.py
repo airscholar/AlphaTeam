@@ -46,26 +46,25 @@ def plot_metrics(networkGraphs, df_, layout='map'):  # USING MATPLOTLIB
 
 # ----------------------------------------------------------------------------------------
 
-
-def generate_static_metric(networkGraphs, df_, layout='map'):  # USING PLOTLY
+def generate_static_metric(networkGraphs, df_, layout_='map'):  # USING PLOTLY
     """
     :Function: Plot the metrics on the graph
     :param networkGraphs: Network graphs
     :param df_: Dataframe with the metrics (first column is the node id) (second column is the metric)
-    :param layout: Layout to be used
+    :param layout_: Layout to be used
     :return: Plotly plot
     """
 
     G = networkGraphs.Graph
 
-    if not networkGraphs.is_spatial() and layout == 'map':
-        layout = 'sfdp'
-    pos = networkGraphs.pos[layout]
+    if not networkGraphs.is_spatial() and layout_ == 'map':
+        layout_ = 'sfdp'
+    pos = networkGraphs.pos[layout_]
 
     metrics_name = df_.columns[1]
     df_['std'] = (df_[metrics_name] - df_[metrics_name].min()) / (df_[metrics_name].max() - df_[metrics_name].min())
 
-    if layout == 'map':
+    if layout_ == 'map':
         edge_trace = go.Scattergeo(lon=[], lat=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
         node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
                                    marker=dict(showscale=True,
@@ -83,7 +82,7 @@ def generate_static_metric(networkGraphs, df_, layout='map'):  # USING PLOTLY
     for idx, edge in tqdm(enumerate(G.edges())):
         x0, y0 = pos[edge[0]]
         x1, y1 = pos[edge[1]]
-        if layout == 'map':
+        if layout_ == 'map':
             edge_trace['lon'] += (x0, x1, None)
             edge_trace['lat'] += (y0, y1, None)
         else:
@@ -91,7 +90,7 @@ def generate_static_metric(networkGraphs, df_, layout='map'):  # USING PLOTLY
             edge_trace['y'] += (y0, y1, None)
 
     for node in tqdm(G.nodes()):
-        if layout == 'map':
+        if layout_ == 'map':
             node_trace['lon'] += tuple([pos[node][0]])
             node_trace['lat'] += tuple([pos[node][1]])
         else:
@@ -103,11 +102,11 @@ def generate_static_metric(networkGraphs, df_, layout='map'):  # USING PLOTLY
 
         node_trace['text'] += tuple([node_info])
 
-    layout = get_layout(networkGraphs, f"{metrics_name} visualisation using {layout} layout", layout_=layout)
+    layout = get_layout(networkGraphs, f"{metrics_name} visualisation using {layout_} layout", layout_=layout_)
     # plot the figure
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
     # hash the fig to avoid overwriting the file
     # filename = "metrics_visualisation.html"
-    fig.write_html(metrics_name)
+    fig.write_html(metrics_name+"_visualisation_"+layout_+".html", auto_open=True)
     return fig
