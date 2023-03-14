@@ -5,68 +5,93 @@ from src.NetworkGraphs import NetworkGraphs
 from src.preprocessing import *
 from src.metrics import *
 from src.visualisation import *
+from src.machineLearning import *
+import time
 
-customGraphs = NetworkGraphs('../datasets/Dune_Eth_transaction.csv', type="CRYPTO")
+networkGraph = NetworkGraphs('../datasets/Railway.csv', type="RAILWAY")
 
-degree = compute_degree_centrality(customGraphs, directed=False)
-print(degree.head())
-plt = plot_metrics(customGraphs, degree)
-plt.show()
+# louv_df = louvain_clustering(networkGraph)
+# print(louv_df)
+# print(color_map)
+# print(list(networkGraph.Graph.nodes))
+# pos = nx.nx_agraph.graphviz_layout(networkGraph.Graph, prog='sfdp')
+# print(pos)
 
-kcore = compute_kcore(customGraphs, directed=False)
-print(kcore.head())
-plt =plot_metrics(customGraphs, kcore)
-plt.show()
+plot_cluster(networkGraph, 'louvain', 'Louvan Clustering')
+plot_cluster(networkGraph, 'greedy_modularity', 'Greedy Modularity Clustering')
+plot_cluster(networkGraph, 'label_propagation', 'Label Propagation Clustering')
+plot_cluster(networkGraph, 'asyn_lpa', 'Asyn LPA Clustering')
+plot_cluster(networkGraph, 'girvan_newman', 'Girvan Newman Clustering')
+plot_cluster(networkGraph, 'edge_betweenness', 'Edge Betweenness Clustering')
+plot_cluster(networkGraph, 'k_clique', 'K Clique Clustering')
 
-triangle = compute_triangles(customGraphs, directed=False)
-print(triangle.head())
-plt = plot_metrics(customGraphs, triangle)
-plt.show()
 
-degree = compute_degree_centrality(customGraphs, directed=False)
-print(degree.head())
-plt = plot_metrics(customGraphs, degree,'neato')
-plt.show()
 
-kcore = compute_kcore(customGraphs, directed=False)
-print(kcore.head())
-plt = plot_metrics(customGraphs, kcore,'neato')
-plt.show()
+# customGraphs = NetworkGraphs('../datasets/Dune_Eth_transaction.csv', type="CRYPTO")
+# louvain_clustering(customGraphs)
 
-triangle = compute_triangles(customGraphs, directed=False)
-print(triangle.head())
-plt = plot_metrics(customGraphs, triangle,'neato')
-plt.show()
 
-degree = compute_degree_centrality(customGraphs, directed=False)
-print(degree.head())
-plt = plot_metrics(customGraphs, degree,'twopi')
-plt.show()
 
-kcore = compute_kcore(customGraphs, directed=False)
-print(kcore.head())
-plt = plot_metrics(customGraphs, kcore,'twopi')
-plt.show()
-
-triangle = compute_triangles(customGraphs, directed=False)
-print(triangle.head())
-plt = plot_metrics(customGraphs, triangle,'twopi')
-plt.show()
-
-degree = compute_degree_centrality(customGraphs, directed=False)
-print(degree.head())
-plt = plot_metrics(customGraphs, degree,'sfdp')
-plt.show()
-
-kcore = compute_kcore(customGraphs, directed=False)
-print(kcore.head())
-plt = plot_metrics(customGraphs, kcore,'sfdp')
-plt.show()
-
-triangle = compute_triangles(customGraphs, directed=False)
-print(triangle.head())
-plt = plot_metrics(customGraphs, triangle,'sfdp')
-plt.show()
+#
+# degree = compute_degree_centrality(customGraphs, directed=False)
+# print(degree.head())
+# plt = plot_metrics(customGraphs, degree)
+# plt.show()
+#
+# kcore = compute_kcore(customGraphs, directed=False)
+# print(kcore.head())
+# plt =plot_metrics(customGraphs, kcore)
+# plt.show()
+#
+# triangle = compute_triangles(customGraphs, directed=False)
+# print(triangle.head())
+# plt = plot_metrics(customGraphs, triangle)
+# plt.show()
+#
+# degree = compute_degree_centrality(customGraphs, directed=False)
+# print(degree.head())
+# plt = plot_metrics(customGraphs, degree,'neato')
+# plt.show()
+#
+# kcore = compute_kcore(customGraphs, directed=False)
+# print(kcore.head())
+# plt = plot_metrics(customGraphs, kcore,'neato')
+# plt.show()
+#
+# triangle = compute_triangles(customGraphs, directed=False)
+# print(triangle.head())
+# plt = plot_metrics(customGraphs, triangle,'neato')
+# plt.show()
+#
+# degree = compute_degree_centrality(customGraphs, directed=False)
+# print(degree.head())
+# plt = plot_metrics(customGraphs, degree,'twopi')
+# plt.show()
+#
+# kcore = compute_kcore(customGraphs, directed=False)
+# print(kcore.head())
+# plt = plot_metrics(customGraphs, kcore,'twopi')
+# plt.show()
+#
+# triangle = compute_triangles(customGraphs, directed=False)
+# print(triangle.head())
+# plt = plot_metrics(customGraphs, triangle,'twopi')
+# plt.show()
+#
+# degree = compute_degree_centrality(customGraphs, directed=False)
+# print(degree.head())
+# plt = plot_metrics(customGraphs, degree,'sfdp')
+# plt.show()
+#
+# kcore = compute_kcore(customGraphs, directed=False)
+# print(kcore.head())
+# plt = plot_metrics(customGraphs, kcore,'sfdp')
+# plt.show()
+#
+# triangle = compute_triangles(customGraphs, directed=False)
+# print(triangle.head())
+# plt = plot_metrics(customGraphs, triangle,'sfdp')
+# plt.show()
 
 # plt = static_visualisation(customGraphs, layout='neato', title='Railway Graph NEATO')
 # plt.show()
