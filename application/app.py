@@ -12,6 +12,7 @@ from flask_caching import Cache
 import matplotlib.pyplot as plt
 import re
 import time
+import shutil
 
 app = Flask(__name__)
 app.secret_key = 'my-secret-key' # set a secret key for the session
@@ -25,16 +26,18 @@ networkGraphs = None
 @app.errorhandler(500)
 def internal_server_error(e):
     if cache.has('global_metrics') or 'filename' in session:
-        # Clear the cache
-        cache.clear()
         # Delete the file
         filename = session['filename']
-        filepath = './uploads/'+filename
+        filename2 = session['filename2']
+        filepath = './uploads/'+filename2
         if os.path.exists(filepath):
-            os.remove(filepath)
+            shutil.rmtree(filepath)
         imagepath = app.root_path + '/static/img/' + filename + '.png'
         if os.path.exists(imagepath):
             os.remove(imagepath)
+        
+        cache.clear()
+
     return render_template('500.html')
 
 # Define a custom error page for 404 Not Found Error
@@ -46,40 +49,82 @@ def not_found_error(e):
 def index():
     # Check if global_metrics is present in the cache and filename is present in the session
     if cache.has('global_metrics') or 'filename' in session:
-        # Clear the cache
-        cache.clear()
         # Delete the file
         filename = session['filename']
-        filepath = './uploads/'+filename
+        filename2 = session['filename2']
+        filepath = './uploads/'+filename2
         if os.path.exists(filepath):
-            os.remove(filepath)
+            shutil.rmtree(filepath)
         imagepath = app.root_path + '/static/img/' + filename + '.png'
         if os.path.exists(imagepath):
             os.remove(imagepath)
+        # Clear the cache
+        cache.clear()
     return render_template('index.html')
+
+@app.route('/index/sample-dataset')
+def index_sample():
+    return render_template('index_sample_dataset.html')
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    # Get the CSV file and the selected option
-    csv_file = request.files['csv_file']
-    option = request.form['option']
-
-    # Save the CSV file to a folder on the server with a filename based on the selected option and file extension
+    data = request.form
+    print(data)
     timestamp = str(int(time.time()))
-    if option != 'General':
-        filename = option + re.sub(r'\W+', '', timestamp) + '.csv'
+
+    # Get the CSV file and the selected option
+    if 'option2' in request.form:
+        csv_file = request.form['csv_path']
+        option = request.form['option']
+        # Save the CSV file to a folder on the server with a filename based on the selected option and file extension
+        if option != 'MTX':
+            source_file = csv_file + option +'.csv'
+            filename = option + re.sub(r'\W+', '', timestamp) + '.csv'
+            filename2 = option + re.sub(r'\W+', '', timestamp)
+        else:
+            source_file = csv_file + option +'.mtx'
+            filename = option + re.sub(r'\W+', '', timestamp) + '.mtx'
+            filename2 = option + re.sub(r'\W+', '', timestamp)
+        # Check if the directory exists, and create it if it doesn't
+        destination_dir = './uploads/'+filename2
+        # Create the directory if it doesn't exist
+        destination_dir = './uploads/'+filename2
+        if not os.path.exists(destination_dir):
+            os.makedirs(destination_dir)
+        destination_file = filename
+        shutil.copy(source_file, destination_dir + '/' + destination_file)
+        filepath = destination_dir + '/' + filename
+        # Store the filename in a session variable
+        session['filename'] = filename
+        session['filename2'] = filename2
+        session['filepath'] = filepath
+        session['option'] = option    
     else:
-        filename = option + re.sub(r'\W+', '', timestamp) + '.mtx'
+        csv_file = request.files['csv_file']
+        option = request.form['option']
+        # Save the CSV file to a folder on the server with a filename based on the selected option and file extension
+        if option != 'MTX':
+            filename = option + re.sub(r'\W+', '', timestamp) + '.csv'
+            filename2 = option + re.sub(r'\W+', '', timestamp)
+        else:
+            filename = option + re.sub(r'\W+', '', timestamp) + '.mtx'
+            filename2 = option + re.sub(r'\W+', '', timestamp)
+    
+        # Create the directory if it doesn't exist
+        destination_dir = './uploads/'+filename2
+        if not os.path.exists(destination_dir):
+            os.makedirs(destination_dir)
 
-    csv_file.save('uploads/' + filename)
-    # Do something with the CSV file and selected option
-    # (e.g., process the file data and store it in a database)
+        csv_file.save(destination_dir + '/' + filename)
+        # Do something with the CSV file and selected option
+        # (e.g., process the file data and store it in a database)
 
-    filepath = './uploads/'+filename
-    # Store the filename in a session variable
-    session['filename'] = filename
-    session['filepath'] = filepath
-    session['option'] = option
+        filepath = destination_dir + '/' + filename
+        # Store the filename in a session variable
+        session['filename'] = filename
+        session['filename2'] = filename2
+        session['filepath'] = filepath
+        session['option'] = option    
 
     # Redirect the user to the success page
     return redirect(url_for('home'))
@@ -89,6 +134,7 @@ def upload():
 def home():
     # Get the filename from the session variable
     filename = session['filename']
+    filename2 = session['filename2']
     filepath = session['filepath']
     option = session['option']
 
@@ -104,7 +150,7 @@ def home():
     table_rows = global_metrics.values.tolist()
 
     # Open the CSV file and read its contents
-    with open('uploads/' + filename, 'r') as file:
+    with open('uploads/'+filename2+'/' + filename, 'r') as file:
         reader = csv.reader(file)
         header = next(reader)  # skip the header row
         data = [header]  # initialize the data list with the header row
