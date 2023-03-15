@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block span %}Home Page{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Static Visualisation</h3>
+            <hr> <!-- Add a horizontal rule for visual separation -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-body" style="align-items: center;">
+                <img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Metrics Dataset</h3>
+            <hr> <!-- Add a horizontal rule for visual separation -->
+            <div class="card card-body" style="margin-bottom: 50px;">
+            </div>
+
+
+            <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+            <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('#example').DataTable({
+                        "pageLength": 10, // Show 10 rows per page
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]] // Customize page length menu
+                    });
+                });
+
+            </script>
+        </div>
+    </div>
+</div>
+{% endblock %}
