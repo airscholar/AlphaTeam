@@ -95,7 +95,6 @@ def plot_all_metrics(networkGraphs, metrics, dynamic=False, directed=False, layo
     if plot:
         if dynamic:
             return None
-            # return generate_dynamic_metrics(networkGraphs, df.columns.values[1:])
         else:
             generate_static_all_metrics(networkGraphs, df, filename, layout_=layout)
     return df, filename
