@@ -38,7 +38,6 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map', plot=T
         generate_static_cluster(networkGraphs, cluster, filename, layout_='map')
 
 
-
 # ----------------------------------------------------------------------------------------
 
 @memoize
@@ -90,7 +89,6 @@ def plot_all_metrics(networkGraphs, metrics, dynamic=False, directed=False, layo
     else:
         return ValueError('Please select a valid metric, either "centralities" or "nodes"')
 
-
     filename = f"All_{metrics}_{directed}_{dynamic}_{layout}.html"
     if plot:
         if dynamic:
@@ -111,12 +109,9 @@ def histogram(df, column, log=False, title=None):
     :param log: Boolean
     :return: Histogram
     """
-
-    # Define the histogram bins and their edges
     bins = np.linspace(-5, 5, 50)
 
     if log:
-        # y-axis of the histogram will be displayed on a logarithmic scale
         plt.hist(df[column], bins=bins, log=True, color='blue', alpha=0.5, edgecolor='black')
     else:
         plt.hist(df[column], bins=bins, color='blue', alpha=0.5, edgecolor='black')
@@ -124,7 +119,6 @@ def histogram(df, column, log=False, title=None):
     if title:
         plt.title(title)
 
-    # return plotly figure
     return plt
 
 # ----------------------------------------------------------------------------------------
