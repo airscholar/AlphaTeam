@@ -23,10 +23,10 @@ def plot_cluster(networkGraphs, clusterType, title=None, dynamic=False):
     cluster = ml.get_communities(networkGraphs, clusterType)
 
     color_map = {
-        k: (cluster[cluster['node'] == k]['color'].values[0], cluster[cluster['node'] == k]['cluster_id'].values[0]) \
+        k: (cluster[cluster['Node'] == k]['Color'].values[0], cluster[cluster['Node'] == k]['Cluster_id'].values[0]) \
         for k in networkGraphs.Graph.nodes}
 
-    return generate_static_cluster(networkGraphs, color_map, title, 'map', directed=False)
+    return generate_static_cluster(networkGraphs, cluster, title, 'map', directed=False)
 
 
 # ----------------------------------------------------------------------------------------
@@ -40,7 +40,8 @@ def plot_metrics(networkGraphs, metrics, dynamic=False, layout='map'):
     :param dynamic: Boolean to indicate if the plot is dynamic or not
     :return: Pyplot plot
     """
-    df = m.get_metrics(networkGraphs, metrics)
+    df = m.get_metrics(networkGraphs, metrics, clean=False)
+    print(df)
 
     # check if df['Node'] is nan
     if df[df.columns.values[1]].isnull().values.any():
