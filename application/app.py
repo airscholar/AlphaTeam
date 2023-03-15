@@ -149,8 +149,6 @@ def home():
     table_headers = list(global_metrics.columns.values)
     table_rows = global_metrics.values.tolist()
     
-    print(networkGraphs.df)
-
     # Pass the data to the HTML template
     return render_template('home.html', data=networkGraphs.df, table_headers=table_headers, table_rows=table_rows)
 
