@@ -132,6 +132,7 @@ def upload():
 @app.route('/home')
 @cache.cached(timeout=3600) # Cache the result for 1 hour
 def home():
+    show_spinner = True
     # Get the filename from the session variable
     filename = session['filename']
     filename2 = session['filename2']
@@ -150,7 +151,9 @@ def home():
     table_rows = global_metrics.values.tolist()
     
     # Pass the data to the HTML template
-    return render_template('home.html', data=networkGraphs.df, table_headers=table_headers, table_rows=table_rows)
+    return render_template('home.html', data=networkGraphs.df, global_metrics=global_metrics, show_spinner=show_spinner)
+
+    #return render_template('home.html', data=networkGraphs.df, table_headers=table_headers, table_rows=table_rows)
 
 #-------------------------------------------VISUALISATION-----------------------------------
 

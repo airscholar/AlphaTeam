@@ -394,3 +394,10 @@
 .sidebar .nav-links li.showMenu .sub-menu2 {
     display: block;
 }
+
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
