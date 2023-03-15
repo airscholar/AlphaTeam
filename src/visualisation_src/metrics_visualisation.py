@@ -104,7 +104,7 @@ def generate_static_metric(networkGraphs, df_, layout_='map'):  # USING PLOTLY
             node_info += f"{metrics_name}: {str(metric_df[metrics_name].values[0])}<br>"
             node_trace['text'] += tuple([node_info])
 
-    layout = get_layout(networkGraphs, f"{metrics_name} visualisation using {layout_} layout", layout_=layout_)
+    layout = get_layout(networkGraphs, f"{metrics_name} visualisation using {layout} layout", layout_=layout)
     # plot the figure
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
