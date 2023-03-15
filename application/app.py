@@ -146,22 +146,11 @@ def home():
     if global_metrics is None:
         global_metrics = compute_global_metrics(networkGraphs)
         cache.set('global_metrics', global_metrics)
-    table_headers = list(global_metrics.columns.values)
-    table_rows = global_metrics.values.tolist()
-
-    # Open the CSV file and read its contents
-    with open('uploads/'+filename2+'/' + filename, 'r') as file:
-        reader = csv.reader(file)
-        header = next(reader)  # skip the header row
-        data = [header]  # initialize the data list with the header row
-        for i, row in enumerate(reader):
-            if i < 100:
-                data.append(row)
-            else:
-                break
-
+    
     # Pass the data to the HTML template
-    return render_template('home.html', data=data, table_headers=table_headers, table_rows=table_rows)
+    return render_template('home.html', data=networkGraphs.df.head(100), example=global_metrics)
+
+#-------------------------------------------VISUALISATION-----------------------------------
 
 @app.route('/visualise/static', endpoint='my_static')
 def static():
@@ -172,77 +161,139 @@ def static():
     if not os.path.exists(app.root_path + '/static/img/' + filename + '.png'):
         plot.savefig(app.root_path + '/static/img/' + filename + '.png', bbox_inches='tight')
     print(image_path)
-    return render_template('static.html', image_path=image_path)
+    return render_template('static_visualisation.html', image_path=image_path)
 
 @app.route('/visualise/dynamic', endpoint='my_dynamic')
 def dynamic():
-    return render_template('dynamic.html')
+    return render_template('dynamic_visualisation.html')
+
+#-------------------------------------------CENTRALITY--------------------------------------
 
 @app.route('/centrality', endpoint='centrality')
 @cache.cached(timeout=3600) # Cache the result for 1 hour
-def centrality():
+def centrality_all():
     allCentralityDF = cache.get('allCentralityDF')
     if allCentralityDF is None:
         allCentralityDF = compute_node_centralities(networkGraphs, directed=False)
         cache.set('allCentralityDF', allCentralityDF)
-    table_headers = list(allCentralityDF.columns.values)
-    table_rows = allCentralityDF.values.tolist()
-    return render_template('centrality.html', table_headers=table_headers, table_rows=table_rows)
+    return render_template('centrality_all.html', example=allCentralityDF)
 
-@app.route('/degree', endpoint='degree')
+@app.route('/centrality/degree', endpoint='degree')
 @cache.cached(timeout=3600) # Cache the result for 1 hour
-def degree():
-    degreeDF = cache.get('degreeDF')
-    if degreeDF is None:
-        degreeDF = compute_degree_centrality(networkGraphs, directed=False)
-        cache.set('degreeDF', degreeDF)
-    table_headers = list(degreeDF.columns.values)
-    table_rows = degreeDF.values.tolist()
-    return render_template('centrality_degree.html', table_headers=table_headers, table_rows=table_rows)
+def centrality_degree():
+    centrality_degreeDF = cache.get('centrality_degreeDF')
+    if centrality_degreeDF is None:
+        centrality_degreeDF = compute_degree_centrality(networkGraphs, directed=False)
+        cache.set('centrality_degreeDF', centrality_degreeDF)
+    return render_template('centrality_degree.html', example=centrality_degreeDF)
 
-@app.route('/eigenvector', endpoint='eigenvector')
+@app.route('/centrality/eigenvector', endpoint='eigenvector')
 @cache.cached(timeout=3600) # Cache the result for 1 hour
-def eigenvector():
-    eigenvectorDF = cache.get('eigenvectorDF')
-    if eigenvectorDF is None:
-        eigenvectorDF = compute_eigen_centrality(networkGraphs, directed=False)
-        cache.set('eigenvectorDF', eigenvectorDF)
-    table_headers = list(eigenvectorDF.columns.values)
-    table_rows = eigenvectorDF.values.tolist()
-    return render_template('centrality_eigenvector.html', table_headers=table_headers, table_rows=table_rows)
+def centrality_eigenvector():
+    centrality_eigenvectorDF = cache.get('centrality_eigenvectorDF')
+    if centrality_eigenvectorDF is None:
+        centrality_eigenvectorDF = compute_eigen_centrality(networkGraphs, directed=False)
+        cache.set('centrality_eigenvectorDF', centrality_eigenvectorDF)
+    return render_template('centrality_eigenvector.html', example=centrality_eigenvectorDF)
 
-@app.route('/closeness', endpoint='closeness')
+@app.route('/centrality/closeness', endpoint='closeness')
 @cache.cached(timeout=3600) # Cache the result for 1 hour
-def closeness():
-    closenessDF = cache.get('closenessDF')
-    if closenessDF is None:
-        closenessDF = compute_closeness_centrality(networkGraphs, directed=False)
-        cache.set('closenessDF', closenessDF)
-    table_headers = list(closenessDF.columns.values)
-    table_rows = closenessDF.values.tolist()
-    return render_template('centrality_closeness.html', table_headers=table_headers, table_rows=table_rows)
+def centrality_closeness():
+    centrality_closenessDF = cache.get('centrality_closenessDF')
+    if centrality_closenessDF is None:
+        centrality_closenessDF = compute_closeness_centrality(networkGraphs, directed=False)
+        cache.set('centrality_closenessDF', centrality_closenessDF)
+    return render_template('centrality_closeness.html', example=centrality_closenessDF)
 
-@app.route('/betwenness', endpoint='betwenness')
+@app.route('/centrality/betwenness', endpoint='betwenness')
 @cache.cached(timeout=3600) # Cache the result for 1 hour
-def betwenness():
-    betwennessDF = cache.get('betwennessDF')
-    if betwennessDF is None:
-        betwennessDF = compute_betweeness_centrality(networkGraphs, directed=False)
-        cache.set('betwennessDF', betwennessDF)
-    table_headers = list(betwennessDF.columns.values)
-    table_rows = betwennessDF.values.tolist()
-    return render_template('centrality_betwenness.html', table_headers=table_headers, table_rows=table_rows)
+def centrality_betwenness():
+    centrality_betwennessDF = cache.get('centrality_betwennessDF')
+    if centrality_betwennessDF is None:
+        centrality_betwennessDF = compute_betweeness_centrality(networkGraphs, directed=False)
+        cache.set('centrality_betwennessDF', centrality_betwennessDF)
+    return render_template('centrality_betwenness.html', example=centrality_betwennessDF)
 
-@app.route('/load', endpoint='load')
+@app.route('/centrality/load', endpoint='load')
 @cache.cached(timeout=3600) # Cache the result for 1 hour
-def load():
-    loadDF = cache.get('loadDF')
-    if loadDF is None:
-        loadDF = compute_load_centrality(networkGraphs, directed=False)
-        cache.set('loadDF', loadDF)
-    table_headers = list(loadDF.columns.values)
-    table_rows = loadDF.round(6).values.tolist()
-    return render_template('centrality_load.html', table_headers=table_headers, table_rows=table_rows)
+def centrality_load():
+    centrality_loadDF = cache.get('centrality_loadDF')
+    if centrality_loadDF is None:
+        centrality_loadDF = compute_load_centrality(networkGraphs, directed=False)
+        cache.set('centrality_loadDF', centrality_loadDF)
+    return render_template('centrality_load.html', example=centrality_loadDF)
 
+#-------------------------------------------NODE--------------------------------------------
+
+@app.route('/node_all', endpoint='node_all')
+@cache.cached(timeout=3600) # Cache the result for 1 hour
+def node_load():
+    node_allDF = cache.get('node_allDF')
+    if node_allDF is None:
+        node_allDF = compute_node_metrics(networkGraphs, directed=False)
+        cache.set('node_allDF', node_allDF)
+    return render_template('node_all.html', example=node_allDF)
+
+@app.route('/node/degree', endpoint='node_degree')
+@cache.cached(timeout=3600) # Cache the result for 1 hour
+def node_degree():
+    node_degreeDF = cache.get('node_degreeDF')
+    if node_degreeDF is None:
+        node_degreeDF = compute_nodes_degree(networkGraphs, directed=False)
+        cache.set('node_degreeDF', node_degreeDF)
+    return render_template('node_degree.html', example=node_degreeDF)
+
+@app.route('/node/kcore', endpoint='node_kcore')
+@cache.cached(timeout=3600) # Cache the result for 1 hour
+def node_kcore():
+    node_kcoreDF = cache.get('node_kcoreDF')
+    if node_kcoreDF is None:
+        node_kcoreDF = compute_kcore(networkGraphs, directed=False)
+        cache.set('node_kcoreDF', node_kcoreDF)
+    return render_template('node_kcore.html', example=node_kcoreDF)
+
+@app.route('/node/triangle', endpoint='node_triangle')
+@cache.cached(timeout=3600) # Cache the result for 1 hour
+def node_triangle():
+    node_triangleDF = cache.get('node_triangleDF')
+    if node_triangleDF is None:
+        node_triangleDF = compute_triangles(networkGraphs, directed=False)
+        cache.set('node_triangleDF', node_triangleDF)
+    return render_template('node_triangle.html', example=node_triangleDF)
+
+@app.route('/node/pagerank', endpoint='node_pagerank')
+@cache.cached(timeout=3600) # Cache the result for 1 hour
+def node_pagerank():
+    node_pagerankDF = cache.get('node_pagerankDF')
+    if node_pagerankDF is None:
+        node_pagerankDF = compute_page_rank(networkGraphs, directed=False)
+        cache.set('node_pagerankDF', node_pagerankDF)
+    return render_template('node_pagerank.html', example=node_pagerankDF)
+
+#-------------------------------------------EDGE--------------------------------------------
+
+@app.route('/edge_all', endpoint='edge_all')
+@cache.cached(timeout=3600) # Cache the result for 1 hour
+def edge_all():
+    edge_allDF = cache.get('edge_allDF')
+    if edge_allDF is None:
+        edge_allDF = compute_load_centrality(networkGraphs, directed=False)
+        cache.set('edge_allDF', edge_allDF)
+    table_headers = list(edge_allDF.columns.values)
+    table_rows = edge_allDF.values.tolist()
+    return render_template('edge_all.html', example=edge_allDF)
+
+#-------------------------------------------ML-CLUSTERING-----------------------------------
+
+@app.route('/clustering/louvanian', endpoint='clustering_louvanian')
+@cache.cached(timeout=3600) # Cache the result for 1 hour
+def clustering_louvanian():
+    clustering_louvanianDF = cache.get('clustering_louvanianDF')
+    if clustering_louvanianDF is None:
+        clustering_louvanianDF = compute_load_centrality(networkGraphs, directed=False)
+        cache.set('clustering_louvanianDF', clustering_louvanianDF)
+    return render_template('clustering_louvanian.html', example=clustering_louvanianDF)
+
+#-------------------------------------------MAIN--------------------------------------------
 if __name__ == '__main__':
     app.run(debug=True)
