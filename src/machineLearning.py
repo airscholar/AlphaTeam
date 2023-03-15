@@ -39,9 +39,9 @@ def create_comm_dataframe(communities, colors):
         color = colors.pop()
         for node in community:
             # concat node, color, cluster_id into dataframe
-            df = pd.concat([df, pd.DataFrame({'node': node,
-                                              'color': color,
-                                              'cluster_id': idx
+            df = pd.concat([df, pd.DataFrame({'Node': node,
+                                              'Color': color,
+                                              'Cluster_id': idx
                                               }, index=[0])], ignore_index=True)
     return df
 
