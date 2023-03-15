@@ -18,7 +18,7 @@ from src.utils import memoize
 # --------------------------------------- GETTER -----------------------------------------
 # ----------------------------------------------------------------------------------------
 
-def get_metrics(networkGraphs, method, clean=True):
+def get_metrics(networkGraphs, method, clean=True, directed=False):
     """
     :Function: Get the metrics for the given graph
     :param networkGraphs: Network graphs
@@ -27,26 +27,28 @@ def get_metrics(networkGraphs, method, clean=True):
     """
     if method not in ['kcore', 'degree', 'triangles', 'pagerank', 'betweenness_centrality', 'closeness_centrality',
                       'eigenvector_centrality', 'load_centrality', 'degree_centrality']:
-        raise ValueError("Method not supported")
+        raise ValueError("Method not supported, please select one of the following: kcore, degree, triangles, "
+                         "pagerank, betweenness_centrality, closeness_centrality, eigenvector_centrality, "
+                         "load_centrality, degree_centrality ")
 
     if method == 'kcore':
-        return compute_kcore(networkGraphs, clean=clean)
+        return compute_kcore(networkGraphs, clean=clean, directed=directed)
     elif method == 'degree':
-        return compute_nodes_degree(networkGraphs, clean=clean)
+        return compute_nodes_degree(networkGraphs, clean=clean, directed=directed)
     elif method == 'triangles':
-        return compute_triangles(networkGraphs, clean=clean)
+        return compute_triangles(networkGraphs, clean=clean, directed=directed)
     elif method == 'pagerank':
-        return compute_page_rank(networkGraphs, clean=clean)
+        return compute_page_rank(networkGraphs, clean=clean, directed=directed)
     elif method == 'betweenness_centrality':
-        return compute_betweeness_centrality(networkGraphs, clean=clean)
+        return compute_betweeness_centrality(networkGraphs, clean=clean, directed=directed)
     elif method == 'closeness_centrality':
-        return compute_closeness_centrality(networkGraphs, clean=clean)
+        return compute_closeness_centrality(networkGraphs, clean=clean, directed=directed)
     elif method == 'eigenvector_centrality':
-        return compute_eigen_centrality(networkGraphs, clean=clean)
+        return compute_eigen_centrality(networkGraphs, clean=clean, directed=directed)
     elif method == 'load_centrality':
-        return compute_load_centrality(networkGraphs, clean=clean)
+        return compute_load_centrality(networkGraphs, clean=clean, directed=directed)
     elif method == 'degree_centrality':
-        return compute_degree_centrality(networkGraphs, clean=clean)
+        return compute_degree_centrality(networkGraphs, clean=clean, directed=directed)
     else:
         raise ValueError("Method not supported")
 

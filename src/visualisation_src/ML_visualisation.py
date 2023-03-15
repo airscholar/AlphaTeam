@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 # ----------------------------------------------------------------------------------------
 
-def generate_static_cluster(networkGraphs, df_, title, layout_='map', directed=False):  # USING PLOTLY
+def generate_static_cluster(networkGraphs, df_, filename, layout_='map'):  # USING PLOTLY
 
     G = networkGraphs.Graph
 
@@ -34,11 +34,9 @@ def generate_static_cluster(networkGraphs, df_, title, layout_='map', directed=F
             node_trace['text'] += tuple([node_info])
             node_trace['marker']['color'] += tuple([metric_df['Color'].values[0]])
 
-    layout = get_layout(networkGraphs, title, layout_)
+    layout = get_layout(networkGraphs, title=f"Cluster visualisation using {layout_} layout", layout_=layout_)
 
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
-
-    filename = f'{title}_map_directed.html' if directed else f'{title}_map_undirected.html'
     fig.write_html(filename)
     return fig
