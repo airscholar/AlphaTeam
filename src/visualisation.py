@@ -33,9 +33,13 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map', plot=T
     """
     cluster = ml.get_communities(networkGraphs, clusterType)
 
-    filename = f"{clusterType}_{dynamic}_{layout}.html"
+    filename = f"{clusterType}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
     if plot:
-        generate_static_cluster(networkGraphs, cluster, filename, layout_='map')
+        if dynamic:
+            filename = filename.replace(f"_{layout}", "")
+            generate_dynamic_cluster(networkGraphs, cluster, filename)
+        else:
+            generate_static_cluster(networkGraphs, cluster, filename, layout_='map')
 
 
 # ----------------------------------------------------------------------------------------

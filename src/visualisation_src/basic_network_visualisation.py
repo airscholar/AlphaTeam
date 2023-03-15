@@ -72,7 +72,9 @@ def dynamic_visualisation(networkGraphs, directed=True, multi=False):
     Net = net.Network(height="750px", width="100%", bgcolor="grey", font_color="black")
     Net.from_nx(G)
     Net.show_buttons(filter_=['physics', 'edges', 'nodes'])
-
+    Net.options.physics.use_force_atlas_2based(
+        params={'central_gravity': 0.01, 'gravity': -50, 'spring_length': 100, 'spring_strength': 0.08, 'damping': 0.4,
+                'overlap': 0})
     filename = f"Dynamic_{directed}_{multi}.html"
     Net.write_html(filename)
 
