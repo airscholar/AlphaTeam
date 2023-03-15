@@ -195,6 +195,8 @@ class NetworkGraphs:
 
             self.standardize_weights()
 
+        self.clean_dataset()
+
     # ------------------------------------------------------------------------------------------------------------------
     # ---------------------------------------------- END CONSTRUCTOR ---------------------------------------------------
     # ------------------------------------------------------------------------------------------------------------------
@@ -212,6 +214,24 @@ class NetworkGraphs:
     # ------------------------------------------------------------------------------------------------------------------
     # ---------------------------------------------- METHODS -----------------------------------------------------------
     # ------------------------------------------------------------------------------------------------------------------
+
+    def clean_dataset(self):
+        """
+        :Function: Clean the dataframe
+        :param df: Pandas dataframe
+        :param column: Column name
+        :return: Pandas dataframe
+        """
+
+        # if the columns is float round it to 6 decimals
+        for column in self.df.columns:
+            # if the columns is a number round it to 6 decimals
+            if is_numeric_dtype(self.df[column]):
+                self.df[column] = self.df[column].round(6)
+
+            if self.df[column].dtype == object:
+                self.df[column] = self.df[column].apply(
+                    lambda x: x[:6] + '...' + x[-6:] if len(x) > 15 and x[:2] == '0x' else x[:12])
 
     # ---------------------------------------------- SETTERS -----------------------------------------------------------
     def set_name(self, name):
