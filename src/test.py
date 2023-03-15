@@ -10,6 +10,11 @@ import time
 
 networkGraph = NetworkGraphs('../datasets/Railway.csv', type="RAILWAY")
 
+plot_hotspot(networkGraph, "Hotspot")
+
+# kcore = compute_kcore(networkGraph, directed=False)
+# plot_metrics_on_map(networkGraph, kcore, 'Kcore', 'kcore')
+
 # louv_df = louvain_clustering(networkGraph)
 # print(louv_df)
 # print(color_map)
@@ -17,13 +22,13 @@ networkGraph = NetworkGraphs('../datasets/Railway.csv', type="RAILWAY")
 # pos = nx.nx_agraph.graphviz_layout(networkGraph.Graph, prog='sfdp')
 # print(pos)
 
-plot_cluster(networkGraph, 'louvain', 'Louvan Clustering')
-plot_cluster(networkGraph, 'greedy_modularity', 'Greedy Modularity Clustering')
-plot_cluster(networkGraph, 'label_propagation', 'Label Propagation Clustering')
-plot_cluster(networkGraph, 'asyn_lpa', 'Asyn LPA Clustering')
-plot_cluster(networkGraph, 'girvan_newman', 'Girvan Newman Clustering')
-plot_cluster(networkGraph, 'edge_betweenness', 'Edge Betweenness Clustering')
-plot_cluster(networkGraph, 'k_clique', 'K Clique Clustering')
+# plot_cluster(networkGraph, 'louvain', 'Louvan Clustering')
+# plot_cluster(networkGraph, 'greedy_modularity', 'Greedy Modularity Clustering')
+# plot_cluster(networkGraph, 'label_propagation', 'Label Propagation Clustering')
+# plot_cluster(networkGraph, 'asyn_lpa', 'Asyn LPA Clustering')
+# plot_cluster(networkGraph, 'girvan_newman', 'Girvan Newman Clustering')
+# plot_cluster(networkGraph, 'edge_betweenness', 'Edge Betweenness Clustering')
+# plot_cluster(networkGraph, 'k_clique', 'K Clique Clustering')
 
 
 

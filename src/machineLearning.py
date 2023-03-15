@@ -39,9 +39,9 @@ def create_comm_dataframe(communities, colors):
         color = colors.pop()
         for node in community:
             # concat node, color, cluster_id into dataframe
-            df = pd.concat([df, pd.DataFrame({'node': node,
-                                              'color': color,
-                                              'cluster_id': idx
+            df = pd.concat([df, pd.DataFrame({'Node': node,
+                                              'Color': color,
+                                              'Cluster_id': idx
                                               }, index=[0])], ignore_index=True)
     return df
 
@@ -111,7 +111,7 @@ def k_clique_clustering(networkGraphs):
 def get_communities(networkGraphs, method):
     if method not in ['louvain', 'greedy_modularity', 'label_propagation', 'asyn_lpa', 'girvan_newman',
                       'edge_betweenness', 'k_clique']:
-        print("Invalid cluster type")
+        ValueError("Invalid cluster type")
         return
 
     if method == 'louvain':
@@ -130,3 +130,20 @@ def get_communities(networkGraphs, method):
         return k_clique_clustering(networkGraphs)
     else:
         return None
+
+
+def get_hotspot(networkGraphs):
+    data = []
+    for node in networkGraphs.Graph.nodes():
+        temp = {'Degree': networkGraphs.Graph.degree(node),
+                'Latitude': networkGraphs.pos['map'][node][1],
+                'Longitude': networkGraphs.pos['map'][node][0],
+                'Node': node,
+                'Edges': networkGraphs.Graph.edges(node)
+                }
+
+        data.append(temp)
+
+    df = pd.DataFrame(data)
+
+    return df

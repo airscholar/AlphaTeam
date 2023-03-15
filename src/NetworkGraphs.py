@@ -52,7 +52,7 @@ class NetworkGraphs:
     # ---------------------------------------------- CONSTRUCTOR ------------------------------------------------------
     # -----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, filename, type, name=None, temporal=False, spatial=False, weighted=False):
+    def __init__(self, filename, type, session_folder=None, temporal=False, spatial=False, weighted=False):
 
         self.name = None
         self.type = None
@@ -70,14 +70,14 @@ class NetworkGraphs:
         self.colors = None
         self.mid_lat = None
         self.mid_long = None
+        self.session_folder = None
+        self.filename = None
 
-        self.filename = filename
-        if name is None:
-            name = filename.split('/')[-1].split('.')[0]
-            self.set_name(name)
-        else:
-            self.set_name(name)
+        self.set_filename(filename)
+        name = filename.split('/')[-1].split('.')[0]
+        self.set_name(name)
         self.set_type(type)
+        self.set_session_folder(session_folder)
 
         # ---------------------------------------------- RAILWAY -------------------------------------------------------
 
@@ -108,7 +108,7 @@ class NetworkGraphs:
 
             self.colors = None
 
-            self.df = pd.read_csv(filename,low_memory=False)
+            self.df = pd.read_csv(filename, low_memory=False)
 
         # ---------------------------------------------- CUSTOM --------------------------------------------------------
 
@@ -133,7 +133,7 @@ class NetworkGraphs:
             self.DiGraph, self.MultiDiGraph = preprocess_custom(filename)
             self.Graph, self.MultiGraph = self.DiGraph.to_undirected(), self.MultiDiGraph.to_undirected()
 
-            self.df = pd.read_csv(filename,low_memory=False)
+            self.df = pd.read_csv(filename, low_memory=False)
 
             if 'lat1' in self.df.columns and 'lon1' in self.df.columns:
                 self.set_spatial(True)
@@ -149,7 +149,6 @@ class NetworkGraphs:
                                'MultiGraph': nx.get_edge_attributes(self.MultiGraph, 'color').values(),
                                'DiGraph': nx.get_edge_attributes(self.DiGraph, 'color').values(),
                                'Graph': nx.get_edge_attributes(self.Graph, 'color').values()}
-
 
         # ---------------------------------------------- SPATIAL -------------------------------------------------------
 
@@ -250,6 +249,12 @@ class NetworkGraphs:
 
     def set_mid_lat(self):
         self.mid_lat = (self.max_lat + self.min_lat) / 2
+
+    def set_session_folder(self, session_folder):
+        self.session_folder = session_folder
+
+    def set_filename(self, filename):
+        self.filename = filename
 
     # ---------------------------------------------- IS  -----------------------------------------------------------
 
