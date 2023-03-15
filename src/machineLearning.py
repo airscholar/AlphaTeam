@@ -111,7 +111,8 @@ def k_clique_clustering(networkGraphs):
 def get_communities(networkGraphs, method):
     if method not in ['louvain', 'greedy_modularity', 'label_propagation', 'asyn_lpa', 'girvan_newman',
                       'edge_betweenness', 'k_clique']:
-        print("Invalid cluster type")
+        print("Invalid cluster type, please choose from the following: 'louvain', 'greedy_modularity', "
+              "'label_propagation', 'asyn_lpa', 'girvan_newman', 'edge_betweenness', 'k_clique'")
         return
 
     if method == 'louvain':

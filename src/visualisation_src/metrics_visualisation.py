@@ -47,11 +47,12 @@ def plot_metrics(networkGraphs, df_, layout='map'):  # USING MATPLOTLIB
 
 # ----------------------------------------------------------------------------------------
 
-def generate_static_metric(networkGraphs, df_, layout_='map'):  # USING PLOTLY
+def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USING PLOTLY
     """
     :Function: Plot the metrics on the graph
     :param networkGraphs: Network graphs
     :param df_: Dataframe with the metrics (first column is the node id) (second column is the metric)
+    :param filename: Name of the file to be saved
     :param layout_: Layout to be used
     :return: Plotly plot
     """
@@ -104,21 +105,21 @@ def generate_static_metric(networkGraphs, df_, layout_='map'):  # USING PLOTLY
             node_info += f"{metrics_name}: {str(metric_df[metrics_name].values[0])}<br>"
             node_trace['text'] += tuple([node_info])
 
-    layout = get_layout(networkGraphs, f"{metrics_name} visualisation using {layout_} layout", layout_=layout_)
-    # plot the figure
+    layout = get_layout(networkGraphs, title=f"{metrics_name} visualisation using {layout_} layout", layout_=layout_)
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
 
-    fig.write_html(metrics_name+"_visualisation_"+layout_+".html", auto_open=True)
+    fig.write_html(filename, auto_open=True)
     return fig
 
 # ----------------------------------------------------------------------------------------
 
-def generate_static_all_metrics(networkGraphs, df_, layout_='map'):  # USING PLOTLY
+def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  # USING PLOTLY
     """
     :Function: Plot the metrics on the graph
     :param networkGraphs: Network graphs
     :param df_: Dataframe with the metrics
+    :param filename: Name of the file to be saved
     :param layout_: Layout to be used
     :return: Plotly plot
     """
@@ -171,10 +172,9 @@ def generate_static_all_metrics(networkGraphs, df_, layout_='map'):  # USING PLO
             node_trace['text'] += tuple([node_info])
 
 
-    layout = get_layout(networkGraphs, f"Metrics visualisation using {layout_} layout", layout_=layout_)
-    # plot the figure
+    layout = get_layout(networkGraphs, title=f"Metrics visualisation using {layout_} layout", layout_=layout_)
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
 
-    fig.write_html("AllMetrics_visualisation_"+layout_+".html", auto_open=True)
+    fig.write_html(filename, auto_open=True)
     return fig
