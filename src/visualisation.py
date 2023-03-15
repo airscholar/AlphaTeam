@@ -15,6 +15,7 @@ import numpy as np
 import src.metrics as m
 from pandas.api.types import is_numeric_dtype
 from src.utils import memoize
+from threading import Thread
 
 # ----------------------------------------------------------------------------------------
 
@@ -36,7 +37,7 @@ def plot_cluster(networkGraphs, clusterType, title=None, dynamic=False):
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def plot_metrics(networkGraphs, metrics, dynamic=False, layout='map'):
+def plot_metric(networkGraphs, metrics, dynamic=False, layout='map'):
     """
     :Function: Plot the metric for the given graph
     :param networkGraphs: Network graphs

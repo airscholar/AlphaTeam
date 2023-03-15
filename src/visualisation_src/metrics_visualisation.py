@@ -130,7 +130,6 @@ def generate_static_all_metrics(networkGraphs, df_, layout_='map'):  # USING PLO
     pos = networkGraphs.pos[layout_]
 
     metrics_names = df_.columns[1:]
-    print(metrics_names)
 
     if layout_ == 'map':
         edge_trace = go.Scattergeo(lon=[], lat=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
