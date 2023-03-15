@@ -7,11 +7,17 @@ from src.metrics import *
 from src.visualisation import *
 from src.machineLearning import *
 import time
+from src.visualisation_src.metrics_visualisation import *
 
 networkGraph = NetworkGraphs('../datasets/Railway.csv', type="RAILWAY")
 
-kcore = compute_kcore(networkGraph, directed=False)
-plot_metrics_on_map(networkGraph, kcore, 'Kcore', 'kcore')
+plot_all_metrics(networkGraph, 'centralities',layout='map')
+plot_all_metrics(networkGraph, 'nodes',layout='map')
+plot_all_metrics(networkGraph, 'centralities',layout='twopi')
+plot_all_metrics(networkGraph, 'nodes',layout='twopi')
+
+
+
 
 # louv_df = louvain_clustering(networkGraph)
 # print(louv_df)

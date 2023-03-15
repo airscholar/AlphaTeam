@@ -47,11 +47,12 @@ def plot_metrics(networkGraphs, df_, layout='map'):  # USING MATPLOTLIB
 
 # ----------------------------------------------------------------------------------------
 
-def generate_static_metric(networkGraphs, df_, layout_='map'):  # USING PLOTLY
+def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USING PLOTLY
     """
     :Function: Plot the metrics on the graph
     :param networkGraphs: Network graphs
     :param df_: Dataframe with the metrics (first column is the node id) (second column is the metric)
+    :param filename: Name of the file to be saved
     :param layout_: Layout to be used
     :return: Plotly plot
     """
@@ -104,10 +105,76 @@ def generate_static_metric(networkGraphs, df_, layout_='map'):  # USING PLOTLY
             node_info += f"{metrics_name}: {str(metric_df[metrics_name].values[0])}<br>"
             node_trace['text'] += tuple([node_info])
 
-    layout = get_layout(networkGraphs, f"{metrics_name} visualisation using {layout} layout", layout_=layout)
-    # plot the figure
+    layout = get_layout(networkGraphs, title=f"{metrics_name} visualisation using {layout_} layout", layout_=layout_)
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
 
-    fig.write_html(metrics_name+"_visualisation_"+layout_+".html", auto_open=True)
+    fig.write_html(filename, auto_open=True)
+    return fig
+
+# ----------------------------------------------------------------------------------------
+
+def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  # USING PLOTLY
+    """
+    :Function: Plot the metrics on the graph
+    :param networkGraphs: Network graphs
+    :param df_: Dataframe with the metrics
+    :param filename: Name of the file to be saved
+    :param layout_: Layout to be used
+    :return: Plotly plot
+    """
+
+    G = networkGraphs.Graph
+
+    if not networkGraphs.is_spatial() and layout_ == 'map':
+        layout_ = 'sfdp'
+    pos = networkGraphs.pos[layout_]
+
+    metrics_names = df_.columns[1:]
+
+    if layout_ == 'map':
+        edge_trace = go.Scattergeo(lon=[], lat=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
+        node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
+                                   marker=dict(showscale=True,
+                                               colorbar=dict(thickness=10, title='Metrics', xanchor='left',
+                                                             titleside='right'), color=['red'],
+                                               size=3))
+    else:
+        edge_trace = go.Scatter(x=[], y=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
+        node_trace = go.Scatter(x=[], y=[], text=[], mode='markers', hoverinfo='text',
+                                marker=dict(showscale=True,
+                                            colorbar=dict(thickness=10, title="Metrics", xanchor='left',
+                                                          titleside='right'), color=['red'],
+                                            size=3))
+
+    for idx, vals in tqdm(enumerate(zip_longest(G.edges(), G.nodes())), total=G.number_of_edges()):
+        edge, node = vals
+        x0, y0 = pos[edge[0]]
+        x1, y1 = pos[edge[1]]
+        if layout_ == 'map':
+            edge_trace['lon'] += (x0, x1, None)
+            edge_trace['lat'] += (y0, y1, None)
+        else:
+            edge_trace['x'] += (x0, x1, None)
+            edge_trace['y'] += (y0, y1, None)
+        if idx < len(G.nodes()):
+            x, y = pos[node]
+            if layout_ == 'map':
+                node_trace['lon'] += tuple([x])
+                node_trace['lat'] += tuple([y])
+            else:
+                node_trace['x'] += tuple([x])
+                node_trace['y'] += tuple([y])
+            metric_df = df_[df_['Node'] == node]
+            node_info = f"Node: {node}<br>"
+            for metric in metrics_names:
+                node_info += f"{metric}: {str(metric_df[metric].values[0])}<br>"
+            node_trace['text'] += tuple([node_info])
+
+
+    layout = get_layout(networkGraphs, title=f"Metrics visualisation using {layout_} layout", layout_=layout_)
+    fig = go.Figure(data=[edge_trace, node_trace],
+                    layout=layout)
+
+    fig.write_html(filename, auto_open=True)
     return fig
