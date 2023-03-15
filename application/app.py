@@ -146,13 +146,9 @@ def home():
     if global_metrics is None:
         global_metrics = compute_global_metrics(networkGraphs)
         cache.set('global_metrics', global_metrics)
-    table_headers = list(global_metrics.columns.values)
-    table_rows = global_metrics.values.tolist()
     
     # Pass the data to the HTML template
-    return render_template('home.html', data=networkGraphs.df, global_metrics=global_metrics)
-
-    #return render_template('home.html', data=networkGraphs.df, table_headers=table_headers, table_rows=table_rows)
+    return render_template('home.html', data=networkGraphs.df.head(100), global_metrics=global_metrics)
 
 #-------------------------------------------VISUALISATION-----------------------------------
 
