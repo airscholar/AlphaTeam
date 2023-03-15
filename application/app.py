@@ -148,20 +148,11 @@ def home():
         cache.set('global_metrics', global_metrics)
     table_headers = list(global_metrics.columns.values)
     table_rows = global_metrics.values.tolist()
-
-    # Open the CSV file and read its contents
-    with open('uploads/'+filename2+'/' + filename, 'r') as file:
-        reader = csv.reader(file)
-        header = next(reader)  # skip the header row
-        data = [header]  # initialize the data list with the header row
-        for i, row in enumerate(reader):
-            if i < 100:
-                data.append(row)
-            else:
-                break
+    
+    print(networkGraphs.df)
 
     # Pass the data to the HTML template
-    return render_template('home.html', data=data, table_headers=table_headers, table_rows=table_rows)
+    return render_template('home.html', data=networkGraphs.df, table_headers=table_headers, table_rows=table_rows)
 
 #-------------------------------------------VISUALISATION-----------------------------------
 
@@ -255,7 +246,7 @@ def centrality_load():
 def node_load():
     node_allDF = cache.get('node_allDF')
     if node_allDF is None:
-        node_allDF = compute_load_centrality(networkGraphs, directed=False)
+        node_allDF = compute_node_metrics(networkGraphs, directed=False)
         cache.set('node_allDF', node_allDF)
     table_headers = list(node_allDF.columns.values)
     table_rows = node_allDF.values.tolist()
@@ -266,7 +257,7 @@ def node_load():
 def node_degree():
     node_degreeDF = cache.get('node_degreeDF')
     if node_degreeDF is None:
-        node_degreeDF = compute_load_centrality(networkGraphs, directed=False)
+        node_degreeDF = compute_nodes_degree(networkGraphs, directed=False)
         cache.set('node_degreeDF', node_degreeDF)
     table_headers = list(node_degreeDF.columns.values)
     table_rows = node_degreeDF.values.tolist()
@@ -277,7 +268,7 @@ def node_degree():
 def node_kcore():
     node_kcoreDF = cache.get('node_kcoreDF')
     if node_kcoreDF is None:
-        node_kcoreDF = compute_load_centrality(networkGraphs, directed=False)
+        node_kcoreDF = compute_kcore(networkGraphs, directed=False)
         cache.set('node_kcoreDF', node_kcoreDF)
     table_headers = list(node_kcoreDF.columns.values)
     table_rows = node_kcoreDF.values.tolist()
@@ -288,11 +279,22 @@ def node_kcore():
 def node_triangle():
     node_triangleDF = cache.get('node_triangleDF')
     if node_triangleDF is None:
-        node_triangleDF = compute_load_centrality(networkGraphs, directed=False)
+        node_triangleDF = compute_triangles(networkGraphs, directed=False)
         cache.set('node_triangleDF', node_triangleDF)
     table_headers = list(node_triangleDF.columns.values)
     table_rows = node_triangleDF.values.tolist()
     return render_template('node_triangle.html', table_headers=table_headers, table_rows=table_rows)
+
+@app.route('/node/pagerank', endpoint='node_pagerank')
+@cache.cached(timeout=3600) # Cache the result for 1 hour
+def node_pagerank():
+    node_pagerankDF = cache.get('node_pagerankDF')
+    if node_pagerankDF is None:
+        node_pagerankDF = compute_page_rank(networkGraphs, directed=False)
+        cache.set('node_pagerankDF', node_pagerankDF)
+    table_headers = list(node_pagerankDF.columns.values)
+    table_rows = node_pagerankDF.values.tolist()
+    return render_template('node_pagerank.html', table_headers=table_headers, table_rows=table_rows)
 
 #-------------------------------------------EDGE--------------------------------------------
 
