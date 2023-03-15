@@ -38,14 +38,13 @@ def plot_cluster(networkGraphs, clusterType, title=None, dynamic=False):
 @memoize
 def plot_metrics(networkGraphs, metrics, dynamic=False, layout='map'):
     """
-    :Function: Plot the metrics for the given graph
+    :Function: Plot the metric for the given graph
     :param networkGraphs: Network graphs
     :param metrics: Metrics to be plotted
     :param dynamic: Boolean to indicate if the plot is dynamic or not
     :return: Pyplot plot
     """
     df = m.get_metrics(networkGraphs, metrics, clean=False)
-    print(df)
 
     if df[df.columns.values[1]].isnull().values.any():
         return ValueError('Metric column is empty. Please select a different metric.')
@@ -55,6 +54,30 @@ def plot_metrics(networkGraphs, metrics, dynamic=False, layout='map'):
     else:
         return generate_static_metric(networkGraphs, df, layout)
 
+
+# ----------------------------------------------------------------------------------------
+
+@memoize
+def plot_all_metrics(networkGraphs, metrics, dynamic=False, directed=False, layout='map'):
+    """
+    :Function: Plot all the metrics for the given graph
+    :param networkGraphs: Network graphs
+    :param dynamic: Boolean to indicate if the plot is dynamic or not
+    :param directed: Boolean to indicate if the graph is directed or not
+    :return: Pyplot plot
+    """
+    if metrics=='centralities':
+        df = m.compute_node_centralities(networkGraphs, directed=False)
+    elif metrics=='nodes':
+        df = m.compute_node_metrics(networkGraphs, directed=False)
+    else:
+        ValueError('Please select a valid metric, either "centralities" or "nodes"')
+
+    if dynamic:
+        return None
+        # return generate_dynamic_metrics(networkGraphs, df.columns.values[1:])
+    else:
+        return generate_static_all_metrics(networkGraphs, df, layout)
 
 # ----------------------------------------------------------------------------------------
 
