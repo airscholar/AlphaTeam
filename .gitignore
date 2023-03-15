@@ -8,5 +8,5 @@ __pycache__
 *.DS_Store
 *.csv
 *.mtx
-*.html
+src/*.html
 uploads

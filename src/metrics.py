@@ -28,7 +28,6 @@ def get_metrics(networkGraphs, method, clean=True):
     if method not in ['kcore', 'degree', 'triangles', 'pagerank', 'betweenness_centrality', 'closeness_centrality',
                       'eigenvector_centrality', 'load_centrality', 'degree_centrality']:
         raise ValueError("Method not supported")
-    print(clean)
 
     if method == 'kcore':
         return compute_kcore(networkGraphs, clean=clean)
@@ -212,17 +211,17 @@ def compute_node_centralities(networkGraphs, directed=True, multi=True):
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_node_metrics(networkGraphs, directed=True, multi=True):
+def compute_node_metrics(networkGraphs, directed=True):
     """
     :Function: Compute the node metrics for the NetworkX graph
     :param networkGraphs: Network Graphs
     :param directed: Boolean
     :return: Pandas dataframe with the metrics and values
     """
-    kcore = compute_kcore(networkGraphs, directed=directed, multi=multi)
-    triangle = compute_triangles(networkGraphs, directed=directed, multi=multi)
-    degree = compute_nodes_degree(networkGraphs, directed=directed, multi=multi)
-    pagerank = compute_page_rank(networkGraphs, directed=directed, multi=multi)
+    kcore = compute_kcore(networkGraphs, directed=directed)
+    triangle = compute_triangles(networkGraphs, directed=directed)
+    degree = compute_nodes_degree(networkGraphs, directed=directed)
+    pagerank = compute_page_rank(networkGraphs, directed=directed)
 
     df = pd.merge(kcore, triangle, how='inner', on='Node')
     df = pd.merge(df, degree, how='inner', on='Node')
