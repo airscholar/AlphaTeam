@@ -36,7 +36,7 @@ def plot_metrics(networkGraphs, df_, layout='map'):  # USING MATPLOTLIB
             width=0.5)
     plt.title(f"{metrics_names} visualisation using {layout} layout")
 
-    # Add colobar
+    # Add colorbar
     sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin=metric_.min(), vmax=metric_.max()))
     sm.set_array([])
     cbar = plt.colorbar(sm)
