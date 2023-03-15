@@ -37,48 +37,9 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var table = $('#example').DataTable({
-                "pageLength": 10,
-                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
-            });
 
-            $('#download_csv').on('click', function () {
-                var csv = '';
-                var headers = [];
-                var rows = [];
-
-                // Get the table headers
-                $('#example thead th').each(function () {
-                    headers.push($(this).text().trim());
-                });
-
-                // Get all table rows, including pagination
-                table.rows().every(function () {
-                    rows.push(this.data());
-                });
-
-                // Combine the headers and rows into a CSV string
-                csv += headers.join(',') + '\n';
-                $.each(rows, function (index, row) {
-                    csv += row.join(',') + '\n';
-                });
-
-                // Create a temporary link element to trigger the download
-                var link = document.createElement('a');
-                link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv));
-                link.setAttribute('download', 'all_node_data.csv');
-                link.style.display = 'none';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            });
-        });
-
-
-    </script>
 </div>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+
 {% endblock %}
