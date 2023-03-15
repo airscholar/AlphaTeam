@@ -38,6 +38,7 @@ def create_comm_colors(communities):
     """
     colors = distinctipy.get_colors(len(communities))
     colors = [tuple([i * 255 for i in c]) for c in colors]
+    # convert rgb tuple to hex
     colors = [f'#{int(c[0]):02x}{int(c[1]):02x}{int(c[2]):02x}' for c in colors]
 
     return colors
@@ -171,8 +172,8 @@ def get_communities(networkGraphs, method):
     """
     if method not in ['louvain', 'greedy_modularity', 'label_propagation', 'asyn_lpa', 'girvan_newman',
                       'edge_betweenness', 'k_clique']:
-        print("Invalid cluster type, please choose from the following: 'louvain', 'greedy_modularity', "
-              "'label_propagation', 'asyn_lpa', 'girvan_newman', 'edge_betweenness', 'k_clique'")
+        ValueError("Invalid cluster type", "please choose from the following: 'louvain', 'greedy_modularity', "
+                                           "'label_propagation', 'asyn_lpa', 'girvan_newman', 'edge_betweenness', 'k_clique'")
         return
 
     if method == 'louvain':
@@ -191,3 +192,20 @@ def get_communities(networkGraphs, method):
         return k_clique_clustering(networkGraphs)
     else:
         return None
+
+
+def get_hotspot(networkGraphs):
+    data = []
+    for node in networkGraphs.Graph.nodes():
+        temp = {'Degree': networkGraphs.Graph.degree(node),
+                'Latitude': networkGraphs.pos['map'][node][1],
+                'Longitude': networkGraphs.pos['map'][node][0],
+                'Node': node,
+                'Edges': networkGraphs.Graph.edges(node)
+                }
+
+        data.append(temp)
+
+    df = pd.DataFrame(data)
+
+    return df

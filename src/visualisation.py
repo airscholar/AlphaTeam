@@ -6,16 +6,14 @@ Purpose: Visualisation for the NetworkX graphs
 
 # ----------------------------------------------------------------------------------------
 
-from src.visualisation_src.metrics_visualisation import *
-from src.visualisation_src.basic_network_visualisation import *
-from src.visualisation_src.ML_visualisation import *
-from src.visualisation_src.temporal_visualisation import *
-import src.machineLearning as ml
 import numpy as np
+
+import src.machineLearning as ml
 import src.metrics as m
-from pandas.api.types import is_numeric_dtype
 from src.utils import memoize
-from threading import Thread
+from src.visualisation_src.ML_visualisation import *
+from src.visualisation_src.metrics_visualisation import *
+from src.visualisation_src.temporal_visualisation import *
 
 
 # ----------------------------------------------------------------------------------------
@@ -105,12 +103,13 @@ def plot_all_metrics(networkGraphs, metrics, dynamic=False, directed=False, layo
 # ----------------------------------------------------------------------------------------
 
 
-def histogram(df, column, log=False, title=None):
+def plot_histogram(df, column, log=False, title=None):
     """
     :Function: Plot the histogram for a given column
     :param df: Pandas dataframe
     :param column: Column name
     :param log: Boolean
+    :param title: Title of the plot
     :return: Histogram
     """
     bins = np.linspace(-5, 5, 50)
@@ -125,4 +124,23 @@ def histogram(df, column, log=False, title=None):
 
     return plt
 
+
 # ----------------------------------------------------------------------------------------
+
+
+def plot_hotspot(networkGraphs):
+    """
+    :Function: Plot the hotspot and coldspot for the given graph
+    :param networkGraphs:
+    :return:
+    """
+    if not networkGraphs.is_spatial():
+        return ValueError('Graph is not spatial. Please select a spatial graph.')
+
+    hotspot = ml.get_hotspot(networkGraphs)
+
+    fig = generate_hotspot(networkGraphs, hotspot)
+
+    fig.write_html('hotspot_coldspot.html')
+
+    return fig
