@@ -18,7 +18,7 @@ from src.utils import memoize
 # --------------------------------------- GETTER -----------------------------------------
 # ----------------------------------------------------------------------------------------
 
-def get_metrics(networkGraphs, method):
+def get_metrics(networkGraphs, method, clean=True):
     """
     :Function: Get the metrics for the given graph
     :param networkGraphs: Network graphs
@@ -28,25 +28,26 @@ def get_metrics(networkGraphs, method):
     if method not in ['kcore', 'degree', 'triangles', 'pagerank', 'betweenness_centrality', 'closeness_centrality',
                       'eigenvector_centrality', 'load_centrality', 'degree_centrality']:
         raise ValueError("Method not supported")
+    print(clean)
 
     if method == 'kcore':
-        return compute_kcore(networkGraphs)
+        return compute_kcore(networkGraphs, clean=clean)
     elif method == 'degree':
-        return compute_nodes_degree(networkGraphs)
+        return compute_nodes_degree(networkGraphs, clean=clean)
     elif method == 'triangles':
-        return compute_triangles(networkGraphs)
+        return compute_triangles(networkGraphs, clean=clean)
     elif method == 'pagerank':
-        return compute_page_rank(networkGraphs)
+        return compute_page_rank(networkGraphs, clean=clean)
     elif method == 'betweenness_centrality':
-        return compute_betweeness_centrality(networkGraphs)
+        return compute_betweeness_centrality(networkGraphs, clean=clean)
     elif method == 'closeness_centrality':
-        return compute_closeness_centrality(networkGraphs)
+        return compute_closeness_centrality(networkGraphs, clean=clean)
     elif method == 'eigenvector_centrality':
-        return compute_eigen_centrality(networkGraphs)
+        return compute_eigen_centrality(networkGraphs, clean=clean)
     elif method == 'load_centrality':
-        return compute_load_centrality(networkGraphs)
+        return compute_load_centrality(networkGraphs, clean=clean)
     elif method == 'degree_centrality':
-        return compute_degree_centrality(networkGraphs)
+        return compute_degree_centrality(networkGraphs, clean=clean)
     else:
         raise ValueError("Method not supported")
 
@@ -233,7 +234,7 @@ def compute_node_metrics(networkGraphs, directed=True, multi=True):
 # ------------------------------ CENTRALITY METRICS --------------------------------------
 # ----------------------------------------------------------------------------------------
 @memoize
-def compute_degree_centrality(networkGraphs, directed=True, multi=True):
+def compute_degree_centrality(networkGraphs, directed=True, multi=True, clean=True):
     """
     :Function: Compute the degree centrality for the NetworkX graph
     :param networkGraphs: Network Graphs
@@ -252,14 +253,15 @@ def compute_degree_centrality(networkGraphs, directed=True, multi=True):
         df['Node'] = list(networkGraphs.Graph.nodes())
         df['Degree Centrality'] = np.nan
 
-    df = clean_df(df)
+    if clean:
+        df = clean_df(df)
     return df
 
 
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_eigen_centrality(networkGraphs, directed=True, multi=True):
+def compute_eigen_centrality(networkGraphs, directed=True, multi=True, clean=True):
     """
     :Function: Compute the eigenvector centrality for the NetworkX graph
     :param networkGraphs: Network Graphs
@@ -278,14 +280,15 @@ def compute_eigen_centrality(networkGraphs, directed=True, multi=True):
         df['Node'] = list(networkGraphs.Graph.nodes())
         df['Eigenvector Centrality'] = np.nan
 
-    df = clean_df(df)
+    if clean:
+        df = clean_df(df)
     return df
 
 
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_closeness_centrality(networkGraphs, directed=True, multi=True):
+def compute_closeness_centrality(networkGraphs, directed=True, multi=True, clean=True):
     """
     :Function: Compute the closeness centrality for the NetworkX graph
     :param networkGraphs: Network Graphs
@@ -304,14 +307,15 @@ def compute_closeness_centrality(networkGraphs, directed=True, multi=True):
         df['Node'] = list(networkGraphs.Graph.nodes())
         df['Closeness Centrality'] = np.nan
 
-    df = clean_df(df)
+    if clean:
+        df = clean_df(df)
     return df
 
 
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_betweeness_centrality(networkGraphs, directed=True, multi=True):
+def compute_betweeness_centrality(networkGraphs, directed=True, multi=True, clean=True):
     """
     :Function: Compute the betweeness centrality for the NetworkX graph
     :param networkGraphs: Network Graphs
@@ -330,14 +334,15 @@ def compute_betweeness_centrality(networkGraphs, directed=True, multi=True):
         df['Node'] = list(networkGraphs.Graph.nodes())
         df['Betweeness Centrality'] = np.nan
 
-    df = clean_df(df)
+    if clean:
+        df = clean_df(df)
     return df
 
 
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_load_centrality(networkGraphs, directed=True, multi=True):
+def compute_load_centrality(networkGraphs, directed=True, multi=True, clean=True):
     """
     :Function: Compute the load centrality for the NetworkX graph
     :param networkGraphs: Network Graphs
@@ -356,7 +361,8 @@ def compute_load_centrality(networkGraphs, directed=True, multi=True):
         df['Node'] = list(networkGraphs.Graph.nodes())
         df['Load Centrality'] = np.nan
 
-    df = clean_df(df)
+    if clean:
+        df = clean_df(df)
     return df
 
 
@@ -365,7 +371,7 @@ def compute_load_centrality(networkGraphs, directed=True, multi=True):
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_nodes_degree(networkGraphs, directed=True):
+def compute_nodes_degree(networkGraphs, directed=True, clean=True):
     """
     :Function: Compute the node degree for the NetworkX graph
     :param networkGraphs: NetworkGraphs
@@ -382,14 +388,15 @@ def compute_nodes_degree(networkGraphs, directed=True):
         df['Node'] = list(networkGraphs.Graph.nodes())
         df['Degree'] = np.nan
 
-    df = clean_df(df)
+    if clean:
+        df = clean_df(df)
     return df
 
 
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_kcore(networkGraphs, directed=True):
+def compute_kcore(networkGraphs, directed=True, clean=True):
     """
     :Function: Compute the k-core
     :param networkGraphs: NetworkGraphs
@@ -406,14 +413,15 @@ def compute_kcore(networkGraphs, directed=True):
         df['Node'] = list(networkGraphs.Graph.nodes())
         df['K-Core'] = np.nan
 
-    df = clean_df(df)
+    if clean:
+        df = clean_df(df)
     return df
 
 
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_triangles(networkGraphs, directed=True):
+def compute_triangles(networkGraphs, directed=True, clean=True):
     """
     :Function: Compute the triangle
     :param networkGraphs: NetworkGraphs
@@ -430,14 +438,15 @@ def compute_triangles(networkGraphs, directed=True):
         df['Node'] = list(networkGraphs.Graph.nodes())
         df['Triangle'] = np.nan
 
-    df = clean_df(df)
+    if clean:
+        df = clean_df(df)
     return df
 
 
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_page_rank(networkGraphs, directed=True, multi=True):
+def compute_page_rank(networkGraphs, directed=True, multi=True, clean=True):
     """
     :Function: Compute the page rank
     :param networkGraphs: NetworkGraphs
@@ -456,7 +465,8 @@ def compute_page_rank(networkGraphs, directed=True, multi=True):
         df['Node'] = list(networkGraphs.Graph.nodes())
         df['Page Rank'] = np.nan
 
-    df = clean_df(df)
+    if clean:
+        df = clean_df(df)
     return df
 
 
