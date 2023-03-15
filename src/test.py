@@ -10,7 +10,7 @@ import time
 
 networkGraph = NetworkGraphs('../datasets/Railway.csv', type="RAILWAY")
 
-plot_hotspot(networkGraph, "Hotspot")
+plot_hotspot(networkGraph)
 
 # kcore = compute_kcore(networkGraph, directed=False)
 # plot_metrics_on_map(networkGraph, kcore, 'Kcore', 'kcore')

@@ -6,16 +6,14 @@ Purpose: Visualisation for the NetworkX graphs
 
 # ----------------------------------------------------------------------------------------
 
-from src.visualisation_src.metrics_visualisation import *
-from src.visualisation_src.basic_network_visualisation import *
-from src.visualisation_src.ML_visualisation import *
-from src.visualisation_src.temporal_visualisation import *
-import src.machineLearning as ml
 import numpy as np
+
+import src.machineLearning as ml
 import src.metrics as m
-from pandas.api.types import is_numeric_dtype
 from src.utils import memoize
-from threading import Thread
+from src.visualisation_src.ML_visualisation import *
+from src.visualisation_src.metrics_visualisation import *
+from src.visualisation_src.temporal_visualisation import *
 
 
 # ----------------------------------------------------------------------------------------
@@ -122,43 +120,22 @@ def plot_histogram(df, column, log=False, title=None):
 
     return plt
 
+
 # ----------------------------------------------------------------------------------------
 
 
-def plot_hotspot(networkGraphs, title=None):
+def plot_hotspot(networkGraphs):
     """
-    :Function: Plot the hotspot for the given graph
-    :param networkGraphs: Network graphs
-    :param title: Title of the plot
+    :Function: Plot the hotspot and coldspot for the given graph
+    :param networkGraphs:
     :return:
     """
     if not networkGraphs.is_spatial():
         return ValueError('Graph is not spatial. Please select a spatial graph.')
 
     hotspot = ml.get_hotspot(networkGraphs)
-    latitude = hotspot['Latitude']
-    longitude = hotspot['Longitude']
-    degree = hotspot['Degree']
-    pos = networkGraphs.pos['map']
-    G = networkGraphs.Graph
 
-    fig = go.Figure(go.Densitymapbox(lat=latitude, lon=longitude, z=degree, radius=20, hoverinfo='none'))
-    fig.add_scattermapbox(lat=latitude, lon=longitude, mode="markers", text=[], name='Nodes', hoverinfo='none',
-                          marker=go.scattermapbox.Marker(size=3, color="white"))
-    fig.add_scattermapbox(lat=[], lon=[], text=[], mode="lines", name='Edges', hoverinfo='none',
-                          line=dict(width=0.5, color="darkgrey"))
-
-    for idx, vals in tqdm(enumerate(zip_longest(G.edges(), G.nodes())), total=G.number_of_edges()):
-        edge, node = vals
-        x0, y0 = pos[edge[0]]
-        x1, y1 = pos[edge[1]]
-        fig.data[2]['lon'] += (x0, x1, None)
-        fig.data[2]['lat'] += (y0, y1, None)
-
-    fig.update_layout(mapbox_style="stamen-terrain", mapbox_center_lon=networkGraphs.mid_long,
-                      mapbox_center_lat=networkGraphs.mid_lat, mapbox_zoom=3.5, margin={"r": 0, "t": 0, "l": 0, "b": 0},
-                      title=title,
-                      legend=dict(orientation="h", yanchor="bottom", y=0.1, xanchor="right", x=1, title="Show/Hide"))
+    fig = generate_hotspot(networkGraphs, hotspot)
 
     fig.write_html('hotspot_coldspot.html')
 
