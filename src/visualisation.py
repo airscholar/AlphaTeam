@@ -57,11 +57,11 @@ def plot_metric(networkGraphs, metrics, directed=False, dynamic=False, layout='m
     if df[df.columns.values[1]].isnull().values.any():
         return ValueError('Metric column is empty. Please select a different metric.')
 
-    filename = f"{metrics}_{directed}_{dynamic}_{layout}.html"
+    filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
     if plot:
         if dynamic:
-            return None
-            # return generate_dynamic_metrics(networkGraphs, metrics)
+            filename = filename.replace(f"_{layout}", "")
+            generate_dynamic_metric(networkGraphs, df, filename)
         else:
             generate_static_metric(networkGraphs, df, filename, layout_=layout)
 

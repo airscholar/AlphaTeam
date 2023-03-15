@@ -4,6 +4,9 @@ from plotly import graph_objects as go
 from src.visualisation_src.utils_visualisation import *
 from tqdm import tqdm
 from itertools import zip_longest
+from pyvis import network as net
+import matplotlib as mpl
+import json
 
 
 # ----------------------------------------------------------------------------------------
@@ -65,7 +68,7 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
 
     metrics_name = df_.columns[1]
     df_['std'] = (df_[metrics_name] - df_[metrics_name].min()) / (df_[metrics_name].max() - df_[metrics_name].min())
-    size_ = 5/df_['std'].mean()  # normalise the size of the nodes
+    size_ = 5 / df_['std'].mean()  # normalise the size of the nodes
 
     if layout_ == 'map':
         edge_trace = go.Scattergeo(lon=[], lat=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
@@ -111,6 +114,7 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
 
     fig.write_html(filename, auto_open=True)
     return fig
+
 
 # ----------------------------------------------------------------------------------------
 
@@ -171,10 +175,49 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
                 node_info += f"{metric}: {str(metric_df[metric].values[0])}<br>"
             node_trace['text'] += tuple([node_info])
 
-
     layout = get_layout(networkGraphs, title=f"Metrics visualisation using {layout_} layout", layout_=layout_)
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
 
     fig.write_html(filename, auto_open=True)
     return fig
+
+
+# ----------------------------------------------------------------------------------------
+
+def generate_dynamic_metric(networkGraphs, df_, filename):  # USING PYVIS
+    """
+    :Function: Plot the metrics on the graph
+    :param networkGraphs: Network graphs
+    :param df_: Dataframe with the metrics
+    :param filename: Name of the file to be saved
+    :return: Pyvis plot
+    """
+    G = networkGraphs.Graph
+    metrics_name = df_.columns[1]
+    df_['std'] = df_[metrics_name].apply(
+        lambda x: (x - min(df_[metrics_name])) / (max(df_[metrics_name]) - min(df_[metrics_name])))
+    size_ = 5 / df_['std'].mean()
+
+    cmap = plt.cm.plasma
+
+    for u, d in G.nodes(data=True):
+        metric_df = df_[df_['Node'] == u]
+        c = cmap(metric_df['std'].values[0])
+        d['color'] = mpl.colors.rgb2hex(c)
+        d['size'] = metric_df['std'].values[0] * size_
+        d['title'] = f"Node: {u}; {metrics_name}: {str(metric_df[metrics_name].values[0])}"
+
+    for u, v, d in G.edges(data=True):
+        d.clear()
+
+    Net = net.Network(height="750px", width="100%", bgcolor="grey", font_color="black", notebook=True)
+    Net.from_nx(G)
+    Net.show_buttons(filter_=['physics', 'edges', 'nodes'])
+    Net.options.physics.use_force_atlas_2based(
+        params={'central_gravity': 0.01, 'gravity': -50, 'spring_length': 100, 'spring_strength': 0.08, 'damping': 0.4,
+                'overlap': 0})
+    print(f"Saving {filename}...")
+    Net.write_html(filename)
+
+    return Net
