@@ -31,10 +31,8 @@ plot_hotspot(networkGraph)
 # plot_cluster(networkGraph, 'k_clique', 'K Clique Clustering')
 
 
-
 # customGraphs = NetworkGraphs('../datasets/CRYPTO.csv', type="CRYPTO")
 # louvain_clustering(customGraphs)
-
 
 
 #
@@ -187,4 +185,3 @@ plot_hotspot(networkGraph)
 # plot_metrics_on_map(networkGraphs, metrics, 'Metrics Centrality Undirected', directed=False).show()
 # metrics = compute_node_metrics(networkGraphs, directed=True)
 # plot_metrics_on_map(networkGraphs, metrics, 'Metrics Centrality Directed', directed=True).show()
-

@@ -7,6 +7,9 @@ sys.path.insert(0, os.path.abspath('../'))
 from visualisation_src.utils_visualisation import *
 from tqdm import tqdm
 from itertools import zip_longest
+from pyvis import network as net
+import matplotlib as mpl
+import json
 
 
 # ----------------------------------------------------------------------------------------
@@ -68,45 +71,35 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
 
     metrics_name = df_.columns[1]
     df_['std'] = (df_[metrics_name] - df_[metrics_name].min()) / (df_[metrics_name].max() - df_[metrics_name].min())
-    size_ = 5/df_['std'].mean()  # normalise the size of the nodes
+    size_ = 5 / df_['std'].mean()  # normalise the size of the nodes
 
     if layout_ == 'map':
-        edge_trace = go.Scattergeo(lon=[], lat=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
         node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
                                    marker=dict(showscale=True,
                                                colorbar=dict(thickness=10, title=metrics_name, xanchor='left',
                                                              titleside='right'), color=df_[metrics_name],
                                                size=df_['std'] * size_))
     else:
-        edge_trace = go.Scatter(x=[], y=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
         node_trace = go.Scatter(x=[], y=[], text=[], mode='markers', hoverinfo='text',
                                 marker=dict(showscale=True,
                                             colorbar=dict(thickness=10, title=metrics_name, xanchor='left',
                                                           titleside='right'), color=df_[metrics_name],
                                             size=df_['std'] * size_))
 
-    for idx, vals in tqdm(enumerate(zip_longest(G.edges(), G.nodes())), total=G.number_of_edges()):
-        edge, node = vals
-        x0, y0 = pos[edge[0]]
-        x1, y1 = pos[edge[1]]
+    edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
+
+    for node in tqdm(G.nodes()):
+        x, y = pos[node]
         if layout_ == 'map':
-            edge_trace['lon'] += (x0, x1, None)
-            edge_trace['lat'] += (y0, y1, None)
+            node_trace['lon'] += tuple([x])
+            node_trace['lat'] += tuple([y])
         else:
-            edge_trace['x'] += (x0, x1, None)
-            edge_trace['y'] += (y0, y1, None)
-        if idx < len(G.nodes()):
-            x, y = pos[node]
-            if layout_ == 'map':
-                node_trace['lon'] += tuple([x])
-                node_trace['lat'] += tuple([y])
-            else:
-                node_trace['x'] += tuple([x])
-                node_trace['y'] += tuple([y])
-            metric_df = df_[df_['Node'] == node]
-            node_info = f"Node: {node}<br>"
-            node_info += f"{metrics_name}: {str(metric_df[metrics_name].values[0])}<br>"
-            node_trace['text'] += tuple([node_info])
+            node_trace['x'] += tuple([x])
+            node_trace['y'] += tuple([y])
+        metric_df = df_[df_['Node'] == node]
+        node_info = f"Node: {node}<br>"
+        node_info += f"{metrics_name}: {str(metric_df[metrics_name].values[0])}<br>"
+        node_trace['text'] += tuple([node_info])
 
     layout = get_layout(networkGraphs, title=f"{metrics_name} visualisation using {layout_} layout", layout_=layout_)
     fig = go.Figure(data=[edge_trace, node_trace],
@@ -114,6 +107,7 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
 
     fig.write_html(filename, auto_open=True)
     return fig
+
 
 # ----------------------------------------------------------------------------------------
 
@@ -136,44 +130,27 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
     metrics_names = df_.columns[1:]
 
     if layout_ == 'map':
-        edge_trace = go.Scattergeo(lon=[], lat=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
         node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
-                                   marker=dict(showscale=True,
-                                               colorbar=dict(thickness=10, title='Metrics', xanchor='left',
-                                                             titleside='right'), color=['red'],
-                                               size=3))
+                                   marker=dict(showscale=False, size=3, color='black'))
     else:
-        edge_trace = go.Scatter(x=[], y=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
         node_trace = go.Scatter(x=[], y=[], text=[], mode='markers', hoverinfo='text',
-                                marker=dict(showscale=True,
-                                            colorbar=dict(thickness=10, title="Metrics", xanchor='left',
-                                                          titleside='right'), color=['red'],
-                                            size=3))
+                                marker=dict(showscale=False, size=3, color='black'))
 
-    for idx, vals in tqdm(enumerate(zip_longest(G.edges(), G.nodes())), total=G.number_of_edges()):
-        edge, node = vals
-        x0, y0 = pos[edge[0]]
-        x1, y1 = pos[edge[1]]
+    edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
+
+    for node in G.nodes():
+        x, y = pos[node]
         if layout_ == 'map':
-            edge_trace['lon'] += (x0, x1, None)
-            edge_trace['lat'] += (y0, y1, None)
+            node_trace['lon'] += tuple([x])
+            node_trace['lat'] += tuple([y])
         else:
-            edge_trace['x'] += (x0, x1, None)
-            edge_trace['y'] += (y0, y1, None)
-        if idx < len(G.nodes()):
-            x, y = pos[node]
-            if layout_ == 'map':
-                node_trace['lon'] += tuple([x])
-                node_trace['lat'] += tuple([y])
-            else:
-                node_trace['x'] += tuple([x])
-                node_trace['y'] += tuple([y])
-            metric_df = df_[df_['Node'] == node]
-            node_info = f"Node: {node}<br>"
-            for metric in metrics_names:
-                node_info += f"{metric}: {str(metric_df[metric].values[0])}<br>"
-            node_trace['text'] += tuple([node_info])
-
+            node_trace['x'] += tuple([x])
+            node_trace['y'] += tuple([y])
+        metric_df = df_[df_['Node'] == node]
+        node_info = f"Node: {node}<br>"
+        for metric in metrics_names:
+            node_info += f"{metric}: {str(metric_df[metric].values[0])}<br>"
+        node_trace['text'] += tuple([node_info])
 
     layout = get_layout(networkGraphs, title=f"Metrics visualisation using {layout_} layout", layout_=layout_)
     fig = go.Figure(data=[edge_trace, node_trace],
@@ -181,3 +158,43 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
 
     fig.write_html(filename, auto_open=True)
     return fig
+
+
+# ----------------------------------------------------------------------------------------
+
+def generate_dynamic_metric(networkGraphs, df_, filename):  # USING PYVIS
+    """
+    :Function: Plot the metrics on the graph
+    :param networkGraphs: Network graphs
+    :param df_: Dataframe with the metrics
+    :param filename: Name of the file to be saved
+    :return: Pyvis plot
+    """
+    G = networkGraphs.Graph
+    metrics_name = df_.columns[1]
+    df_['std'] = df_[metrics_name].apply(
+        lambda x: (x - min(df_[metrics_name])) / (max(df_[metrics_name]) - min(df_[metrics_name])))
+    size_ = 5 / df_['std'].mean()
+
+    cmap = plt.cm.plasma
+
+    for u, d in G.nodes(data=True):
+        metric_df = df_[df_['Node'] == u]
+        c = cmap(metric_df['std'].values[0])
+        d['color'] = mpl.colors.rgb2hex(c)
+        d['size'] = metric_df['std'].values[0] * size_
+        d['title'] = f"Node: {u}; {metrics_name}: {str(metric_df[metrics_name].values[0])}"
+
+    for u, v, d in G.edges(data=True):
+        d.clear()
+
+    Net = net.Network(height="750px", width="100%", bgcolor="grey", font_color="black", notebook=True)
+    Net.from_nx(G)
+    Net.show_buttons(filter_=['physics', 'edges', 'nodes'])
+    Net.options.physics.use_force_atlas_2based(
+        params={'central_gravity': 0.01, 'gravity': -50, 'spring_length': 100, 'spring_strength': 0.08, 'damping': 0.4,
+                'overlap': 0})
+    print(f"Saving {filename}...")
+    Net.write_html(filename)
+
+    return Net

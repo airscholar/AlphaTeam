@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>preprocessing &mdash; AlphaTeam 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AlphaTeam
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AlphaTeam</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">preprocessing</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for preprocessing</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">:Author: Alpha Team Group Project</span>
+<span class="sd">:Date: March 2023</span>
+<span class="sd">:Purpose: Preprocess the datasets and create generals NetworkX graphs</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="c1"># Imports</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.io</span> <span class="k">as</span> <span class="nn">sio</span>
+<span class="c1"># from NetworkGraphs import NetworkGraphs</span>
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="preprocess_railway"><a class="viewcode-back" href="../preprocessing.html#preprocessing.preprocess_railway">[docs]</a><span class="k">def</span> <span class="nf">preprocess_railway</span><span class="p">(</span><span class="n">filename_</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Preprocess the railway dataset and create NetworkX graphs</span>
+<span class="sd">    :param filename_: Path to the file (csv)</span>
+<span class="sd">    :type filename_: str</span>
+<span class="sd">    :return: NetworkX graphs (DiGraph and MultiDiGraph)</span>
+<span class="sd">    :rtype: list of NetworkX graphs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">network</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">station_id</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">excluded</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">colormap</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Z&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="s2">&quot;purple&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="s2">&quot;orange&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="s2">&quot;pink&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="s2">&quot;4&quot;</span><span class="p">:</span> <span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="s2">&quot;5&quot;</span><span class="p">:</span> <span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="s2">&quot;6&quot;</span><span class="p">:</span> <span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="s2">&quot;7&quot;</span><span class="p">:</span> <span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="s2">&quot;8&quot;</span><span class="p">:</span> <span class="s2">&quot;grey&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;9&quot;</span><span class="p">:</span> <span class="s2">&quot;grey&quot;</span><span class="p">}</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename_</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">excluded</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">prev_train</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">prev_station</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+
+            <span class="c1"># skip header</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">):</span>
+                <span class="k">continue</span>
+
+            <span class="n">train</span><span class="p">,</span> <span class="n">st_no</span><span class="p">,</span> <span class="n">st_id</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">arr_time</span><span class="p">,</span> <span class="n">dep_time</span><span class="p">,</span> <span class="n">stay_time</span><span class="p">,</span> <span class="n">mileage</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="n">lat</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span>
+            <span class="n">lon</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">lon</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">dep_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dep_time</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">dep_time</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">dep_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">dep_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">arr_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">arr_time</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">arr_time</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">arr_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">arr_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">date</span> <span class="o">==</span> <span class="s2">&quot;Day 2&quot;</span><span class="p">:</span>
+                <span class="n">arr_time</span> <span class="o">+=</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span>
+                <span class="n">dep_time</span> <span class="o">+=</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span>
+
+            <span class="k">elif</span> <span class="n">date</span> <span class="o">==</span> <span class="s2">&quot;Day 3&quot;</span><span class="p">:</span>
+                <span class="n">arr_time</span> <span class="o">+=</span> <span class="mi">48</span> <span class="o">*</span> <span class="mi">60</span>
+                <span class="n">dep_time</span> <span class="o">+=</span> <span class="mi">48</span> <span class="o">*</span> <span class="mi">60</span>
+
+            <span class="k">elif</span> <span class="n">date</span> <span class="o">==</span> <span class="s2">&quot;Day 4&quot;</span><span class="p">:</span>
+                <span class="n">arr_time</span> <span class="o">+=</span> <span class="mi">72</span> <span class="o">*</span> <span class="mi">60</span>
+                <span class="n">dep_time</span> <span class="o">+=</span> <span class="mi">72</span> <span class="o">*</span> <span class="mi">60</span>
+
+            <span class="k">if</span> <span class="n">train</span> <span class="o">!=</span> <span class="n">prev_train</span><span class="p">:</span>
+                <span class="n">prev_station</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">network</span><span class="p">[</span><span class="n">train</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="n">station</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">st_id</span><span class="p">),</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Station </span><span class="si">{</span><span class="n">st_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="n">lat</span><span class="p">,</span>
+                <span class="s2">&quot;lon&quot;</span><span class="p">:</span> <span class="n">lon</span><span class="p">,</span>
+                <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">dep_time</span><span class="p">,</span>
+                <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;from&quot;</span><span class="p">:</span> <span class="n">prev_station</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">prev_station</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="n">network</span><span class="p">[</span><span class="n">train</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">station</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">prev_station</span><span class="p">:</span>
+                <span class="n">prev_station</span><span class="p">[</span><span class="s2">&quot;to&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">)</span>
+                <span class="n">prev_station</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr_time</span>
+                <span class="n">prev_station</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">colormap</span><span class="p">[</span><span class="n">train</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+            <span class="n">prev_train</span> <span class="o">=</span> <span class="n">train</span>
+            <span class="n">prev_station</span> <span class="o">=</span> <span class="n">station</span>
+
+    <span class="k">for</span> <span class="n">train</span> <span class="ow">in</span> <span class="n">network</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">station</span> <span class="ow">in</span> <span class="n">network</span><span class="p">[</span><span class="n">train</span><span class="p">]:</span>
+            <span class="n">station_id</span><span class="p">[(</span><span class="n">station</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">],</span> <span class="n">station</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">])]</span> <span class="o">=</span> <span class="n">station</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Excluded </span><span class="si">{</span><span class="n">excluded</span><span class="si">}</span><span class="s2"> stations&quot;</span><span class="p">)</span>
+
+    <span class="n">multi_di_graph</span> <span class="o">=</span> <span class="n">create_multi_DiGraph_railway</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">station_id</span><span class="p">)</span>
+    <span class="n">di_graph</span> <span class="o">=</span> <span class="n">convert_to_DiGraph</span><span class="p">(</span><span class="n">multi_di_graph</span><span class="p">)</span>
+
+    <span class="n">multi_di_graph</span><span class="o">.</span><span class="n">remove_edges_from</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">selfloop_edges</span><span class="p">(</span><span class="n">multi_di_graph</span><span class="p">))</span>
+    <span class="n">di_graph</span><span class="o">.</span><span class="n">remove_edges_from</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">selfloop_edges</span><span class="p">(</span><span class="n">di_graph</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">di_graph</span><span class="p">,</span> <span class="n">multi_di_graph</span><span class="p">]</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="create_multi_DiGraph_railway"><a class="viewcode-back" href="../preprocessing.html#preprocessing.create_multi_DiGraph_railway">[docs]</a><span class="k">def</span> <span class="nf">create_multi_DiGraph_railway</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">station_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Create a MultiDiGraph from the railway dataset JSON object</span>
+<span class="sd">    :param network: JSON object of the railway dataset</span>
+<span class="sd">    :type network: dict</span>
+<span class="sd">    :param station_id: Dictionary of station id per location</span>
+<span class="sd">    :type station_id: dict</span>
+<span class="sd">    :return: NetworkX MultiDiGraph</span>
+<span class="sd">    :rtype: NetworkX MultiDiGraph</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">multi_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">stations</span> <span class="ow">in</span> <span class="n">network</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">station</span> <span class="ow">in</span> <span class="n">network</span><span class="p">[</span><span class="n">stations</span><span class="p">]:</span>
+            <span class="n">multi_graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">station</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="n">station</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">],</span> <span class="n">station</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">]))</span>
+            <span class="n">from_node</span> <span class="o">=</span> <span class="n">station</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">station</span><span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">tuple</span><span class="p">:</span>
+                <span class="n">to_node</span> <span class="o">=</span> <span class="n">station_id</span><span class="p">[</span><span class="n">station</span><span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">]]</span>
+                <span class="n">multi_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">from_node</span><span class="p">,</span> <span class="n">to_node</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">station</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">],</span> <span class="n">end</span><span class="o">=</span><span class="n">station</span><span class="p">[</span><span class="s1">&#39;end&#39;</span><span class="p">],</span>
+                                     <span class="n">color</span><span class="o">=</span><span class="n">station</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">],</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+    <span class="k">return</span> <span class="n">multi_graph</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="convert_to_DiGraph"><a class="viewcode-back" href="../preprocessing.html#preprocessing.convert_to_DiGraph">[docs]</a><span class="k">def</span> <span class="nf">convert_to_DiGraph</span><span class="p">(</span><span class="n">multi_graph</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Create a DiGraph from a MultiDiGraph with the same nodes and edges containing the sum of the weights,</span>
+<span class="sd">    and conserving the first edge&#39;s attributes</span>
+<span class="sd">    :param multi_graph: NetworkX MultiDiGraph</span>
+<span class="sd">    :type multi_graph: NetworkX MultiDiGraph</span>
+<span class="sd">    :return: NetworkX DiGraph</span>
+<span class="sd">    :rtype: NetworkX DiGraph</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">g_directed</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">multi_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">g_directed</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k_</span><span class="p">,</span> <span class="n">v_</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">g_directed</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">k_</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_</span>
+
+    <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">multi_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">g_directed</span><span class="o">.</span><span class="n">has_edge</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+            <span class="c1"># if weight exists, add the new weight to the existing one</span>
+            <span class="k">if</span> <span class="s1">&#39;weight&#39;</span> <span class="ow">in</span> <span class="n">g_directed</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">]:</span>
+                <span class="n">g_directed</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">][</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span>
+            <span class="k">continue</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">g_directed</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k_</span><span class="p">,</span> <span class="n">v_</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">g_directed</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">][</span><span class="n">k_</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_</span>
+
+    <span class="k">return</span> <span class="n">g_directed</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="convert_to_undirected"><a class="viewcode-back" href="../preprocessing.html#preprocessing.convert_to_undirected">[docs]</a><span class="k">def</span> <span class="nf">convert_to_undirected</span><span class="p">(</span><span class="n">g_directed</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Convert a DiGraph to an undirected graph using NetworkX to_undirected() function</span>
+<span class="sd">    :param g_directed: NetworkX DiGraph</span>
+<span class="sd">    :type g_directed: NetworkX DiGraph</span>
+<span class="sd">    :return: NetworkX Graph</span>
+<span class="sd">    :rtype: NetworkX Graph</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">g_directed</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">()</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="create_temporal_subgraph"><a class="viewcode-back" href="../preprocessing.html#preprocessing.create_temporal_subgraph">[docs]</a><span class="k">def</span> <span class="nf">create_temporal_subgraph</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Create a temporal subgraph from a NetworkGraphs object using the start_time, end_time and step parameters</span>
+<span class="sd">    :param networkGraphs: Custom NetworkGraphs object</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param start_time: Start time of the temporal subgraph</span>
+<span class="sd">    :type start_time: int</span>
+<span class="sd">    :param end_time: End time of the temporal subgraph</span>
+<span class="sd">    :type end_time: int</span>
+<span class="sd">    :param step: Step size of the temporal subgraph</span>
+<span class="sd">    :type step: int</span>
+<span class="sd">    :return: List of NetworkX DiGraphs</span>
+<span class="sd">    :rtype: list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">temporal_graphs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+        <span class="c1"># add edges</span>
+        <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">DiGraph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="ow">and</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">i</span><span class="p">:</span>
+                <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">k_</span><span class="p">,</span> <span class="n">v_</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">][</span><span class="n">k_</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_</span>
+        <span class="c1"># add node positions</span>
+        <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">DiGraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">G</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k_</span><span class="p">,</span> <span class="n">v_</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">k_</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_</span>
+
+        <span class="n">temporal_graphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">Creating temporal graphs: </span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_time</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">end_time</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_time</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_time</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">end_time</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_time</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">,</span>
+            <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">temporal_graphs</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="preprocess_crypto"><a class="viewcode-back" href="../preprocessing.html#preprocessing.preprocess_crypto">[docs]</a><span class="k">def</span> <span class="nf">preprocess_crypto</span><span class="p">(</span><span class="n">filename_</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Preprocess the crypto dataset and return a NetworkX DiGraph and MultiDiGraph</span>
+<span class="sd">    :param filename_: Path to the crypto dataset</span>
+<span class="sd">    :type filename_: str</span>
+<span class="sd">    :return: List of NetworkX DiGraph and MultiDiGraph</span>
+<span class="sd">    :rtype: list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename_</span><span class="p">)</span>
+
+    <span class="n">MultiDiGraph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">()</span>
+    <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+    <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">from_</span><span class="p">,</span> <span class="n">to_</span><span class="p">,</span> <span class="n">value_</span><span class="p">,</span> <span class="n">time_</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="s1">&#39;to&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;block_time&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+        <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">from_</span><span class="p">,</span> <span class="n">to_</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">value_</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">time_</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">time_</span><span class="p">)</span>
+
+    <span class="n">DiGraph</span> <span class="o">=</span> <span class="n">convert_to_DiGraph</span><span class="p">(</span><span class="n">MultiDiGraph</span><span class="p">)</span>
+
+    <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">remove_edges_from</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">selfloop_edges</span><span class="p">(</span><span class="n">MultiDiGraph</span><span class="p">))</span>
+    <span class="n">DiGraph</span><span class="o">.</span><span class="n">remove_edges_from</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">selfloop_edges</span><span class="p">(</span><span class="n">DiGraph</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">MultiDiGraph</span><span class="p">]</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="preprocess_mtx"><a class="viewcode-back" href="../preprocessing.html#preprocessing.preprocess_mtx">[docs]</a><span class="k">def</span> <span class="nf">preprocess_mtx</span><span class="p">(</span><span class="n">filename_</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Preprocess the mtx dataset and return a NetworkX DiGraph and MultiDiGraph</span>
+<span class="sd">    :param filename_: Path to the mtx dataset</span>
+<span class="sd">    :type filename_: str</span>
+<span class="sd">    :return: List of NetworkX DiGraph and MultiDiGraph</span>
+<span class="sd">    :rtype: list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mtx</span> <span class="o">=</span> <span class="n">sio</span><span class="o">.</span><span class="n">mmread</span><span class="p">(</span><span class="n">filename_</span><span class="p">)</span>
+
+    <span class="n">MultiDiGraph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">(</span><span class="n">mtx</span><span class="p">)</span>
+    <span class="n">DiGraph</span> <span class="o">=</span> <span class="n">convert_to_DiGraph</span><span class="p">(</span><span class="n">MultiDiGraph</span><span class="p">)</span>
+
+    <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">remove_edges_from</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">selfloop_edges</span><span class="p">(</span><span class="n">MultiDiGraph</span><span class="p">))</span>
+    <span class="n">DiGraph</span><span class="o">.</span><span class="n">remove_edges_from</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">selfloop_edges</span><span class="p">(</span><span class="n">DiGraph</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">MultiDiGraph</span><span class="p">]</span></div>
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="preprocess_custom"><a class="viewcode-back" href="../preprocessing.html#preprocessing.preprocess_custom">[docs]</a><span class="k">def</span> <span class="nf">preprocess_custom</span><span class="p">(</span><span class="n">filename_</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Preprocess the custom dataset and return a NetworkX DiGraph and MultiDiGraph</span>
+<span class="sd">    Dataset must have the following columns:</span>
+<span class="sd">        - from: Source node</span>
+<span class="sd">        - to: Target node</span>
+<span class="sd">    Dataset could have the following columns:</span>
+<span class="sd">        - weight: Edge weight</span>
+<span class="sd">        - start: Start time of the edge</span>
+<span class="sd">        - end: End time of the edge</span>
+<span class="sd">        - color: Color of the edge</span>
+<span class="sd">        - lat1: Latitude of the source node</span>
+<span class="sd">        - lon1: Longitude of the source node</span>
+<span class="sd">        - lat2: Latitude of the target node</span>
+<span class="sd">        - lon2: Longitude of the target node</span>
+<span class="sd">    :param filename_: Path to the custom dataset</span>
+<span class="sd">    :type filename_: str</span>
+<span class="sd">    :return: List of NetworkX DiGraph and MultiDiGraph</span>
+<span class="sd">    :rtype: list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename_</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="s1">&#39;to&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">MultiDiGraph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;from&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="ow">not</span> <span class="s1">&#39;to&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No &quot;from&quot; and &quot;to&quot; columns in the dataset&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+    <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+
+    <span class="k">for</span> <span class="n">from_</span><span class="p">,</span> <span class="n">to_</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="s1">&#39;to&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+        <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">from_</span><span class="p">,</span> <span class="n">to_</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s1">&#39;lat1&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">&#39;lon1&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">node</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="s1">&#39;lat1&#39;</span><span class="p">,</span> <span class="s1">&#39;lon1&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+            <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s1">&#39;lat2&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">&#39;lon2&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">node</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;to&#39;</span><span class="p">,</span> <span class="s1">&#39;lat2&#39;</span><span class="p">,</span> <span class="s1">&#39;lon2&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;pos&#39;</span> <span class="ow">in</span> <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span>
+                <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s1">&#39;weight&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="p">[(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">weight_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+            <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">weight_</span>
+
+    <span class="k">if</span> <span class="s1">&#39;start&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="ow">not</span> <span class="s1">&#39;end&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">from_</span><span class="p">,</span> <span class="n">to_</span><span class="p">,</span> <span class="n">start_</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="s1">&#39;to&#39;</span><span class="p">,</span> <span class="s1">&#39;start&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+            <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">from_</span><span class="p">,</span> <span class="n">to_</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_</span>
+            <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">from_</span><span class="p">,</span> <span class="n">to_</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_</span>
+
+    <span class="k">if</span> <span class="s1">&#39;start&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">&#39;end&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">from_</span><span class="p">,</span> <span class="n">to_</span><span class="p">,</span> <span class="n">start_</span><span class="p">,</span> <span class="n">end_</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="s1">&#39;to&#39;</span><span class="p">,</span> <span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;end&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+            <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">from_</span><span class="p">,</span> <span class="n">to_</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_</span>
+            <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">from_</span><span class="p">,</span> <span class="n">to_</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">end_</span>
+
+    <span class="k">if</span> <span class="s1">&#39;color&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="p">[(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">color_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+            <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">color_</span>
+
+    <span class="n">DiGraph</span> <span class="o">=</span> <span class="n">convert_to_DiGraph</span><span class="p">(</span><span class="n">MultiDiGraph</span><span class="p">)</span>
+    <span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">remove_edges_from</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">selfloop_edges</span><span class="p">(</span><span class="n">MultiDiGraph</span><span class="p">))</span>
+    <span class="n">DiGraph</span><span class="o">.</span><span class="n">remove_edges_from</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">selfloop_edges</span><span class="p">(</span><span class="n">DiGraph</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">MultiDiGraph</span><span class="p">]</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Alpha Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

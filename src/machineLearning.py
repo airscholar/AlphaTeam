@@ -3,7 +3,6 @@ Author: Alpha Team Group Project
 Date: March 2023
 Purpose: Machine Learning for the NetworkX graphs
 """
-
 import networkx.algorithms.community as nx_comm
 import pandas as pd
 from distinctipy import distinctipy
@@ -39,7 +38,8 @@ def create_comm_colors(communities):
     colors = distinctipy.get_colors(len(communities))
     colors = [tuple([i * 255 for i in c]) for c in colors]
     # convert rgb tuple to hex
-    colors = [f'#{int(c[0]):02x}{int(c[1]):02x}{int(c[2]):02x}' for c in colors]
+    colors = [
+        f'#{int(c[0]):02x}{int(c[1]):02x}{int(c[2]):02x}' for c in colors]
 
     return colors
 
@@ -85,7 +85,8 @@ def greedy_modularity_clustering(networkGraphs):
     :param networkGraphs: NetworkGraphs
     :return: dataframe
     """
-    communities = list(nx_comm.greedy_modularity_communities(networkGraphs.Graph))
+    communities = list(
+        nx_comm.greedy_modularity_communities(networkGraphs.Graph))
     colors = create_comm_colors(communities)
     df = create_comm_dataframe(communities, colors)
     return df
@@ -99,7 +100,8 @@ def label_propagation_clustering(networkGraphs):
     :param networkGraphs: NetworkGraphs
     :return: dataframe
     """
-    communities = list(nx_comm.label_propagation_communities(networkGraphs.Graph))
+    communities = list(
+        nx_comm.label_propagation_communities(networkGraphs.Graph))
     colors = create_comm_colors(communities)
     df = create_comm_dataframe(communities, colors)
     return df

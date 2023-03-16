@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>metrics &mdash; AlphaTeam 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AlphaTeam
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AlphaTeam</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">metrics</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for metrics</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Author: Alpha Team Group Project</span>
+<span class="sd">Date: March 2023</span>
+<span class="sd">Purpose: Compute the metrics for the NetworkX graphs</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="c1"># from NetworkGraphs import NetworkGraphs</span>
+<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">memoize</span>
+<span class="kn">from</span> <span class="nn">pandas.api.types</span> <span class="kn">import</span> <span class="n">is_numeric_dtype</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+<span class="c1"># --------------------------------------- GETTER -----------------------------------------</span>
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="get_metrics"><a class="viewcode-back" href="../metrics.html#metrics.get_metrics">[docs]</a><span class="k">def</span> <span class="nf">get_metrics</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Get the metrics for the given graph</span>
+<span class="sd">    Method:</span>
+<span class="sd">        - &#39;kcore&#39;</span>
+<span class="sd">        - &#39;degree&#39;</span>
+<span class="sd">        - &#39;triangles&#39;</span>
+<span class="sd">        - &#39;pagerank&#39;</span>
+<span class="sd">        - &#39;betweenness_centrality&#39;</span>
+<span class="sd">        - &#39;closeness_centrality&#39;</span>
+<span class="sd">        - &#39;eigenvector_centrality&#39;</span>
+<span class="sd">        - &#39;load_centrality&#39;</span>
+<span class="sd">        - &#39;degree_centrality&#39;</span>
+<span class="sd">    :param networkGraphs: Network graphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param method: Method to compute the metrics</span>
+<span class="sd">    :type method: str</span>
+<span class="sd">    :param clean: Clean result DataFrame after computing the metrics</span>
+<span class="sd">    :type clean: bool</span>
+<span class="sd">    :param directed: Compute the metrics for the directed graph</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :param multi: Compute the metrics for the multi graph</span>
+<span class="sd">    :type multi: bool</span>
+<span class="sd">    :return: Pandas dataframe with the metrics and values</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;kcore&#39;</span><span class="p">,</span> <span class="s1">&#39;degree&#39;</span><span class="p">,</span> <span class="s1">&#39;triangles&#39;</span><span class="p">,</span> <span class="s1">&#39;pagerank&#39;</span><span class="p">,</span> <span class="s1">&#39;betweenness_centrality&#39;</span><span class="p">,</span> <span class="s1">&#39;closeness_centrality&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;eigenvector_centrality&#39;</span><span class="p">,</span> <span class="s1">&#39;load_centrality&#39;</span><span class="p">,</span> <span class="s1">&#39;degree_centrality&#39;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Method not supported, please select one of the following: kcore, degree, triangles, &quot;</span>
+                         <span class="s2">&quot;pagerank, betweenness_centrality, closeness_centrality, eigenvector_centrality, &quot;</span>
+                         <span class="s2">&quot;load_centrality, degree_centrality &quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;kcore&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">compute_kcore</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;degree&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">compute_nodes_degree</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;triangles&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">compute_triangles</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;pagerank&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">compute_page_rank</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;betweenness_centrality&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">compute_betweeness_centrality</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;closeness_centrality&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">compute_closeness_centrality</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;eigenvector_centrality&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">compute_eigen_centrality</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;load_centrality&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">compute_load_centrality</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;degree_centrality&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">compute_degree_centrality</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Method not supported&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+<span class="c1"># ------------------------------------ GLOBAL METRICS ------------------------------------</span>
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">compute_global_metrics</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Compute the global metrics for the NetworkGraphs object (all the graphs)</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :return: Pandas dataframe with the metrics and values (for each graph type)</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">directed</span> <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>  <span class="c1"># compute for directed</span>
+    <span class="n">undirected</span> <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span>  <span class="c1"># compute for undirected</span>
+    <span class="n">multidi</span> <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span>
+        <span class="n">networkGraphs</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">)</span>  <span class="c1"># compute for multidi</span>
+    <span class="n">multi</span> <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">)</span>  <span class="c1"># compute for multi</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">directed</span><span class="p">,</span> <span class="n">undirected</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;Metrics&#39;</span><span class="p">)</span><span class="o">.</span> \
+        <span class="n">merge</span><span class="p">(</span><span class="n">multidi</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;Metrics&#39;</span><span class="p">)</span><span class="o">.</span> \
+        <span class="n">merge</span><span class="p">(</span><span class="n">multi</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;Metrics&#39;</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Metrics&#39;</span><span class="p">,</span> <span class="s1">&#39;Directed&#39;</span><span class="p">,</span> <span class="s1">&#39;Undirected&#39;</span><span class="p">,</span> <span class="s1">&#39;MultiDi&#39;</span><span class="p">,</span> <span class="s1">&#39;Multi&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">compute_metrics</span><span class="p">(</span><span class="n">networkx_</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Compute the generals metrics for the NetworkX graph</span>
+<span class="sd">    :param networkx_: NetworkX graph</span>
+<span class="sd">    :type networkx_: nx.Graph or nx.DiGraph or nx.MultiGraph or nx.MultiDiGraph</span>
+<span class="sd">    :return: Pandas dataframe with the metrics and values</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">clustering_coefficient</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">average_clustering</span><span class="p">(</span><span class="n">networkx_</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">clustering_coefficient</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">avg_shortest_path_length</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">average_shortest_path_length</span><span class="p">(</span><span class="n">networkx_</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">avg_shortest_path_length</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">diameter</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">diameter</span><span class="p">(</span><span class="n">networkx_</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">diameter</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">radius</span><span class="p">(</span><span class="n">networkx_</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">avg_eigenvector_centrality</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">eigenvector_centrality</span><span class="p">(</span><span class="n">networkx_</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">avg_eigenvector_centrality</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">avg_closeness_centrality</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">closeness_centrality</span><span class="p">(</span><span class="n">networkx_</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">avg_closeness_centrality</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">avg_betweenness_centrality</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">betweenness_centrality</span><span class="p">(</span><span class="n">networkx_</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">avg_betweenness_centrality</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">avg_degree_centrality</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">degree_centrality</span><span class="p">(</span><span class="n">networkx_</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">avg_degree_centrality</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">avg_load_centrality</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">load_centrality</span><span class="p">(</span><span class="n">networkx_</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">avg_load_centrality</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">avg_pagerank</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">pagerank</span><span class="p">(</span><span class="n">networkx_</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">avg_pagerank</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">avg_clustering</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">clustering</span><span class="p">(</span><span class="n">networkx_</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">avg_clustering</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">transitivity</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">transitivity</span><span class="p">(</span><span class="n">networkx_</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">transitivity</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">avg_degree</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">networkx_</span><span class="o">.</span><span class="n">degree</span><span class="p">())</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">avg_degree</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">networkx_</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">records</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;Metrics&quot;</span><span class="p">:</span> <span class="s2">&quot;Clustering Coefficient&quot;</span><span class="p">,</span> <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">clustering_coefficient</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;Metrics&quot;</span><span class="p">:</span> <span class="s2">&quot;Avg. Shortest Path Length&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">avg_shortest_path_length</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;Metrics&quot;</span><span class="p">:</span> <span class="s2">&quot;Diameter&quot;</span><span class="p">,</span> <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">diameter</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;Metrics&quot;</span><span class="p">:</span> <span class="s2">&quot;Radius&quot;</span><span class="p">,</span> <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">radius</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;Metrics&quot;</span><span class="p">:</span> <span class="s2">&quot;Number of Nodes&quot;</span><span class="p">,</span> <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">networkx_</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()},</span>
+        <span class="p">{</span><span class="s2">&quot;Metrics&quot;</span><span class="p">:</span> <span class="s2">&quot;Number of Edges&quot;</span><span class="p">,</span> <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">networkx_</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()},</span>
+        <span class="p">{</span><span class="s2">&quot;Metrics&quot;</span><span class="p">:</span> <span class="s2">&quot;Density&quot;</span><span class="p">,</span> <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">density</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;Metrics&quot;</span><span class="p">:</span> <span class="s2">&quot;Transitivity&quot;</span><span class="p">,</span> <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">transitivity</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;Metrics&quot;</span><span class="p">:</span> <span class="s2">&quot;Avg. Degree&quot;</span><span class="p">,</span> <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">avg_degree</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;Metrics&quot;</span><span class="p">:</span> <span class="s2">&quot;Avg. Clustering&quot;</span><span class="p">,</span> <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">avg_clustering</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;Metrics&quot;</span><span class="p">:</span> <span class="s2">&quot;Avg. Eigenvector Centrality&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">avg_eigenvector_centrality</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;Metrics&quot;</span><span class="p">:</span> <span class="s2">&quot;Avg. Betweenness Centrality&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">avg_betweenness_centrality</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;Metrics&quot;</span><span class="p">:</span> <span class="s2">&quot;Avg. Closeness Centrality&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">avg_closeness_centrality</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;Metrics&quot;</span><span class="p">:</span> <span class="s2">&quot;Avg. Degree Centrality&quot;</span><span class="p">,</span> <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">avg_degree_centrality</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;Metrics&quot;</span><span class="p">:</span> <span class="s2">&quot;Avg. Page Rank&quot;</span><span class="p">,</span> <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">avg_pagerank</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;Metrics&quot;</span><span class="p">:</span> <span class="s2">&quot;Avg. Load Centrality&quot;</span><span class="p">,</span> <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">avg_load_centrality</span><span class="p">},</span>
+    <span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])],</span>
+                       <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+<span class="c1"># ------------------------------- ALL METRICS FUNCTION -----------------------------------</span>
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">compute_node_centralities</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Compute all the centrality metrics for the NetworkGraphs</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs object</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param directed: Compute the metrics for the directed graph</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :param multi: Compute the metrics for the multi graph</span>
+<span class="sd">    :type multi: bool</span>
+<span class="sd">    :param clean: Clean the DataFrame after computing the metrics</span>
+<span class="sd">    :type clean: bool</span>
+<span class="sd">    :return: Pandas dataframe with the metrics and values</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">degree_centrality</span> <span class="o">=</span> <span class="n">compute_degree_centrality</span><span class="p">(</span>
+        <span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">)</span>
+    <span class="n">eigen_centrality</span> <span class="o">=</span> <span class="n">compute_eigen_centrality</span><span class="p">(</span>
+        <span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">)</span>
+    <span class="n">closeness_centrality</span> <span class="o">=</span> <span class="n">compute_closeness_centrality</span><span class="p">(</span>
+        <span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">)</span>
+    <span class="n">betweenness_centrality</span> <span class="o">=</span> <span class="n">compute_betweeness_centrality</span><span class="p">(</span>
+        <span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">)</span>
+    <span class="n">load_centrality</span> <span class="o">=</span> <span class="n">compute_load_centrality</span><span class="p">(</span>
+        <span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">degree_centrality</span><span class="p">,</span> <span class="n">eigen_centrality</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;Node&#39;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">closeness_centrality</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;Node&#39;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">betweenness_centrality</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;Node&#39;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">load_centrality</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;Node&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">compute_node_metrics</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Compute all the node metrics for the NetworkGraphs object</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param directed: Compute the metrics for the directed graph</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :param clean: Clean the DataFrame after computing the metrics</span>
+<span class="sd">    :type clean: bool</span>
+<span class="sd">    :return: Pandas dataframe with the metrics and values</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kcore</span> <span class="o">=</span> <span class="n">compute_kcore</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">)</span>
+    <span class="n">triangle</span> <span class="o">=</span> <span class="n">compute_triangles</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">)</span>
+    <span class="n">degree</span> <span class="o">=</span> <span class="n">compute_nodes_degree</span><span class="p">(</span>
+        <span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">)</span>
+    <span class="n">pagerank</span> <span class="o">=</span> <span class="n">compute_page_rank</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">kcore</span><span class="p">,</span> <span class="n">triangle</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;Node&#39;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;Node&#39;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">pagerank</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;Node&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+<span class="c1"># ------------------------------ CENTRALITY METRICS --------------------------------------</span>
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">compute_degree_centrality</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Compute the degree centrality for the NetworkGraphs object</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs object</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param directed: Compute the metrics for the directed graph</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :param multi: Compute the metrics for the multi graph</span>
+<span class="sd">    :type multi: bool</span>
+<span class="sd">    :param clean: Clean the DataFrame after computing the metrics</span>
+<span class="sd">    :type clean: bool</span>
+<span class="sd">    :return: Pandas dataframe with the metrics and values</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">multi</span><span class="p">:</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">directed</span> <span class="k">else</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">DiGraph</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">MultiGraph</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">directed</span> <span class="k">else</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">MultiDiGraph</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">degree_centrality</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">degree_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">degree_centrality</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+                          <span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;Degree Centrality&#39;</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;Degree Centrality&#39;</span><span class="p">])</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Degree Centrality&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">clean_df</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">compute_eigen_centrality</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Compute the eigenvector centrality for the NetworkGraphs object</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs object</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param directed: Compute the metrics for the directed graph</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :param multi: Compute the metrics for the multi graph</span>
+<span class="sd">    :type multi: bool</span>
+<span class="sd">    :param clean: Clean the DataFrame after computing the metrics</span>
+<span class="sd">    :type clean: bool</span>
+<span class="sd">    :return: Pandas dataframe with the metrics and values</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">multi</span><span class="p">:</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">directed</span> <span class="k">else</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">DiGraph</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">MultiGraph</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">directed</span> <span class="k">else</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">MultiDiGraph</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">eigen_centrality</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">eigenvector_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">eigen_centrality</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+                          <span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;Eigenvector Centrality&#39;</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;Eigenvector Centrality&#39;</span><span class="p">])</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Eigenvector Centrality&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">clean_df</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">compute_closeness_centrality</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Compute the closeness centrality for the NetworkGraphs object</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs object</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param directed: Compute the metrics for the directed graph</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :param multi: Compute the metrics for the multi graph</span>
+<span class="sd">    :type multi: bool</span>
+<span class="sd">    :param clean: Clean the DataFrame after computing the metrics</span>
+<span class="sd">    :type clean: bool</span>
+<span class="sd">    :return: Pandas dataframe with the metrics and values</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">multi</span><span class="p">:</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">directed</span> <span class="k">else</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">DiGraph</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">MultiGraph</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">directed</span> <span class="k">else</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">MultiDiGraph</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">closeness_centrality</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">closeness_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">closeness_centrality</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+                          <span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;Closeness Centrality&#39;</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;Closeness Centrality&#39;</span><span class="p">])</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Closeness Centrality&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">clean_df</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">compute_betweeness_centrality</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Compute the betweeness centrality for the NetworkGraphs object</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs object</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param directed: Compute the metrics for the directed graph</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :param multi: Compute the metrics for the multi graph</span>
+<span class="sd">    :type multi: bool</span>
+<span class="sd">    :param clean: Clean the DataFrame after computing the metrics</span>
+<span class="sd">    :type clean: bool</span>
+<span class="sd">    :return: Pandas dataframe with the metrics and values</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">multi</span><span class="p">:</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">directed</span> <span class="k">else</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">DiGraph</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">MultiGraph</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">directed</span> <span class="k">else</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">MultiDiGraph</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">betweeness_centrality</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">betweenness_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">betweeness_centrality</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+                          <span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;Betweeness Centrality&#39;</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;Betweeness Centrality&#39;</span><span class="p">])</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Betweeness Centrality&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">clean_df</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">compute_load_centrality</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Compute the load centrality for the NetworkGraphs object</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs object</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param directed: Compute the metrics for the directed graph</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :param multi: Compute the metrics for the multi graph</span>
+<span class="sd">    :type multi: bool</span>
+<span class="sd">    :param clean: Clean the DataFrame after computing the metrics</span>
+<span class="sd">    :type clean: bool</span>
+<span class="sd">    :return: Pandas dataframe with the metrics and values</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">multi</span><span class="p">:</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">directed</span> <span class="k">else</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">DiGraph</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">MultiGraph</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">directed</span> <span class="k">else</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">MultiDiGraph</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">load_centrality</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">load_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">load_centrality</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+                          <span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;Load Centrality&#39;</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;Load Centrality&#39;</span><span class="p">])</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Load Centrality&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">clean_df</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+<span class="c1"># ------------------------------ NODES METRICS ------------------------------------------</span>
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">compute_nodes_degree</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Compute the node degree for the NetworkGraphs object</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs object</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param directed: Compute the metrics for the directed graph</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :param clean: Clean the DataFrame after computing the metrics</span>
+<span class="sd">    :type clean: bool</span>
+<span class="sd">    :return: Pandas dataframe with the metrics and values</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">directed</span> <span class="k">else</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">DiGraph</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">degree</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">degree</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">degree</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;Degree&#39;</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;Degree&#39;</span><span class="p">])</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Degree&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">clean_df</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">compute_kcore</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Compute the k-core for the NetworkGraphs object</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs object</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param directed: Compute the metrics for the directed graph</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :param clean: Clean the DataFrame after computing the metrics</span>
+<span class="sd">    :type clean: bool</span>
+<span class="sd">    :return: Pandas dataframe with the metrics and values</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">directed</span> <span class="k">else</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">DiGraph</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">kcore</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">core_number</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">kcore</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;K-Core&#39;</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;K-Core&#39;</span><span class="p">])</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;K-Core&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">clean_df</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">compute_triangles</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Compute the triangle for the NetworkGraphs object</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs object</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param directed: Compute the metrics for the directed graph</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :param clean: Clean the DataFrame after computing the metrics</span>
+<span class="sd">    :type clean: bool</span>
+<span class="sd">    :return: Pandas dataframe with the metrics and values</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">directed</span> <span class="k">else</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">DiGraph</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">triangle</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">triangles</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">triangle</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;Triangle&#39;</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;Triangle&#39;</span><span class="p">])</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Triangle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">clean_df</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">compute_page_rank</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Compute the page rank for the NetworkGraphs object</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs object</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param directed: Compute the metrics for the directed graph</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :param clean: Clean the DataFrame after computing the metrics</span>
+<span class="sd">    :type clean: bool</span>
+<span class="sd">    :return: Pandas dataframe with the metrics and values</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">directed</span> <span class="k">else</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">DiGraph</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">page_rank</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">pagerank</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">page_rank</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;Page Rank&#39;</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;Page Rank&#39;</span><span class="p">])</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Page Rank&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">clean_df</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+<span class="c1"># --------------------------- CONVERT TO HISTOGRAM ---------------------------------------</span>
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">compute_CDF</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Compute the Cumulative Distribution Function for a given column</span>
+<span class="sd">    :param df: Pandas dataframe</span>
+<span class="sd">    :type df: pd.DataFrame</span>
+<span class="sd">    :param column: Column name</span>
+<span class="sd">    :type column: str</span>
+<span class="sd">    :return: Pandas dataframe with the CDF</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">column</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CDF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">compute_CCDF</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Compute the Complementary Cumulative Distribution Function for a given column</span>
+<span class="sd">    :param df: Pandas dataframe</span>
+<span class="sd">    :type df: pd.DataFrame</span>
+<span class="sd">    :param column: Column name</span>
+<span class="sd">    :type column: str</span>
+<span class="sd">    :return: Pandas dataframe with the CCDF</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">compute_CDF</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CCDF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;CDF&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+<span class="c1"># ----------------------------------- OTHERS ---------------------------------------------</span>
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">get_shortest_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">directed</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">nx</span><span class="o">.</span><span class="n">shortest_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">nx</span><span class="o">.</span><span class="n">shortest_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">)</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="export_to_csv"><a class="viewcode-back" href="../metrics.html#metrics.export_to_csv">[docs]</a><span class="k">def</span> <span class="nf">export_to_csv</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Export the dataframe to a csv file</span>
+<span class="sd">    :param df: Pandas dataframe</span>
+<span class="sd">    :param filename: Filename</span>
+<span class="sd">    :return: 1 if the file is exported</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">1</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="clean_df"><a class="viewcode-back" href="../metrics.html#metrics.clean_df">[docs]</a><span class="k">def</span> <span class="nf">clean_df</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Clean the dataframe by rounding the values to 6 decimals and shortening the strings to 12 characters</span>
+<span class="sd">    :param df: Pandas dataframe to clean</span>
+<span class="sd">    :type df: pd.DataFrame</span>
+<span class="sd">    :return: Pandas dataframe cleaned</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># if the columns is float round it to 6 decimals</span>
+    <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="c1"># if the columns is a number round it to 6 decimals</span>
+        <span class="k">if</span> <span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]):</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="nb">object</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;...&#39;</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">15</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;0x&#39;</span> <span class="k">else</span> <span class="n">x</span><span class="p">[:</span><span class="mi">12</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">df</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Alpha Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

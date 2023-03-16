@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NetworkGraphs &mdash; AlphaTeam 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AlphaTeam
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AlphaTeam</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">NetworkGraphs</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for NetworkGraphs</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Imports</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;../src&#39;</span><span class="p">))</span>
+<span class="kn">from</span> <span class="nn">pandas.core.dtypes.common</span> <span class="kn">import</span> <span class="n">is_numeric_dtype</span>
+<span class="kn">from</span> <span class="nn">preprocessing</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">visualisation</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pandas.api.types</span> <span class="kn">import</span> <span class="n">is_numeric_dtype</span>
+<span class="kn">import</span> <span class="nn">scipy.io</span> <span class="k">as</span> <span class="nn">sio</span>
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Author: Alpha Team Group Project</span>
+<span class="sd">Date: March 2023</span>
+<span class="sd">Purpose: Class containing the NetworkX graphs</span>
+
+<span class="sd">----------------------------------------------------------------------------------------</span>
+
+<span class="sd">INFORMATION ABOUT GRAPH ATTRIBUTES</span>
+
+<span class="sd">NODES:</span>
+<span class="sd">- &#39;pos&#39;: position of the node (x, y) as a tuple, POS IS A DICTIONARY WITH LAYOUTS AS KEYS AND POSITIONS AS VALUES</span>
+<span class="sd">    - pos[&#39;map&#39;] = (lat, long)</span>
+<span class="sd">    - pos[&#39;neato&#39;] = (x, y)</span>
+<span class="sd">    - pos[&#39;twopi&#39;] = (x, y)</span>
+<span class="sd">    - pos[&#39;sfdp&#39;] = (x, y)</span>
+<span class="sd">    </span>
+<span class="sd">EDGES:</span>
+<span class="sd">- &#39;weight&#39;: value of the edge (float) for value graphs, WEIGHT IS A DICTIONARY WITH GRAPH AS KEYS AND WEIGHTS AS VALUES</span>
+<span class="sd">    - weight[&#39;MultiDiGraph&#39;] = float</span>
+<span class="sd">    - weight[&#39;MultiGraph&#39;] = float</span>
+<span class="sd">    - weight[&#39;DiGraph&#39;] = float</span>
+<span class="sd">    - weight[&#39;Graph&#39;] = float</span>
+<span class="sd">- &#39;start&#39;: time of the start of the edge (int) for temporal graphs</span>
+<span class="sd">- &#39;end&#39;: time of the end of the edge (int) for temporal graphs</span>
+<span class="sd">- &#39;color&#39;: color of the edge (string), COLOR IS A DICTIONARY WITH GRAPH AS KEYS AND COLORS AS VALUES</span>
+<span class="sd">    - color[&#39;MultiDiGraph&#39;] = string</span>
+<span class="sd">    - color[&#39;MultiGraph&#39;] = string</span>
+<span class="sd">    - color[&#39;DiGraph&#39;] = string</span>
+<span class="sd">    - color[&#39;Graph&#39;] = string</span>
+
+<span class="sd">GRAPHS:</span>
+<span class="sd">- &#39;name&#39;: name of the graph (string)</span>
+<span class="sd">- &#39;type&#39;: type of the graph (string) - &#39;RAILWAY&#39;, &#39;CRYPTO&#39; &#39;MTX&#39; or &#39;CUSTOM&#39;</span>
+<span class="sd">- &#39;temporal&#39;: True if the graph is temporal, False otherwise</span>
+<span class="sd">- &#39;spatial&#39;: True if the graph is spatial, False otherwise</span>
+<span class="sd">- &#39;weighted&#39;: True if the graph is weighted, False otherwise</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="NetworkGraphs"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs">[docs]</a><span class="k">class</span> <span class="nc">NetworkGraphs</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class containing the NetworkX graphs wrapping functionalities to generalise the use of the MultiDiGraph,</span>
+<span class="sd">    MultiGraph, DiGraph and Graph. This class store attributes of the graphs to allow effective use of the graphs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -----------------------------------------------------------------------------------------------------------------</span>
+    <span class="c1"># ---------------------------------------------- CONSTRUCTOR ------------------------------------------------------</span>
+    <span class="c1"># -----------------------------------------------------------------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">session_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temporal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">spatial</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor of the NetworkGraphs class. It creates the NetworkX graphs and store the attributes of the graphs.</span>
+
+<span class="sd">        File format accepted:</span>
+<span class="sd">            - .csv</span>
+<span class="sd">            - .mtx</span>
+<span class="sd">            - .txt</span>
+<span class="sd">        Type accepted:</span>
+<span class="sd">            - &#39;RAILWAY&#39;</span>
+<span class="sd">            - &#39;CRYPTO&#39;</span>
+<span class="sd">            - &#39;MTX&#39;</span>
+<span class="sd">            - &#39;CUSTOM&#39;</span>
+<span class="sd">        :param filename: Path to the file containing the dataset to be loaded</span>
+<span class="sd">        :type filename: str</span>
+<span class="sd">        :param type: Type of the dataset to be loaded</span>
+<span class="sd">        :type type: str</span>
+<span class="sd">        :param session_folder: Path to the folder where the session is stored</span>
+<span class="sd">        :type session_folder: str</span>
+<span class="sd">        :param temporal: True if the graph is temporal, False otherwise</span>
+<span class="sd">        :type temporal: bool</span>
+<span class="sd">        :param spatial: True if the graph is spatial, False otherwise</span>
+<span class="sd">        :type spatial: bool</span>
+<span class="sd">        :param weighted: True if the graph is weighted, False otherwise</span>
+<span class="sd">        :type weighted: bool</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: None</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; graph1 = NetworkGraphs(&#39;data/RAILWAY/RAILWAY.csv&#39;, &#39;RAILWAY&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; graph2 = NetworkGraphs(&#39;data/CRYPTO/CRYPTO.csv&#39;, &#39;CRYPTO&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; graph3 = NetworkGraphs(&#39;data/MTX/MTX.mtx&#39;, &#39;MTX&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; graph4 = NetworkGraphs(&#39;data/CUSTOM/CUSTOM.csv&#39;, &#39;CUSTOM&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_lat</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_lat</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_long</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_long</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temporal</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spatial</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weighted</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DiGraph</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MultiDiGraph</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Graph</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MultiGraph</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mid_lat</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mid_long</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session_folder</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_type</span><span class="p">(</span><span class="nb">type</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_session_folder</span><span class="p">(</span><span class="n">session_folder</span><span class="p">)</span>
+
+        <span class="c1"># ---------------------------------------------- RAILWAY -------------------------------------------------------</span>
+
+        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;RAILWAY&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_spatial</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_temporal</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_weighted</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MultiDiGraph</span> <span class="o">=</span> <span class="n">preprocess_railway</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MultiGraph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DiGraph</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;MultiDiGraph&#39;</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span>
+                           <span class="s1">&#39;MultiGraph&#39;</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span>
+                           <span class="s1">&#39;DiGraph&#39;</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span>
+                           <span class="s1">&#39;Graph&#39;</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()}</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">low_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># ---------------------------------------------- CRYPTO --------------------------------------------------------</span>
+
+        <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;CRYPTO&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_spatial</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_temporal</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_weighted</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MultiDiGraph</span> <span class="o">=</span> <span class="n">preprocess_crypto</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MultiGraph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DiGraph</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">low_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># ---------------------------------------------- CUSTOM --------------------------------------------------------</span>
+
+        <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;MTX&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_spatial</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_temporal</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_weighted</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MultiDiGraph</span> <span class="o">=</span> <span class="n">preprocess_mtx</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MultiGraph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DiGraph</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="n">mtx</span> <span class="o">=</span> <span class="n">sio</span><span class="o">.</span><span class="n">mmread</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">coo</span> <span class="o">=</span> <span class="n">mtx</span><span class="o">.</span><span class="n">tocoo</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="n">coo</span><span class="o">.</span><span class="n">row</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="n">coo</span><span class="o">.</span><span class="n">col</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="n">coo</span><span class="o">.</span><span class="n">data</span><span class="p">})</span>
+
+        <span class="c1"># ---------------------------------------------- CUSTOM --------------------------------------------------------</span>
+
+        <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;CUSTOM&#39;</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MultiDiGraph</span> <span class="o">=</span> <span class="n">preprocess_custom</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MultiGraph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DiGraph</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">low_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s1">&#39;lat1&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">&#39;lon1&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_spatial</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s1">&#39;start&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_temporal</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s1">&#39;weight&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_weighted</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s1">&#39;color&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;MultiDiGraph&#39;</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span>
+                               <span class="s1">&#39;MultiGraph&#39;</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span>
+                               <span class="s1">&#39;DiGraph&#39;</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span>
+                               <span class="s1">&#39;Graph&#39;</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()}</span>
+
+        <span class="c1"># ---------------------------------------------- SPATIAL -------------------------------------------------------</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># print(&#39;start layout computation&#39;)</span>
+        <span class="c1"># self.pos[&#39;neato&#39;] = nx.nx_agraph.graphviz_layout(self.Graph, prog=&#39;neato&#39;)</span>
+        <span class="c1"># print(&#39;neato&#39;)</span>
+        <span class="c1"># self.pos[&#39;dot&#39;] = nx.nx_agraph.graphviz_layout(self.Graph, prog=&#39;dot&#39;)</span>
+        <span class="c1"># print(&#39;dot&#39;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="s1">&#39;twopi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">nx_agraph</span><span class="o">.</span><span class="n">graphviz_layout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">prog</span><span class="o">=</span><span class="s1">&#39;twopi&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;twopi&#39;</span><span class="p">)</span>
+        <span class="c1"># self.pos[&#39;fdp&#39;] = nx.nx_agraph.graphviz_layout(self.Graph, prog=&#39;fdp&#39;)</span>
+        <span class="c1"># print(&#39;fdp&#39;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="s1">&#39;sfdp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">nx_agraph</span><span class="o">.</span><span class="n">graphviz_layout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">prog</span><span class="o">=</span><span class="s1">&#39;sfdp&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sfdp&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_spatial</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="s1">&#39;pos&#39;</span><span class="p">)</span>
+            <span class="n">location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+            <span class="c1"># add space around the graph</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_min_long</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_min_lat</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_max_long</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_max_lat</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_mid_long</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_mid_lat</span><span class="p">()</span>
+
+        <span class="c1"># ---------------------------------------------- TEMPORAL ------------------------------------------------------</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_temporal</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">,</span> <span class="s1">&#39;start&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">,</span> <span class="s1">&#39;end&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+        <span class="c1"># ---------------------------------------------- WEIGHTED ------------------------------------------------------</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_weighted</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Graph&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
+                            <span class="s1">&#39;MultiGraph&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
+                            <span class="s1">&#39;DiGraph&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
+                            <span class="s1">&#39;MultiDiGraph&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">())}</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">min_weight</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_weight</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">standardize_weights</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">clean_dataset</span><span class="p">()</span>
+
+    <span class="c1"># ------------------------------------------------------------------------------------------------------------------</span>
+    <span class="c1"># ---------------------------------------------- END CONSTRUCTOR ---------------------------------------------------</span>
+    <span class="c1"># ------------------------------------------------------------------------------------------------------------------</span>
+
+    <span class="c1"># ---------------------------------------------- ATTRIBUTES --------------------------------------------------------</span>
+
+<div class="viewcode-block" id="NetworkGraphs.standardize_weights"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.standardize_weights">[docs]</a>    <span class="k">def</span> <span class="nf">standardize_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Standardize the weights of the graph between 0 and 1</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_weighted</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">weight</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">weight</span><span class="p">]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">weight</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_weight</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_weight</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_weight</span><span class="p">)</span> <span class="k">for</span> <span class="n">weight</span> <span class="ow">in</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">weight</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The graph is not weighted&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># ------------------------------------------------------------------------------------------------------------------</span>
+    <span class="c1"># ---------------------------------------------- METHODS -----------------------------------------------------------</span>
+    <span class="c1"># ------------------------------------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="NetworkGraphs.clean_dataset"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.clean_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">clean_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Clean the dataframe by formatting the columns values and rounding the float values for display</span>
+<span class="sd">        purpose</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># if the columns is float round it to 6 decimals</span>
+        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="c1"># if the columns is a number round it to 6 decimals</span>
+            <span class="k">if</span> <span class="n">is_numeric_dtype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="nb">object</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;...&#39;</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">15</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;0x&#39;</span> <span class="k">else</span> <span class="n">x</span><span class="p">[:</span><span class="mi">12</span><span class="p">])</span></div>
+
+    <span class="c1"># ---------------------------------------------- SETTERS -----------------------------------------------------------</span>
+<div class="viewcode-block" id="NetworkGraphs.set_name"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.set_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Set the name of the graph</span>
+<span class="sd">        :param name: the name of the graph</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.set_type"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.set_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_type</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Set the type of the graph</span>
+<span class="sd">        Data type can be</span>
+<span class="sd">         - &#39;RAILWAY&#39;</span>
+<span class="sd">         - &#39;CRYPTO&#39;</span>
+<span class="sd">         - &#39;CUSTOM&#39;</span>
+<span class="sd">        :param data_type:</span>
+<span class="sd">        :type data_type: str</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">data_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;RAILWAY&#39;</span><span class="p">,</span> <span class="s1">&#39;CRYPTO&#39;</span><span class="p">,</span> <span class="s1">&#39;CUSTOM&#39;</span><span class="p">,</span> <span class="s1">&#39;MTX&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">data_type</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The type must be &#39;RAILWAY&#39;, &#39;CRYPTO&#39; or &#39;CUSTOM&#39;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.set_max_lat"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.set_max_lat">[docs]</a>    <span class="k">def</span> <span class="nf">set_max_lat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_lat</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Set the maximum latitude of the graph</span>
+<span class="sd">        :param max_lat: the maximum latitude of the graph</span>
+<span class="sd">        :type max_lat: float</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_lat</span> <span class="o">=</span> <span class="n">max_lat</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.set_temporal"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.set_temporal">[docs]</a>    <span class="k">def</span> <span class="nf">set_temporal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temporal</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Set the temporal attribute of the graph</span>
+<span class="sd">        :param temporal: True if the graph is temporal, False otherwise</span>
+<span class="sd">        :type temporal: bool</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temporal</span> <span class="o">=</span> <span class="n">temporal</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.set_min_lat"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.set_min_lat">[docs]</a>    <span class="k">def</span> <span class="nf">set_min_lat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_lat</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Set the minimum latitude of the graph</span>
+<span class="sd">        :param min_lat: the minimum latitude of the graph</span>
+<span class="sd">        :type min_lat: float</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_lat</span> <span class="o">=</span> <span class="n">min_lat</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.set_spatial"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.set_spatial">[docs]</a>    <span class="k">def</span> <span class="nf">set_spatial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spatial</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Set the spatial attribute of the graph</span>
+<span class="sd">        :param spatial: True if the graph is spatial, False otherwise</span>
+<span class="sd">        :type spatial: bool</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spatial</span> <span class="o">=</span> <span class="n">spatial</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.set_weighted"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.set_weighted">[docs]</a>    <span class="k">def</span> <span class="nf">set_weighted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weighted</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Set the weighted attribute of the graph</span>
+<span class="sd">        :param weighted: True if the graph is weighted, False otherwise</span>
+<span class="sd">        :type weighted: bool</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weighted</span> <span class="o">=</span> <span class="n">weighted</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.set_min_long"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.set_min_long">[docs]</a>    <span class="k">def</span> <span class="nf">set_min_long</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_long</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Set the minimum longitude of the graph</span>
+<span class="sd">        :param min_long: the minimum longitude of the graph</span>
+<span class="sd">        :type min_long: float</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_long</span> <span class="o">=</span> <span class="n">min_long</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.set_max_long"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.set_max_long">[docs]</a>    <span class="k">def</span> <span class="nf">set_max_long</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_long</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Set the maximum longitude of the graph</span>
+<span class="sd">        :param max_long: the maximum longitude of the graph</span>
+<span class="sd">        :type max_long: float</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_long</span> <span class="o">=</span> <span class="n">max_long</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.set_mid_long"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.set_mid_long">[docs]</a>    <span class="k">def</span> <span class="nf">set_mid_long</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Set the middle longitude of the graph</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mid_long</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_long</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_long</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.set_mid_lat"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.set_mid_lat">[docs]</a>    <span class="k">def</span> <span class="nf">set_mid_lat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Set the middle latitude of the graph</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mid_lat</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_lat</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_lat</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.set_session_folder"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.set_session_folder">[docs]</a>    <span class="k">def</span> <span class="nf">set_session_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_folder</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Set the session folder of the graph</span>
+<span class="sd">        :param session_folder: the session folder of the graph</span>
+<span class="sd">        :type session_folder: str</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session_folder</span> <span class="o">=</span> <span class="n">session_folder</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.set_filename"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.set_filename">[docs]</a>    <span class="k">def</span> <span class="nf">set_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Set the filename of the graph</span>
+<span class="sd">        :param filename: the filename of the graph</span>
+<span class="sd">        :type filename: str</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span></div>
+
+    <span class="c1"># ---------------------------------------------- IS  -----------------------------------------------------------</span>
+
+<div class="viewcode-block" id="NetworkGraphs.is_temporal"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.is_temporal">[docs]</a>    <span class="k">def</span> <span class="nf">is_temporal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Return True if the graph is temporal, False otherwise</span>
+<span class="sd">        :return: True if the graph is temporal, False otherwise</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">temporal</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.is_spatial"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.is_spatial">[docs]</a>    <span class="k">def</span> <span class="nf">is_spatial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Return True if the graph is spatial, False otherwise</span>
+<span class="sd">        :return: True if the graph is spatial, False otherwise</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spatial</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.is_weighted"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.is_weighted">[docs]</a>    <span class="k">def</span> <span class="nf">is_weighted</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Return True if the graph is weighted, False otherwise</span>
+<span class="sd">        :return: True if the graph is weighted, False otherwise</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weighted</span></div>
+
+    <span class="c1"># ---------------------------------------------- GETTERS -----------------------------------------------------------</span>
+
+<div class="viewcode-block" id="NetworkGraphs.get_graph"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.get_graph">[docs]</a>    <span class="k">def</span> <span class="nf">get_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph_type</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Return the graph of the specified type</span>
+<span class="sd">        Graph type can be:</span>
+<span class="sd">            - &#39;DiGraph&#39;</span>
+<span class="sd">            - &#39;MultiDiGraph&#39;</span>
+<span class="sd">            - &#39;Graph&#39;</span>
+<span class="sd">            - &#39;MultiGraph&#39;</span>
+<span class="sd">        :param graph_type: the type of the graph</span>
+<span class="sd">        :type graph_type: str</span>
+<span class="sd">        :return: the graph of the specified type</span>
+<span class="sd">        :rtype: networkx.DiGraph or networkx.MultiDiGraph or networkx.Graph or networkx.MultiGraph</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">graph_type</span> <span class="o">==</span> <span class="s1">&#39;DiGraph&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DiGraph</span>
+        <span class="k">elif</span> <span class="n">graph_type</span> <span class="o">==</span> <span class="s1">&#39;MultiDiGraph&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">MultiDiGraph</span>
+        <span class="k">elif</span> <span class="n">graph_type</span> <span class="o">==</span> <span class="s1">&#39;Graph&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Graph</span>
+        <span class="k">elif</span> <span class="n">graph_type</span> <span class="o">==</span> <span class="s1">&#39;MultiGraph&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">MultiGraph</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The graph type must be &#39;DiGraph&#39;, &#39;MultiDiGraph&#39;, &#39;Graph&#39; or &#39;MultiGraph&#39;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.get_pos"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.get_pos">[docs]</a>    <span class="k">def</span> <span class="nf">get_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Return the position of the nodes</span>
+<span class="sd">        :return: the position of the nodes</span>
+<span class="sd">        :rtype: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_spatial</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The graph is not spatial&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.get_min_long"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.get_min_long">[docs]</a>    <span class="k">def</span> <span class="nf">get_min_long</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Return the minimum longitude of the graph</span>
+<span class="sd">        :return: the minimum longitude of the graph</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_long</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.get_max_long"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.get_max_long">[docs]</a>    <span class="k">def</span> <span class="nf">get_max_long</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Return the maximum longitude of the graph</span>
+<span class="sd">        :return: the maximum longitude of the graph</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_long</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.get_type"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.get_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Return the type of the graph</span>
+<span class="sd">        :return: the type of the graph</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.get_min_lat"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.get_min_lat">[docs]</a>    <span class="k">def</span> <span class="nf">get_min_lat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Return the minimum latitude of the graph</span>
+<span class="sd">        :return: the minimum latitude of the graph</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_lat</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.get_max_lat"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.get_max_lat">[docs]</a>    <span class="k">def</span> <span class="nf">get_max_lat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Return the maximum latitude of the graph</span>
+<span class="sd">        :return: the maximum latitude of the graph</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_lat</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.get_name"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Return the name of the graph</span>
+<span class="sd">        :return: the name of the graph</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.get_colors"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.get_colors">[docs]</a>    <span class="k">def</span> <span class="nf">get_colors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Return the colors of the graph</span>
+<span class="sd">        :return: the colors of the graph</span>
+<span class="sd">        :rtype: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">colors</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.get_weights"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.get_weights">[docs]</a>    <span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph_type</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Return the weights of the graph</span>
+<span class="sd">        :param graph_type: the type of the graph</span>
+<span class="sd">        :type graph_type: str</span>
+<span class="sd">        :return: the weights of the graph</span>
+<span class="sd">        :rtype: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_weighted</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">graph_type</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The graph is not weighted&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.get_start"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.get_start">[docs]</a>    <span class="k">def</span> <span class="nf">get_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Return the start of the graph</span>
+<span class="sd">        :return: the start of the graph</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_temporal</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The graph is not temporal&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.get_end"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.get_end">[docs]</a>    <span class="k">def</span> <span class="nf">get_end</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Return the end of the graph</span>
+<span class="sd">        :return: the end of the graph</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_temporal</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The graph is not temporal&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NetworkGraphs.get_df"><a class="viewcode-back" href="../NetworkGraphs.html#NetworkGraphs.NetworkGraphs.get_df">[docs]</a>    <span class="k">def</span> <span class="nf">get_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Return the dataframe of the graph</span>
+<span class="sd">        :return: the dataframe of the graph</span>
+<span class="sd">        :rtype: pandas.DataFrame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span></div>
+
+    <span class="c1"># ---------------------------------------------- PRINT -----------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Function: Return a string representation of the graph</span>
+<span class="sd">        :return: a string representation of the graph</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;Name: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Type: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_type</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Temporal: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">is_temporal</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Spatial: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_spatial</span><span class="p">())</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Alpha Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
