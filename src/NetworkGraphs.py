@@ -1,6 +1,10 @@
 # Imports
-from src.preprocessing import *
-from src.visualisation import *
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../src'))
+from pandas.core.dtypes.common import is_numeric_dtype
+from preprocessing import *
+from visualisation import *
 
 # ----------------------------------------------------------------------------------------
 """

@@ -1,11 +1,11 @@
 # FILE TO TEST THE FUNCTIONS IN THE SRC FOLDER
 import matplotlib.pyplot as plt
 
-from src.NetworkGraphs import NetworkGraphs
-from src.preprocessing import *
-from src.metrics import *
-from src.visualisation import *
-from src.machineLearning import *
+from NetworkGraphs import NetworkGraphs
+from preprocessing import *
+from metrics import *
+from visualisation import *
+from machineLearning import *
 import time
 
 networkGraph = NetworkGraphs('../datasets/Railway.csv', type="RAILWAY")
@@ -32,7 +32,7 @@ plot_hotspot(networkGraph)
 
 
 
-# customGraphs = NetworkGraphs('../datasets/Dune_Eth_transaction.csv', type="CRYPTO")
+# customGraphs = NetworkGraphs('../datasets/CRYPTO.csv', type="CRYPTO")
 # louvain_clustering(customGraphs)
 
 

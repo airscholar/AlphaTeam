@@ -5,15 +5,17 @@ Purpose: Visualisation for the NetworkX graphs
 """
 
 # ----------------------------------------------------------------------------------------
-
+import os
+import sys
+sys.path.insert(1, os.path.abspath('../..src'))
 import numpy as np
 
-import src.machineLearning as ml
-import src.metrics as m
-from src.utils import memoize
-from src.visualisation_src.ML_visualisation import *
-from src.visualisation_src.metrics_visualisation import *
-from src.visualisation_src.temporal_visualisation import *
+import machineLearning as ml
+import metrics as m
+from utils import memoize
+from visualisation_src.ML_visualisation import *
+from visualisation_src.metrics_visualisation import *
+from visualisation_src.temporal_visualisation import *
 
 
 # ----------------------------------------------------------------------------------------
@@ -23,9 +25,13 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map', plot=T
     """
     :Function: Plot the cluster for the given graph
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkX graph
     :param clusterType: Type of cluster
+    :type clusterType: String
     :param dynamic: Boolean to indicate if the plot is dynamic or not
+    :type dynamic: Boolean
     :param plot: Boolean to indicate if the html file should be generated
+    :type plot: Boolean
     :param layout: Layout of the plot
     :return:
     """

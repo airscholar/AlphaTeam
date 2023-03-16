@@ -11,7 +11,7 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 from pandas.api.types import is_numeric_dtype
-from src.utils import memoize
+from utils import memoize
 
 
 # ----------------------------------------------------------------------------------------

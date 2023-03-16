@@ -1,7 +1,10 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 from plotly import graph_objects as go
-from src.visualisation_src.utils_visualisation import *
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../'))
+from visualisation_src.utils_visualisation import *
 from tqdm import tqdm
 from itertools import zip_longest
 

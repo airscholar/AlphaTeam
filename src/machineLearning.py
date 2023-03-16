@@ -32,7 +32,7 @@ def get_hot_spot(networkx_):
 
 def create_comm_colors(communities):
     """
-    Create a list of colors for the communities
+    :Function: Create a list of colors for the communities
     :param communities: list of communities
     :return: list of colors
     """
@@ -47,7 +47,7 @@ def create_comm_colors(communities):
 # ----------------------------------------------------------------------------------------
 def create_comm_dataframe(communities, colors):
     """
-    Create a dataframe with the Node, communities ID and their colors
+    :Function: Create a dataframe for the communities
     :param communities: list of communities
     :param colors: list of colors
     :return: dataframe
@@ -66,7 +66,7 @@ def create_comm_dataframe(communities, colors):
 # ----------------------------------------------------------------------------------------
 def louvain_clustering(networkGraphs):
     """
-    Detect communities based on Louvain clustering
+    :Function: Detect communities based on Louvain
     :param networkGraphs: NetworkGraphs
     :return: dataframe
     """
@@ -137,8 +137,9 @@ def girvan_newman_clustering(networkGraphs):
 
 def edge_betweenness_clustering(networkGraphs):
     """
-    Detect communities based on edge betweenness
+    :Function: Detect communities based on edge betweenness
     :param networkGraphs: NetworkGraphs
+    :type networkGraphs: NetworkGraphs
     :return: dataframe
     """
     communities = list(nx_comm.centrality.girvan_newman(networkGraphs.Graph))

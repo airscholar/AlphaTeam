@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
-from src.visualisation_src.utils_visualisation import *
-from src.utils import memoize
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../'))
+from visualisation_src.utils_visualisation import *
+from utils import memoize
 import networkx as nx
 
 # ----------------------------------------------------------------------------------------

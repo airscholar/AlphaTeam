@@ -1,9 +1,11 @@
 from itertools import zip_longest
 
 from tqdm import tqdm
-
-import src.machineLearning as ml
-from src.visualisation_src.utils_visualisation import *
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../'))
+import machineLearning as ml
+from visualisation_src.utils_visualisation import *
 
 
 # ----------------------------------------------------------------------------------------
