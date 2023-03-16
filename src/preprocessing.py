@@ -10,7 +10,6 @@
 import networkx as nx
 import pandas as pd
 import scipy.io as sio
-from src.NetworkGraphs import NetworkGraphs
 
 # ----------------------------------------------------------------------------------------
 

@@ -20,7 +20,7 @@ def generate_static_cluster(networkGraphs, df_, filename, layout_='map'):  # USI
 
     if layout_ == 'map':
         node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
-                               marker=dict(showscale=False, size=5, color=[]))
+                                   marker=dict(showscale=False, size=5, color=[]))
     else:
         node_trace = go.Scatter(x=[], y=[], text=[], mode='markers', hoverinfo='text',
                                 marker=dict(showscale=False, size=5, color=[]))
@@ -46,6 +46,7 @@ def generate_static_cluster(networkGraphs, df_, filename, layout_='map'):  # USI
 
     fig.write_html(filename, auto_open=True)
     return fig
+
 
 # ----------------------------------------------------------------------------------------
 
