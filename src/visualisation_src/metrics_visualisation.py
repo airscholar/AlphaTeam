@@ -68,7 +68,7 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
 
     metrics_name = df_.columns[1]
     df_['std'] = (df_[metrics_name] - df_[metrics_name].min()) / (df_[metrics_name].max() - df_[metrics_name].min())
-    size_ = 5 / (df_['std'].mean())  # normalise the size of the nodes
+    size_ = 5 / df_['std'].mean()  # normalise the size of the nodes
 
     if layout_ == 'map':
         node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
