@@ -152,7 +152,7 @@ def plot_all_metrics(networkGraphs, metrics, directed=False, layout='map'):
     else:
         return ValueError('Please select a valid metric, either "centralities" or "nodes"')
 
-    filename = f"All_{metrics}_{directed}_{layout}.html"
+    filename = f"All_{metrics}_{'Directed' if directed else 'Undirected'}_{layout}.html"
     filepath = f"../application/{networkGraphs.session_folder}/{filename}"
 
     if not os.path.isfile(filepath):
