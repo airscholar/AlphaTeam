@@ -7,7 +7,7 @@ from pyvis import network as net
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def static_visualisation(networkGraphs, directed=True, multi=False, layout='map'):
+def static_visualisation(networkGraphs, filepath, directed=True, multi=False, layout_='map'):
     """
     :Function: Plot the NetworkX graph on as map
     :param networkGraphs: Network graphs
@@ -15,39 +15,43 @@ def static_visualisation(networkGraphs, directed=True, multi=False, layout='map'
     :param multi: for multi graphs
     :return: Matplotlib plot
     """
-    if not networkGraphs.is_spatial() and layout == 'map':
-        ValueError("Graph is not spatial with coordinates")
+    G = networkGraphs.Graph
 
-    if layout == 'map':
-        plot_map(networkGraphs)
+    if not networkGraphs.is_spatial() and layout_ == 'map':
+        return ValueError("Graph is not spatial with coordinates")
 
-    pos = networkGraphs.pos[layout]
+    pos = networkGraphs.pos[layout_]
 
-    if directed:
-        if multi:
-            nx.draw(networkGraphs.MultiDiGraph, pos, with_labels=False, node_size=1,
-                    edge_color=networkGraphs.colors['MultiDiGraph'], node_color='red', width=0.5)
-        else:
-            nx.draw(networkGraphs.DiGraph, pos, with_labels=False, node_size=1,
-                    edge_color=networkGraphs.colors['DiGraph'], node_color='red', width=0.5)
+    if layout_ == 'map':
+        node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
+                                   marker=dict(showscale=True, color='black', size=5))
     else:
-        if multi:
-            nx.draw(networkGraphs.MultiGraph, pos, with_labels=False, node_size=1,
-                    width=0.5)
+        node_trace = go.Scatter(x=[], y=[], text=[], mode='markers', hoverinfo='text',
+                                marker=dict(showscale=True, color='black',size=5))
+
+    edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
+
+    for node in tqdm(G.nodes()):
+        x, y = pos[node]
+        if layout_ == 'map':
+            node_trace['lon'] += tuple([x])
+            node_trace['lat'] += tuple([y])
         else:
-            nx.draw(networkGraphs.Graph, pos, with_labels=False, node_size=1, node_color='red',
-                    width=0.5)
+            node_trace['x'] += tuple([x])
+            node_trace['y'] += tuple([y])
 
-    # plot axes
-    plt.axis('on')
-    plt.title(f"{networkGraphs.name} using {layout}")
+    layout = get_layout(networkGraphs, title=f"Visualisation using {layout_} layout", layout_=layout_)
+    fig = go.Figure(data=[edge_trace, node_trace],
+                    layout=layout)
 
-    return plt
+    fig.write_html(filepath, auto_open=True)
+
+    return fig
 
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def dynamic_visualisation(networkGraphs, directed=True, multi=False):
+def dynamic_visualisation(networkGraphs, filepath, directed=True, multi=False):
     """
     :Function: Plot the NetworkX graph on a dynamic map using pyvis
     :param networkGraphs: Network graphs
@@ -75,7 +79,7 @@ def dynamic_visualisation(networkGraphs, directed=True, multi=False):
     Net.options.physics.use_force_atlas_2based(
         params={'central_gravity': 0.01, 'gravity': -50, 'spring_length': 100, 'spring_strength': 0.08, 'damping': 0.4,
                 'overlap': 0})
-    filename = f"Dynamic_{directed}_{multi}.html"
-    Net.write_html(filename)
+
+    Net.write_html(filepath)
 
     return Net
