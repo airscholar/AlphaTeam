@@ -2,26 +2,24 @@ import matplotlib.pyplot as plt
 from src.visualisation_src.utils_visualisation import *
 from src.utils import memoize
 import networkx as nx
+from pyvis import network as net
 
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def static_visualisation(networkGraphs, title, directed=True, multi=False, background=True, edges=True, layout='map'):
+def static_visualisation(networkGraphs, directed=True, multi=False, layout='map'):
     """
-    :Function: Plot the NetworkX graph on a map
+    :Function: Plot the NetworkX graph on as map
     :param networkGraphs: Network graphs
-    :param title: Title of the plot
     :param directed: Boolean to indicate if the graph is directed or not
     :param multi: for multi graphs
-    :param background: Boolean to indicate if the background is to be plotted or not
-    :param edges: Boolean to indicate if the edges are to be plotted or not
     :return: Matplotlib plot
     """
     if not networkGraphs.is_spatial() and layout == 'map':
         ValueError("Graph is not spatial with coordinates")
 
     if layout == 'map':
-        plot_map(networkGraphs, background=background, edges=edges)
+        plot_map(networkGraphs)
 
     pos = networkGraphs.pos[layout]
 
@@ -42,6 +40,42 @@ def static_visualisation(networkGraphs, title, directed=True, multi=False, backg
 
     # plot axes
     plt.axis('on')
-    plt.title(title)
+    plt.title(f"{networkGraphs.name} using {layout}")
 
     return plt
+
+# ----------------------------------------------------------------------------------------
+
+@memoize
+def dynamic_visualisation(networkGraphs, directed=True, multi=False):
+    """
+    :Function: Plot the NetworkX graph on a dynamic map using pyvis
+    :param networkGraphs: Network graphs
+    :param directed: Boolean to indicate if the graph is directed or not
+    :param multi: for multi graphs
+    :return: Plotly plot
+    """
+    if multi:
+        G = networkGraphs.MultiGraph if not directed else networkGraphs.MultiDiGraph
+    else:
+        G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
+
+    # noramlise the weights
+    weights = [G[u][v]['weight'] for u, v in G.edges()]
+    weights = [w / max(weights) * 25 for w in weights]
+
+    # change the weights
+    for i, (u, v) in enumerate(G.edges()):
+        G[u][v]['weight'] = weights[i]
+
+
+    Net = net.Network(height="750px", width="100%", bgcolor="grey", font_color="black")
+    Net.from_nx(G)
+    Net.show_buttons(filter_=['physics', 'edges', 'nodes'])
+    Net.options.physics.use_force_atlas_2based(
+        params={'central_gravity': 0.01, 'gravity': -50, 'spring_length': 100, 'spring_strength': 0.08, 'damping': 0.4,
+                'overlap': 0})
+    filename = f"Dynamic_{directed}_{multi}.html"
+    Net.write_html(filename)
+
+    return Net

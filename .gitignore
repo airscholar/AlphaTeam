@@ -2,7 +2,7 @@
 venv/
 .vscode/
 .ipynb_checkpoints/
-__pycache__
+__pycache__/
 *.mp4
 .env
 .DS_Store

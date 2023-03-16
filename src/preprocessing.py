@@ -7,46 +7,21 @@
 # ----------------------------------------------------------------------------------------
 
 # Imports
-from enum import Enum
-from typing import Type
 import networkx as nx
 import pandas as pd
-import scipy.io
-
-# ----------------------------------------------------------------------------------------
-
-class DatasetType(Enum):
-    RAILWAY = 'RAILWAY'
-    CRYPTO = 'CRYPTO'
-    CUSTOM = 'CUSTOM'
-
-
-# ----------------------------------------------------------------------------------------
-
-def preprocess(filename_: str, dataset_type: Type[DatasetType]):
-    """
-    :Function: Preprocess the dataset
-    :param filename_: Path to the file
-    :param dataset_type: Type of the dataset
-    :return: NetworkX graph
-    """
-    switch = {
-        DatasetType.RAILWAY: preprocess_railway,
-        DatasetType.CRYPTO: preprocess_crypto,
-        DatasetType.CUSTOM: preprocess_custom,
-    }
-    func = switch.get(dataset_type, lambda _: None)
-    return func(filename_)
-
+import scipy.io as sio
+from src.NetworkGraphs import NetworkGraphs
 
 # ----------------------------------------------------------------------------------------
 
 
 def preprocess_railway(filename_: str):
     """
-    :Function: Preprocess the railway dataset
-    :param filename_: Path to the file
+    :Function: Preprocess the railway dataset and create NetworkX graphs
+    :param filename_: Path to the file (csv)
+    :type filename_: str
     :return: NetworkX graphs (DiGraph and MultiDiGraph)
+    :rtype: list of NetworkX graphs
     """
     network = {}
     station_id = {}
@@ -60,7 +35,8 @@ def preprocess_railway(filename_: str):
         "T": "purple",
         "K": "orange",
         "Y": "pink",
-        "1": "grey", "2": "grey", "3": "grey", "4": "grey", "5": "grey", "6": "grey", "7": "grey", "8": "grey", "9": "grey"}
+        "1": "grey", "2": "grey", "3": "grey", "4": "grey", "5": "grey", "6": "grey", "7": "grey", "8": "grey",
+        "9": "grey"}
 
     with open(filename_, 'r') as f:
         excluded = 0
@@ -80,13 +56,11 @@ def preprocess_railway(filename_: str):
             try:
                 dep_time = int(dep_time.split(":")[0]) * 60 + int(dep_time.split(":")[1])
             except:
-                # print(f"Converting {dep_time} to {int(float(dep_time) * 24 * 60)}")
                 dep_time = int(float(dep_time) * 24 * 60)
 
             try:
                 arr_time = int(arr_time.split(":")[0]) * 60 + int(arr_time.split(":")[1])
             except:
-                # print(f"Converting {arr_time} to {int(float(arr_time) * 24 * 60)}")
                 arr_time = int(float(arr_time) * 24 * 60)
 
             if date == "Day 2":
@@ -145,27 +119,25 @@ def preprocess_railway(filename_: str):
 
 def create_multi_DiGraph_railway(network, station_id):
     """
-    :Function: Create a MultiDiGraph from the railway dataset
+    :Function: Create a MultiDiGraph from the railway dataset JSON object
     :param network: JSON object of the railway dataset
+    :type network: dict
     :param station_id: Dictionary of station id per location
+    :type station_id: dict
     :return: NetworkX MultiDiGraph
+    :rtype: NetworkX MultiDiGraph
     """
     multi_graph = nx.MultiDiGraph()
 
-    # add nodes to the graph
     for stations in network:
         for station in network[stations]:
-            # print(station)
-            # add note with the localisation for visualization
             multi_graph.add_node(station['id'], pos=(station['lon'], station['lat']))
-
             from_node = station['id']
 
             if type(station['to']) is tuple:
-                # if the 'to' value is a tuple, create a new node
                 to_node = station_id[station['to']]
-                # add time interval to the edge
-                multi_graph.add_edge(from_node, to_node, start=station['start'], end=station['end'], color=station['color'], weight=1)
+                multi_graph.add_edge(from_node, to_node, start=station['start'], end=station['end'],
+                                     color=station['color'], weight=1)
             else:
                 continue
 
@@ -177,9 +149,12 @@ def create_multi_DiGraph_railway(network, station_id):
 
 def convert_to_DiGraph(multi_graph):
     """
-    :Function: Convert a MultiDiGraph to a DiGraph with the same nodes and edges
+    :Function: Create a DiGraph from a MultiDiGraph with the same nodes and edges containing the sum of the weights,
+    and conserving the first edge's attributes
     :param multi_graph: NetworkX MultiDiGraph
+    :type multi_graph: NetworkX MultiDiGraph
     :return: NetworkX DiGraph
+    :rtype: NetworkX DiGraph
     """
     g_directed = nx.DiGraph()
     for u, data in multi_graph.nodes(data=True):
@@ -206,9 +181,11 @@ def convert_to_DiGraph(multi_graph):
 
 def convert_to_undirected(g_directed):
     """
-    :Function: Convert a DiGraph to an undirected graph
+    :Function: Convert a DiGraph to an undirected graph using NetworkX to_undirected() function
     :param g_directed: NetworkX DiGraph
+    :type g_directed: NetworkX DiGraph
     :return: NetworkX Graph
+    :rtype: NetworkX Graph
     """
     return g_directed.to_undirected()
 
@@ -218,9 +195,17 @@ def convert_to_undirected(g_directed):
 
 def create_temporal_subgraph(networkGraphs, start_time, end_time, step):
     """
-    :Function: Create a temporal subgraph for each minute of the 3 day
-    :param networkx: NetworkX Digraph
-    :return: List of NetworkX Digraphs (one for each minute)
+    :Function: Create a temporal subgraph from a NetworkGraphs object using the start_time, end_time and step parameters
+    :param networkGraphs: Custom NetworkGraphs object
+    :type networkGraphs: NetworkGraphs
+    :param start_time: Start time of the temporal subgraph
+    :type start_time: int
+    :param end_time: End time of the temporal subgraph
+    :type end_time: int
+    :param step: Step size of the temporal subgraph
+    :type step: int
+    :return: List of NetworkX DiGraphs
+    :rtype: list
     """
     temporal_graphs = []
     for i in range(start_time, end_time, step):
@@ -241,7 +226,9 @@ def create_temporal_subgraph(networkGraphs, start_time, end_time, step):
 
         temporal_graphs.append(G)
 
-        print(f"\rCreating temporal graphs: {i-start_time+1}/{end_time-start_time} ({(i-start_time+1)/(end_time-start_time)*100:.2f}%)", end="")
+        print(
+            f"\rCreating temporal graphs: {i - start_time + 1}/{end_time - start_time} ({(i - start_time + 1) / (end_time - start_time) * 100:.2f}%)",
+            end="")
     return temporal_graphs
 
 
@@ -250,9 +237,11 @@ def create_temporal_subgraph(networkGraphs, start_time, end_time, step):
 
 def preprocess_crypto(filename_: str):
     """
-    :Function: Preprocess the crypto dataset
+    :Function: Preprocess the crypto dataset and return a NetworkX DiGraph and MultiDiGraph
     :param filename_: Path to the crypto dataset
-    :return: List of NetworkX DiGraphs and MultiDiGraphs
+    :type filename_: str
+    :return: List of NetworkX DiGraph and MultiDiGraph
+    :rtype: list
     """
     df = pd.read_csv(filename_)
 
@@ -269,17 +258,19 @@ def preprocess_crypto(filename_: str):
 
     return [DiGraph, MultiDiGraph]
 
+
 # ----------------------------------------------------------------------------------------
 
 
 def preprocess_mtx(filename_: str):
     """
-    :Function: Preprocess the mtx dataset
+    :Function: Preprocess the mtx dataset and return a NetworkX DiGraph and MultiDiGraph
     :param filename_: Path to the mtx dataset
-    :return: List of NetworkX DiGraphs and MultiDiGraphs
+    :type filename_: str
+    :return: List of NetworkX DiGraph and MultiDiGraph
+    :rtype: list
     """
-    
-    mtx = scipy.io.mmread(filename_)
+    mtx = sio.mmread(filename_)
 
     MultiDiGraph = nx.MultiDiGraph(mtx)
     DiGraph = convert_to_DiGraph(MultiDiGraph)
@@ -289,13 +280,15 @@ def preprocess_mtx(filename_: str):
 
     return [DiGraph, MultiDiGraph]
 
-def preprocess_custom(filename_:str):
+# ----------------------------------------------------------------------------------------
+
+def preprocess_custom(filename_: str):
     """
-    :Function: Preprocess the custom dataset
-    :param Dataset must have the following columns:
+    :Function: Preprocess the custom dataset and return a NetworkX DiGraph and MultiDiGraph
+    Dataset must have the following columns:
         - from: Source node
         - to: Target node
-    :param Dataset could have the following columns:
+    Dataset could have the following columns:
         - weight: Edge weight
         - start: Start time of the edge
         - end: End time of the edge
@@ -305,7 +298,9 @@ def preprocess_custom(filename_:str):
         - lat2: Latitude of the target node
         - lon2: Longitude of the target node
     :param filename_: Path to the custom dataset
-    :return: List of NetworkX DiGraphs and MultiDiGraphs
+    :type filename_: str
+    :return: List of NetworkX DiGraph and MultiDiGraph
+    :rtype: list
     """
     df = pd.read_csv(filename_)
     df.sort_values(by=['from', 'to'], inplace=True)
