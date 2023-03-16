@@ -190,18 +190,18 @@ def compute_metrics(networkx_):
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_node_centralities(networkGraphs, directed=True, multi=True):
+def compute_node_centralities(networkGraphs, directed=True, multi=True, clean=True):
     """
     :Function: Compute the node metrics for the NetworkX graph
     :param networkGraphs: Network Graphs
     :param directed: Boolean
     :return: Pandas dataframe with the metrics and values
     """
-    degree_centrality = compute_degree_centrality(networkGraphs, directed=directed, multi=multi)
-    eigen_centrality = compute_eigen_centrality(networkGraphs, directed=directed, multi=multi)
-    closeness_centrality = compute_closeness_centrality(networkGraphs, directed=directed, multi=multi)
-    betweenness_centrality = compute_betweeness_centrality(networkGraphs, directed=directed, multi=multi)
-    load_centrality = compute_load_centrality(networkGraphs, directed=directed, multi=multi)
+    degree_centrality = compute_degree_centrality(networkGraphs, directed=directed, multi=multi, clean=clean)
+    eigen_centrality = compute_eigen_centrality(networkGraphs, directed=directed, multi=multi, clean=clean)
+    closeness_centrality = compute_closeness_centrality(networkGraphs, directed=directed, multi=multi, clean=clean)
+    betweenness_centrality = compute_betweeness_centrality(networkGraphs, directed=directed, multi=multi, clean=clean)
+    load_centrality = compute_load_centrality(networkGraphs, directed=directed, multi=multi, clean=clean)
 
     df = pd.merge(degree_centrality, eigen_centrality, how='inner', on='Node')
     df = pd.merge(df, closeness_centrality, how='inner', on='Node')
@@ -213,17 +213,17 @@ def compute_node_centralities(networkGraphs, directed=True, multi=True):
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_node_metrics(networkGraphs, directed=True):
+def compute_node_metrics(networkGraphs, directed=True, clean=True):
     """
     :Function: Compute the node metrics for the NetworkX graph
     :param networkGraphs: Network Graphs
     :param directed: Boolean
     :return: Pandas dataframe with the metrics and values
     """
-    kcore = compute_kcore(networkGraphs, directed=directed)
-    triangle = compute_triangles(networkGraphs, directed=directed)
-    degree = compute_nodes_degree(networkGraphs, directed=directed)
-    pagerank = compute_page_rank(networkGraphs, directed=directed)
+    kcore = compute_kcore(networkGraphs, directed=directed, clean=clean)
+    triangle = compute_triangles(networkGraphs, directed=directed, clean=clean)
+    degree = compute_nodes_degree(networkGraphs, directed=directed, clean=clean)
+    pagerank = compute_page_rank(networkGraphs, directed=directed, clean=clean)
 
     df = pd.merge(kcore, triangle, how='inner', on='Node')
     df = pd.merge(df, degree, how='inner', on='Node')

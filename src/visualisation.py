@@ -45,7 +45,7 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map', plot=T
             filename = filename.replace(f"_{layout}", "")
             generate_dynamic_cluster(networkGraphs, cluster, filename)
         else:
-            generate_static_cluster(networkGraphs, cluster, filename, layout_='map')
+            generate_static_cluster(networkGraphs, cluster, filename, layout_=layout)
 
 
 # ----------------------------------------------------------------------------------------
@@ -106,9 +106,9 @@ def plot_all_metrics(networkGraphs, metrics, dynamic=False, directed=False, layo
     :return: Pyplot plot
     """
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=False)
+        df = m.compute_node_centralities(networkGraphs, directed=False, clean=False)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=False)
+        df = m.compute_node_metrics(networkGraphs, directed=False, clean=False)
     else:
         return ValueError('Please select a valid metric, either "centralities" or "nodes"')
 
@@ -159,9 +159,7 @@ def plot_hotspot(networkGraphs):
         return ValueError('Graph is not spatial. Please select a spatial graph.')
 
     hotspot = ml.get_hotspot(networkGraphs)
-
     fig = generate_hotspot(networkGraphs, hotspot)
-
-    fig.write_html('hotspot_coldspot.html')
+    fig.write_html('hotspot_coldspot.html', auto_open=True)
 
     return fig

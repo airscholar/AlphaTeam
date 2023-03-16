@@ -14,31 +14,40 @@ def generate_static_cluster(networkGraphs, df_, filename, layout_='map'):  # USI
 
     G = networkGraphs.Graph
 
+    if not networkGraphs.is_spatial() and layout_ == 'map':
+        layout_ = 'sfdp'
     pos = networkGraphs.pos[layout_]
 
-    node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
-                               marker=dict(showscale=True, size=5, color=[],
-                                           colorbar=dict(thickness=10, title='Node Connections', xanchor='left',
-                                                         titleside='right')))
+    if layout_ == 'map':
+        node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
+                               marker=dict(showscale=True, size=5, color=[]))
+    else:
+        node_trace = go.Scatter(x=[], y=[], text=[], mode='markers', hoverinfo='text',
+                                marker=dict(showscale=True, size=5, color=[]))
 
     edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
 
-    for node in G.nodes():
+    for node in tqdm(G.nodes()):
         x, y = pos[node]
-        node_trace['lon'] += tuple([x])
-        node_trace['lat'] += tuple([y])
+        if layout_ == 'map':
+            node_trace['lon'] += tuple([x])
+            node_trace['lat'] += tuple([y])
+        else:
+            node_trace['x'] += tuple([x])
+            node_trace['y'] += tuple([y])
         metric_df = df_[df_['Node'] == node]
         node_info = f"Node: {node}<br>Cluster Id: {str(metric_df['Cluster_id'].values[0])}<br>"
         node_trace['text'] += tuple([node_info])
         node_trace['marker']['color'] += tuple([metric_df['Color'].values[0]])
 
     layout = get_layout(networkGraphs, title=f"Cluster visualisation using {layout_} layout", layout_=layout_)
-
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
-    fig.write_html(filename)
+
+    fig.write_html(filename, auto_open=True)
     return fig
 
+# ----------------------------------------------------------------------------------------
 
 def generate_hotspot(networkGraphs, hotspot_df):
     """
