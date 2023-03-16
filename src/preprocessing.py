@@ -7,11 +7,10 @@
 # ----------------------------------------------------------------------------------------
 
 # Imports
-from enum import Enum
-from typing import Type
 import networkx as nx
 import pandas as pd
-import scipy.io
+import scipy.io as sio
+from src.NetworkGraphs import NetworkGraphs
 
 # ----------------------------------------------------------------------------------------
 
@@ -271,7 +270,7 @@ def preprocess_mtx(filename_: str):
     :return: List of NetworkX DiGraph and MultiDiGraph
     :rtype: list
     """
-    mtx = scipy.io.mmread(filename_)
+    mtx = sio.mmread(filename_)
 
     MultiDiGraph = nx.MultiDiGraph(mtx)
     DiGraph = convert_to_DiGraph(MultiDiGraph)

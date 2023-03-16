@@ -2,6 +2,7 @@
 from src.preprocessing import *
 from src.visualisation import *
 from pandas.api.types import is_numeric_dtype
+import scipy.io as sio
 
 # ----------------------------------------------------------------------------------------
 """
@@ -86,10 +87,10 @@ class NetworkGraphs:
         :rtype: None
 
         Example:
-            >>> graph = NetworkGraphs('data/RAILWAY/RAILWAY.csv', 'RAILWAY')
-            >>> graph = NetworkGraphs('data/CRYPTO/CRYPTO.csv', 'CRYPTO')
-            >>> graph = NetworkGraphs('data/MTX/MTX.mtx', 'MTX')
-            >>> graph = NetworkGraphs('data/CUSTOM/CUSTOM.csv', 'CUSTOM')
+            >>> graph1 = NetworkGraphs('data/RAILWAY/RAILWAY.csv', 'RAILWAY')
+            >>> graph2 = NetworkGraphs('data/CRYPTO/CRYPTO.csv', 'CRYPTO')
+            >>> graph3 = NetworkGraphs('data/MTX/MTX.mtx', 'MTX')
+            >>> graph4 = NetworkGraphs('data/CUSTOM/CUSTOM.csv', 'CUSTOM')
         """
 
         self.name = None
@@ -160,7 +161,7 @@ class NetworkGraphs:
 
             self.colors = None
 
-            mtx = scipy.io.mmread(filename)
+            mtx = sio.mmread(filename)
             coo = mtx.tocoo()
             self.df = pd.DataFrame({'source': coo.row, 'target': coo.col, 'weight': coo.data})
 
