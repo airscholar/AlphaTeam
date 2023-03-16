@@ -185,7 +185,7 @@ def generate_dynamic_metric(networkGraphs, df_, filename):  # USING PYVIS
     for u, v, d in G.edges(data=True):
         d.clear()
 
-    Net = net.Network(height="750px", width="100%", bgcolor="grey", font_color="black", notebook=True)
+    Net = net.Network(height="750px", width="100%", bgcolor="#E4ECF6", font_color="black", notebook=True)
     Net.from_nx(G)
     Net.show_buttons(filter_=['physics', 'edges', 'nodes'])
     Net.options.physics.use_force_atlas_2based(

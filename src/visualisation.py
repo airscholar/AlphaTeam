@@ -13,14 +13,45 @@ import src.metrics as m
 from src.utils import memoize
 from src.visualisation_src.ML_visualisation import *
 from src.visualisation_src.metrics_visualisation import *
+from src.visualisation_src.basic_network_visualisation import *
 from src.visualisation_src.temporal_visualisation import *
 from pandas.api.types import is_numeric_dtype
+import os
 
 
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map', plot=True):
+def plot_network(networkGraphs, layout='map', dynamic=False):
+    """
+    :Function: Plot the NetworkX graph on as map
+    :param networkGraphs: Network graphs
+    :param directed: Boolean to indicate if the graph is directed or not
+    :param multi: for multi graphs
+    :return: Matplotlib plot
+    """
+    if not networkGraphs.is_spatial() and layout == 'map':
+        ValueError("Graph is not spatial with coordinates")
+
+    filename = f"{'Dynamic' if dynamic else 'Static'}_{layout}.html"
+    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
+    if dynamic:
+        filepath = filepath.replace(f"_{layout}", "")
+
+    if not os.path.isfile(filepath):
+        if dynamic:
+            return 0
+            # dynamic_visualisation(networkGraphs, filepath)
+        else:
+            static_visualisation(networkGraphs, filepath, layout_=layout)
+
+    return filename
+
+
+# ----------------------------------------------------------------------------------------
+
+@memoize
+def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
     """
     :Function: Plot the cluster for the given graph
     Clusters:
@@ -41,18 +72,23 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map', plot=T
     cluster = ml.get_communities(networkGraphs, clusterType)
 
     filename = f"{clusterType}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    if plot:
+    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
+    if dynamic:
+        filepath = filepath.replace(f"_{layout}", "")
+
+    if not os.path.isfile(filepath):
         if dynamic:
-            filename = filename.replace(f"_{layout}", "")
-            generate_dynamic_cluster(networkGraphs, cluster, filename)
+            generate_dynamic_cluster(networkGraphs, cluster, filepath)
         else:
-            generate_static_cluster(networkGraphs, cluster, filename, layout_=layout)
+            generate_static_cluster(networkGraphs, cluster, filepath, layout_=layout)
+
+    return cluster, filename
 
 
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def plot_metric(networkGraphs, metrics, directed=False, dynamic=False, layout='map', plot=True):
+def plot_metric(networkGraphs, metrics, directed=False, dynamic=False, layout='map'):
     """
     :Function: Plot the metric for the given graph
     Metrics:
@@ -79,12 +115,15 @@ def plot_metric(networkGraphs, metrics, directed=False, dynamic=False, layout='m
         return ValueError('Metric column is empty. Please select a different metric.')
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    if plot:
+    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
+    if dynamic:
+        filepath = filepath.replace(f"_{layout}", "")
+
+    if not os.path.isfile(filepath):
         if dynamic:
-            filename = filename.replace(f"_{layout}", "")
-            generate_dynamic_metric(networkGraphs, df, filename)
+            generate_dynamic_metric(networkGraphs, df, filepath)
         else:
-            generate_static_metric(networkGraphs, df, filename, layout_=layout)
+            generate_static_metric(networkGraphs, df, filepath, layout_=layout)
 
     return df, filename
 
@@ -92,7 +131,7 @@ def plot_metric(networkGraphs, metrics, directed=False, dynamic=False, layout='m
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def plot_all_metrics(networkGraphs, metrics, dynamic=False, directed=False, layout='map', plot=True):
+def plot_all_metrics(networkGraphs, metrics, directed=False, layout='map'):
     """
     :Function: Plot all the metrics for the given graph
     Metrics:
@@ -113,12 +152,12 @@ def plot_all_metrics(networkGraphs, metrics, dynamic=False, directed=False, layo
     else:
         return ValueError('Please select a valid metric, either "centralities" or "nodes"')
 
-    filename = f"All_{metrics}_{directed}_{dynamic}_{layout}.html"
-    if plot:
-        if dynamic:
-            return None
-        else:
-            generate_static_all_metrics(networkGraphs, df, filename, layout_=layout)
+    filename = f"All_{metrics}_{'Directed' if directed else 'Undirected'}_{layout}.html"
+    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
+
+    if not os.path.isfile(filepath):
+        generate_static_all_metrics(networkGraphs, df, filepath, layout_=layout)
+
     return df, filename
 
 
@@ -160,7 +199,12 @@ def plot_hotspot(networkGraphs):
         return ValueError('Graph is not spatial. Please select a spatial graph.')
 
     hotspot = ml.get_hotspot(networkGraphs)
-    fig = generate_hotspot(networkGraphs, hotspot)
-    fig.write_html('hotspot_coldspot.html', auto_open=True)
 
-    return fig
+    filename = f"Density_hotspot.html"
+    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
+    print(filepath)
+
+    if not os.path.isfile(filepath):
+        generate_hotspot(networkGraphs, hotspot, filepath)
+
+    return hotspot, filename
