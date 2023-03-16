@@ -13,6 +13,7 @@ import networkx as nx
 import pandas as pd
 import scipy.io
 
+
 # ----------------------------------------------------------------------------------------
 
 class DatasetType(Enum):
@@ -60,7 +61,8 @@ def preprocess_railway(filename_: str):
         "T": "purple",
         "K": "orange",
         "Y": "pink",
-        "1": "grey", "2": "grey", "3": "grey", "4": "grey", "5": "grey", "6": "grey", "7": "grey", "8": "grey", "9": "grey"}
+        "1": "grey", "2": "grey", "3": "grey", "4": "grey", "5": "grey", "6": "grey", "7": "grey", "8": "grey",
+        "9": "grey"}
 
     with open(filename_, 'r') as f:
         excluded = 0
@@ -165,7 +167,8 @@ def create_multi_DiGraph_railway(network, station_id):
                 # if the 'to' value is a tuple, create a new node
                 to_node = station_id[station['to']]
                 # add time interval to the edge
-                multi_graph.add_edge(from_node, to_node, start=station['start'], end=station['end'], color=station['color'], weight=1)
+                multi_graph.add_edge(from_node, to_node, start=station['start'], end=station['end'],
+                                     color=station['color'], weight=1)
             else:
                 continue
 
@@ -241,7 +244,9 @@ def create_temporal_subgraph(networkGraphs, start_time, end_time, step):
 
         temporal_graphs.append(G)
 
-        print(f"\rCreating temporal graphs: {i-start_time+1}/{end_time-start_time} ({(i-start_time+1)/(end_time-start_time)*100:.2f}%)", end="")
+        print(
+            f"\rCreating temporal graphs: {i - start_time + 1}/{end_time - start_time} ({(i - start_time + 1) / (end_time - start_time) * 100:.2f}%)",
+            end="")
     return temporal_graphs
 
 
@@ -269,6 +274,7 @@ def preprocess_crypto(filename_: str):
 
     return [DiGraph, MultiDiGraph]
 
+
 # ----------------------------------------------------------------------------------------
 
 
@@ -278,7 +284,7 @@ def preprocess_mtx(filename_: str):
     :param filename_: Path to the mtx dataset
     :return: List of NetworkX DiGraphs and MultiDiGraphs
     """
-    
+
     mtx = scipy.io.mmread(filename_)
 
     MultiDiGraph = nx.MultiDiGraph(mtx)
@@ -289,13 +295,14 @@ def preprocess_mtx(filename_: str):
 
     return [DiGraph, MultiDiGraph]
 
-def preprocess_custom(filename_:str):
+
+def preprocess_custom(filename_: str):
     """
     :Function: Preprocess the custom dataset
-    :param Dataset must have the following columns:
+    Dataset must have the following columns:
         - from: Source node
         - to: Target node
-    :param Dataset could have the following columns:
+    Dataset could have the following columns:
         - weight: Edge weight
         - start: Start time of the edge
         - end: End time of the edge

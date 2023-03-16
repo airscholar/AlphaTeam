@@ -1,6 +1,7 @@
 # Imports
 from src.preprocessing import *
 from src.visualisation import *
+from pandas.api.types import is_numeric_dtype
 
 # ----------------------------------------------------------------------------------------
 """

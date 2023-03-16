@@ -22,6 +22,14 @@ from src.visualisation_src.temporal_visualisation import *
 def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map', plot=True):
     """
     :Function: Plot the cluster for the given graph
+    Clusters:
+        - 'louvain'
+        - 'greedy_modularity'
+        - 'label_propagation'
+        - 'asyn_lpa'
+        - 'girvan_newman',
+        - 'edge_betweenness'
+        - 'k_clique'
     :param networkGraphs: Network graphs
     :param clusterType: Type of cluster
     :param dynamic: Boolean to indicate if the plot is dynamic or not
@@ -46,6 +54,16 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map', plot=T
 def plot_metric(networkGraphs, metrics, directed=False, dynamic=False, layout='map', plot=True):
     """
     :Function: Plot the metric for the given graph
+    Metrics:
+        - 'kcore'
+        - 'degree'
+        - 'triangles'
+        - 'pagerank'
+        - 'betweenness_centrality'
+        - 'closeness_centrality'
+        - 'eigenvector_centrality'
+        - 'load_centrality'
+        - 'degree_centrality'
     :param networkGraphs: Network graphs
     :param metrics: Metrics to be plotted
     :param dynamic: Boolean to indicate if the plot is dynamic or not
@@ -76,11 +94,14 @@ def plot_metric(networkGraphs, metrics, directed=False, dynamic=False, layout='m
 def plot_all_metrics(networkGraphs, metrics, dynamic=False, directed=False, layout='map', plot=True):
     """
     :Function: Plot all the metrics for the given graph
+    Metrics:
+        - 'centralities'
+        - 'nodes'
     :param networkGraphs: Network graphs
+    :param metrics: Metrics to be plotted
     :param dynamic: Boolean to indicate if the plot is dynamic or not
     :param directed: Boolean to indicate if the graph is directed or not
     :param layout: Layout of the plot
-    :param metrics: Metrics to be plotted
     :param plot: Boolean to indicate if the html file should be generated
     :return: Pyplot plot
     """

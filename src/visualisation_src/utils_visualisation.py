@@ -1,10 +1,13 @@
 import matplotlib.pyplot as plt
 import geopandas as gpd
 from plotly import graph_objects as go
+from src.utils import memoize
+from tqdm import tqdm
 
 
 # ----------------------------------------------------------------------------------------
 
+@memoize
 def plot_map(networkGraphs, background=True, edges=True):  # FOR MATPLOTLIB
     """
     :Function: Plot the map of the location of the graphs
@@ -28,12 +31,13 @@ def plot_map(networkGraphs, background=True, edges=True):  # FOR MATPLOTLIB
 
 # ----------------------------------------------------------------------------------------
 
+@memoize
 def get_layout(networkGraphs, title=None, layout_='map'):  # FOR PLOTLY
 
     if layout_ == 'map':
         layout = go.Layout(
             title=f'<br>{title}',
-            titlefont=dict(size=16, color='White'),
+            titlefont=dict(size=16, color='Black'),
             showlegend=False,
             hovermode='closest',
             annotations=[
@@ -59,7 +63,7 @@ def get_layout(networkGraphs, title=None, layout_='map'):  # FOR PLOTLY
     else:
         layout = go.Layout(
             title=f'<br>{title}',
-            titlefont=dict(size=16, color='White'),
+            titlefont=dict(size=16, color='Black'),
             showlegend=False,
             hovermode='closest',
             annotations=[
@@ -76,3 +80,33 @@ def get_layout(networkGraphs, title=None, layout_='map'):  # FOR PLOTLY
         )
 
     return layout
+
+
+# ----------------------------------------------------------------------------------------
+
+@memoize
+def generate_edge_trace(Graph, pos, layout):
+    """
+    :Function: Generate the edge trace for the plotly plot, leveraging the memoize decorator for cache optimization
+    :param Graph: Network graph
+    :param pos: Position of the nodes
+    :param layout: Layout of the plot
+    :return: Edge trace
+    """
+    if layout == 'map':
+        edge_trace = go.Scattergeo(lon=[], lat=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
+
+    else:
+        edge_trace = go.Scatter(x=[], y=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
+
+    for edge in tqdm(Graph.edges()):
+        x0, y0 = pos[edge[0]]
+        x1, y1 = pos[edge[1]]
+        if layout == 'map':
+            edge_trace['lon'] += (x0, x1, None)
+            edge_trace['lat'] += (y0, y1, None)
+        else:
+            edge_trace['x'] += (x0, x1, None)
+            edge_trace['y'] += (y0, y1, None)
+
+    return edge_trace

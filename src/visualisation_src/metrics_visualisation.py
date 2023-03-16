@@ -71,42 +71,32 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
     size_ = 5 / df_['std'].mean()  # normalise the size of the nodes
 
     if layout_ == 'map':
-        edge_trace = go.Scattergeo(lon=[], lat=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
         node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
                                    marker=dict(showscale=True,
                                                colorbar=dict(thickness=10, title=metrics_name, xanchor='left',
                                                              titleside='right'), color=df_[metrics_name],
                                                size=df_['std'] * size_))
     else:
-        edge_trace = go.Scatter(x=[], y=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
         node_trace = go.Scatter(x=[], y=[], text=[], mode='markers', hoverinfo='text',
                                 marker=dict(showscale=True,
                                             colorbar=dict(thickness=10, title=metrics_name, xanchor='left',
                                                           titleside='right'), color=df_[metrics_name],
                                             size=df_['std'] * size_))
 
-    for idx, vals in tqdm(enumerate(zip_longest(G.edges(), G.nodes())), total=G.number_of_edges()):
-        edge, node = vals
-        x0, y0 = pos[edge[0]]
-        x1, y1 = pos[edge[1]]
+    edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
+
+    for node in tqdm(G.nodes()):
+        x, y = pos[node]
         if layout_ == 'map':
-            edge_trace['lon'] += (x0, x1, None)
-            edge_trace['lat'] += (y0, y1, None)
+            node_trace['lon'] += tuple([x])
+            node_trace['lat'] += tuple([y])
         else:
-            edge_trace['x'] += (x0, x1, None)
-            edge_trace['y'] += (y0, y1, None)
-        if idx < len(G.nodes()):
-            x, y = pos[node]
-            if layout_ == 'map':
-                node_trace['lon'] += tuple([x])
-                node_trace['lat'] += tuple([y])
-            else:
-                node_trace['x'] += tuple([x])
-                node_trace['y'] += tuple([y])
-            metric_df = df_[df_['Node'] == node]
-            node_info = f"Node: {node}<br>"
-            node_info += f"{metrics_name}: {str(metric_df[metrics_name].values[0])}<br>"
-            node_trace['text'] += tuple([node_info])
+            node_trace['x'] += tuple([x])
+            node_trace['y'] += tuple([y])
+        metric_df = df_[df_['Node'] == node]
+        node_info = f"Node: {node}<br>"
+        node_info += f"{metrics_name}: {str(metric_df[metrics_name].values[0])}<br>"
+        node_trace['text'] += tuple([node_info])
 
     layout = get_layout(networkGraphs, title=f"{metrics_name} visualisation using {layout_} layout", layout_=layout_)
     fig = go.Figure(data=[edge_trace, node_trace],
@@ -137,43 +127,33 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
     metrics_names = df_.columns[1:]
 
     if layout_ == 'map':
-        edge_trace = go.Scattergeo(lon=[], lat=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
         node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
                                    marker=dict(showscale=True,
                                                colorbar=dict(thickness=10, title='Metrics', xanchor='left',
                                                              titleside='right'), color=['red'],
                                                size=3))
     else:
-        edge_trace = go.Scatter(x=[], y=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
         node_trace = go.Scatter(x=[], y=[], text=[], mode='markers', hoverinfo='text',
                                 marker=dict(showscale=True,
                                             colorbar=dict(thickness=10, title="Metrics", xanchor='left',
                                                           titleside='right'), color=['red'],
                                             size=3))
 
-    for idx, vals in tqdm(enumerate(zip_longest(G.edges(), G.nodes())), total=G.number_of_edges()):
-        edge, node = vals
-        x0, y0 = pos[edge[0]]
-        x1, y1 = pos[edge[1]]
+    edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
+
+    for node in G.nodes():
+        x, y = pos[node]
         if layout_ == 'map':
-            edge_trace['lon'] += (x0, x1, None)
-            edge_trace['lat'] += (y0, y1, None)
+            node_trace['lon'] += tuple([x])
+            node_trace['lat'] += tuple([y])
         else:
-            edge_trace['x'] += (x0, x1, None)
-            edge_trace['y'] += (y0, y1, None)
-        if idx < len(G.nodes()):
-            x, y = pos[node]
-            if layout_ == 'map':
-                node_trace['lon'] += tuple([x])
-                node_trace['lat'] += tuple([y])
-            else:
-                node_trace['x'] += tuple([x])
-                node_trace['y'] += tuple([y])
-            metric_df = df_[df_['Node'] == node]
-            node_info = f"Node: {node}<br>"
-            for metric in metrics_names:
-                node_info += f"{metric}: {str(metric_df[metric].values[0])}<br>"
-            node_trace['text'] += tuple([node_info])
+            node_trace['x'] += tuple([x])
+            node_trace['y'] += tuple([y])
+        metric_df = df_[df_['Node'] == node]
+        node_info = f"Node: {node}<br>"
+        for metric in metrics_names:
+            node_info += f"{metric}: {str(metric_df[metric].values[0])}<br>"
+        node_trace['text'] += tuple([node_info])
 
     layout = get_layout(networkGraphs, title=f"Metrics visualisation using {layout_} layout", layout_=layout_)
     fig = go.Figure(data=[edge_trace, node_trace],
