@@ -34,7 +34,7 @@ def plot_network(networkGraphs, layout='map', dynamic=False):
         ValueError("Graph is not spatial with coordinates")
 
     filename = f"{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    filepath = f"../application{networkGraphs.session_folder}/{filename}"
+    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
     if dynamic:
         filepath = filepath.replace(f"_{layout}", "")
 
@@ -72,7 +72,7 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
     cluster = ml.get_communities(networkGraphs, clusterType)
 
     filename = f"{clusterType}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    filepath = f"../application{networkGraphs.session_folder}/{filename}"
+    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
     if dynamic:
         filepath = filepath.replace(f"_{layout}", "")
 
@@ -115,7 +115,7 @@ def plot_metric(networkGraphs, metrics, directed=False, dynamic=False, layout='m
         return ValueError('Metric column is empty. Please select a different metric.')
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    filepath = f"../application{networkGraphs.session_folder}/{filename}"
+    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
     if dynamic:
         filepath = filepath.replace(f"_{layout}", "")
 
@@ -153,7 +153,7 @@ def plot_all_metrics(networkGraphs, metrics, directed=False, layout='map'):
         return ValueError('Please select a valid metric, either "centralities" or "nodes"')
 
     filename = f"All_{metrics}_{directed}_{layout}.html"
-    filepath = f"../application{networkGraphs.session_folder}/{filename}"
+    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
 
     if not os.path.isfile(filepath):
         generate_static_all_metrics(networkGraphs, df, filepath, layout_=layout)
@@ -201,7 +201,7 @@ def plot_hotspot(networkGraphs):
     hotspot = ml.get_hotspot(networkGraphs)
 
     filename = f"Density_hotspot.html"
-    filepath = f"../application{networkGraphs.session_folder}/{filename}"
+    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
     print(filepath)
 
     if not os.path.isfile(filepath):
