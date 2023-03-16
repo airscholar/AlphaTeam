@@ -50,11 +50,12 @@ def generate_static_cluster(networkGraphs, df_, filename, layout_='map'):  # USI
 
 # ----------------------------------------------------------------------------------------
 
-def generate_hotspot(networkGraphs, hotspot_df):
+def generate_hotspot(networkGraphs, hotspot_df, filename):
     """
     :Function: Plot the hotspot for the given graph
     :param networkGraphs: Network graphs
     :param hotspot_df: Hotspot dataframe
+    :param filename: Filename
     :return:
     """
     latitude = hotspot_df['Latitude']
@@ -79,6 +80,8 @@ def generate_hotspot(networkGraphs, hotspot_df):
     fig.update_layout(mapbox_style="stamen-terrain", mapbox_center_lon=networkGraphs.mid_long,
                       mapbox_center_lat=networkGraphs.mid_lat, mapbox_zoom=3.5, margin={"r": 0, "t": 0, "l": 0, "b": 0},
                       legend=dict(orientation="h", yanchor="bottom", y=0.1, xanchor="right", x=1, title="Show/Hide"))
+
+    fig.write_html(filename, auto_open=True)
 
     return fig
 
@@ -105,7 +108,7 @@ def generate_dynamic_cluster(networkGraphs, df_, filename):  # USING PYVIS
     for u, v, d in G.edges(data=True):
         d.clear()
 
-    Net = net.Network(height="750px", width="100%", bgcolor="grey", font_color="black", notebook=True)
+    Net = net.Network(height="750px", width="100%", bgcolor="#E4ECF6", font_color="black", notebook=True)
     Net.from_nx(G)
     # Net.show_buttons(filter_=['physics', 'edges', 'nodes'])
     Net.options.physics.use_force_atlas_2based(

@@ -68,7 +68,7 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
 
     metrics_name = df_.columns[1]
     df_['std'] = (df_[metrics_name] - df_[metrics_name].min()) / (df_[metrics_name].max() - df_[metrics_name].min())
-    size_ = 5 / (df_['std'].median())  # normalise the size of the nodes
+    size_ = 5 / df_['std'].mean()  # normalise the size of the nodes
 
     if layout_ == 'map':
         node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
@@ -185,7 +185,7 @@ def generate_dynamic_metric(networkGraphs, df_, filename):  # USING PYVIS
     for u, v, d in G.edges(data=True):
         d.clear()
 
-    Net = net.Network(height="750px", width="100%", bgcolor="grey", font_color="black", notebook=True)
+    Net = net.Network(height="750px", width="100%", bgcolor="#E4ECF6", font_color="black", notebook=True)
     Net.from_nx(G)
     Net.show_buttons(filter_=['physics', 'edges', 'nodes'])
     Net.options.physics.use_force_atlas_2based(

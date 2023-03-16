@@ -49,6 +49,7 @@ def get_layout(networkGraphs, title=None, layout_='map'):  # FOR PLOTLY
                     font=dict(color='black')
                 )
             ],
+            margin=dict(l=0, r=0, t=0, b=0),
             geo=dict(
                 scope='world',
                 lataxis_range=[networkGraphs.min_lat, networkGraphs.max_lat],
