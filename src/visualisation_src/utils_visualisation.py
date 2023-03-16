@@ -56,6 +56,7 @@ def get_layout(networkGraphs, title=None, layout_='map'):  # FOR PLOTLY
                 lonaxis_range=[networkGraphs.min_long, networkGraphs.max_long],
                 center=dict(lat=networkGraphs.mid_lat, lon=networkGraphs.mid_long),
                 showland=True,
+                showcountries=True,
             ),
             xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
             yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)

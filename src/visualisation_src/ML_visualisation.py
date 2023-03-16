@@ -44,7 +44,7 @@ def generate_static_cluster(networkGraphs, df_, filename, layout_='map'):  # USI
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
 
-    fig.write_html(filename, auto_open=True)
+    fig.write_html(filename)
     return fig
 
 
@@ -81,7 +81,7 @@ def generate_hotspot(networkGraphs, hotspot_df, filename):
                       mapbox_center_lat=networkGraphs.mid_lat, mapbox_zoom=3.5, margin={"r": 0, "t": 0, "l": 0, "b": 0},
                       legend=dict(orientation="h", yanchor="bottom", y=0.1, xanchor="right", x=1, title="Show/Hide"))
 
-    fig.write_html(filename, auto_open=True)
+    fig.write_html(filename)
 
     return fig
 

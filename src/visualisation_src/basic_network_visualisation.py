@@ -21,12 +21,13 @@ def static_visualisation(networkGraphs, filepath, directed=True, multi=False, la
         return ValueError("Graph is not spatial with coordinates")
 
     pos = networkGraphs.pos[layout_]
+    text = [f"Node: {node}" for node in G.nodes()]
 
     if layout_ == 'map':
-        node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
+        node_trace = go.Scattergeo(lon=[], lat=[], text=text, mode='markers', hoverinfo='text',
                                    marker=dict(showscale=True, color='black', size=5))
     else:
-        node_trace = go.Scatter(x=[], y=[], text=[], mode='markers', hoverinfo='text',
+        node_trace = go.Scatter(x=[], y=[], text=text, mode='markers', hoverinfo='text',
                                 marker=dict(showscale=True, color='black',size=5))
 
     edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
@@ -44,7 +45,7 @@ def static_visualisation(networkGraphs, filepath, directed=True, multi=False, la
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
 
-    fig.write_html(filepath, auto_open=True)
+    fig.write_html(filepath)
 
     return fig
 

@@ -102,7 +102,7 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
 
-    fig.write_html(filename, auto_open=True)
+    fig.write_html(filename)
     return fig
 
 
@@ -153,7 +153,7 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
 
-    fig.write_html(filename, auto_open=True)
+    fig.write_html(filename)
     return fig
 
 
