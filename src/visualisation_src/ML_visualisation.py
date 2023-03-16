@@ -20,10 +20,10 @@ def generate_static_cluster(networkGraphs, df_, filename, layout_='map'):  # USI
 
     if layout_ == 'map':
         node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
-                               marker=dict(showscale=True, size=5, color=[]))
+                               marker=dict(showscale=False, size=5, color=[]))
     else:
         node_trace = go.Scatter(x=[], y=[], text=[], mode='markers', hoverinfo='text',
-                                marker=dict(showscale=True, size=5, color=[]))
+                                marker=dict(showscale=False, size=5, color=[]))
 
     edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
 

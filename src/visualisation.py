@@ -14,6 +14,7 @@ from src.utils import memoize
 from src.visualisation_src.ML_visualisation import *
 from src.visualisation_src.metrics_visualisation import *
 from src.visualisation_src.temporal_visualisation import *
+from pandas.api.types import is_numeric_dtype
 
 
 # ----------------------------------------------------------------------------------------
@@ -74,7 +75,7 @@ def plot_metric(networkGraphs, metrics, directed=False, dynamic=False, layout='m
     """
     df = m.get_metrics(networkGraphs, metrics, clean=False, directed=directed)
 
-    if df[df.columns.values[1]].isnull().values.any():
+    if not is_numeric_dtype(df[df.columns.values[1]]):
         return ValueError('Metric column is empty. Please select a different metric.')
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"

@@ -128,10 +128,10 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
 
     if layout_ == 'map':
         node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
-                                   marker=dict(showscale=True, color=['red'], size=3))
+                                   marker=dict(showscale=False, size=3, color='black'))
     else:
         node_trace = go.Scatter(x=[], y=[], text=[], mode='markers', hoverinfo='text',
-                                marker=dict(showscale=True, color=['red'], size=3))
+                                marker=dict(showscale=False, size=3, color='black'))
 
     edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
 
