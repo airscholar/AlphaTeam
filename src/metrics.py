@@ -18,12 +18,31 @@ from src.utils import memoize
 # --------------------------------------- GETTER -----------------------------------------
 # ----------------------------------------------------------------------------------------
 
-def get_metrics(networkGraphs, method, clean=True, directed=False):
+def get_metrics(networkGraphs, method, clean=True, directed=False, multi=False):
     """
     :Function: Get the metrics for the given graph
+    Method:
+        - 'kcore'
+        - 'degree'
+        - 'triangles'
+        - 'pagerank'
+        - 'betweenness_centrality'
+        - 'closeness_centrality'
+        - 'eigenvector_centrality'
+        - 'load_centrality'
+        - 'degree_centrality'
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
     :param method: Method to compute the metrics
+    :type method: str
+    :param clean: Clean result DataFrame after computing the metrics
+    :type clean: bool
+    :param directed: Compute the metrics for the directed graph
+    :type directed: bool
+    :param multi: Compute the metrics for the multi graph
+    :type multi: bool
     :return: Pandas dataframe with the metrics and values
+    :rtype: pd.DataFrame
     """
     if method not in ['kcore', 'degree', 'triangles', 'pagerank', 'betweenness_centrality', 'closeness_centrality',
                       'eigenvector_centrality', 'load_centrality', 'degree_centrality']:
@@ -40,15 +59,15 @@ def get_metrics(networkGraphs, method, clean=True, directed=False):
     elif method == 'pagerank':
         return compute_page_rank(networkGraphs, clean=clean, directed=directed)
     elif method == 'betweenness_centrality':
-        return compute_betweeness_centrality(networkGraphs, clean=clean, directed=directed)
+        return compute_betweeness_centrality(networkGraphs, clean=clean, directed=directed, multi=multi)
     elif method == 'closeness_centrality':
-        return compute_closeness_centrality(networkGraphs, clean=clean, directed=directed)
+        return compute_closeness_centrality(networkGraphs, clean=clean, directed=directed, multi=multi)
     elif method == 'eigenvector_centrality':
-        return compute_eigen_centrality(networkGraphs, clean=clean, directed=directed)
+        return compute_eigen_centrality(networkGraphs, clean=clean, directed=directed, multi=multi)
     elif method == 'load_centrality':
-        return compute_load_centrality(networkGraphs, clean=clean, directed=directed)
+        return compute_load_centrality(networkGraphs, clean=clean, directed=directed, multi=multi)
     elif method == 'degree_centrality':
-        return compute_degree_centrality(networkGraphs, clean=clean, directed=directed)
+        return compute_degree_centrality(networkGraphs, clean=clean, directed=directed, multi=multi)
     else:
         raise ValueError("Method not supported")
 
@@ -59,9 +78,11 @@ def get_metrics(networkGraphs, method, clean=True, directed=False):
 @memoize
 def compute_global_metrics(networkGraphs):
     """
-    :Function: Compute the global metrics for the NetworkX graph (directed and undirected)
-    :param networkGraphs: Network Graphs
-    :return: Pandas dataframe with the metrics and values (directed and undirected)
+    :Function: Compute the global metrics for the NetworkGraphs object (all the graphs)
+    :param networkGraphs: NetworkGraphs
+    :type networkGraphs: NetworkGraphs
+    :return: Pandas dataframe with the metrics and values (for each graph type)
+    :rtype: pd.DataFrame
     """
     directed = compute_metrics(networkGraphs.DiGraph)  # compute for directed
     undirected = compute_metrics(networkGraphs.Graph)  # compute for undirected
@@ -83,10 +104,12 @@ def compute_metrics(networkx_):
     """
     :Function: Compute the generals metrics for the NetworkX graph
     :param networkx_: NetworkX graph
+    :type networkx_: nx.Graph or nx.DiGraph or nx.MultiGraph or nx.MultiDiGraph
     :return: Pandas dataframe with the metrics and values
+    :rtype: pd.DataFrame
     """
 
-    df = pd.DataFrame()  # return pandas dataframe
+    df = pd.DataFrame()
 
     try:
         clustering_coefficient = nx.average_clustering(networkx_)
@@ -192,10 +215,17 @@ def compute_metrics(networkx_):
 @memoize
 def compute_node_centralities(networkGraphs, directed=True, multi=True, clean=True):
     """
-    :Function: Compute the node metrics for the NetworkX graph
-    :param networkGraphs: Network Graphs
-    :param directed: Boolean
+    :Function: Compute all the centrality metrics for the NetworkGraphs
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: NetworkGraphs
+    :param directed: Compute the metrics for the directed graph
+    :type directed: bool
+    :param multi: Compute the metrics for the multi graph
+    :type multi: bool
+    :param clean: Clean the DataFrame after computing the metrics
+    :type clean: bool
     :return: Pandas dataframe with the metrics and values
+    :rtype: pd.DataFrame
     """
     degree_centrality = compute_degree_centrality(networkGraphs, directed=directed, multi=multi, clean=clean)
     eigen_centrality = compute_eigen_centrality(networkGraphs, directed=directed, multi=multi, clean=clean)
@@ -207,6 +237,7 @@ def compute_node_centralities(networkGraphs, directed=True, multi=True, clean=Tr
     df = pd.merge(df, closeness_centrality, how='inner', on='Node')
     df = pd.merge(df, betweenness_centrality, how='inner', on='Node')
     df = pd.merge(df, load_centrality, how='inner', on='Node')
+
     return df
 
 
@@ -215,10 +246,15 @@ def compute_node_centralities(networkGraphs, directed=True, multi=True, clean=Tr
 @memoize
 def compute_node_metrics(networkGraphs, directed=True, clean=True):
     """
-    :Function: Compute the node metrics for the NetworkX graph
-    :param networkGraphs: Network Graphs
-    :param directed: Boolean
+    :Function: Compute all the node metrics for the NetworkGraphs object
+    :param networkGraphs: NetworkGraphs
+    :type networkGraphs: NetworkGraphs
+    :param directed: Compute the metrics for the directed graph
+    :type directed: bool
+    :param clean: Clean the DataFrame after computing the metrics
+    :type clean: bool
     :return: Pandas dataframe with the metrics and values
+    :rtype: pd.DataFrame
     """
     kcore = compute_kcore(networkGraphs, directed=directed, clean=clean)
     triangle = compute_triangles(networkGraphs, directed=directed, clean=clean)
@@ -237,10 +273,17 @@ def compute_node_metrics(networkGraphs, directed=True, clean=True):
 @memoize
 def compute_degree_centrality(networkGraphs, directed=True, multi=True, clean=True):
     """
-    :Function: Compute the degree centrality for the NetworkX graph
-    :param networkGraphs: Network Graphs
-    :param directed: Boolean
+    :Function: Compute the degree centrality for the NetworkGraphs object
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: NetworkGraphs
+    :param directed: Compute the metrics for the directed graph
+    :type directed: bool
+    :param multi: Compute the metrics for the multi graph
+    :type multi: bool
+    :param clean: Clean the DataFrame after computing the metrics
+    :type clean: bool
     :return: Pandas dataframe with the metrics and values
+    :rtype: pd.DataFrame
     """
     if not multi:
         G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
@@ -264,10 +307,17 @@ def compute_degree_centrality(networkGraphs, directed=True, multi=True, clean=Tr
 @memoize
 def compute_eigen_centrality(networkGraphs, directed=True, multi=True, clean=True):
     """
-    :Function: Compute the eigenvector centrality for the NetworkX graph
-    :param networkGraphs: Network Graphs
-    :param directed: Boolean
+    :Function: Compute the eigenvector centrality for the NetworkGraphs object
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: NetworkGraphs
+    :param directed: Compute the metrics for the directed graph
+    :type directed: bool
+    :param multi: Compute the metrics for the multi graph
+    :type multi: bool
+    :param clean: Clean the DataFrame after computing the metrics
+    :type clean: bool
     :return: Pandas dataframe with the metrics and values
+    :rtype: pd.DataFrame
     """
     if not multi:
         G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
@@ -291,10 +341,17 @@ def compute_eigen_centrality(networkGraphs, directed=True, multi=True, clean=Tru
 @memoize
 def compute_closeness_centrality(networkGraphs, directed=True, multi=True, clean=True):
     """
-    :Function: Compute the closeness centrality for the NetworkX graph
-    :param networkGraphs: Network Graphs
-    :param directed: Boolean
+    :Function: Compute the closeness centrality for the NetworkGraphs object
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: NetworkGraphs
+    :param directed: Compute the metrics for the directed graph
+    :type directed: bool
+    :param multi: Compute the metrics for the multi graph
+    :type multi: bool
+    :param clean: Clean the DataFrame after computing the metrics
+    :type clean: bool
     :return: Pandas dataframe with the metrics and values
+    :rtype: pd.DataFrame
     """
     if not multi:
         G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
@@ -318,10 +375,17 @@ def compute_closeness_centrality(networkGraphs, directed=True, multi=True, clean
 @memoize
 def compute_betweeness_centrality(networkGraphs, directed=True, multi=True, clean=True):
     """
-    :Function: Compute the betweeness centrality for the NetworkX graph
-    :param networkGraphs: Network Graphs
-    :param directed: Boolean
+    :Function: Compute the betweeness centrality for the NetworkGraphs object
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: NetworkGraphs
+    :param directed: Compute the metrics for the directed graph
+    :type directed: bool
+    :param multi: Compute the metrics for the multi graph
+    :type multi: bool
+    :param clean: Clean the DataFrame after computing the metrics
+    :type clean: bool
     :return: Pandas dataframe with the metrics and values
+    :rtype: pd.DataFrame
     """
     if not multi:
         G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
@@ -345,10 +409,17 @@ def compute_betweeness_centrality(networkGraphs, directed=True, multi=True, clea
 @memoize
 def compute_load_centrality(networkGraphs, directed=True, multi=True, clean=True):
     """
-    :Function: Compute the load centrality for the NetworkX graph
-    :param networkGraphs: Network Graphs
-    :param directed: Boolean
+    :Function: Compute the load centrality for the NetworkGraphs object
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: NetworkGraphs
+    :param directed: Compute the metrics for the directed graph
+    :type directed: bool
+    :param multi: Compute the metrics for the multi graph
+    :type multi: bool
+    :param clean: Clean the DataFrame after computing the metrics
+    :type clean: bool
     :return: Pandas dataframe with the metrics and values
+    :rtype: pd.DataFrame
     """
     if not multi:
         G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
@@ -374,10 +445,15 @@ def compute_load_centrality(networkGraphs, directed=True, multi=True, clean=True
 @memoize
 def compute_nodes_degree(networkGraphs, directed=True, clean=True):
     """
-    :Function: Compute the node degree for the NetworkX graph
-    :param networkGraphs: NetworkGraphs
-    :param directed: Boolean
+    :Function: Compute the node degree for the NetworkGraphs object
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: NetworkGraphs
+    :param directed: Compute the metrics for the directed graph
+    :type directed: bool
+    :param clean: Clean the DataFrame after computing the metrics
+    :type clean: bool
     :return: Pandas dataframe with the metrics and values
+    :rtype: pd.DataFrame
     """
     G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
 
@@ -399,10 +475,15 @@ def compute_nodes_degree(networkGraphs, directed=True, clean=True):
 @memoize
 def compute_kcore(networkGraphs, directed=True, clean=True):
     """
-    :Function: Compute the k-core
-    :param networkGraphs: NetworkGraphs
-    :param directed: Boolean
-    :return: Pandas dataframe with the k-core
+    :Function: Compute the k-core for the NetworkGraphs object
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: NetworkGraphs
+    :param directed: Compute the metrics for the directed graph
+    :type directed: bool
+    :param clean: Clean the DataFrame after computing the metrics
+    :type clean: bool
+    :return: Pandas dataframe with the metrics and values
+    :rtype: pd.DataFrame
     """
     G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
 
@@ -424,10 +505,15 @@ def compute_kcore(networkGraphs, directed=True, clean=True):
 @memoize
 def compute_triangles(networkGraphs, directed=True, clean=True):
     """
-    :Function: Compute the triangle
-    :param networkGraphs: NetworkGraphs
-    :param directed: Boolean
-    :return: Pandas dataframe with the triangle
+    :Function: Compute the triangle for the NetworkGraphs object
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: NetworkGraphs
+    :param directed: Compute the metrics for the directed graph
+    :type directed: bool
+    :param clean: Clean the DataFrame after computing the metrics
+    :type clean: bool
+    :return: Pandas dataframe with the metrics and values
+    :rtype: pd.DataFrame
     """
     G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
 
@@ -447,17 +533,20 @@ def compute_triangles(networkGraphs, directed=True, clean=True):
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_page_rank(networkGraphs, directed=True, multi=True, clean=True):
+def compute_page_rank(networkGraphs, directed=True, clean=True):
     """
-    :Function: Compute the page rank
-    :param networkGraphs: NetworkGraphs
-    :param directed: Boolean
-    :return: Pandas dataframe with the page rank
+    :Function: Compute the page rank for the NetworkGraphs object
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: NetworkGraphs
+    :param directed: Compute the metrics for the directed graph
+    :type directed: bool
+    :param clean: Clean the DataFrame after computing the metrics
+    :type clean: bool
+    :return: Pandas dataframe with the metrics and values
+    :rtype: pd.DataFrame
     """
-    if not multi:
-        G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
-    else:
-        G = networkGraphs.MultiGraph if not directed else networkGraphs.MultiDiGraph
+    G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
+
     try:
         page_rank = nx.pagerank(G)
         df = pd.DataFrame(page_rank.items(), columns=['Node', 'Page Rank'])
@@ -479,8 +568,11 @@ def compute_CDF(df, column):
     """
     :Function: Compute the Cumulative Distribution Function for a given column
     :param df: Pandas dataframe
+    :type df: pd.DataFrame
     :param column: Column name
+    :type column: str
     :return: Pandas dataframe with the CDF
+    :rtype: pd.DataFrame
     """
     df = df.sort_values(by=column, ascending=True)
     df['CDF'] = np.cumsum(df[column]) / np.sum(df[column])
@@ -494,8 +586,11 @@ def compute_CCDF(df, column):
     """
     :Function: Compute the Complementary Cumulative Distribution Function for a given column
     :param df: Pandas dataframe
+    :type df: pd.DataFrame
     :param column: Column name
+    :type column: str
     :return: Pandas dataframe with the CCDF
+    :rtype: pd.DataFrame
     """
     df = compute_CDF(df, column)
     df['CCDF'] = 1 - df['CDF']
@@ -529,34 +624,13 @@ def export_to_csv(df, filename):
 
 # ----------------------------------------------------------------------------------------
 
-# TEST FUNCTIONS VISUALIZATION SHOULD BE IN ANOTHER FILE
-def histogram(df, column, bins=100, log=False, title=None):
-    """
-    :Function: Plot the histogram for a given column
-    :param df: Pandas dataframe
-    :param column: Column name
-    :param bins: Number of bins
-    :param log: Boolean
-    :return: Histogram
-    """
-    if log:
-        plt.hist(df[column], bins=bins, log=True)
-    else:
-        plt.hist(df[column], bins=bins)
-
-    if title:
-        plt.title(title)
-    plt.show()
-
-
-# ----------------------------------------------------------------------------------------
-
 def clean_df(df):
     """
-    :Function: Clean the dataframe
-    :param df: Pandas dataframe
-    :param column: Column name
-    :return: Pandas dataframe
+    :Function: Clean the dataframe by rounding the values to 6 decimals and shortening the strings to 12 characters
+    :param df: Pandas dataframe to clean
+    :type df: pd.DataFrame
+    :return: Pandas dataframe cleaned
+    :rtype: pd.DataFrame
     """
 
     # if the columns is float round it to 6 decimals
