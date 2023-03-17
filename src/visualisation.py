@@ -166,7 +166,7 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
 
 def plot_histogram(networkGraphs, metrics, directed=True, multi=True):
     """
-    :Function: Plot the histogram for a given column
+    :Function: Plot the histogram distribution for a given metric
     Metrics:
         - 'kcore'
         - 'degree'
@@ -223,3 +223,83 @@ def plot_hotspot(networkGraphs):
         generate_hotspot(networkGraphs, hotspot, filepath)
 
     return hotspot, filename
+
+
+# ----------------------------------------------------------------------------------------
+
+
+def plot_boxplot(networkGraphs, metrics, directed=True, multi=True):
+    """
+    :Function: Plot the boxplot for a given metric
+    Metrics:
+        - 'kcore'
+        - 'degree'
+        - 'triangles'
+        - 'pagerank'
+        - 'betweenness_centrality'
+        - 'closeness_centrality'
+        - 'eigenvector_centrality'
+        - 'load_centrality'
+        - 'degree_centrality'
+        - 'centralities' - All centralities
+        - 'nodes' - All node metrics
+    :param networkGraphs: Network graphs
+    :param metrics: Metrics to be plotted
+    :param directed: Boolean to indicate if the graph is directed or not
+    :param multi: for multi graphs
+    :return: df and filename
+    """
+    if metrics == 'centralities':
+        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
+    elif metrics == 'nodes':
+        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi, clean=False)
+    else:
+        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi, clean=False)
+
+    filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Boxplot.html"
+    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
+
+    if not os.path.isfile(filepath):
+        generate_boxplot_metric(df, filepath)
+
+    return df, filename
+
+
+# ----------------------------------------------------------------------------------------
+
+
+def plot_violin(networkGraphs, metrics, directed=True, multi=True):
+    """
+    :Function: Plot the violin plot for a metric
+    Metrics:
+        - 'kcore'
+        - 'degree'
+        - 'triangles'
+        - 'pagerank'
+        - 'betweenness_centrality'
+        - 'closeness_centrality'
+        - 'eigenvector_centrality'
+        - 'load_centrality'
+        - 'degree_centrality'
+        - 'centralities' - All centralities
+        - 'nodes' - All node metrics
+    :param networkGraphs: Network graphs
+    :param metrics: Metrics to be plotted
+    :param directed: Boolean to indicate if the graph is directed or not
+    :param multi: for multi graphs
+    :return: df and filename
+    """
+    if metrics == 'centralities':
+        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
+    elif metrics == 'nodes':
+        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi, clean=False)
+    else:
+        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi, clean=False)
+
+    filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Violin.html"
+    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
+
+    if not os.path.isfile(filepath):
+        generate_violin_metric(df, filepath)
+
+    return df, filename
