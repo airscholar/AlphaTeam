@@ -78,7 +78,6 @@ def static_visualisation(networkGraphs, filepath, directed=True, multi=False, la
     fig.update_layout(layout)
 
     fig.write_html(filepath)
-    fig.show()
 
     return fig
 
