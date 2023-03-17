@@ -287,15 +287,16 @@ def compute_degree_centrality(networkGraphs, directed=True, multi=True, clean=Tr
     :return: Pandas dataframe with the metrics and values
     :rtype: pd.DataFrame
     """
+    metric = 'Degree Centrality'
     if not multi:
         G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
     else:
         G = networkGraphs.MultiGraph if not directed else networkGraphs.MultiDiGraph
     try:
         degree_centrality = nx.degree_centrality(G)
-        df = pd.DataFrame(degree_centrality.items(), columns=['Node', 'Degree Centrality'])
+        df = pd.DataFrame(degree_centrality.items(), columns=['Node', metric])
     except:
-        df = return_nan(networkGraphs, 'Degree Centrality')
+        df = return_nan(networkGraphs, metric)
 
     if clean:
         df = clean_df(df)
@@ -319,15 +320,16 @@ def compute_eigen_centrality(networkGraphs, directed=True, multi=True, clean=Tru
     :return: Pandas dataframe with the metrics and values
     :rtype: pd.DataFrame
     """
+    metric = 'Eigenvector Centrality'
     if not multi:
         G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
     else:
         G = networkGraphs.MultiGraph if not directed else networkGraphs.MultiDiGraph
     try:
         eigen_centrality = nx.eigenvector_centrality(G)
-        df = pd.DataFrame(eigen_centrality.items(), columns=['Node', 'Eigenvector Centrality'])
+        df = pd.DataFrame(eigen_centrality.items(), columns=['Node', metric])
     except:
-        df = return_nan(networkGraphs, 'Eigenvector Centrality')
+        df = return_nan(networkGraphs, metric)
 
     if clean:
         df = clean_df(df)
@@ -351,15 +353,16 @@ def compute_closeness_centrality(networkGraphs, directed=True, multi=True, clean
     :return: Pandas dataframe with the metrics and values
     :rtype: pd.DataFrame
     """
+    metric = 'Closeness Centrality'
     if not multi:
         G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
     else:
         G = networkGraphs.MultiGraph if not directed else networkGraphs.MultiDiGraph
     try:
         closeness_centrality = nx.closeness_centrality(G)
-        df = pd.DataFrame(closeness_centrality.items(), columns=['Node', 'Closeness Centrality'])
+        df = pd.DataFrame(closeness_centrality.items(), columns=['Node', metric])
     except:
-        df = return_nan(networkGraphs, 'Closeness Centrality')
+        df = return_nan(networkGraphs, metric)
 
     if clean:
         df = clean_df(df)
@@ -383,15 +386,16 @@ def compute_betweeness_centrality(networkGraphs, directed=True, multi=True, clea
     :return: Pandas dataframe with the metrics and values
     :rtype: pd.DataFrame
     """
+    metric = 'Betweeness Centrality'
     if not multi:
         G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
     else:
         G = networkGraphs.MultiGraph if not directed else networkGraphs.MultiDiGraph
     try:
         betweeness_centrality = nx.betweenness_centrality(G)
-        df = pd.DataFrame(betweeness_centrality.items(), columns=['Node', 'Betweeness Centrality'])
+        df = pd.DataFrame(betweeness_centrality.items(), columns=['Node', metric])
     except:
-        df = return_nan(networkGraphs, 'Betweeness Centrality')
+        df = return_nan(networkGraphs, metric)
 
     if clean:
         df = clean_df(df)
@@ -415,15 +419,16 @@ def compute_load_centrality(networkGraphs, directed=True, multi=True, clean=True
     :return: Pandas dataframe with the metrics and values
     :rtype: pd.DataFrame
     """
+    metric = 'Load Centrality'
     if not multi:
         G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
     else:
         G = networkGraphs.MultiGraph if not directed else networkGraphs.MultiDiGraph
     try:
         load_centrality = nx.load_centrality(G)
-        df = pd.DataFrame(load_centrality.items(), columns=['Node', 'Load Centrality'])
+        df = pd.DataFrame(load_centrality.items(), columns=['Node', metric])
     except:
-        df = return_nan(networkGraphs, 'Load Centrality')
+        df = return_nan(networkGraphs, metric)
 
     if clean:
         df = clean_df(df)
@@ -449,6 +454,7 @@ def compute_nodes_degree(networkGraphs, directed=True, multi=True, clean=True):
     :return: Pandas dataframe with the metrics and values
     :rtype: pd.DataFrame
     """
+    metric = 'Degree'
     if not multi:
         G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
     else:
@@ -456,9 +462,9 @@ def compute_nodes_degree(networkGraphs, directed=True, multi=True, clean=True):
 
     try:
         degree = nx.degree(G)
-        df = pd.DataFrame(degree, columns=['Node', 'Degree'])
+        df = pd.DataFrame(degree, columns=['Node', metric])
     except:
-        df = return_nan(networkGraphs, "Degree")
+        df = return_nan(networkGraphs, metric)
 
     if clean:
         df = clean_df(df)
@@ -483,16 +489,17 @@ def compute_kcore(networkGraphs, directed=True, multi=False, clean=True):
     :rtype: pd.DataFrame
     :raises: ValueError if the graph is multi
     """
+    metric = 'K-Core'
     if multi:
         print(ValueError("K-Core computation is not allowed for Multi graphs"))
-        df = return_nan(networkGraphs, 'K-Core')
+        df = return_nan(networkGraphs, metric)
     else:
         G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
         try:
             kcore = nx.core_number(G)
-            df = pd.DataFrame(kcore.items(), columns=['Node', 'K-Core'])
+            df = pd.DataFrame(kcore.items(), columns=['Node', metric])
         except:
-            df = return_nan(networkGraphs, 'K-Core')
+            df = return_nan(networkGraphs, metric)
 
     if clean:
         df = clean_df(df)
@@ -513,17 +520,18 @@ def compute_triangles(networkGraphs, clean=True, directed=False, multi=False):
     :rtype: pd.DataFrame
     :raises: Exception if the graph is directed or multi
     """
+    metric = 'Triangle'
     if multi or directed:
         print(ValueError('Triangles computation is not allowed for directed or multi graphs'))
-        df = return_nan(networkGraphs, 'Triangle')
+        df = return_nan(networkGraphs, metric)
 
     else:
         G = networkGraphs.Graph
         try:
             triangle = nx.triangles(G)
-            df = pd.DataFrame(triangle.items(), columns=['Node', 'Triangle'])
+            df = pd.DataFrame(triangle.items(), columns=['Node', metric])
         except:
-            df = return_nan(networkGraphs, 'Triangle')
+            df = return_nan(networkGraphs, metric)
 
     if clean:
         df = clean_df(df)
@@ -548,6 +556,7 @@ def compute_page_rank(networkGraphs, directed=True, multi=True, clean=True):
     :return: Pandas dataframe with the metrics and values
     :rtype: pd.DataFrame
     """
+    metric = 'Page Rank'
     if not multi:
         G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
     else:
@@ -555,9 +564,9 @@ def compute_page_rank(networkGraphs, directed=True, multi=True, clean=True):
 
     try:
         page_rank = nx.pagerank(G)
-        df = pd.DataFrame(page_rank.items(), columns=['Node', 'Page Rank'])
+        df = pd.DataFrame(page_rank.items(), columns=['Node', metric])
     except:
-       df = return_nan(networkGraphs, 'Page Rank')
+        df = return_nan(networkGraphs, metric)
 
     if clean:
         df = clean_df(df)
@@ -649,6 +658,7 @@ def clean_df(df):
 
     return df
 
+
 # ----------------------------------------------------------------------------------------
 
 
@@ -664,4 +674,3 @@ def return_nan(networkGraphs, metric):
     df['Node'] = list(networkGraphs.Graph.nodes())
     df[metric] = np.nan
     return df
-
