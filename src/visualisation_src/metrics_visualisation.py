@@ -6,47 +6,9 @@ from tqdm import tqdm
 from itertools import zip_longest
 from pyvis import network as net
 import matplotlib as mpl
+import plotly.figure_factory as ff
+import plotly.express as px
 import json
-
-
-# ----------------------------------------------------------------------------------------
-
-def plot_metrics(networkGraphs, df_, layout='map'):  # USING MATPLOTLIB
-    """
-    :Function: Plot the metrics on the graph
-    :param networkGraphs: Network graphs
-    :param df_: Dataframe with the metrics (first column is the node id) (second column is the metric)
-    :param layout: Layout to be used
-    :return: Matplotlib plot
-    """
-    if not networkGraphs.is_spatial() and layout == 'map':
-        ValueError("Graph is not spatial with coordinates")
-        plt.title("Graph is not spatial with coordinates")
-        return plt
-
-    if layout == 'map':
-        plot_map(networkGraphs)
-    pos = networkGraphs.pos[layout]
-
-    # get the metrics and standardise them
-    metrics_names = df_.columns[1]
-    metric_ = df_[metrics_names]
-    metric_ = (metric_ - metric_.min()) / (metric_.max() - metric_.min())
-
-    fig, ax = plt.subplots(figsize=(10, 6))
-    cmap = plt.cm.plasma
-    nx.draw(networkGraphs.Graph, pos, node_color=metric_, cmap=cmap, node_size=metric_ * 30, with_labels=False,
-            width=0.5)
-    plt.title(f"{metrics_names} visualisation using {layout} layout")
-
-    # Add colorbar
-    sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin=metric_.min(), vmax=metric_.max()))
-    sm.set_array([])
-    cbar = plt.colorbar(sm)
-    cbar.set_label(f"{metrics_names} values", rotation=270, labelpad=15)
-
-    return plt
-
 
 # ----------------------------------------------------------------------------------------
 
@@ -59,7 +21,6 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
     :param layout_: Layout to be used
     :return: Plotly plot
     """
-
     G = networkGraphs.Graph
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
@@ -70,14 +31,26 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
     df_['std'] = (df_[metrics_name] - df_[metrics_name].min()) / (df_[metrics_name].max() - df_[metrics_name].min())
     size_ = 5 / df_['std'].mean()  # normalise the size of the nodes
 
+    x_list = []
+    y_list = []
+    text_list = []
+    for node in tqdm(G.nodes()):
+        x, y = pos[node]
+        x_list.extend([x])
+        y_list.extend([y])
+        metric_df = df_[df_['Node'] == node]
+        node_info = f"Node: {node}<br>"
+        node_info += f"{metrics_name}: {str(metric_df[metrics_name].values[0])}<br>"
+        text_list.extend([node_info])
+
     if layout_ == 'map':
-        node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
+        node_trace = go.Scattergeo(lon=x_list, lat=y_list, text=text_list, mode='markers', hoverinfo='text',
                                    marker=dict(showscale=True,
                                                colorbar=dict(thickness=10, title=metrics_name, xanchor='left',
                                                              titleside='right'), color=df_[metrics_name],
                                                size=df_['std'] * size_))
     else:
-        node_trace = go.Scatter(x=[], y=[], text=[], mode='markers', hoverinfo='text',
+        node_trace = go.Scatter(x=x_list, y=y_list, text=text_list, mode='markers', hoverinfo='text',
                                 marker=dict(showscale=True,
                                             colorbar=dict(thickness=10, title=metrics_name, xanchor='left',
                                                           titleside='right'), color=df_[metrics_name],
@@ -85,24 +58,11 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
 
     edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
 
-    for node in tqdm(G.nodes()):
-        x, y = pos[node]
-        if layout_ == 'map':
-            node_trace['lon'] += tuple([x])
-            node_trace['lat'] += tuple([y])
-        else:
-            node_trace['x'] += tuple([x])
-            node_trace['y'] += tuple([y])
-        metric_df = df_[df_['Node'] == node]
-        node_info = f"Node: {node}<br>"
-        node_info += f"{metrics_name}: {str(metric_df[metrics_name].values[0])}<br>"
-        node_trace['text'] += tuple([node_info])
-
     layout = get_layout(networkGraphs, title=f"{metrics_name} visualisation using {layout_} layout", layout_=layout_)
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
 
-    fig.write_html(filename, auto_open=True)
+    fig.write_html(filename)
     return fig
 
 
@@ -117,7 +77,6 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
     :param layout_: Layout to be used
     :return: Plotly plot
     """
-
     G = networkGraphs.Graph
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
@@ -126,34 +85,33 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
 
     metrics_names = df_.columns[1:]
 
-    if layout_ == 'map':
-        node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
-                                   marker=dict(showscale=False, size=3, color='black'))
-    else:
-        node_trace = go.Scatter(x=[], y=[], text=[], mode='markers', hoverinfo='text',
-                                marker=dict(showscale=False, size=3, color='black'))
-
-    edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
-
+    x_list = []
+    y_list = []
+    text_list = []
     for node in G.nodes():
         x, y = pos[node]
-        if layout_ == 'map':
-            node_trace['lon'] += tuple([x])
-            node_trace['lat'] += tuple([y])
-        else:
-            node_trace['x'] += tuple([x])
-            node_trace['y'] += tuple([y])
+        x_list.extend([x])
+        y_list.extend([y])
         metric_df = df_[df_['Node'] == node]
         node_info = f"Node: {node}<br>"
         for metric in metrics_names:
             node_info += f"{metric}: {str(metric_df[metric].values[0])}<br>"
-        node_trace['text'] += tuple([node_info])
+        text_list.extend([node_info])
+
+    if layout_ == 'map':
+        node_trace = go.Scattergeo(lon=x_list, lat=y_list, text=text_list, mode='markers', hoverinfo='text',
+                                   marker=dict(showscale=False, size=3, color='black'))
+    else:
+        node_trace = go.Scatter(x=x_list, y=y_list, text=text_list, mode='markers', hoverinfo='text',
+                                marker=dict(showscale=False, size=3, color='black'))
+
+    edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
 
     layout = get_layout(networkGraphs, title=f"Metrics visualisation using {layout_} layout", layout_=layout_)
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
 
-    fig.write_html(filename, auto_open=True)
+    fig.write_html(filename)
     return fig
 
 
@@ -195,3 +153,5 @@ def generate_dynamic_metric(networkGraphs, df_, filename):  # USING PYVIS
     Net.write_html(filename)
 
     return Net
+
+# ----------------------------------------------------------------------------------------
