@@ -88,7 +88,7 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def plot_metric(networkGraphs, metrics, directed=False, dynamic=False, layout='map'):
+def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False, layout='map'):
     """
     :Function: Plot the metric for the given graph
     Metrics:
@@ -107,11 +107,12 @@ def plot_metric(networkGraphs, metrics, directed=False, dynamic=False, layout='m
     :param plot: Boolean to indicate if the html file should be generated
     :param layout: Layout of the plot
     :param directed: Boolean to indicate if the graph is directed or not
+    :param multi: for multi graphs
     :return: Pyplot plot
     """
-    df = m.get_metrics(networkGraphs, metrics, clean=False, directed=directed)
+    df = m.get_metrics(networkGraphs, metrics, clean=False, directed=directed, multi=multi)
 
-    if not is_numeric_dtype(df[df.columns.values[1]]):
+    if df.empty or df.isnull().values.any() or not is_numeric_dtype(df[df.columns.values[1]]):
         return ValueError('Metric column is empty. Please select a different metric.')
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
@@ -131,7 +132,7 @@ def plot_metric(networkGraphs, metrics, directed=False, dynamic=False, layout='m
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def plot_all_metrics(networkGraphs, metrics, directed=False, layout='map'):
+def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='map'):
     """
     :Function: Plot all the metrics for the given graph
     Metrics:
@@ -139,16 +140,15 @@ def plot_all_metrics(networkGraphs, metrics, directed=False, layout='map'):
         - 'nodes'
     :param networkGraphs: Network graphs
     :param metrics: Metrics to be plotted
-    :param dynamic: Boolean to indicate if the plot is dynamic or not
     :param directed: Boolean to indicate if the graph is directed or not
+    :param multi: for multi graphs
     :param layout: Layout of the plot
-    :param plot: Boolean to indicate if the html file should be generated
     :return: Pyplot plot
     """
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=False, clean=False)
+        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=False, clean=False)
+        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi, clean=False)
     else:
         return ValueError('Please select a valid metric, either "centralities" or "nodes"')
 
@@ -164,26 +164,38 @@ def plot_all_metrics(networkGraphs, metrics, directed=False, layout='map'):
 # ----------------------------------------------------------------------------------------
 
 
-def plot_histogram(df, column, log=False, title=None):
+def plot_histogram(networkGraphs, metrics, directed=True, multi=True):
     """
     :Function: Plot the histogram for a given column
-    :param df: Pandas dataframe
-    :param column: Column name
-    :param log: Boolean
-    :param title: Title of the plot
-    :return: Histogram
+    Metrics:
+        - 'kcore'
+        - 'degree'
+        - 'triangles'
+        - 'pagerank'
+        - 'betweenness_centrality'
+        - 'closeness_centrality'
+        - 'eigenvector_centrality'
+        - 'load_centrality'
+        - 'degree_centrality'
+        - 'centralities'
+        - 'nodes'
+    :param networkGraphs: Network graphs
+    :param metrics: Metrics to be plotted
+    :param directed: Boolean to indicate if the graph is directed or not
+    :param multi: for multi graphs
+    :return: df and filename
     """
-    bins = np.linspace(-5, 5, 50)
-
-    if log:
-        plt.hist(df[column], bins=bins, log=True, color='blue', alpha=0.5, edgecolor='black')
+    if metrics == 'centralities':
+        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
+    elif metrics == 'nodes':
+        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi, clean=False)
     else:
-        plt.hist(df[column], bins=bins, color='blue', alpha=0.5, edgecolor='black')
+        m.get_metrics(networkGraphs, metrics, directed=False, multi=multi, clean=False)
 
-    if title:
-        plt.title(title)
+    filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_Histogram.html"
 
-    return plt
+
+
 
 
 # ----------------------------------------------------------------------------------------

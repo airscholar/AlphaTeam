@@ -155,3 +155,32 @@ def generate_dynamic_metric(networkGraphs, df_, filename):  # USING PYVIS
     return Net
 
 # ----------------------------------------------------------------------------------------
+
+def generate_histogram_metric(df_, filename):
+    """
+    :Function: Generate histogram of the metrics
+    :param df_: Dataframe with the metrics
+    :type df_: pd.DataFrame
+    :param filename: Name of the file to be saved
+    :type filename: str
+    :return: Plotly plot
+    :rtype: plotly.graph_objects.Figure
+    """
+    metrics_names = df_.columns[1:]
+    metrics = df_[metrics_names].values
+    title = f"Histogram distribution of the metric{'s' if len(metrics_names)>1 else ''}: {', '.join(metrics_names)}"
+
+    fig = go.Figure()
+    for i, metric in enumerate(metrics_names):
+        fig.add_trace(go.Histogram(x=metrics[:, i], name=metric))
+
+    fig.update_layout(barmode='overlay',
+                      title_text=title,
+                      xaxis_title="Values",
+                      yaxis_title="Count",
+                      bargap=0.1,)
+    fig.update_traces(opacity=0.75)
+
+    fig.write_html(filename)
+
+    return fig
