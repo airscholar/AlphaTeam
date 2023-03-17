@@ -182,5 +182,6 @@ def generate_histogram_metric(df_, filename):
     fig.update_traces(opacity=0.75)
 
     fig.write_html(filename)
+    fig.show()
 
     return fig

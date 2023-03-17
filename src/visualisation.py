@@ -177,8 +177,8 @@ def plot_histogram(networkGraphs, metrics, directed=True, multi=True):
         - 'eigenvector_centrality'
         - 'load_centrality'
         - 'degree_centrality'
-        - 'centralities'
-        - 'nodes'
+        - 'centralities' - All centralities
+        - 'nodes' - All node metrics
     :param networkGraphs: Network graphs
     :param metrics: Metrics to be plotted
     :param directed: Boolean to indicate if the graph is directed or not
@@ -190,12 +190,15 @@ def plot_histogram(networkGraphs, metrics, directed=True, multi=True):
     elif metrics == 'nodes':
         df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi, clean=False)
     else:
-        m.get_metrics(networkGraphs, metrics, directed=False, multi=multi, clean=False)
+        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi, clean=False)
 
-    filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_Histogram.html"
+    filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Histogram.html"
+    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
 
+    if not os.path.isfile(filepath):
+        generate_histogram_metric(df, filepath)
 
-
+    return df, filename
 
 
 # ----------------------------------------------------------------------------------------
