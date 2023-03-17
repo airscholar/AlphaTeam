@@ -115,7 +115,7 @@ def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False
     if df.empty or df.isnull().values.any() or not is_numeric_dtype(df[df.columns.values[1]]):
         return ValueError('Metric column is empty. Please select a different metric.')
 
-    filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
+    filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
     filepath = f"../application/{networkGraphs.session_folder}/{filename}"
     if dynamic:
         filepath = filepath.replace(f"_{layout}", "")
@@ -152,7 +152,7 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
     else:
         return ValueError('Please select a valid metric, either "centralities" or "nodes"')
 
-    filename = f"All_{metrics}_{'Directed' if directed else 'Undirected'}_{layout}.html"
+    filename = f"All_{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_{layout}.html"
     filepath = f"../application/{networkGraphs.session_folder}/{filename}"
 
     if not os.path.isfile(filepath):
