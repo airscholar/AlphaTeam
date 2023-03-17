@@ -26,7 +26,7 @@ def generate_static_cluster(networkGraphs, df_, filename, layout_='map'):  # USI
                                 marker=dict(showscale=False, size=5, color=[]))
 
     edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
-
+    print(df_)
     for node in tqdm(G.nodes()):
         x, y = pos[node]
         if layout_ == 'map':

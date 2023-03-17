@@ -62,6 +62,7 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
         - 'girvan_newman',
         - 'edge_betweenness'
         - 'k_clique'
+        - 'spectral'
     :param networkGraphs: Network graphs
     :param clusterType: Type of cluster
     :param dynamic: Boolean to indicate if the plot is dynamic or not
@@ -69,10 +70,18 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
     :param layout: Layout of the plot
     :return:
     """
+    if clusterType not in ['louvain', 'greedy_modularity', 'label_propagation', 'asyn_lpa', 'girvan_newman',
+                           'edge_betweenness', 'k_clique', 'spectral', 'kmeans', 'dbscan', 'hierarchical']:
+        raise ValueError("Cluster type not recognised")
     cluster = ml.get_communities(networkGraphs, clusterType)
 
     filename = f"{clusterType}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
+    folder = f"../application/{networkGraphs.session_folder}/"
+    if not os.path.isdir(folder):
+        os.mkdir(folder)
+
+    filepath = f"{folder}{filename}"
+    print('filepath', filepath)
     if dynamic:
         filepath = filepath.replace(f"_{layout}", "")
 
@@ -81,6 +90,7 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
             generate_dynamic_cluster(networkGraphs, cluster, filepath)
         else:
             generate_static_cluster(networkGraphs, cluster, filepath, layout_=layout)
+            print('static cluster generated')
 
     return cluster, filename
 
