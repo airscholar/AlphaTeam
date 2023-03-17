@@ -23,23 +23,21 @@ def static_visualisation(networkGraphs, filepath, directed=True, multi=False, la
     pos = networkGraphs.pos[layout_]
     text = [f"Node: {node}" for node in G.nodes()]
 
+    x_list = []
+    y_list = []
+    for node in G.nodes():
+        x, y = pos[node]
+        x_list.extend([x])
+        y_list.extend([y])
+
     if layout_ == 'map':
-        node_trace = go.Scattergeo(lon=[], lat=[], text=text, mode='markers', hoverinfo='text',
+        node_trace = go.Scattergeo(lon=x_list, lat=y_list, text=text, mode='markers', hoverinfo='text',
                                    marker=dict(showscale=True, color='black', size=5))
     else:
-        node_trace = go.Scatter(x=[], y=[], text=text, mode='markers', hoverinfo='text',
+        node_trace = go.Scatter(x=x_list, y=y_list, text=text, mode='markers', hoverinfo='text',
                                 marker=dict(showscale=True, color='black',size=5))
 
     edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
-
-    for node in tqdm(G.nodes()):
-        x, y = pos[node]
-        if layout_ == 'map':
-            node_trace['lon'] += tuple([x])
-            node_trace['lat'] += tuple([y])
-        else:
-            node_trace['x'] += tuple([x])
-            node_trace['y'] += tuple([y])
 
     layout = get_layout(networkGraphs, title=f"Visualisation using {layout_} layout", layout_=layout_)
     fig = go.Figure(data=[edge_trace, node_trace],
@@ -72,7 +70,6 @@ def dynamic_visualisation(networkGraphs, filepath, directed=True, multi=False):
     # change the weights
     for i, (u, v) in enumerate(G.edges()):
         G[u][v]['weight'] = weights[i]
-
 
     Net = net.Network(height="750px", width="100%", bgcolor="grey", font_color="black")
     Net.from_nx(G)

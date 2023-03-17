@@ -95,20 +95,17 @@ def generate_edge_trace(Graph, pos, layout):
     :param layout: Layout of the plot
     :return: Edge trace
     """
-    if layout == 'map':
-        edge_trace = go.Scattergeo(lon=[], lat=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
-
-    else:
-        edge_trace = go.Scatter(x=[], y=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
-
-    for edge in tqdm(Graph.edges()):
+    x_list = []
+    y_list = []
+    for edge in Graph.edges():
         x0, y0 = pos[edge[0]]
         x1, y1 = pos[edge[1]]
-        if layout == 'map':
-            edge_trace['lon'] += (x0, x1, None)
-            edge_trace['lat'] += (y0, y1, None)
-        else:
-            edge_trace['x'] += (x0, x1, None)
-            edge_trace['y'] += (y0, y1, None)
+        x_list.extend([x0, x1, None])
+        y_list.extend([y0, y1, None])
+
+    if layout == 'map':
+        edge_trace = go.Scattergeo(lon=x_list, lat=y_list, hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
+    else:
+        edge_trace = go.Scatter(x=x_list, y=y_list, hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
 
     return edge_trace
