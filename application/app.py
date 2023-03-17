@@ -29,13 +29,9 @@ def internal_server_error(e):
         # Delete the file
         filename = session['filename']
         filename2 = session['filename2']
-        filepath = './uploads/'+filename2
+        filepath = 'static/uploads/'+filename2
         if os.path.exists(filepath):
-            shutil.rmtree(filepath)
-        imagepath = app.root_path + '/static/img/' + filename + '.png'
-        if os.path.exists(imagepath):
-            os.remove(imagepath)
-        
+            shutil.rmtree(filepath)        
         cache.clear()
 
     return render_template('500.html')
@@ -52,12 +48,9 @@ def index():
         # Delete the file
         filename = session['filename']
         filename2 = session['filename2']
-        filepath = './uploads/'+filename2
+        filepath = 'static/uploads/'+filename2
         if os.path.exists(filepath):
             shutil.rmtree(filepath)
-        imagepath = app.root_path + '/static/img/' + filename + '.png'
-        if os.path.exists(imagepath):
-            os.remove(imagepath)
         # Clear the cache
         cache.clear()
     return render_template('index.html')
@@ -86,9 +79,9 @@ def upload():
             filename = option + re.sub(r'\W+', '', timestamp) + '.mtx'
             filename2 = option + re.sub(r'\W+', '', timestamp)
         # Check if the directory exists, and create it if it doesn't
-        destination_dir = './uploads/'+filename2
+        destination_dir = 'static/uploads/'+filename2
         # Create the directory if it doesn't exist
-        destination_dir = './uploads/'+filename2
+        destination_dir = 'static/uploads/'+filename2
         if not os.path.exists(destination_dir):
             os.makedirs(destination_dir)
         destination_file = filename
@@ -111,7 +104,7 @@ def upload():
             filename2 = option + re.sub(r'\W+', '', timestamp)
     
         # Create the directory if it doesn't exist
-        destination_dir = './uploads/'+filename2
+        destination_dir = 'static/uploads/'+filename2
         if not os.path.exists(destination_dir):
             os.makedirs(destination_dir)
 
@@ -137,10 +130,10 @@ def home():
     filename2 = session['filename2']
     filepath = session['filepath']
     option = session['option']
-
+    
     # Assign the value to the global variable
     global networkGraphs
-    networkGraphs = NetworkGraphs(filepath, type=option, spatial=True)
+    networkGraphs = NetworkGraphs(filepath, session_folder='static/uploads/'+filename2, type=option)
 
     global_metrics = cache.get('global_metrics')
     if global_metrics is None:
@@ -152,16 +145,41 @@ def home():
 
 #-------------------------------------------VISUALISATION-----------------------------------
 
-@app.route('/visualise/static', endpoint='my_static')
-def static():
+@app.route('/visualise/static', methods=['GET', 'POST'], endpoint='my_static')
+def static_visualisation():
     filename = session['filename']
-    obj = static_visualisation(networkGraphs, "My Plot", directed=False)
-    plot = static_visualisation(networkGraphs, "My Plot", directed=False)
-    image_path = 'img/' + filename + '.png'
-    if not os.path.exists(app.root_path + '/static/img/' + filename + '.png'):
-        plot.savefig(app.root_path + '/static/img/' + filename + '.png', bbox_inches='tight')
-    print(image_path)
-    return render_template('static_visualisation.html', image_path=image_path)
+    filename2 = session['filename2']
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'option1'
+
+    if request.method == 'POST':
+        # Get form data
+        dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+        directed_toggle = bool(request.form.get('directed_toggle'))
+        layout = request.form.get('layout')
+
+        # Update visualization based on form data
+        # Example code:
+        # if dynamic_toggle:
+        #     # Do something for dynamic toggle on
+        # else:
+        #     # Do something for dynamic toggle off
+
+        # if directed_toggle:
+        #     # Do something for directed toggle on
+        # else:
+        #     # Do something for directed toggle off
+
+        # if layout == 'map':
+        #     # Do something for map layout selected
+        # elif layout == 'sfdp':
+        #     # Do something for sfdp layout selected
+        # elif layout == 'twopi':
+        #     # Do something for twopi layout selected
+    
+    return render_template('static_visualisation.html', dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout)
+
 
 @app.route('/visualise/dynamic', endpoint='my_dynamic')
 def dynamic():
@@ -169,14 +187,44 @@ def dynamic():
 
 #-------------------------------------------CENTRALITY--------------------------------------
 
-@app.route('/centrality', endpoint='centrality')
+@app.route('/centrality', endpoint='centrality', methods=['GET', 'POST'])
 @cache.cached(timeout=3600) # Cache the result for 1 hour
 def centrality_all():
-    allCentralityDF = cache.get('allCentralityDF')
-    if allCentralityDF is None:
-        allCentralityDF = compute_node_centralities(networkGraphs, directed=False)
-        cache.set('allCentralityDF', allCentralityDF)
-    return render_template('centrality_all.html', example=allCentralityDF)
+    filename2 = session['filename2']
+    metrics = 'centralities'
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+
+    if request.method == 'POST':
+        # Get form data
+        dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+        directed_toggle = bool(request.form.get('directed_toggle'))
+        layout = request.form.get('layout')
+
+        # Update visualization based on form data
+        # Example code:
+        # if dynamic_toggle:
+        #     # Do something for dynamic toggle on
+        # else:
+        #     # Do something for dynamic toggle off
+
+        # if directed_toggle:
+        #     # Do something for directed toggle on
+        # else:
+        #     # Do something for directed toggle off
+
+        # if layout == 'map':
+        #     # Do something for map layout selected
+        # elif layout == 'sfdp':
+        #     # Do something for sfdp layout selected
+        # elif layout == 'twopi':
+        #     # Do something for twopi layout selected
+    else:
+        df, graph_name = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, layout=layout)
+
+    graph_path = 'static/uploads/'+filename2+'/'+graph_name
+    return render_template('centrality_all.html', example=df, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph=graph_path)
 
 @app.route('/centrality/degree', endpoint='degree')
 @cache.cached(timeout=3600) # Cache the result for 1 hour

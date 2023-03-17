@@ -73,3 +73,12 @@ $(document).ready(function () {
         document.body.removeChild(link);
     });
 });
+
+function validateLayout() {
+    var layout = document.getElementById('dropdown-menu').value;
+    if (layout === 'option1') {
+        alert('Please select a layout option.');
+        return false;
+    }
+    return true;
+}
