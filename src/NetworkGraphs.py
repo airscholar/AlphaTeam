@@ -123,7 +123,7 @@ class NetworkGraphs:
         if type == 'RAILWAY':
             self.set_spatial(True)
             self.set_temporal(True)
-            self.set_weighted(False)
+            self.set_weighted(True)
 
             self.DiGraph, self.MultiDiGraph = preprocess_railway(filename)
             self.Graph, self.MultiGraph = self.DiGraph.to_undirected(), self.MultiDiGraph.to_undirected()
@@ -228,9 +228,15 @@ class NetworkGraphs:
                             'MultiGraph': list(nx.get_edge_attributes(self.MultiGraph, 'weight').values()),
                             'DiGraph': list(nx.get_edge_attributes(self.DiGraph, 'weight').values()),
                             'MultiDiGraph': list(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())}
+            self.min_weight = {'Graph': min(nx.get_edge_attributes(self.Graph, 'weight').values()),
+                                'MultiGraph': min(nx.get_edge_attributes(self.MultiGraph, 'weight').values()),
+                                'DiGraph': min(nx.get_edge_attributes(self.DiGraph, 'weight').values()),
+                                'MultiDiGraph': min(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())}
 
-            self.min_weight = min(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())
-            self.max_weight = max(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())
+            self.max_weight = {'Graph': max(nx.get_edge_attributes(self.Graph, 'weight').values()),
+                               'MultiGraph': max(nx.get_edge_attributes(self.MultiGraph, 'weight').values()),
+                               'DiGraph': max(nx.get_edge_attributes(self.DiGraph, 'weight').values()),
+                               'MultiDiGraph': max(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())}
 
             self.standardize_weights()
 
@@ -249,8 +255,7 @@ class NetworkGraphs:
         """
         if self.is_weighted():
             for weight in self.weights:
-                self.weights[weight] = [(weight - self.min_weight) / (self.max_weight - self.min_weight) for weight in
-                                        self.weights[weight]]
+                self.weights[weight] = [(w / self.max_weight[weight]) for w in self.weights[weight]]
         else:
             raise ValueError("The graph is not weighted")
 
