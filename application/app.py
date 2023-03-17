@@ -171,13 +171,14 @@ def static_visualisation():
         # else:
         #     # Do something for directed toggle off
 
+        print(layout)
         # if layout == 'map':
         #     # Do something for map layout selected
         # elif layout == 'sfdp':
         #     # Do something for sfdp layout selected
         # elif layout == 'twopi':
         #     # Do something for twopi layout selected
-    
+        
     return render_template('static_visualisation.html', dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout)
 
 
@@ -188,39 +189,21 @@ def dynamic():
 #-------------------------------------------CENTRALITY--------------------------------------
 
 @app.route('/centrality', endpoint='centrality', methods=['GET', 'POST'])
-@cache.cached(timeout=3600) # Cache the result for 1 hour
 def centrality_all():
     filename2 = session['filename2']
     metrics = 'centralities'
-    dynamic_toggle = False
-    directed_toggle = False
-    layout = 'map'
+    
 
     if request.method == 'POST':
         # Get form data
         dynamic_toggle = bool(request.form.get('dynamic_toggle'))
         directed_toggle = bool(request.form.get('directed_toggle'))
         layout = request.form.get('layout')
-
-        # Update visualization based on form data
-        # Example code:
-        # if dynamic_toggle:
-        #     # Do something for dynamic toggle on
-        # else:
-        #     # Do something for dynamic toggle off
-
-        # if directed_toggle:
-        #     # Do something for directed toggle on
-        # else:
-        #     # Do something for directed toggle off
-
-        # if layout == 'map':
-        #     # Do something for map layout selected
-        # elif layout == 'sfdp':
-        #     # Do something for sfdp layout selected
-        # elif layout == 'twopi':
-        #     # Do something for twopi layout selected
+        df, graph_name = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, layout=layout)
     else:
+        dynamic_toggle = False
+        directed_toggle = False
+        layout = 'map'
         df, graph_name = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, layout=layout)
 
     graph_path = 'static/uploads/'+filename2+'/'+graph_name

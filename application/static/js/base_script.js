@@ -80,5 +80,6 @@ function validateLayout() {
         alert('Please select a layout option.');
         return false;
     }
+
     return true;
 }
