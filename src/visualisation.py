@@ -303,3 +303,20 @@ def plot_violin(networkGraphs, metrics, directed=True, multi=True):
         generate_violin_metric(df, filepath)
 
     return df, filename
+
+# ----------------------------------------------------------------------------------------
+
+
+def plot_heatmap(networkGraph):
+    """
+    :Function: Plot the heatmap for the given graph
+    :param networkGraph:
+    :return:
+    """
+    filename = f"heatmap.html"
+    filepath = f"../application/{networkGraph.session_folder}/{filename}"
+
+    if not os.path.isfile(filepath):
+        generate_heatmap(networkGraph, filepath)
+
+    return filename

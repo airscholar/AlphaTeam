@@ -244,3 +244,27 @@ def generate_violin_metric(df_, filename):
     fig.show()
 
     return fig
+
+# ----------------------------------------------------------------------------------------
+
+
+def generate_heatmap(networkGraph, filename):
+    """
+    :Function: Show the heatmap of the graph
+    :param networkGraph: Network graph
+    :type networkGraph: NetworkGraph
+    :param filename: Name of the file to be saved
+    :type filename: str
+    :return: Plotly plot
+    """
+    G = networkGraph.Graph
+
+    mat = nx.to_scipy_sparse_array(G, nodelist=G.nodes(), weight=None, dtype=None, format='csc')
+    mat = mat.todense()
+    ax = [str(i) for i in G.nodes()]
+
+    fig = go.Figure(data=go.Heatmap(z=mat, x=ax, y=ax))
+    fig.update_layout(title_text="Heatmap of connections between nodes")
+
+    fig.write_html(filename)
+    return fig
