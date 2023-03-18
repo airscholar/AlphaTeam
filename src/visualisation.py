@@ -6,16 +6,14 @@ Purpose: Visualisation for the NetworkX graphs
 
 # ----------------------------------------------------------------------------------------
 
-import os
-
 from pandas.api.types import is_numeric_dtype
 
+import src.machineLearning as ml
 import src.metrics as m
 from src.visualisation_src.ML_visualisation import *
 from src.visualisation_src.basic_network_visualisation import *
 from src.visualisation_src.metrics_visualisation import *
 from src.visualisation_src.utils_visualisation import *
-import src.machineLearning as ml
 
 
 # ----------------------------------------------------------------------------------------
@@ -197,7 +195,7 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
     else:
         return ValueError('Please select a valid metric, either "centralities" or "nodes"')
 
-    filename = f"All_{metrics}_{'Directed' if directed else 'Undirected'}_{layout}.html"
+    filename = f"All_{metrics}_{'Directed' if directed else 'Undirected'}_{'Multi' if multi else ''}_{layout}.html"
     filepath = get_file_path(networkGraphs, filename)
 
     if not os.path.isfile(filepath):
