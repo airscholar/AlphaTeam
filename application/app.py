@@ -220,7 +220,7 @@ def centrality_all():
     graph1 = session['graph_name1']
     graph_path1 = 'static/uploads/'+filename2+'/'+graph1
     graph2 = session['graph_name2']
-    graph_path2 = 'static/uploads/'+filename2+'/'+graph_name2
+    graph_path2 = 'static/uploads/'+filename2+'/'+graph2
 
     return render_template('centrality_all.html', example=df, 
     dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
