@@ -10,7 +10,109 @@
             <hr> <!-- Add a horizontal rule for visual separation -->
         </div>
     </div>
-    <div class="card-body">
+
+    <div class="row">
+        <div class="container mt-3">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link {% if tab=='tab1' %}active{% else %}{% endif %}" data-toggle="tab"
+                        href="#tab1">Tab 1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if tab=='tab2' %}active{% else %}{% endif %}" data-toggle="tab"
+                        href="#tab2">Tab 2</a>
+                </li>
+            </ul>
+
+            <div class="tab-content" style="background-color: white; padding-bottom: 25px;">
+                <div id="tab1" class="container tab-pane {% if tab=='tab1' %}active{% else %}fade{% endif %}">
+                    <br />
+                    <div class="row">
+                        <div class="col-10">
+                            <div class="card card-body" style="align-items: center;">
+                                <iframe src="{{ graph1 }}" width="100%" height="500"></iframe>
+                                <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="card card-body" style="align-items: center;">
+
+                                <form method="post">
+                                    <div class="toggle-btn" style="margin:5px">
+                                        <input type="checkbox" id="dynamic-toggle" name="dynamic_toggle" {% if
+                                            dynamic_toggle %}checked{% endif %}>
+                                        <label for="dynamic-toggle"></label>
+                                    </div>
+                                    <span>Dynamic</span>
+                                    <div class="toggle-btn" style="margin:5px">
+                                        <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if
+                                            directed_toggle %}checked{% endif %}>
+                                        <label for="directed-toggle"></label>
+                                    </div>
+                                    <span>Directed</span>
+                                    <div class="dropdown" style="margin:5px">
+                                        <select id="dropdown-menu" class="mx-auto" name="layout">
+                                            <option value="map" {% if layout=='map' %}selected{% endif %}>Map</option>
+                                            <option value="sfdp" {% if layout=='sfdp' %}selected{% endif %}>Sfdp
+                                            </option>
+                                            <option value="twopi" {% if layout=='twopi' %}selected{% endif %}>Twopi
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary"
+                                        style="margin:5px; width: 100%;">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab2" class="container tab-pane {% if tab=='tab2' %}active{% else %}fade{% endif %}">
+                    <br />
+                    <div class="row">
+                        <div class="col-10">
+                            <div class="card card-body" style="align-items: center;">
+                                <iframe src="{{ graph2 }}" width="100%" height="500"></iframe>
+                                <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="card card-body" style="align-items: center;">
+
+                                <form method="post">
+                                    <div class="toggle-btn" style="margin:5px">
+                                        <input type="checkbox" id="dynamic-toggle2" name="dynamic_toggle2" {% if
+                                            dynamic_toggle2 %}checked{% endif %}>
+                                        <label for="dynamic-toggle2"></label>
+                                    </div>
+                                    <span>Dynamic</span>
+                                    <div class="toggle-btn" style="margin:5px">
+                                        <input type="checkbox" id="directed-toggle2" name="directed_toggle2" {% if
+                                            directed_toggle2 %}checked{% endif %}>
+                                        <label for="directed-toggle2"></label>
+                                    </div>
+                                    <span>Directed</span>
+                                    <div class="dropdown" style="margin:5px">
+                                        <select id="dropdown-menu2" class="mx-auto" name="layout2">
+                                            <option value="map" {% if layout2=='map' %}selected{% endif %}>Map</option>
+                                            <option value="sfdp" {% if layout2=='sfdp' %}selected{% endif %}>Sfdp
+                                            </option>
+                                            <option value="twopi" {% if layout2=='twopi' %}selected{% endif %}>Twopi
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary"
+                                        style="margin:5px; width: 100%;">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <div class="card card-body">
         <table id="example" class="display" style="width:100%">
             <thead>
                 <tr>

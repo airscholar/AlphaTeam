@@ -37,6 +37,12 @@
 
                                 <form method="post">
                                     <div class="toggle-btn" style="margin:5px">
+                                        <input type="checkbox" id="multi-toggle" name="multi_toggle" {% if multi_toggle
+                                            %}checked{% endif %}>
+                                        <label for="multi-toggle"></label>
+                                    </div>
+                                    <span>Multi</span>
+                                    <div class="toggle-btn" style="margin:5px">
                                         <input type="checkbox" id="dynamic-toggle" name="dynamic_toggle" {% if
                                             dynamic_toggle %}checked{% endif %}>
                                         <label for="dynamic-toggle"></label>
@@ -77,6 +83,12 @@
                             <div class="card card-body" style="align-items: center;">
 
                                 <form method="post">
+                                    <div class="toggle-btn" style="margin:5px">
+                                        <input type="checkbox" id="multi-toggle2" name="multi_toggle2" {% if
+                                            multi_toggle2 %}checked{% endif %}>
+                                        <label for="multi-toggle2"></label>
+                                    </div>
+                                    <span>Multi</span>
                                     <div class="toggle-btn" style="margin:5px">
                                         <input type="checkbox" id="dynamic-toggle2" name="dynamic_toggle2" {% if
                                             dynamic_toggle2 %}checked{% endif %}>
