@@ -6,17 +6,16 @@ Purpose: Visualisation for the NetworkX graphs
 
 # ----------------------------------------------------------------------------------------
 
-import numpy as np
-
-import src.machineLearning as ml
-import src.metrics as m
-from src.utils import memoize
-from src.visualisation_src.ML_visualisation import *
-from src.visualisation_src.metrics_visualisation import *
-from src.visualisation_src.basic_network_visualisation import *
-from src.visualisation_src.temporal_visualisation import *
-from pandas.api.types import is_numeric_dtype
 import os
+
+import numpy as np
+from pandas.api.types import is_numeric_dtype
+
+import src.metrics as m
+from src.visualisation_src.ML_visualisation import *
+from src.visualisation_src.basic_network_visualisation import *
+from src.visualisation_src.metrics_visualisation import *
+from src.visualisation_src.utils_visualisation import *
 
 
 # ----------------------------------------------------------------------------------------
@@ -63,25 +62,24 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
         - 'edge_betweenness'
         - 'k_clique'
         - 'spectral'
+        - 'kmeans'
+        - 'agglomerative'
+        - 'dbscan'
+        - 'hierarchical'
     :param networkGraphs: Network graphs
     :param clusterType: Type of cluster
     :param dynamic: Boolean to indicate if the plot is dynamic or not
-    :param plot: Boolean to indicate if the html file should be generated
     :param layout: Layout of the plot
     :return:
     """
     if clusterType not in ['louvain', 'greedy_modularity', 'label_propagation', 'asyn_lpa', 'girvan_newman',
-                           'edge_betweenness', 'k_clique', 'spectral', 'kmeans', 'dbscan', 'hierarchical']:
-        raise ValueError("Cluster type not recognised")
+                           'edge_betweenness', 'k_clique', 'spectral', 'kmeans', 'dbscan', 'hierarchical',
+                           'agglomerative']:
+        return ValueError("Cluster type not recognised")
     cluster = ml.get_communities(networkGraphs, clusterType)
 
     filename = f"{clusterType}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    folder = f"../application/{networkGraphs.session_folder}/"
-    if not os.path.isdir(folder):
-        os.mkdir(folder)
-
-    filepath = f"{folder}{filename}"
-    print('filepath', filepath)
+    filepath = get_file_path(networkGraphs, filename)
     if dynamic:
         filepath = filepath.replace(f"_{layout}", "")
 
@@ -90,7 +88,6 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
             generate_dynamic_cluster(networkGraphs, cluster, filepath)
         else:
             generate_static_cluster(networkGraphs, cluster, filepath, layout_=layout)
-            print('static cluster generated')
 
     return cluster, filename
 
@@ -163,7 +160,7 @@ def plot_all_metrics(networkGraphs, metrics, directed=False, layout='map'):
         return ValueError('Please select a valid metric, either "centralities" or "nodes"')
 
     filename = f"All_{metrics}_{'Directed' if directed else 'Undirected'}_{layout}.html"
-    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
+    filepath = get_file_path(networkGraphs, filename)
 
     if not os.path.isfile(filepath):
         generate_static_all_metrics(networkGraphs, df, filepath, layout_=layout)

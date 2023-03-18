@@ -1,8 +1,10 @@
-import matplotlib.pyplot as plt
+import os
+
 import geopandas as gpd
+import matplotlib.pyplot as plt
 from plotly import graph_objects as go
+
 from src.utils import memoize
-from tqdm import tqdm
 
 
 # ----------------------------------------------------------------------------------------
@@ -56,6 +58,7 @@ def get_layout(networkGraphs, title=None, layout_='map'):  # FOR PLOTLY
                 lonaxis_range=[networkGraphs.min_long, networkGraphs.max_long],
                 center=dict(lat=networkGraphs.mid_lat, lon=networkGraphs.mid_long),
                 showland=True,
+                showcountries=True,
             ),
             xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
             yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)
@@ -94,20 +97,32 @@ def generate_edge_trace(Graph, pos, layout):
     :param layout: Layout of the plot
     :return: Edge trace
     """
-    if layout == 'map':
-        edge_trace = go.Scattergeo(lon=[], lat=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
-
-    else:
-        edge_trace = go.Scatter(x=[], y=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
-
-    for edge in tqdm(Graph.edges()):
+    x_list = []
+    y_list = []
+    for edge in Graph.edges():
         x0, y0 = pos[edge[0]]
         x1, y1 = pos[edge[1]]
-        if layout == 'map':
-            edge_trace['lon'] += (x0, x1, None)
-            edge_trace['lat'] += (y0, y1, None)
-        else:
-            edge_trace['x'] += (x0, x1, None)
-            edge_trace['y'] += (y0, y1, None)
+        x_list.extend([x0, x1, None])
+        y_list.extend([y0, y1, None])
+
+    if layout == 'map':
+        edge_trace = go.Scattergeo(lon=x_list, lat=y_list, hoverinfo='none', mode='lines',
+                                   line=dict(width=0.5, color='#888'))
+    else:
+        edge_trace = go.Scatter(x=x_list, y=y_list, hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
 
     return edge_trace
+
+
+def get_file_path(networkGraphs, file_name):
+    """
+    :Function: Get the file path for the plotly plot
+    :param networkGraphs: Network graph
+    :param file_name: Name of the file
+    :return: Filepath
+    """
+    folder = f"../application/{networkGraphs.session_folder}/"
+    if not os.path.isdir(folder):
+        os.mkdir(folder)
+
+    return f"{folder}{file_name}"

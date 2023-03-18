@@ -51,13 +51,13 @@ def get_metrics(networkGraphs, method, clean=True, directed=False, multi=False):
                          "load_centrality, degree_centrality ")
 
     if method == 'kcore':
-        return compute_kcore(networkGraphs, clean=clean, directed=directed)
+        return compute_kcore(networkGraphs, clean=clean, directed=directed, multi=multi)
     elif method == 'degree':
-        return compute_nodes_degree(networkGraphs, clean=clean, directed=directed)
+        return compute_nodes_degree(networkGraphs, clean=clean, directed=directed, multi=multi)
     elif method == 'triangles':
-        return compute_triangles(networkGraphs, clean=clean, directed=directed)
+        return compute_triangles(networkGraphs, clean=clean, directed=directed, multi=multi)
     elif method == 'pagerank':
-        return compute_page_rank(networkGraphs, clean=clean, directed=directed)
+        return compute_page_rank(networkGraphs, clean=clean, directed=directed, multi=multi)
     elif method == 'betweenness_centrality':
         return compute_betweeness_centrality(networkGraphs, clean=clean, directed=directed, multi=multi)
     elif method == 'closeness_centrality':
@@ -244,22 +244,24 @@ def compute_node_centralities(networkGraphs, directed=True, multi=True, clean=Tr
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_node_metrics(networkGraphs, directed=True, clean=True):
+def compute_node_metrics(networkGraphs, directed=True, multi=True, clean=True):
     """
     :Function: Compute all the node metrics for the NetworkGraphs object
     :param networkGraphs: NetworkGraphs
     :type networkGraphs: NetworkGraphs
     :param directed: Compute the metrics for the directed graph
     :type directed: bool
+    :param multi: Compute the metrics for the multi graph
+    :type multi: bool
     :param clean: Clean the DataFrame after computing the metrics
     :type clean: bool
     :return: Pandas dataframe with the metrics and values
     :rtype: pd.DataFrame
     """
-    kcore = compute_kcore(networkGraphs, directed=directed, clean=clean)
-    triangle = compute_triangles(networkGraphs, directed=directed, clean=clean)
-    degree = compute_nodes_degree(networkGraphs, directed=directed, clean=clean)
-    pagerank = compute_page_rank(networkGraphs, directed=directed, clean=clean)
+    kcore = compute_kcore(networkGraphs, directed=directed, multi=multi, clean=clean)
+    triangle = compute_triangles(networkGraphs, directed=directed, multi=multi, clean=clean)
+    degree = compute_nodes_degree(networkGraphs, directed=directed, multi=multi, clean=clean)
+    pagerank = compute_page_rank(networkGraphs, directed=directed, multi=multi, clean=clean)
 
     df = pd.merge(kcore, triangle, how='inner', on='Node')
     df = pd.merge(df, degree, how='inner', on='Node')
@@ -443,19 +445,24 @@ def compute_load_centrality(networkGraphs, directed=True, multi=True, clean=True
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_nodes_degree(networkGraphs, directed=True, clean=True):
+def compute_nodes_degree(networkGraphs, directed=True, multi=True, clean=True):
     """
-    :Function: Compute the node degree for the NetworkGraphs object
+    :Function: Compute the node degree for the NetworkGraphs object, degree computation allows for Directed and Multi graphs
     :param networkGraphs: NetworkGraphs object
     :type networkGraphs: NetworkGraphs
     :param directed: Compute the metrics for the directed graph
     :type directed: bool
+    :param multi: Compute the metrics for the multi graph
+    :type multi: bool
     :param clean: Clean the DataFrame after computing the metrics
     :type clean: bool
     :return: Pandas dataframe with the metrics and values
     :rtype: pd.DataFrame
     """
-    G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
+    if not multi:
+        G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
+    else:
+        G = networkGraphs.MultiGraph if not directed else networkGraphs.MultiDiGraph
 
     try:
         degree = nx.degree(G)
@@ -473,19 +480,26 @@ def compute_nodes_degree(networkGraphs, directed=True, clean=True):
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_kcore(networkGraphs, directed=True, clean=True):
+def compute_kcore(networkGraphs, directed=True, multi=False, clean=True):
     """
-    :Function: Compute the k-core for the NetworkGraphs object
+    :Function: Compute the k-core for the NetworkGraphs object, k-core computation allows for Directed but not Multi graphs
     :param networkGraphs: NetworkGraphs object
     :type networkGraphs: NetworkGraphs
     :param directed: Compute the metrics for the directed graph
     :type directed: bool
+    :param multi: Compute the metrics for the multi graph
+    :type multi: bool
     :param clean: Clean the DataFrame after computing the metrics
     :type clean: bool
     :return: Pandas dataframe with the metrics and values
     :rtype: pd.DataFrame
+    :raises: ValueError if the graph is multi
     """
-    G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
+    if not multi:
+        G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
+    else:
+        G = networkGraphs.MultiGraph if not directed else networkGraphs.MultiDiGraph
+        print(ValueError("K-Core computation is not allowed for Multi graphs"))
 
     try:
         kcore = nx.core_number(G)
@@ -503,19 +517,24 @@ def compute_kcore(networkGraphs, directed=True, clean=True):
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_triangles(networkGraphs, directed=True, clean=True):
+def compute_triangles(networkGraphs, clean=True, directed=False, multi=False):
     """
-    :Function: Compute the triangle for the NetworkGraphs object
+    :Function: Compute the triangle for the NetworkGraphs object not allows for Directed and Multi graphs
     :param networkGraphs: NetworkGraphs object
     :type networkGraphs: NetworkGraphs
-    :param directed: Compute the metrics for the directed graph
-    :type directed: bool
     :param clean: Clean the DataFrame after computing the metrics
     :type clean: bool
     :return: Pandas dataframe with the metrics and values
     :rtype: pd.DataFrame
+    :raises: Exception if the graph is directed or multi
     """
-    G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
+    if multi or directed:
+        print(ValueError('Triangles computation is not allowed for directed and multi graphs'))
+
+    if not multi:
+        G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
+    else:
+        G = networkGraphs.MultiGraph if not directed else networkGraphs.MultiDiGraph
 
     try:
         triangle = nx.triangles(G)
@@ -533,19 +552,24 @@ def compute_triangles(networkGraphs, directed=True, clean=True):
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def compute_page_rank(networkGraphs, directed=True, clean=True):
+def compute_page_rank(networkGraphs, directed=True, multi=True, clean=True):
     """
-    :Function: Compute the page rank for the NetworkGraphs object
+    :Function: Compute the page rank for the NetworkGraphs object allows for Directed and Multi graphs
     :param networkGraphs: NetworkGraphs object
     :type networkGraphs: NetworkGraphs
     :param directed: Compute the metrics for the directed graph
     :type directed: bool
+    :param multi: Compute the metrics for the multi graph
+    :type multi: bool
     :param clean: Clean the DataFrame after computing the metrics
     :type clean: bool
     :return: Pandas dataframe with the metrics and values
     :rtype: pd.DataFrame
     """
-    G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
+    if not multi:
+        G = networkGraphs.Graph if not directed else networkGraphs.DiGraph
+    else:
+        G = networkGraphs.MultiGraph if not directed else networkGraphs.MultiDiGraph
 
     try:
         page_rank = nx.pagerank(G)
