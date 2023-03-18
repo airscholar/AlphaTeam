@@ -34,6 +34,8 @@
                             <div class="card card-body" style="align-items: center;">
 
                                 <form method="post">
+                                    <input type="hidden" name="tab" value="tab1">
+                                    <!-- Add this line to include tab information -->
                                     <div class="toggle-btn" style="margin:5px">
                                         <input type="checkbox" id="dynamic-toggle" name="dynamic_toggle" {% if
                                             dynamic_toggle %}checked{% endif %}>
@@ -77,7 +79,35 @@
                         </div>
                         <div class="col-4">
                             <div class="card card-body" style="align-items: center;">
-
+                                <form method="post">
+                                    <input type="hidden" name="tab" value="tab2">
+                                    <!-- Add this line to include tab information -->
+                                    <div class="toggle-btn" style="margin:5px">
+                                        <input type="checkbox" id="dynamic-toggle" name="dynamic_toggle" {% if
+                                            dynamic_toggle %}checked{% endif %}>
+                                        <label for="dynamic-toggle"></label>
+                                    </div>
+                                    <span>Dynamic</span>
+                                    <div class="toggle-btn" style="margin:5px">
+                                        <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if
+                                            directed_toggle %}checked{% endif %}>
+                                        <label for="directed-toggle"></label>
+                                    </div>
+                                    <span>Directed</span>
+                                    <div class="dropdown" style="margin:5px">
+                                        <select id="dropdown-menu" class="mx-auto" name="layout">
+                                            <option value="option1" {% if layout=='option1' %}selected{% endif %}>Select
+                                                Layout</option>
+                                            <option value="map" {% if layout=='map' %}selected{% endif %}>Map</option>
+                                            <option value="sfdp" {% if layout=='sfdp' %}selected{% endif %}>Sfdp
+                                            </option>
+                                            <option value="twopi" {% if layout=='twopi' %}selected{% endif %}>Twopi
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary"
+                                        style="margin:5px; width: 100%;">Submit</button>
+                                </form>
                             </div>
                         </div>
                     </div>

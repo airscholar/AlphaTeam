@@ -193,13 +193,19 @@ def centrality_all():
     filename2 = session['filename2']
     metrics = 'centralities'
     
-
     if request.method == 'POST':
         # Get form data
         dynamic_toggle = bool(request.form.get('dynamic_toggle'))
         directed_toggle = bool(request.form.get('directed_toggle'))
         layout = request.form.get('layout')
-        df, graph_name = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, layout=layout)
+        tab = request.form.get('tab')  # Add this line to get the tab information
+
+        # Add a conditional to handle the output for each tab
+        if tab == 'tab1':
+            df, graph_name = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, layout=layout)
+        elif tab == 'tab2':
+            df, graph_name = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, layout=layout)  # Update this line to use a different function for Tab 2
+
     else:
         dynamic_toggle = False
         directed_toggle = False

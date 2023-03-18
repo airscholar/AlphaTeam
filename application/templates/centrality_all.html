@@ -77,19 +77,19 @@
 
                                 <form method="post" onsubmit="return validateLayout()">
                                     <div class="toggle-btn" style="margin:5px">
-                                        <input type="checkbox" id="dynamic-toggle" name="dynamic_toggle" {% if
+                                        <input type="checkbox" id="dynamic-toggle2" name="dynamic_toggle2" {% if
                                             dynamic_toggle %}checked{% endif %}>
                                         <label for="dynamic-toggle"></label>
                                     </div>
                                     <span>Dynamic</span>
                                     <div class="toggle-btn" style="margin:5px">
-                                        <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if
+                                        <input type="checkbox" id="directed-toggle2" name="directed_toggle2" {% if
                                             directed_toggle %}checked{% endif %}>
                                         <label for="directed-toggle"></label>
                                     </div>
                                     <span>Directed</span>
                                     <div class="dropdown" style="margin:5px">
-                                        <select id="dropdown-menu" class="mx-auto" name="layout">
+                                        <select id="dropdown-menu2" class="mx-auto" name="layout2">
                                             <option value="option1">Select Layout</option>
                                             <option value="map" {% if layout=='map' %}selected{% endif %}>Map</option>
                                             <option value="sfdp" {% if layout=='sfdp' %}selected{% endif %}>Sfdp
