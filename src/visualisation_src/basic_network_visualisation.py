@@ -3,6 +3,7 @@ from src.visualisation_src.utils_visualisation import *
 from src.utils import memoize
 import networkx as nx
 from pyvis import network as net
+from itertools import zip_longest
 
 # ----------------------------------------------------------------------------------------
 
@@ -19,32 +20,64 @@ def static_visualisation(networkGraphs, filepath, directed=True, multi=False, la
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
         return ValueError("Graph is not spatial with coordinates")
-
     pos = networkGraphs.pos[layout_]
+    text = [f"Node: {node}" for node in G.nodes()]
+
+    if networkGraphs.colors is None:
+        colors = ['red' for _ in range(len(G.edges()))]
+    else:
+        colors = list(networkGraphs.colors['Graph'])
+
+    if networkGraphs.is_weighted() is None:
+        weights = [5 for _ in range(len(G.edges()))]
+    else:
+        weights = list(networkGraphs.weights['Graph'])
+        weights = [w * 10 for w in weights]
+
+    x_ = []
+    y_ = []
+    x_list = []
+    y_list = []
+    for idx, vals in enumerate(zip_longest(G.nodes(), G.edges())):
+        node, edge = vals
+        x0, y0 = pos[edge[0]]
+        x1, y1 = pos[edge[1]]
+        x_list.extend([x0, x1, None])
+        y_list.extend([y0, y1, None])
+        if idx < len(G.nodes()):
+            x, y = pos[node]
+            x_.extend([x])
+            y_.extend([y])
+
+    fig = go.Figure()
 
     if layout_ == 'map':
-        node_trace = go.Scattergeo(lon=[], lat=[], text=[], mode='markers', hoverinfo='text',
-                                   marker=dict(showscale=True, color='black', size=5))
+        for i, edge in enumerate(G.edges()):
+            fig.add_trace(
+                go.Scattergeo(
+                    lon=[pos[edge[0]][0], pos[edge[1]][0]],
+                    lat=[pos[edge[0]][1], pos[edge[1]][1]],
+                    mode='lines', line=dict(width=weights[i], color=colors[i]),
+                )
+            )
+        fig.add_trace(go.Scattergeo(lon=x_, lat=y_, text=text, mode='markers', hoverinfo='text',
+                                        marker=dict(showscale=True, color='black', size=5)))
     else:
-        node_trace = go.Scatter(x=[], y=[], text=[], mode='markers', hoverinfo='text',
-                                marker=dict(showscale=True, color='black',size=5))
-
-    edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
-
-    for node in tqdm(G.nodes()):
-        x, y = pos[node]
-        if layout_ == 'map':
-            node_trace['lon'] += tuple([x])
-            node_trace['lat'] += tuple([y])
-        else:
-            node_trace['x'] += tuple([x])
-            node_trace['y'] += tuple([y])
+        for i, edge in enumerate(G.edges()):
+            fig.add_trace(
+                go.Scatter(
+                    x=[pos[edge[0]][0], pos[edge[1]][0]],
+                    y=[pos[edge[0]][1], pos[edge[1]][1]],
+                    mode='lines', line=dict(width=weights[i], color=colors[i]),
+                )
+            )
+        fig.add_trace(go.Scatter(x=x_, y=y_, text=text, mode='markers', hoverinfo='text',
+                                 marker=dict(showscale=True, color='black', size=5)))
 
     layout = get_layout(networkGraphs, title=f"Visualisation using {layout_} layout", layout_=layout_)
-    fig = go.Figure(data=[edge_trace, node_trace],
-                    layout=layout)
+    fig.update_layout(layout)
 
-    fig.write_html(filepath, auto_open=True)
+    fig.write_html(filepath)
 
     return fig
 
@@ -71,7 +104,6 @@ def dynamic_visualisation(networkGraphs, filepath, directed=True, multi=False):
     # change the weights
     for i, (u, v) in enumerate(G.edges()):
         G[u][v]['weight'] = weights[i]
-
 
     Net = net.Network(height="750px", width="100%", bgcolor="grey", font_color="black")
     Net.from_nx(G)
