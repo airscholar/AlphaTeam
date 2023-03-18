@@ -195,10 +195,10 @@ def centrality_all():
     dynamic_toggle = False
     directed_toggle = False
     layout = 'map'
-    dynamic_toggle2 = True
-    directed_toggle2 = True
-    layout2 = 'twopi'
-    tab = 'tab2'
+    dynamic_toggle2 = False
+    directed_toggle2 = False
+    layout2 = 'map'
+    tab = 'tab1'
     
     if request.method == 'POST':
         if (request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
@@ -229,26 +229,91 @@ def centrality_all():
     dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2)
 
-@app.route('/centrality/degree', endpoint='degree')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
+@app.route('/centrality/degree', endpoint='degree', methods=['GET', 'POST'])
 def centrality_degree():
-    centrality_degreeDF = cache.get('centrality_degreeDF')
-    if centrality_degreeDF is None:
-        centrality_degreeDF = compute_degree_centrality(networkGraphs, directed=False)
-        cache.set('centrality_degreeDF', centrality_degreeDF)
-    return render_template('centrality_degree.html', example=centrality_degreeDF)
+    filename2 = session['filename2']
+    multi = True
+    metrics = 'degree_centrality'
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    dynamic_toggle2 = False
+    directed_toggle2 = False
+    layout2 = 'map'
+    tab = 'tab1'
+    
+    if request.method == 'POST':
+        if (request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi, dynamic=dynamic_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+            tab = 'tab1'
+        if (request.form.get('dynamic_toggle2') is not None or request.form.get('directed_toggle2') is not None or request.form.get('layout2') is not None):
+            dynamic_toggle2 = bool(request.form.get('dynamic_toggle2'))
+            directed_toggle2 = bool(request.form.get('directed_toggle2'))
+            layout2 = request.form.get('layout2')
+            df, graph_name2 = plot_metric(networkGraphs, metrics, directed=directed_toggle2, multi=multi, dynamic=dynamic_toggle2, layout=layout2)
+            session['graph_name2'] = graph_name2
+            tab = 'tab2'
+    else:
+        df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi, dynamic=dynamic_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+        df, graph_name2 = plot_metric(networkGraphs, metrics, directed=directed_toggle2, multi=multi, dynamic=dynamic_toggle2, layout=layout2)
+        session['graph_name2'] = graph_name2
+    graph1 = session['graph_name1']
+    graph_path1 = '../static/uploads/'+filename2+'/'+graph1
+    graph2 = session['graph_name2']
+    graph_path2 = '../static/uploads/'+filename2+'/'+graph2
 
-@app.route('/centrality/eigenvector', endpoint='eigenvector')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
+    return render_template('centrality_degree.html', example=df, tab=tab,
+    dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
+    dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2)
+
+@app.route('/centrality/eigenvector', endpoint='eigenvector', methods=['GET', 'POST'])
 def centrality_eigenvector():
-    centrality_eigenvectorDF = cache.get('centrality_eigenvectorDF')
-    if centrality_eigenvectorDF is None:
-        centrality_eigenvectorDF = compute_eigen_centrality(networkGraphs, directed=False)
-        cache.set('centrality_eigenvectorDF', centrality_eigenvectorDF)
-    return render_template('centrality_eigenvector.html', example=centrality_eigenvectorDF)
+    filename2 = session['filename2']
+    multi = True
+    metrics = 'eigenvector_centrality'
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    dynamic_toggle2 = False
+    directed_toggle2 = False
+    layout2 = 'map'
+    tab = 'tab1'
+    
+    if request.method == 'POST':
+        if (request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi, dynamic=dynamic_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+            tab = 'tab1'
+        if (request.form.get('dynamic_toggle2') is not None or request.form.get('directed_toggle2') is not None or request.form.get('layout2') is not None):
+            dynamic_toggle2 = bool(request.form.get('dynamic_toggle2'))
+            directed_toggle2 = bool(request.form.get('directed_toggle2'))
+            layout2 = request.form.get('layout2')
+            df, graph_name2 = plot_metric(networkGraphs, metrics, directed=directed_toggle2, multi=multi, dynamic=dynamic_toggle2, layout=layout2)
+            session['graph_name2'] = graph_name2
+            tab = 'tab2'
+    else:
+        df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi, dynamic=dynamic_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+        df, graph_name2 = plot_metric(networkGraphs, metrics, directed=directed_toggle2, multi=multi, dynamic=dynamic_toggle2, layout=layout2)
+        session['graph_name2'] = graph_name2
+    graph1 = session['graph_name1']
+    graph_path1 = '../static/uploads/'+filename2+'/'+graph1
+    graph2 = session['graph_name2']
+    graph_path2 = '../static/uploads/'+filename2+'/'+graph2
+
+    return render_template('centrality_eigenvector.html', example=df, tab=tab,
+    dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
+    dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2)
 
 @app.route('/centrality/closeness', endpoint='closeness')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
 def centrality_closeness():
     centrality_closenessDF = cache.get('centrality_closenessDF')
     if centrality_closenessDF is None:
@@ -257,7 +322,6 @@ def centrality_closeness():
     return render_template('centrality_closeness.html', example=centrality_closenessDF)
 
 @app.route('/centrality/betwenness', endpoint='betwenness')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
 def centrality_betwenness():
     centrality_betwennessDF = cache.get('centrality_betwennessDF')
     if centrality_betwennessDF is None:
@@ -266,7 +330,6 @@ def centrality_betwenness():
     return render_template('centrality_betwenness.html', example=centrality_betwennessDF)
 
 @app.route('/centrality/load', endpoint='load')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
 def centrality_load():
     centrality_loadDF = cache.get('centrality_loadDF')
     if centrality_loadDF is None:
@@ -277,7 +340,6 @@ def centrality_load():
 #-------------------------------------------NODE--------------------------------------------
 
 @app.route('/node_all', endpoint='node_all')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
 def node_load():
     node_allDF = cache.get('node_allDF')
     if node_allDF is None:
