@@ -141,7 +141,7 @@ def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False
     if df.empty or df.isnull().values.any() or not is_numeric_dtype(df[df.columns.values[1]]):
         print(ValueError('Metric column is empty. Please select a different metric.'))
         # In future create a html page to display no graph for this metrics
-        return df, None
+        return df, "no_graph.html"
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
     filepath = f"../application/{networkGraphs.session_folder}/{filename}"
