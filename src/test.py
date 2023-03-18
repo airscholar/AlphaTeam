@@ -2,15 +2,73 @@
 import matplotlib.pyplot as plt
 
 from src.NetworkGraphs import NetworkGraphs
-from src.preprocessing import *
 from src.metrics import *
 from src.visualisation import *
 from src.machineLearning import *
+from src.utils import *
 import time
+import plotly.express as px
+from threading import Thread
 
-networkGraph = NetworkGraphs('../datasets/Railway.csv', type="RAILWAY")
+networkGraph = NetworkGraphs("../datasets/Railway.csv", type="RAILWAY",session_folder="uploads/584545")
 
-plot_hotspot(networkGraph)
+# create empty plotly graph with text "No graph to display"
+plotly_graph = go.Figure()
+plotly_graph.update_layout(
+    title="No graph to display",
+    xaxis_title="",
+    yaxis_title="",
+    font=dict(
+        family="Courier New, monospace",
+        size=18,
+        color="#7f7f7f"
+    )
+)
+plotly_graph.write_html("no_graph.html")
+
+
+
+
+print(get_metrics(networkGraph, "degree_centrality",directed=True, multi=True))
+
+
+
+# plot_histogram(networkGraph, 'degree_centrality', directed=False, multi=False)
+# plot_histogram(networkGraph, 'kcore', directed=False, multi=False)
+# plot_histogram(networkGraph, 'triangles', directed=True, multi=True)
+# plot_histogram(networkGraph, 'closeness_centrality', directed=False, multi=False)
+# plot_histogram(networkGraph, 'betweenness_centrality', directed=False, multi=False)
+# plot_histogram(networkGraph, 'eigenvector_centrality', directed=False, multi=False)
+# plot_histogram(networkGraph, 'load_centrality', directed=False, multi=False)
+# plot_histogram(networkGraph, 'pagerank', directed=False, multi=False)
+# plot_histogram(networkGraph, 'centralities', directed=False, multi=False)
+# plot_histogram(networkGraph, 'nodes', directed=False, multi=False)
+
+# df = compute_node_metrics(networkGraph, directed=False, multi=False)
+# generate_histogram_metric(df , "histo.html")
+# plot_cluster(networkGraph, 'greedy_modularity', layout='map')
+# plot_hotspot(networkGraph)
+
+
+# plot_metric(networkGraph, 'degree_centrality', directed=False, dynamic=False, layout='map', plot=True)
+# plot_metric(networkGraph, 'kcore', directed=False, dynamic=False, layout='map', plot=True)
+# plot_metric(networkGraph, 'triangles', directed=False, dynamic=False, layout='map', plot=True)
+# plot_metric(networkGraph, 'closeness_centrality', directed=False, dynamic=False, layout='map', plot=True)
+# plot_metric(networkGraph, 'betweenness_centrality', directed=False, dynamic=False, layout='map', plot=True)
+# plot_metric(networkGraph, 'eigenvector_centrality', directed=False, dynamic=False, layout='map', plot=True)
+# plot_all_metrics(networkGraph, "nodes" ,directed=False, dynamic=False, layout='map', plot=True)
+# plot_all_metrics(networkGraph, "centralities" ,directed=False, dynamic=False, layout='map', plot=True)
+# plot_cluster(networkGraph, 'louvain', layout='map', plot=True)
+# plot_cluster(networkGraph, 'greedy_modularity', layout='map', plot=True)
+#
+#
+# plot_metric(networkGraph, 'degree_centrality', directed=False, dynamic=False, layout='twopi', plot=True)
+# plot_metric(networkGraph, 'kcore', directed=False, dynamic=False, layout='twopi', plot=True)
+# plot_all_metrics(networkGraph, "nodes" ,directed=False, dynamic=False, layout='twopi', plot=True)
+# plot_all_metrics(networkGraph, "centralities" ,directed=False, dynamic=False, layout='twopi', plot=True)
+# plot_cluster(networkGraph, 'louvain', layout='twopi', plot=True)
+# plot_cluster(networkGraph, 'greedy_modularity', layout='twopi', plot=True)
+
 
 # kcore = compute_kcore(networkGraph, directed=False)
 # plot_metrics_on_map(networkGraph, kcore, 'Kcore', 'kcore')
