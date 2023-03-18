@@ -10,3 +10,4 @@ __pycache__/
 *.mtx
 src/*.html
 uploads
+test
