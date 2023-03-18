@@ -1,8 +1,9 @@
 # Imports
+import scipy.io as sio
+from pandas.api.types import is_numeric_dtype
+
 from src.preprocessing import *
 from src.visualisation import *
-from pandas.api.types import is_numeric_dtype
-import scipy.io as sio
 
 # ----------------------------------------------------------------------------------------
 """
@@ -229,9 +230,9 @@ class NetworkGraphs:
                             'DiGraph': list(nx.get_edge_attributes(self.DiGraph, 'weight').values()),
                             'MultiDiGraph': list(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())}
             self.min_weight = {'Graph': min(nx.get_edge_attributes(self.Graph, 'weight').values()),
-                                'MultiGraph': min(nx.get_edge_attributes(self.MultiGraph, 'weight').values()),
-                                'DiGraph': min(nx.get_edge_attributes(self.DiGraph, 'weight').values()),
-                                'MultiDiGraph': min(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())}
+                               'MultiGraph': min(nx.get_edge_attributes(self.MultiGraph, 'weight').values()),
+                               'DiGraph': min(nx.get_edge_attributes(self.DiGraph, 'weight').values()),
+                               'MultiDiGraph': min(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())}
 
             self.max_weight = {'Graph': max(nx.get_edge_attributes(self.Graph, 'weight').values()),
                                'MultiGraph': max(nx.get_edge_attributes(self.MultiGraph, 'weight').values()),

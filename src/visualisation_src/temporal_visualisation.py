@@ -1,9 +1,11 @@
+import os
+
+import cv2
 import geopandas as gpd
+import ipywidgets as widgets
 import matplotlib.pyplot as plt
 import networkx as nx
-import ipywidgets as widgets
-import os
-import cv2
+
 
 # ----------------------------------------------------------------------------------------
 
@@ -49,6 +51,7 @@ def plot_temporal_graphs(temporal_graphs):
     # display(slider)
     # plt.show()
 
+
 # ----------------------------------------------------------------------------------------
 
 
@@ -77,6 +80,7 @@ def create_frames(temporal_graphs):
         print(f"\rCreating frames: {i + 1}/{len(temporal_graphs)}", end="")
 
     return 1
+
 
 # ----------------------------------------------------------------------------------------
 
