@@ -14,15 +14,17 @@
         <div class="container mt-3">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#tab1">Tab 1</a>
+                    <a class="nav-link {% if tab=='tab1' %}active{% else %}{% endif %}" data-toggle="tab"
+                        href="#tab1">Tab 1</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#tab2">Tab 2</a>
+                    <a class="nav-link {% if tab=='tab2' %}active{% else %}{% endif %}" data-toggle="tab"
+                        href="#tab2">Tab 2</a>
                 </li>
             </ul>
 
             <div class="tab-content" style="background-color: white; padding-bottom: 25px;">
-                <div id="tab1" class="container tab-pane active">
+                <div id="tab1" class="container tab-pane {% if tab=='tab1' %}active{% else %}fade{% endif %}">
                     <br />
                     <div class="row">
                         <div class="col-10">
@@ -34,7 +36,7 @@
                         <div class="col-2">
                             <div class="card card-body" style="align-items: center;">
 
-                                <form method="post">
+                                <form method="post" name="form1">
                                     <div class="toggle-btn" style="margin:5px">
                                         <input type="checkbox" id="dynamic-toggle" name="dynamic_toggle" {% if
                                             dynamic_toggle %}checked{% endif %}>
@@ -65,7 +67,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="tab2" class="container tab-pane fade">
+                <div id="tab2" class="container tab-pane {% if tab=='tab2' %}active{% else %}fade{% endif %}">
                     <br />
                     <div class="row">
                         <div class="col-10">
@@ -77,7 +79,7 @@
                         <div class="col-2">
                             <div class="card card-body" style="align-items: center;">
 
-                                <form method="post">
+                                <form method="post" name="form2">
                                     <div class="toggle-btn" style="margin:5px">
                                         <input type="checkbox" id="dynamic-toggle2" name="dynamic_toggle2" {% if
                                             dynamic_toggle2 %}checked{% endif %}>

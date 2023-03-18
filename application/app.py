@@ -198,20 +198,23 @@ def centrality_all():
     dynamic_toggle2 = True
     directed_toggle2 = True
     layout2 = 'twopi'
+    tab = 'tab2'
     
     if request.method == 'POST':
-        if request.form.get('dynamic_toggle') is not None:
+        if (request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
             dynamic_toggle = bool(request.form.get('dynamic_toggle'))
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             df, graph_name1 = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, layout=layout)
             session['graph_name1'] = graph_name1
-        if request.form.get('dynamic_toggle2') is not None:
+            tab = 'tab1'
+        if (request.form.get('dynamic_toggle2') is not None or request.form.get('directed_toggle2') is not None or request.form.get('layout2') is not None):
             dynamic_toggle2 = bool(request.form.get('dynamic_toggle2'))
             directed_toggle2 = bool(request.form.get('directed_toggle2'))
             layout2 = request.form.get('layout2')
             df, graph_name2 = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle2, layout=layout2)
             session['graph_name2'] = graph_name2
+            tab = 'tab2'
     else:
         df, graph_name1 = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, layout=layout)
         session['graph_name1'] = graph_name1
@@ -222,7 +225,7 @@ def centrality_all():
     graph2 = session['graph_name2']
     graph_path2 = 'static/uploads/'+filename2+'/'+graph2
 
-    return render_template('centrality_all.html', example=df, 
+    return render_template('centrality_all.html', example=df, tab=tab,
     dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2)
 
