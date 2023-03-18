@@ -192,28 +192,39 @@ def dynamic():
 def centrality_all():
     filename2 = session['filename2']
     metrics = 'centralities'
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    dynamic_toggle2 = True
+    directed_toggle2 = True
+    layout2 = 'twopi'
     
     if request.method == 'POST':
-        # Get form data
-        dynamic_toggle = bool(request.form.get('dynamic_toggle'))
-        directed_toggle = bool(request.form.get('directed_toggle'))
-        layout = request.form.get('layout')
-        tab = request.form.get('tab')  # Add this line to get the tab information
-
-        # Add a conditional to handle the output for each tab
-        if tab == 'tab1':
-            df, graph_name = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, layout=layout)
-        elif tab == 'tab2':
-            df, graph_name = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, layout=layout)  # Update this line to use a different function for Tab 2
-
+        if request.form.get('dynamic_toggle') is not None:
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+        if request.form.get('dynamic_toggle2') is not None:
+            dynamic_toggle2 = bool(request.form.get('dynamic_toggle2'))
+            directed_toggle2 = bool(request.form.get('directed_toggle2'))
+            layout2 = request.form.get('layout2')
+            df, graph_name2 = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle2, layout=layout2)
+            session['graph_name2'] = graph_name2
     else:
-        dynamic_toggle = False
-        directed_toggle = False
-        layout = 'map'
-        df, graph_name = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, layout=layout)
+        df, graph_name1 = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+        df, graph_name2 = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle2, layout=layout2)
+        session['graph_name2'] = graph_name2
+    graph1 = session['graph_name1']
+    graph_path1 = 'static/uploads/'+filename2+'/'+graph1
+    graph2 = session['graph_name2']
+    graph_path2 = 'static/uploads/'+filename2+'/'+graph_name2
 
-    graph_path = 'static/uploads/'+filename2+'/'+graph_name
-    return render_template('centrality_all.html', example=df, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph=graph_path)
+    return render_template('centrality_all.html', example=df, 
+    dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
+    dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2)
 
 @app.route('/centrality/degree', endpoint='degree')
 @cache.cached(timeout=3600) # Cache the result for 1 hour
