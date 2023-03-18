@@ -1,5 +1,4 @@
 from pyvis import network as net
-from tqdm import tqdm
 
 from src.visualisation_src.utils_visualisation import *
 
@@ -94,6 +93,7 @@ def generate_dynamic_cluster(networkGraphs, df_, filename):  # USING PYVIS
     :return: Pyvis plot
     """
     G = networkGraphs.Graph
+    metrics_name = df_.columns[1]
 
     for u, d in G.nodes(data=True):
         metric_df = df_[df_['Node'] == u]
@@ -106,6 +106,7 @@ def generate_dynamic_cluster(networkGraphs, df_, filename):  # USING PYVIS
 
     Net = net.Network(height="750px", width="100%", bgcolor="#E4ECF6", font_color="black", notebook=True)
     Net.from_nx(G)
+    # Net.show_buttons(filter_=['physics', 'edges', 'nodes'])
     Net.options.physics.use_force_atlas_2based(
         params={'central_gravity': 0.01, 'gravity': -50, 'spring_length': 100, 'spring_strength': 0.08, 'damping': 0.4,
                 'overlap': 0})

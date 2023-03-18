@@ -12,10 +12,7 @@ import numpy as np
 import pandas as pd
 from distinctipy import distinctipy
 from kneed import KneeLocator
-from scipy.cluster.hierarchy import linkage
 from sklearn.cluster import SpectralClustering, KMeans, AgglomerativeClustering, DBSCAN
-from scipy.cluster.hierarchy import linkage, dendrogram
-import matplotlib.pyplot as plt
 
 warnings.filterwarnings("ignore")
 
@@ -265,6 +262,7 @@ def agglomerative_clustering(networkGraphs):
     df = clustering_response(G, clustering, optimal_k)
 
     return df
+
 
 def dbscan_clustering(networkGraphs):
     """

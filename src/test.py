@@ -1,12 +1,7 @@
 # FILE TO TEST THE FUNCTIONS IN THE SRC FOLDER
-import matplotlib.pyplot as plt
 
 from src.NetworkGraphs import NetworkGraphs
-from src.preprocessing import *
-from src.metrics import *
 from src.visualisation import *
-from src.machineLearning import *
-import time
 
 networkGraph = NetworkGraphs('../datasets/Dune_Eth_transaction.csv', session_folder='plots', type="CRYPTO")
 # networkGraph = NetworkGraphs('../datasets/Railway.csv', session_folder='plots', type="RAILWAY")
@@ -15,12 +10,6 @@ networkGraph = NetworkGraphs('../datasets/Dune_Eth_transaction.csv', session_fol
 # agglomerative_clustering(networkGraph)
 plot_cluster(networkGraph, 'dbscan', dynamic=False, layout='sfdp')
 # hierarchical_clustering(networkGraph)
-
-import networkx as nx
-from scipy.cluster.hierarchy import linkage, dendrogram
-import matplotlib.pyplot as plt
-
-
 
 # def hierarchical_clustering(G):
 #     # create a distance matrix based on the shortest path length between nodes in the graph

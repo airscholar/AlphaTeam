@@ -1,4 +1,5 @@
 import matplotlib as mpl
+import networkx as nx
 from pyvis import network as net
 from tqdm import tqdm
 
@@ -149,4 +150,121 @@ def generate_dynamic_metric(networkGraphs, df_, filename):  # USING PYVIS
 
     return Net
 
+
 # ----------------------------------------------------------------------------------------
+
+def generate_histogram_metric(df_, filename):
+    """
+    :Function: Generate histogram of the metrics
+    :param df_: Dataframe with the metrics
+    :type df_: pd.DataFrame
+    :param filename: Name of the file to be saved
+    :type filename: str
+    :return: Plotly plot
+    :rtype: plotly.graph_objects.Figure
+    """
+    metrics_names = df_.columns[1:]
+    metrics = df_[metrics_names].values
+    title = f"Histogram distribution of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
+
+    fig = go.Figure()
+    for i, metric in enumerate(metrics_names):
+        fig.add_trace(go.Histogram(x=metrics[:, i], name=metric))
+
+    fig.update_layout(barmode='overlay',
+                      title_text=title,
+                      xaxis_title="Values",
+                      yaxis_title="Count",
+                      bargap=0.1, )
+    fig.update_traces(opacity=0.75)
+
+    fig.write_html(filename)
+
+    return fig
+
+
+# ----------------------------------------------------------------------------------------
+
+def generate_boxplot_metric(df_, filename):
+    """
+    :Function: Generate boxplot of the metrics
+    :param df_: Dataframe with the metrics
+    :type df_: pd.DataFrame
+    :param filename: Name of the file to be saved
+    :type filename: str
+    :return: Plotly plot
+    :rtype: plotly.graph_objects.Figure
+    """
+    metrics_names = df_.columns[1:]
+    metrics = df_[metrics_names].values
+    title = f"Boxplot of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
+
+    fig = go.Figure()
+    for i, metric in enumerate(metrics_names):
+        fig.add_trace(go.Box(y=metrics[:, i], name=metric))
+
+    fig.update_layout(title_text=title,
+                      xaxis_title="Metrics",
+                      yaxis_title="Values",
+                      )
+
+    fig.write_html(filename)
+    fig.show()
+
+    return fig
+
+
+# ----------------------------------------------------------------------------------------
+
+def generate_violin_metric(df_, filename):
+    """
+    :Function: Generate violin plot of the metrics
+    :param df_: Dataframe with the metrics
+    :type df_: pd.DataFrame
+    :param filename: Name of the file to be saved
+    :type filename: str
+    :return: Plotly plot
+    :rtype: plotly.graph_objects.Figure
+    """
+    metrics_names = df_.columns[1:]
+    metrics = df_[metrics_names].values
+    title = f"Violin plot of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
+
+    fig = go.Figure()
+    for i, metric in enumerate(metrics_names):
+        fig.add_trace(go.Violin(y=metrics[:, i], name=metric, box_visible=True, meanline_visible=True))
+
+    fig.update_layout(title_text=title,
+                      xaxis_title="Metrics",
+                      yaxis_title="Values",
+                      )
+
+    fig.write_html(filename)
+    fig.show()
+
+    return fig
+
+
+# ----------------------------------------------------------------------------------------
+
+
+def generate_heatmap(networkGraph, filename):
+    """
+    :Function: Show the heatmap of the graph
+    :param networkGraph: Network graph
+    :type networkGraph: NetworkGraph
+    :param filename: Name of the file to be saved
+    :type filename: str
+    :return: Plotly plot
+    """
+    G = networkGraph.Graph
+
+    mat = nx.to_scipy_sparse_array(G, nodelist=G.nodes(), weight=None, dtype=None, format='csc')
+    mat = mat.todense()
+    ax = [str(i) for i in G.nodes()]
+
+    fig = go.Figure(data=go.Heatmap(z=mat, x=ax, y=ax))
+    fig.update_layout(title_text="Heatmap of connections between nodes")
+
+    fig.write_html(filename)
+    return fig

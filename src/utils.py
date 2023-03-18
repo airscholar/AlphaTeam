@@ -1,5 +1,6 @@
 # from src.metrics import
 from _md5 import md5
+
 # import jenkins hashing function
 
 red = "\033[0;91m"
@@ -7,11 +8,12 @@ green = "\033[0;92m"
 yellow = "\033[0;93m"
 blue = "\033[0;94m"
 
+
 def memoize(func):
     cache = {}
 
     def wrapper(*args, **kwargs):
-        key = (func,args, tuple(kwargs.items()))
+        key = (func, args, tuple(kwargs.items()))
         key_hash = md5(str(key).encode('utf-8')).hexdigest()
         if key_hash in cache:
             print(f"{green}CACHE: Using cache for {func.__name__}, hash: {yellow}{key_hash}")

@@ -11,6 +11,7 @@ import networkx as nx
 import pandas as pd
 import scipy.io as sio
 
+
 # ----------------------------------------------------------------------------------------
 
 
@@ -278,6 +279,7 @@ def preprocess_mtx(filename_: str):
     DiGraph.remove_edges_from(nx.selfloop_edges(DiGraph))
 
     return [DiGraph, MultiDiGraph]
+
 
 # ----------------------------------------------------------------------------------------
 
