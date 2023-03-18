@@ -25,10 +25,18 @@ import os
 def plot_network(networkGraphs, layout='map', dynamic=False):
     """
     :Function: Plot the NetworkX graph on as map
+    Layouts:
+        - 'map'
+        - 'twopi'
+        - 'sfdp'
     :param networkGraphs: Network graphs
-    :param directed: Boolean to indicate if the graph is directed or not
-    :param multi: for multi graphs
-    :return: Matplotlib plot
+    :type networkGraphs: NetworkGraphs
+    :param layout: Layout of the plot
+    :type layout: str
+    :param dynamic: Boolean to indicate if the plot is dynamic or not
+    :type dynamic: bool
+    :return: filename
+    :rtype: str
     """
     if not networkGraphs.is_spatial() and layout == 'map':
         ValueError("Graph is not spatial with coordinates")
@@ -62,12 +70,20 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
         - 'girvan_newman',
         - 'edge_betweenness'
         - 'k_clique'
+    Layouts:
+        - 'map'
+        - 'twopi'
+        - 'sfdp'
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
     :param clusterType: Type of cluster
+    :type clusterType: str
     :param dynamic: Boolean to indicate if the plot is dynamic or not
-    :param plot: Boolean to indicate if the html file should be generated
+    :type dynamic: bool
     :param layout: Layout of the plot
-    :return:
+    :type layout: str
+    :return: Cluster and filename of the plot
+    :rtype: pd.DataFrame, str
     """
     cluster = ml.get_communities(networkGraphs, clusterType)
 
@@ -101,19 +117,31 @@ def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False
         - 'eigenvector_centrality'
         - 'load_centrality'
         - 'degree_centrality'
+    Layouts:
+        - 'map'
+        - 'twopi'
+        - 'sfdp'
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
     :param metrics: Metrics to be plotted
+    :type metrics: str
     :param dynamic: Boolean to indicate if the plot is dynamic or not
-    :param plot: Boolean to indicate if the html file should be generated
+    :type dynamic: bool
     :param layout: Layout of the plot
+    :type layout: str
     :param directed: Boolean to indicate if the graph is directed or not
+    :type directed: bool
     :param multi: for multi graphs
-    :return: Pyplot plot
+    :type multi: bool
+    :return: Dataframe with the metric and the filename of the plot
+    :rtype: pd.DataFrame, str
     """
     df = m.get_metrics(networkGraphs, metrics, clean=False, directed=directed, multi=multi)
 
     if df.empty or df.isnull().values.any() or not is_numeric_dtype(df[df.columns.values[1]]):
-        return ValueError('Metric column is empty. Please select a different metric.')
+        print(ValueError('Metric column is empty. Please select a different metric.'))
+        # In future create a html page to display no graph for this metrics
+        return df, "no_graph.html"
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
     filepath = f"../application/{networkGraphs.session_folder}/{filename}"
@@ -138,12 +166,22 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
     Metrics:
         - 'centralities'
         - 'nodes'
+    Layouts:
+        - 'map'
+        - 'twopi'
+        - 'sfdp'
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
     :param metrics: Metrics to be plotted
+    :type metrics: str
     :param directed: Boolean to indicate if the graph is directed or not
+    :type directed: bool
     :param multi: for multi graphs
+    :type multi: bool
     :param layout: Layout of the plot
-    :return: Pyplot plot
+    :type layout: str
+    :return: Dataframe with all the metrics and the filename of the plot
+    :rtype: pd.DataFrame, str
     """
     if metrics == 'centralities':
         df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
@@ -180,10 +218,15 @@ def plot_histogram(networkGraphs, metrics, directed=True, multi=True):
         - 'centralities' - All centralities
         - 'nodes' - All node metrics
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
     :param metrics: Metrics to be plotted
+    :type metrics: str
     :param directed: Boolean to indicate if the graph is directed or not
+    :type directed: bool
     :param multi: for multi graphs
+    :type multi: bool
     :return: df and filename
+    :rtype: pd.DataFrame, str
     """
     if metrics == 'centralities':
         df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
@@ -207,8 +250,10 @@ def plot_histogram(networkGraphs, metrics, directed=True, multi=True):
 def plot_hotspot(networkGraphs):
     """
     :Function: Plot the hotspot and coldspot for the given graph
-    :param networkGraphs:
-    :return:
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: NetworkGraphs
+    :return: Dataframe with the hotspot and coldspot and filename
+    :rtype: pd.DataFrame, str
     """
     if not networkGraphs.is_spatial():
         return ValueError('Graph is not spatial. Please select a spatial graph.')
@@ -244,10 +289,15 @@ def plot_boxplot(networkGraphs, metrics, directed=True, multi=True):
         - 'centralities' - All centralities
         - 'nodes' - All node metrics
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
     :param metrics: Metrics to be plotted
+    :type metrics: str
     :param directed: Boolean to indicate if the graph is directed or not
+    :type directed: bool
     :param multi: for multi graphs
+    :type multi: bool
     :return: df and filename
+    :rtype: pd.DataFrame, str
     """
     if metrics == 'centralities':
         df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
@@ -284,10 +334,15 @@ def plot_violin(networkGraphs, metrics, directed=True, multi=True):
         - 'centralities' - All centralities
         - 'nodes' - All node metrics
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
     :param metrics: Metrics to be plotted
+    :type metrics: str
     :param directed: Boolean to indicate if the graph is directed or not
+    :type directed: bool
     :param multi: for multi graphs
+    :type multi: bool
     :return: df and filename
+    :rtype: pd.DataFrame, str
     """
     if metrics == 'centralities':
         df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
@@ -311,7 +366,9 @@ def plot_heatmap(networkGraph):
     """
     :Function: Plot the heatmap for the given graph
     :param networkGraph:
-    :return:
+    :type networkGraph: NetworkGraph
+    :return: filename
+    :rtype: str
     """
     filename = f"heatmap.html"
     filepath = f"../application/{networkGraph.session_folder}/{filename}"
