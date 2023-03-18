@@ -221,9 +221,17 @@ def centrality_all():
         df, graph_name2 = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle2, layout=layout2)
         session['graph_name2'] = graph_name2
     graph1 = session['graph_name1']
-    graph_path1 = 'static/uploads/'+filename2+'/'+graph1
     graph2 = session['graph_name2']
-    graph_path2 = 'static/uploads/'+filename2+'/'+graph2
+    
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+
+    if graph2 == 'no_graph.html':
+        graph_path2 = '../static/' + graph2
+    else:
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
 
     return render_template('centrality_all.html', example=df, tab=tab,
     dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
@@ -263,9 +271,17 @@ def centrality_degree():
         df, graph_name2 = plot_metric(networkGraphs, metrics, directed=directed_toggle2, multi=multi, dynamic=dynamic_toggle2, layout=layout2)
         session['graph_name2'] = graph_name2
     graph1 = session['graph_name1']
-    graph_path1 = '../static/uploads/'+filename2+'/'+graph1
     graph2 = session['graph_name2']
-    graph_path2 = '../static/uploads/'+filename2+'/'+graph2
+    
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+
+    if graph2 == 'no_graph.html':
+        graph_path2 = '../static/' + graph2
+    else:
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
 
     return render_template('centrality_degree.html', example=df, tab=tab,
     dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
@@ -305,9 +321,17 @@ def centrality_eigenvector():
         df, graph_name2 = plot_metric(networkGraphs, metrics, directed=directed_toggle2, multi=multi, dynamic=dynamic_toggle2, layout=layout2)
         session['graph_name2'] = graph_name2
     graph1 = session['graph_name1']
-    graph_path1 = '../static/uploads/'+filename2+'/'+graph1
     graph2 = session['graph_name2']
-    graph_path2 = '../static/uploads/'+filename2+'/'+graph2
+
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+
+    if graph2 == 'no_graph.html':
+        graph_path2 = '../static/' + graph2
+    else:
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
 
     return render_template('centrality_eigenvector.html', example=df, tab=tab,
     dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
@@ -347,9 +371,17 @@ def centrality_closeness():
         df, graph_name2 = plot_metric(networkGraphs, metrics, directed=directed_toggle2, multi=multi, dynamic=dynamic_toggle2, layout=layout2)
         session['graph_name2'] = graph_name2
     graph1 = session['graph_name1']
-    graph_path1 = '../static/uploads/'+filename2+'/'+graph1
     graph2 = session['graph_name2']
-    graph_path2 = '../static/uploads/'+filename2+'/'+graph2
+    
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+
+    if graph2 == 'no_graph.html':
+        graph_path2 = '../static/' + graph2
+    else:
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
 
     return render_template('centrality_closeness.html', example=df, tab=tab,
     dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
@@ -390,9 +422,17 @@ def centrality_betwenness():
         df, graph_name2 = plot_metric(networkGraphs, metrics, directed=directed_toggle2, multi=multi, dynamic=dynamic_toggle2, layout=layout2)
         session['graph_name2'] = graph_name2
     graph1 = session['graph_name1']
-    graph_path1 = '../static/uploads/'+filename2+'/'+graph1
     graph2 = session['graph_name2']
-    graph_path2 = '../static/uploads/'+filename2+'/'+graph2
+    
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+
+    if graph2 == 'no_graph.html':
+        graph_path2 = '../static/' + graph2
+    else:
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
 
     return render_template('centrality_betwenness.html', example=df, tab=tab,
     dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
@@ -432,9 +472,17 @@ def centrality_load():
         df, graph_name2 = plot_metric(networkGraphs, metrics, directed=directed_toggle2, multi=multi, dynamic=dynamic_toggle2, layout=layout2)
         session['graph_name2'] = graph_name2
     graph1 = session['graph_name1']
-    graph_path1 = '../static/uploads/'+filename2+'/'+graph1
     graph2 = session['graph_name2']
-    graph_path2 = '../static/uploads/'+filename2+'/'+graph2
+    
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+
+    if graph2 == 'no_graph.html':
+        graph_path2 = '../static/' + graph2
+    else:
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
 
     return render_template('centrality_load.html', example=df, tab=tab,
     dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
