@@ -1,3 +1,4 @@
+from tqdm import tqdm
 from pyvis import network as net
 
 from src.visualisation_src.utils_visualisation import *
