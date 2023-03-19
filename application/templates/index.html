@@ -8,7 +8,20 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <style>
+    .spinner-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+  </style>
 </head>
+<div class="spinner-container" id="spinner">
+  <div class="spinner-grow" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
 
 <body>
 
@@ -50,7 +63,8 @@
                     <option value="option1">Select Dataset Type</option>
                     <option value="RAILWAY">Railway</option>
                     <option value="CRYPTO">Crypto</option>
-                    <option value="CUSTOM">General</option>
+                    <option value="MTX">MTX</option>
+                    <option value="CUSTOM">Custom</option>
                   </select>
                 </div>
                 <div class="d-grid gap-2">
@@ -59,7 +73,11 @@
                 </div>
               </form>
             </div>
-
+            <div class="col-md-12 text-center">
+              <p class="mx-auto" style="text-decoration: underline; color: #483EA8;"><a href="/index/sample-dataset"
+                  style="text-decoration: none;">Not Sure? Try sample
+                  datasets</a></p>
+            </div>
           </div>
         </div>
       </div>
@@ -78,6 +96,7 @@
     crossorigin="anonymous"></script>
   <script type="text/javascript" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
 </body>
 
 </html>

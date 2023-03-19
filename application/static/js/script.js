@@ -24,6 +24,7 @@ $(function () {
         var formData = new FormData();
         formData.append('csv_file', csvFile);
         formData.append('option', option);
+        setSpinnerVisibility(true);
 
         // Send the data using AJAX
         $.ajax({
@@ -74,3 +75,12 @@ $(function () {
     });
 
 });
+
+function setSpinnerVisibility(visible) {
+    let spinner = document.getElementById('spinner');
+    spinner.style.display = visible ? 'flex' : 'none';
+}
+
+// Example usage
+let showSpinner = false; // Set this variable to true to display the spinner or false to hide it
+setSpinnerVisibility(showSpinner);
