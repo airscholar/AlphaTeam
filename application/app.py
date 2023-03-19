@@ -1249,14 +1249,43 @@ def edge_all():
 
 #-------------------------------------------ML-CLUSTERING-----------------------------------
 
-@app.route('/clustering/louvanian', endpoint='clustering_louvanian', methods=['GET', 'POST'])
-@cache.cached(timeout=3600) # Cache the result for 1 hour
+@app.route('/clustering/louvain', endpoint='clustering_louvanian', methods=['GET', 'POST'])
 def clustering_louvanian():
-    clustering_louvanianDF = cache.get('clustering_louvanianDF')
-    if clustering_louvanianDF is None:
-        clustering_louvanianDF = compute_load_centrality(networkGraphs, directed=False)
-        cache.set('clustering_louvanianDF', clustering_louvanianDF)
-    return render_template('clustering_louvanian.html', example=clustering_louvanianDF)
+    filename2 = session['filename2']
+    clusterType = 'louvain'
+    multi_toggle = True
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    
+    if request.method == 'POST':
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+    else:
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+    graph1 = session['graph_name1']
+ 
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+
+    return render_template('node_degree.html', example=df,
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1)
+
+
+#-------------------------------------------RESILIENCE_ANALYSIS-----------------------------------
+
+@app.route('/resilience/random', endpoint='resilience_random', methods=['GET', 'POST'])
+def resilience_analyisis_random():
+    return render_template('resilience_analyisis_random.html')
+
+
 
 #-------------------------------------------MAIN--------------------------------------------
 if __name__ == '__main__':
