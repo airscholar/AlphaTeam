@@ -15,11 +15,19 @@
             <ul class="nav nav-tabs">
                 <li class="nav-item">
                     <a class="nav-link {% if tab=='tab1' %}active{% else %}{% endif %}" data-toggle="tab"
-                        href="#tab1">Tab 1</a>
+                        href="#tab1">Layout</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if tab=='tab2' %}active{% else %}{% endif %}" data-toggle="tab"
-                        href="#tab2">Tab 2</a>
+                        href="#tab2">Histogram</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if tab=='tab3' %}active{% else %}{% endif %}" data-toggle="tab"
+                        href="#tab3">Boxplot</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if tab=='tab4' %}active{% else %}{% endif %}" data-toggle="tab"
+                        href="#tab4">Violinplot</a>
                 </li>
             </ul>
 
@@ -108,6 +116,100 @@
                                             <option value="sfdp" {% if layout2=='sfdp' %}selected{% endif %}>Sfdp
                                             </option>
                                             <option value="twopi" {% if layout2=='twopi' %}selected{% endif %}>Twopi
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary"
+                                        style="margin:5px; width: 100%;">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab3" class="container tab-pane {% if tab=='tab3' %}active{% else %}fade{% endif %}">
+                    <br />
+                    <div class="row">
+                        <div class="col-10">
+                            <div class="card card-body" style="align-items: center;">
+                                <iframe src="{{ graph3 }}" width="100%" height="500"></iframe>
+                                <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="card card-body" style="align-items: center;">
+
+                                <form method="post">
+                                    <div class="toggle-btn" style="margin:5px">
+                                        <input type="checkbox" id="multi-toggle3" name="multi_toggle3" {% if
+                                            multi_toggle3 %}checked{% endif %}>
+                                        <label for="multi-toggle3"></label>
+                                    </div>
+                                    <span>Multi</span>
+                                    <div class="toggle-btn" style="margin:5px">
+                                        <input type="checkbox" id="dynamic-toggle3" name="dynamic_toggle3" {% if
+                                            dynamic_toggle3 %}checked{% endif %}>
+                                        <label for="dynamic-toggle3"></label>
+                                    </div>
+                                    <span>Dynamic</span>
+                                    <div class="toggle-btn" style="margin:5px">
+                                        <input type="checkbox" id="directed-toggle3" name="directed_toggle3" {% if
+                                            directed_toggle3 %}checked{% endif %}>
+                                        <label for="directed-toggle3"></label>
+                                    </div>
+                                    <span>Directed</span>
+                                    <div class="dropdown" style="margin:5px">
+                                        <select id="dropdown-menu3" class="mx-auto" name="layout3">
+                                            <option value="map" {% if layout3=='map' %}selected{% endif %}>Map</option>
+                                            <option value="sfdp" {% if layout3=='sfdp' %}selected{% endif %}>Sfdp
+                                            </option>
+                                            <option value="twopi" {% if layout3=='twopi' %}selected{% endif %}>Twopi
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary"
+                                        style="margin:5px; width: 100%;">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab4" class="container tab-pane {% if tab=='tab4' %}active{% else %}fade{% endif %}">
+                    <br />
+                    <div class="row">
+                        <div class="col-10">
+                            <div class="card card-body" style="align-items: center;">
+                                <iframe src="{{ graph4 }}" width="100%" height="500"></iframe>
+                                <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="card card-body" style="align-items: center;">
+
+                                <form method="post">
+                                    <div class="toggle-btn" style="margin:5px">
+                                        <input type="checkbox" id="multi-toggle4" name="multi_toggle4" {% if
+                                            multi_toggle4 %}checked{% endif %}>
+                                        <label for="multi-toggle4"></label>
+                                    </div>
+                                    <span>Multi</span>
+                                    <div class="toggle-btn" style="margin:5px">
+                                        <input type="checkbox" id="dynamic-toggle4" name="dynamic_toggle4" {% if
+                                            dynamic_toggle4 %}checked{% endif %}>
+                                        <label for="dynamic-toggle4"></label>
+                                    </div>
+                                    <span>Dynamic</span>
+                                    <div class="toggle-btn" style="margin:5px">
+                                        <input type="checkbox" id="directed-toggle4" name="directed_toggle4" {% if
+                                            directed_toggle4 %}checked{% endif %}>
+                                        <label for="directed-toggle4"></label>
+                                    </div>
+                                    <span>Directed</span>
+                                    <div class="dropdown" style="margin:5px">
+                                        <select id="dropdown-menu4" class="mx-auto" name="layout4">
+                                            <option value="map" {% if layout4=='map' %}selected{% endif %}>Map</option>
+                                            <option value="sfdp" {% if layout4=='sfdp' %}selected{% endif %}>Sfdp
+                                            </option>
+                                            <option value="twopi" {% if layout4=='twopi' %}selected{% endif %}>Twopi
                                             </option>
                                         </select>
                                     </div>
