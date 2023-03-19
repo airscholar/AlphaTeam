@@ -1,14 +1,10 @@
-import matplotlib.pyplot as plt
-import networkx as nx
-from plotly import graph_objects as go
-from src.visualisation_src.utils_visualisation import *
-from tqdm import tqdm
-from itertools import zip_longest
-from pyvis import network as net
 import matplotlib as mpl
-import plotly.figure_factory as ff
-import plotly.express as px
-import json
+import networkx as nx
+from pyvis import network as net
+from tqdm import tqdm
+
+from src.visualisation_src.utils_visualisation import *
+
 
 # ----------------------------------------------------------------------------------------
 
@@ -154,6 +150,7 @@ def generate_dynamic_metric(networkGraphs, df_, filename):  # USING PYVIS
 
     return Net
 
+
 # ----------------------------------------------------------------------------------------
 
 def generate_histogram_metric(df_, filename):
@@ -168,7 +165,7 @@ def generate_histogram_metric(df_, filename):
     """
     metrics_names = df_.columns[1:]
     metrics = df_[metrics_names].values
-    title = f"Histogram distribution of the metric{'s' if len(metrics_names)>1 else ''}: {', '.join(metrics_names)}"
+    title = f"Histogram distribution of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
 
     fig = go.Figure()
     for i, metric in enumerate(metrics_names):
@@ -178,12 +175,13 @@ def generate_histogram_metric(df_, filename):
                       title_text=title,
                       xaxis_title="Values",
                       yaxis_title="Count",
-                      bargap=0.1,)
+                      bargap=0.1, )
     fig.update_traces(opacity=0.75)
 
     fig.write_html(filename)
 
     return fig
+
 
 # ----------------------------------------------------------------------------------------
 
@@ -199,7 +197,7 @@ def generate_boxplot_metric(df_, filename):
     """
     metrics_names = df_.columns[1:]
     metrics = df_[metrics_names].values
-    title = f"Boxplot of the metric{'s' if len(metrics_names)>1 else ''}: {', '.join(metrics_names)}"
+    title = f"Boxplot of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
 
     fig = go.Figure()
     for i, metric in enumerate(metrics_names):
@@ -215,6 +213,7 @@ def generate_boxplot_metric(df_, filename):
 
     return fig
 
+
 # ----------------------------------------------------------------------------------------
 
 def generate_violin_metric(df_, filename):
@@ -229,7 +228,7 @@ def generate_violin_metric(df_, filename):
     """
     metrics_names = df_.columns[1:]
     metrics = df_[metrics_names].values
-    title = f"Violin plot of the metric{'s' if len(metrics_names)>1 else ''}: {', '.join(metrics_names)}"
+    title = f"Violin plot of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
 
     fig = go.Figure()
     for i, metric in enumerate(metrics_names):
@@ -244,6 +243,7 @@ def generate_violin_metric(df_, filename):
     fig.show()
 
     return fig
+
 
 # ----------------------------------------------------------------------------------------
 

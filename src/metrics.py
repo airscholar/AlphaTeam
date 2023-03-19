@@ -6,11 +6,11 @@ Purpose: Compute the metrics for the NetworkX graphs
 
 # ----------------------------------------------------------------------------------------
 
-import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 import pandas as pd
 from pandas.api.types import is_numeric_dtype
+
 from src.utils import memoize
 
 
