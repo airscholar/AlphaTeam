@@ -197,7 +197,7 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
         df = pd.DataFrame(columns=['Node', 'Metric'])
         df['Node'] = list(networkGraphs.Graph.nodes())
         df['Metric'] = np.nan
-        return df, "no_graph.html"\
+        return df, "no_graph.html"
 
     if metrics == 'centralities':
         df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
