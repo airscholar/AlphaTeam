@@ -29,13 +29,9 @@ def internal_server_error(e):
         # Delete the file
         filename = session['filename']
         filename2 = session['filename2']
-        filepath = './uploads/'+filename2
+        filepath = 'static/uploads/'+filename2
         if os.path.exists(filepath):
-            shutil.rmtree(filepath)
-        imagepath = app.root_path + '/static/img/' + filename + '.png'
-        if os.path.exists(imagepath):
-            os.remove(imagepath)
-        
+            shutil.rmtree(filepath)        
         cache.clear()
 
     return render_template('500.html')
@@ -52,12 +48,9 @@ def index():
         # Delete the file
         filename = session['filename']
         filename2 = session['filename2']
-        filepath = './uploads/'+filename2
+        filepath = 'static/uploads/'+filename2
         if os.path.exists(filepath):
             shutil.rmtree(filepath)
-        imagepath = app.root_path + '/static/img/' + filename + '.png'
-        if os.path.exists(imagepath):
-            os.remove(imagepath)
         # Clear the cache
         cache.clear()
     return render_template('index.html')
@@ -86,9 +79,9 @@ def upload():
             filename = option + re.sub(r'\W+', '', timestamp) + '.mtx'
             filename2 = option + re.sub(r'\W+', '', timestamp)
         # Check if the directory exists, and create it if it doesn't
-        destination_dir = './uploads/'+filename2
+        destination_dir = 'static/uploads/'+filename2
         # Create the directory if it doesn't exist
-        destination_dir = './uploads/'+filename2
+        destination_dir = 'static/uploads/'+filename2
         if not os.path.exists(destination_dir):
             os.makedirs(destination_dir)
         destination_file = filename
@@ -111,7 +104,7 @@ def upload():
             filename2 = option + re.sub(r'\W+', '', timestamp)
     
         # Create the directory if it doesn't exist
-        destination_dir = './uploads/'+filename2
+        destination_dir = 'static/uploads/'+filename2
         if not os.path.exists(destination_dir):
             os.makedirs(destination_dir)
 
@@ -137,10 +130,10 @@ def home():
     filename2 = session['filename2']
     filepath = session['filepath']
     option = session['option']
-
+    
     # Assign the value to the global variable
     global networkGraphs
-    networkGraphs = NetworkGraphs(filepath, type=option, spatial=True)
+    networkGraphs = NetworkGraphs(filepath, session_folder='static/uploads/'+filename2, type=option)
 
     global_metrics = cache.get('global_metrics')
     if global_metrics is None:
@@ -152,16 +145,42 @@ def home():
 
 #-------------------------------------------VISUALISATION-----------------------------------
 
-@app.route('/visualise/static', endpoint='my_static')
-def static():
+@app.route('/visualise/static', methods=['GET', 'POST'], endpoint='my_static')
+def static_visualisation():
     filename = session['filename']
-    obj = static_visualisation(networkGraphs, "My Plot", directed=False)
-    plot = static_visualisation(networkGraphs, "My Plot", directed=False)
-    image_path = 'img/' + filename + '.png'
-    if not os.path.exists(app.root_path + '/static/img/' + filename + '.png'):
-        plot.savefig(app.root_path + '/static/img/' + filename + '.png', bbox_inches='tight')
-    print(image_path)
-    return render_template('static_visualisation.html', image_path=image_path)
+    filename2 = session['filename2']
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'option1'
+
+    if request.method == 'POST':
+        # Get form data
+        dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+        directed_toggle = bool(request.form.get('directed_toggle'))
+        layout = request.form.get('layout')
+
+        # Update visualization based on form data
+        # Example code:
+        # if dynamic_toggle:
+        #     # Do something for dynamic toggle on
+        # else:
+        #     # Do something for dynamic toggle off
+
+        # if directed_toggle:
+        #     # Do something for directed toggle on
+        # else:
+        #     # Do something for directed toggle off
+
+        print(layout)
+        # if layout == 'map':
+        #     # Do something for map layout selected
+        # elif layout == 'sfdp':
+        #     # Do something for sfdp layout selected
+        # elif layout == 'twopi':
+        #     # Do something for twopi layout selected
+        
+    return render_template('static_visualisation.html', dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout)
+
 
 @app.route('/visualise/dynamic', endpoint='my_dynamic')
 def dynamic():
@@ -169,111 +188,1056 @@ def dynamic():
 
 #-------------------------------------------CENTRALITY--------------------------------------
 
-@app.route('/centrality', endpoint='centrality')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
+@app.route('/centrality', endpoint='centrality', methods=['GET', 'POST'])
 def centrality_all():
-    allCentralityDF = cache.get('allCentralityDF')
-    if allCentralityDF is None:
-        allCentralityDF = compute_node_centralities(networkGraphs, directed=False)
-        cache.set('allCentralityDF', allCentralityDF)
-    return render_template('centrality_all.html', example=allCentralityDF)
+    filename2 = session['filename2']
+    metrics = 'centralities'
+    multi_toggle = True
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    multi_toggle2 = True
+    dynamic_toggle2 = False
+    directed_toggle2 = False
+    layout2 = 'map'
+    multi_toggle3 = True
+    dynamic_toggle3 = False
+    directed_toggle3 = False
+    layout3 = 'map'
+    multi_toggle4 = True
+    dynamic_toggle4 = False
+    directed_toggle4 = False
+    layout4 = 'map'
+    tab = 'tab1'
+    
+    if request.method == 'POST':
+        if (request.form.get('multi_toggle') is not None or request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+            tab = 'tab1'
+        if (request.form.get('multi_toggle2') is not None or request.form.get('dynamic_toggle2') is not None or request.form.get('directed_toggle2') is not None or request.form.get('layout2') is not None):
+            multi_toggle2 = bool(request.form.get('multi_toggle2'))
+            dynamic_toggle2 = bool(request.form.get('dynamic_toggle2'))
+            directed_toggle2 = bool(request.form.get('directed_toggle2'))
+            layout2 = request.form.get('layout2')
+            df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+            session['graph_name2'] = graph_name2
+            tab = 'tab2'
+        if (request.form.get('multi_toggle3') is not None or request.form.get('dynamic_toggle3') is not None or request.form.get('directed_toggle3') is not None or request.form.get('layout3') is not None):
+            multi_toggle3 = bool(request.form.get('multi_toggle3'))
+            dynamic_toggle3 = bool(request.form.get('dynamic_toggle3'))
+            directed_toggle3 = bool(request.form.get('directed_toggle3'))
+            layout3 = request.form.get('layout3')
+            df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+            session['graph_name3'] = graph_name3
+            tab = 'tab3'
+        if (request.form.get('multi_toggle4') is not None or request.form.get('dynamic_toggle4') is not None or request.form.get('directed_toggle4') is not None or request.form.get('layout4') is not None):
+            multi_toggle4 = bool(request.form.get('multi_toggle4'))
+            dynamic_toggle4 = bool(request.form.get('dynamic_toggle4'))
+            directed_toggle4 = bool(request.form.get('directed_toggle4'))
+            layout4 = request.form.get('layout4')
+            df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+            session['graph_name4'] = graph_name4
+            tab = 'tab4'
+    else:
+        df, graph_name1 = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+        df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+        session['graph_name2'] = graph_name2
+        df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+        session['graph_name3'] = graph_name3
+        df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+        session['graph_name4'] = graph_name4
+    graph1 = session['graph_name1']
+    graph2 = session['graph_name2']
+    graph3 = session['graph_name3']
+    graph4 = session['graph_name4']
+    
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
 
-@app.route('/centrality/degree', endpoint='degree')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
+    if graph2 == 'no_graph.html':
+        graph_path2 = '../static/' + graph2
+    else:
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
+    
+    if graph3 == 'no_graph.html':
+        graph_path3 = '../static/' + graph3
+    else:
+        graph_path3 = '../static/uploads/' + filename2 + '/' + graph3
+
+    if graph4 == 'no_graph.html':
+        graph_path4 = '../static/' + graph4
+    else:
+        graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
+
+    return render_template('centrality_all.html', example=df, tab=tab, 
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
+    multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
+    multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
+    multi_toggle4=multi_toggle4, dynamic_toggle4=dynamic_toggle4, directed_toggle4=directed_toggle4, layout4=layout4, graph4=graph_path4)
+
+@app.route('/centrality/degree', endpoint='degree', methods=['GET', 'POST'])
 def centrality_degree():
-    centrality_degreeDF = cache.get('centrality_degreeDF')
-    if centrality_degreeDF is None:
-        centrality_degreeDF = compute_degree_centrality(networkGraphs, directed=False)
-        cache.set('centrality_degreeDF', centrality_degreeDF)
-    return render_template('centrality_degree.html', example=centrality_degreeDF)
+    filename2 = session['filename2']
+    metrics = 'degree_centrality'
+    multi_toggle = True
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    multi_toggle2 = True
+    dynamic_toggle2 = False
+    directed_toggle2 = False
+    layout2 = 'map'
+    multi_toggle3 = True
+    dynamic_toggle3 = False
+    directed_toggle3 = False
+    layout3 = 'map'
+    multi_toggle4 = True
+    dynamic_toggle4 = False
+    directed_toggle4 = False
+    layout4 = 'map'
+    tab = 'tab1'
+    
+    if request.method == 'POST':
+        if (request.form.get('multi_toggle') is not None or request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+            tab = 'tab1'
+        if (request.form.get('multi_toggle2') is not None or request.form.get('dynamic_toggle2') is not None or request.form.get('directed_toggle2') is not None or request.form.get('layout2') is not None):
+            multi_toggle2 = bool(request.form.get('multi_toggle2'))
+            dynamic_toggle2 = bool(request.form.get('dynamic_toggle2'))
+            directed_toggle2 = bool(request.form.get('directed_toggle2'))
+            layout2 = request.form.get('layout2')
+            df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+            session['graph_name2'] = graph_name2
+            tab = 'tab2'
+        if (request.form.get('multi_toggle3') is not None or request.form.get('dynamic_toggle3') is not None or request.form.get('directed_toggle3') is not None or request.form.get('layout3') is not None):
+            multi_toggle3 = bool(request.form.get('multi_toggle3'))
+            dynamic_toggle3 = bool(request.form.get('dynamic_toggle3'))
+            directed_toggle3 = bool(request.form.get('directed_toggle3'))
+            layout3 = request.form.get('layout3')
+            df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+            session['graph_name3'] = graph_name3
+            tab = 'tab3'
+        if (request.form.get('multi_toggle4') is not None or request.form.get('dynamic_toggle4') is not None or request.form.get('directed_toggle4') is not None or request.form.get('layout4') is not None):
+            multi_toggle4 = bool(request.form.get('multi_toggle4'))
+            dynamic_toggle4 = bool(request.form.get('dynamic_toggle4'))
+            directed_toggle4 = bool(request.form.get('directed_toggle4'))
+            layout4 = request.form.get('layout4')
+            df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+            session['graph_name4'] = graph_name4
+            tab = 'tab4'
+    else:
+        df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+        df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+        session['graph_name2'] = graph_name2
+        df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+        session['graph_name3'] = graph_name3
+        df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+        session['graph_name4'] = graph_name4
+    graph1 = session['graph_name1']
+    graph2 = session['graph_name2']
+    graph3 = session['graph_name3']
+    graph4 = session['graph_name4']
+    
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
 
-@app.route('/centrality/eigenvector', endpoint='eigenvector')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
+    if graph2 == 'no_graph.html':
+        graph_path2 = '../static/' + graph2
+    else:
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
+    
+    if graph3 == 'no_graph.html':
+        graph_path3 = '../static/' + graph3
+    else:
+        graph_path3 = '../static/uploads/' + filename2 + '/' + graph3
+
+    if graph4 == 'no_graph.html':
+        graph_path4 = '../static/' + graph4
+    else:
+        graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
+
+    return render_template('centrality_degree.html', example=df, tab=tab, 
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
+    multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
+    multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
+    multi_toggle4=multi_toggle4, dynamic_toggle4=dynamic_toggle4, directed_toggle4=directed_toggle4, layout4=layout4, graph4=graph_path4)
+
+@app.route('/centrality/eigenvector', endpoint='eigenvector', methods=['GET', 'POST'])
 def centrality_eigenvector():
-    centrality_eigenvectorDF = cache.get('centrality_eigenvectorDF')
-    if centrality_eigenvectorDF is None:
-        centrality_eigenvectorDF = compute_eigen_centrality(networkGraphs, directed=False)
-        cache.set('centrality_eigenvectorDF', centrality_eigenvectorDF)
-    return render_template('centrality_eigenvector.html', example=centrality_eigenvectorDF)
+    filename2 = session['filename2']
+    metrics = 'eigenvector_centrality'
+    multi_toggle = True
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    multi_toggle2 = True
+    dynamic_toggle2 = False
+    directed_toggle2 = False
+    layout2 = 'map'
+    multi_toggle3 = True
+    dynamic_toggle3 = False
+    directed_toggle3 = False
+    layout3 = 'map'
+    multi_toggle4 = True
+    dynamic_toggle4 = False
+    directed_toggle4 = False
+    layout4 = 'map'
+    tab = 'tab1'
+    
+    if request.method == 'POST':
+        if (request.form.get('multi_toggle') is not None or request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+            tab = 'tab1'
+        if (request.form.get('multi_toggle2') is not None or request.form.get('dynamic_toggle2') is not None or request.form.get('directed_toggle2') is not None or request.form.get('layout2') is not None):
+            multi_toggle2 = bool(request.form.get('multi_toggle2'))
+            dynamic_toggle2 = bool(request.form.get('dynamic_toggle2'))
+            directed_toggle2 = bool(request.form.get('directed_toggle2'))
+            layout2 = request.form.get('layout2')
+            df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+            session['graph_name2'] = graph_name2
+            tab = 'tab2'
+        if (request.form.get('multi_toggle3') is not None or request.form.get('dynamic_toggle3') is not None or request.form.get('directed_toggle3') is not None or request.form.get('layout3') is not None):
+            multi_toggle3 = bool(request.form.get('multi_toggle3'))
+            dynamic_toggle3 = bool(request.form.get('dynamic_toggle3'))
+            directed_toggle3 = bool(request.form.get('directed_toggle3'))
+            layout3 = request.form.get('layout3')
+            df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+            session['graph_name3'] = graph_name3
+            tab = 'tab3'
+        if (request.form.get('multi_toggle4') is not None or request.form.get('dynamic_toggle4') is not None or request.form.get('directed_toggle4') is not None or request.form.get('layout4') is not None):
+            multi_toggle4 = bool(request.form.get('multi_toggle4'))
+            dynamic_toggle4 = bool(request.form.get('dynamic_toggle4'))
+            directed_toggle4 = bool(request.form.get('directed_toggle4'))
+            layout4 = request.form.get('layout4')
+            df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+            session['graph_name4'] = graph_name4
+            tab = 'tab4'
+    else:
+        df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+        df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+        session['graph_name2'] = graph_name2
+        df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+        session['graph_name3'] = graph_name3
+        df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+        session['graph_name4'] = graph_name4
+    graph1 = session['graph_name1']
+    graph2 = session['graph_name2']
+    graph3 = session['graph_name3']
+    graph4 = session['graph_name4']
+    
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
 
-@app.route('/centrality/closeness', endpoint='closeness')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
+    if graph2 == 'no_graph.html':
+        graph_path2 = '../static/' + graph2
+    else:
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
+    
+    if graph3 == 'no_graph.html':
+        graph_path3 = '../static/' + graph3
+    else:
+        graph_path3 = '../static/uploads/' + filename2 + '/' + graph3
+
+    if graph4 == 'no_graph.html':
+        graph_path4 = '../static/' + graph4
+    else:
+        graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
+
+    return render_template('centrality_eigenvector.html', example=df, tab=tab, 
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
+    multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
+    multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
+    multi_toggle4=multi_toggle4, dynamic_toggle4=dynamic_toggle4, directed_toggle4=directed_toggle4, layout4=layout4, graph4=graph_path4)
+
+@app.route('/centrality/closeness', endpoint='closeness', methods=['GET', 'POST'])
 def centrality_closeness():
-    centrality_closenessDF = cache.get('centrality_closenessDF')
-    if centrality_closenessDF is None:
-        centrality_closenessDF = compute_closeness_centrality(networkGraphs, directed=False)
-        cache.set('centrality_closenessDF', centrality_closenessDF)
-    return render_template('centrality_closeness.html', example=centrality_closenessDF)
+    filename2 = session['filename2']
+    metrics = 'closeness_centrality'
+    multi_toggle = True
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    multi_toggle2 = True
+    dynamic_toggle2 = False
+    directed_toggle2 = False
+    layout2 = 'map'
+    multi_toggle3 = True
+    dynamic_toggle3 = False
+    directed_toggle3 = False
+    layout3 = 'map'
+    multi_toggle4 = True
+    dynamic_toggle4 = False
+    directed_toggle4 = False
+    layout4 = 'map'
+    tab = 'tab1'
+    
+    if request.method == 'POST':
+        if (request.form.get('multi_toggle') is not None or request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+            tab = 'tab1'
+        if (request.form.get('multi_toggle2') is not None or request.form.get('dynamic_toggle2') is not None or request.form.get('directed_toggle2') is not None or request.form.get('layout2') is not None):
+            multi_toggle2 = bool(request.form.get('multi_toggle2'))
+            dynamic_toggle2 = bool(request.form.get('dynamic_toggle2'))
+            directed_toggle2 = bool(request.form.get('directed_toggle2'))
+            layout2 = request.form.get('layout2')
+            df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+            session['graph_name2'] = graph_name2
+            tab = 'tab2'
+        if (request.form.get('multi_toggle3') is not None or request.form.get('dynamic_toggle3') is not None or request.form.get('directed_toggle3') is not None or request.form.get('layout3') is not None):
+            multi_toggle3 = bool(request.form.get('multi_toggle3'))
+            dynamic_toggle3 = bool(request.form.get('dynamic_toggle3'))
+            directed_toggle3 = bool(request.form.get('directed_toggle3'))
+            layout3 = request.form.get('layout3')
+            df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+            session['graph_name3'] = graph_name3
+            tab = 'tab3'
+        if (request.form.get('multi_toggle4') is not None or request.form.get('dynamic_toggle4') is not None or request.form.get('directed_toggle4') is not None or request.form.get('layout4') is not None):
+            multi_toggle4 = bool(request.form.get('multi_toggle4'))
+            dynamic_toggle4 = bool(request.form.get('dynamic_toggle4'))
+            directed_toggle4 = bool(request.form.get('directed_toggle4'))
+            layout4 = request.form.get('layout4')
+            df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+            session['graph_name4'] = graph_name4
+            tab = 'tab4'
+    else:
+        df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+        df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+        session['graph_name2'] = graph_name2
+        df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+        session['graph_name3'] = graph_name3
+        df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+        session['graph_name4'] = graph_name4
+    graph1 = session['graph_name1']
+    graph2 = session['graph_name2']
+    graph3 = session['graph_name3']
+    graph4 = session['graph_name4']
+    
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
 
-@app.route('/centrality/betwenness', endpoint='betwenness')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
+    if graph2 == 'no_graph.html':
+        graph_path2 = '../static/' + graph2
+    else:
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
+    
+    if graph3 == 'no_graph.html':
+        graph_path3 = '../static/' + graph3
+    else:
+        graph_path3 = '../static/uploads/' + filename2 + '/' + graph3
+
+    if graph4 == 'no_graph.html':
+        graph_path4 = '../static/' + graph4
+    else:
+        graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
+
+    return render_template('centrality_closeness.html', example=df, tab=tab, 
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
+    multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
+    multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
+    multi_toggle4=multi_toggle4, dynamic_toggle4=dynamic_toggle4, directed_toggle4=directed_toggle4, layout4=layout4, graph4=graph_path4)
+
+@app.route('/centrality/betwenness', endpoint='betwenness', methods=['GET', 'POST'])
 def centrality_betwenness():
-    centrality_betwennessDF = cache.get('centrality_betwennessDF')
-    if centrality_betwennessDF is None:
-        centrality_betwennessDF = compute_betweeness_centrality(networkGraphs, directed=False)
-        cache.set('centrality_betwennessDF', centrality_betwennessDF)
-    return render_template('centrality_betwenness.html', example=centrality_betwennessDF)
+    filename2 = session['filename2']
+    metrics = 'betweenness_centrality'
+    multi_toggle = True
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    multi_toggle2 = True
+    dynamic_toggle2 = False
+    directed_toggle2 = False
+    layout2 = 'map'
+    multi_toggle3 = True
+    dynamic_toggle3 = False
+    directed_toggle3 = False
+    layout3 = 'map'
+    multi_toggle4 = True
+    dynamic_toggle4 = False
+    directed_toggle4 = False
+    layout4 = 'map'
+    tab = 'tab1'
+    
+    if request.method == 'POST':
+        if (request.form.get('multi_toggle') is not None or request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+            tab = 'tab1'
+        if (request.form.get('multi_toggle2') is not None or request.form.get('dynamic_toggle2') is not None or request.form.get('directed_toggle2') is not None or request.form.get('layout2') is not None):
+            multi_toggle2 = bool(request.form.get('multi_toggle2'))
+            dynamic_toggle2 = bool(request.form.get('dynamic_toggle2'))
+            directed_toggle2 = bool(request.form.get('directed_toggle2'))
+            layout2 = request.form.get('layout2')
+            df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+            session['graph_name2'] = graph_name2
+            tab = 'tab2'
+        if (request.form.get('multi_toggle3') is not None or request.form.get('dynamic_toggle3') is not None or request.form.get('directed_toggle3') is not None or request.form.get('layout3') is not None):
+            multi_toggle3 = bool(request.form.get('multi_toggle3'))
+            dynamic_toggle3 = bool(request.form.get('dynamic_toggle3'))
+            directed_toggle3 = bool(request.form.get('directed_toggle3'))
+            layout3 = request.form.get('layout3')
+            df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+            session['graph_name3'] = graph_name3
+            tab = 'tab3'
+        if (request.form.get('multi_toggle4') is not None or request.form.get('dynamic_toggle4') is not None or request.form.get('directed_toggle4') is not None or request.form.get('layout4') is not None):
+            multi_toggle4 = bool(request.form.get('multi_toggle4'))
+            dynamic_toggle4 = bool(request.form.get('dynamic_toggle4'))
+            directed_toggle4 = bool(request.form.get('directed_toggle4'))
+            layout4 = request.form.get('layout4')
+            df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+            session['graph_name4'] = graph_name4
+            tab = 'tab4'
+    else:
+        df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+        df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+        session['graph_name2'] = graph_name2
+        df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+        session['graph_name3'] = graph_name3
+        df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+        session['graph_name4'] = graph_name4
+    graph1 = session['graph_name1']
+    graph2 = session['graph_name2']
+    graph3 = session['graph_name3']
+    graph4 = session['graph_name4']
+    
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
 
-@app.route('/centrality/load', endpoint='load')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
+    if graph2 == 'no_graph.html':
+        graph_path2 = '../static/' + graph2
+    else:
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
+    
+    if graph3 == 'no_graph.html':
+        graph_path3 = '../static/' + graph3
+    else:
+        graph_path3 = '../static/uploads/' + filename2 + '/' + graph3
+
+    if graph4 == 'no_graph.html':
+        graph_path4 = '../static/' + graph4
+    else:
+        graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
+
+    return render_template('centrality_betwenness.html', example=df, tab=tab, 
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
+    multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
+    multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
+    multi_toggle4=multi_toggle4, dynamic_toggle4=dynamic_toggle4, directed_toggle4=directed_toggle4, layout4=layout4, graph4=graph_path4)
+
+@app.route('/centrality/load', endpoint='load', methods=['GET', 'POST'])
 def centrality_load():
-    centrality_loadDF = cache.get('centrality_loadDF')
-    if centrality_loadDF is None:
-        centrality_loadDF = compute_load_centrality(networkGraphs, directed=False)
-        cache.set('centrality_loadDF', centrality_loadDF)
-    return render_template('centrality_load.html', example=centrality_loadDF)
+    filename2 = session['filename2']
+    metrics = 'load_centrality'
+    multi_toggle = True
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    multi_toggle2 = True
+    dynamic_toggle2 = False
+    directed_toggle2 = False
+    layout2 = 'map'
+    multi_toggle3 = True
+    dynamic_toggle3 = False
+    directed_toggle3 = False
+    layout3 = 'map'
+    multi_toggle4 = True
+    dynamic_toggle4 = False
+    directed_toggle4 = False
+    layout4 = 'map'
+    tab = 'tab1'
+    
+    if request.method == 'POST':
+        if (request.form.get('multi_toggle') is not None or request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+            tab = 'tab1'
+        if (request.form.get('multi_toggle2') is not None or request.form.get('dynamic_toggle2') is not None or request.form.get('directed_toggle2') is not None or request.form.get('layout2') is not None):
+            multi_toggle2 = bool(request.form.get('multi_toggle2'))
+            dynamic_toggle2 = bool(request.form.get('dynamic_toggle2'))
+            directed_toggle2 = bool(request.form.get('directed_toggle2'))
+            layout2 = request.form.get('layout2')
+            df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+            session['graph_name2'] = graph_name2
+            tab = 'tab2'
+        if (request.form.get('multi_toggle3') is not None or request.form.get('dynamic_toggle3') is not None or request.form.get('directed_toggle3') is not None or request.form.get('layout3') is not None):
+            multi_toggle3 = bool(request.form.get('multi_toggle3'))
+            dynamic_toggle3 = bool(request.form.get('dynamic_toggle3'))
+            directed_toggle3 = bool(request.form.get('directed_toggle3'))
+            layout3 = request.form.get('layout3')
+            df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+            session['graph_name3'] = graph_name3
+            tab = 'tab3'
+        if (request.form.get('multi_toggle4') is not None or request.form.get('dynamic_toggle4') is not None or request.form.get('directed_toggle4') is not None or request.form.get('layout4') is not None):
+            multi_toggle4 = bool(request.form.get('multi_toggle4'))
+            dynamic_toggle4 = bool(request.form.get('dynamic_toggle4'))
+            directed_toggle4 = bool(request.form.get('directed_toggle4'))
+            layout4 = request.form.get('layout4')
+            df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+            session['graph_name4'] = graph_name4
+            tab = 'tab4'
+    else:
+        df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+        df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+        session['graph_name2'] = graph_name2
+        df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+        session['graph_name3'] = graph_name3
+        df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+        session['graph_name4'] = graph_name4
+    graph1 = session['graph_name1']
+    graph2 = session['graph_name2']
+    graph3 = session['graph_name3']
+    graph4 = session['graph_name4']
+    
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+
+    if graph2 == 'no_graph.html':
+        graph_path2 = '../static/' + graph2
+    else:
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
+    
+    if graph3 == 'no_graph.html':
+        graph_path3 = '../static/' + graph3
+    else:
+        graph_path3 = '../static/uploads/' + filename2 + '/' + graph3
+
+    if graph4 == 'no_graph.html':
+        graph_path4 = '../static/' + graph4
+    else:
+        graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
+
+    return render_template('centrality_load.html', example=df, tab=tab, 
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
+    multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
+    multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
+    multi_toggle4=multi_toggle4, dynamic_toggle4=dynamic_toggle4, directed_toggle4=directed_toggle4, layout4=layout4, graph4=graph_path4)
 
 #-------------------------------------------NODE--------------------------------------------
 
-@app.route('/node_all', endpoint='node_all')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
-def node_load():
-    node_allDF = cache.get('node_allDF')
-    if node_allDF is None:
-        node_allDF = compute_node_metrics(networkGraphs, directed=False)
-        cache.set('node_allDF', node_allDF)
-    return render_template('node_all.html', example=node_allDF)
+@app.route('/node_all', endpoint='node_all', methods=['GET', 'POST'])
+def node_all():
+    filename2 = session['filename2']
+    metrics = 'nodes'
+    multi_toggle = True
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    multi_toggle2 = True
+    dynamic_toggle2 = False
+    directed_toggle2 = False
+    layout2 = 'map'
+    multi_toggle3 = True
+    dynamic_toggle3 = False
+    directed_toggle3 = False
+    layout3 = 'map'
+    multi_toggle4 = True
+    dynamic_toggle4 = False
+    directed_toggle4 = False
+    layout4 = 'map'
+    tab = 'tab1'
+    
+    if request.method == 'POST':
+        if (request.form.get('multi_toggle') is not None or request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+            tab = 'tab1'
+        if (request.form.get('multi_toggle2') is not None or request.form.get('dynamic_toggle2') is not None or request.form.get('directed_toggle2') is not None or request.form.get('layout2') is not None):
+            multi_toggle2 = bool(request.form.get('multi_toggle2'))
+            dynamic_toggle2 = bool(request.form.get('dynamic_toggle2'))
+            directed_toggle2 = bool(request.form.get('directed_toggle2'))
+            layout2 = request.form.get('layout2')
+            df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+            session['graph_name2'] = graph_name2
+            tab = 'tab2'
+        if (request.form.get('multi_toggle3') is not None or request.form.get('dynamic_toggle3') is not None or request.form.get('directed_toggle3') is not None or request.form.get('layout3') is not None):
+            multi_toggle3 = bool(request.form.get('multi_toggle3'))
+            dynamic_toggle3 = bool(request.form.get('dynamic_toggle3'))
+            directed_toggle3 = bool(request.form.get('directed_toggle3'))
+            layout3 = request.form.get('layout3')
+            df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+            session['graph_name3'] = graph_name3
+            tab = 'tab3'
+        if (request.form.get('multi_toggle4') is not None or request.form.get('dynamic_toggle4') is not None or request.form.get('directed_toggle4') is not None or request.form.get('layout4') is not None):
+            multi_toggle4 = bool(request.form.get('multi_toggle4'))
+            dynamic_toggle4 = bool(request.form.get('dynamic_toggle4'))
+            directed_toggle4 = bool(request.form.get('directed_toggle4'))
+            layout4 = request.form.get('layout4')
+            df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+            session['graph_name4'] = graph_name4
+            tab = 'tab4'
+    else:
+        df, graph_name1 = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+        df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+        session['graph_name2'] = graph_name2
+        df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+        session['graph_name3'] = graph_name3
+        df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+        session['graph_name4'] = graph_name4
+    graph1 = session['graph_name1']
+    graph2 = session['graph_name2']
+    graph3 = session['graph_name3']
+    graph4 = session['graph_name4']
+    
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
 
-@app.route('/node/degree', endpoint='node_degree')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
+    if graph2 == 'no_graph.html':
+        graph_path2 = '../static/' + graph2
+    else:
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
+    
+    if graph3 == 'no_graph.html':
+        graph_path3 = '../static/' + graph3
+    else:
+        graph_path3 = '../static/uploads/' + filename2 + '/' + graph3
+
+    if graph4 == 'no_graph.html':
+        graph_path4 = '../static/' + graph4
+    else:
+        graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
+
+    return render_template('node_all.html', example=df, tab=tab, 
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
+    multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
+    multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
+    multi_toggle4=multi_toggle4, dynamic_toggle4=dynamic_toggle4, directed_toggle4=directed_toggle4, layout4=layout4, graph4=graph_path4)
+
+@app.route('/node/degree', endpoint='node_degree', methods=['GET', 'POST'])
 def node_degree():
-    node_degreeDF = cache.get('node_degreeDF')
-    if node_degreeDF is None:
-        node_degreeDF = compute_nodes_degree(networkGraphs, directed=False)
-        cache.set('node_degreeDF', node_degreeDF)
-    return render_template('node_degree.html', example=node_degreeDF)
+    filename2 = session['filename2']
+    metrics = 'degree'
+    multi_toggle = True
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    multi_toggle2 = True
+    dynamic_toggle2 = False
+    directed_toggle2 = False
+    layout2 = 'map'
+    multi_toggle3 = True
+    dynamic_toggle3 = False
+    directed_toggle3 = False
+    layout3 = 'map'
+    multi_toggle4 = True
+    dynamic_toggle4 = False
+    directed_toggle4 = False
+    layout4 = 'map'
+    tab = 'tab1'
+    
+    if request.method == 'POST':
+        if (request.form.get('multi_toggle') is not None or request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+            tab = 'tab1'
+        if (request.form.get('multi_toggle2') is not None or request.form.get('dynamic_toggle2') is not None or request.form.get('directed_toggle2') is not None or request.form.get('layout2') is not None):
+            multi_toggle2 = bool(request.form.get('multi_toggle2'))
+            dynamic_toggle2 = bool(request.form.get('dynamic_toggle2'))
+            directed_toggle2 = bool(request.form.get('directed_toggle2'))
+            layout2 = request.form.get('layout2')
+            df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+            session['graph_name2'] = graph_name2
+            tab = 'tab2'
+        if (request.form.get('multi_toggle3') is not None or request.form.get('dynamic_toggle3') is not None or request.form.get('directed_toggle3') is not None or request.form.get('layout3') is not None):
+            multi_toggle3 = bool(request.form.get('multi_toggle3'))
+            dynamic_toggle3 = bool(request.form.get('dynamic_toggle3'))
+            directed_toggle3 = bool(request.form.get('directed_toggle3'))
+            layout3 = request.form.get('layout3')
+            df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+            session['graph_name3'] = graph_name3
+            tab = 'tab3'
+        if (request.form.get('multi_toggle4') is not None or request.form.get('dynamic_toggle4') is not None or request.form.get('directed_toggle4') is not None or request.form.get('layout4') is not None):
+            multi_toggle4 = bool(request.form.get('multi_toggle4'))
+            dynamic_toggle4 = bool(request.form.get('dynamic_toggle4'))
+            directed_toggle4 = bool(request.form.get('directed_toggle4'))
+            layout4 = request.form.get('layout4')
+            df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+            session['graph_name4'] = graph_name4
+            tab = 'tab4'
+    else:
+        df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+        df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+        session['graph_name2'] = graph_name2
+        df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+        session['graph_name3'] = graph_name3
+        df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+        session['graph_name4'] = graph_name4
+    graph1 = session['graph_name1']
+    graph2 = session['graph_name2']
+    graph3 = session['graph_name3']
+    graph4 = session['graph_name4']
+    
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
 
-@app.route('/node/kcore', endpoint='node_kcore')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
+    if graph2 == 'no_graph.html':
+        graph_path2 = '../static/' + graph2
+    else:
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
+    
+    if graph3 == 'no_graph.html':
+        graph_path3 = '../static/' + graph3
+    else:
+        graph_path3 = '../static/uploads/' + filename2 + '/' + graph3
+
+    if graph4 == 'no_graph.html':
+        graph_path4 = '../static/' + graph4
+    else:
+        graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
+
+    return render_template('node_degree.html', example=df, tab=tab, 
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
+    multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
+    multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
+    multi_toggle4=multi_toggle4, dynamic_toggle4=dynamic_toggle4, directed_toggle4=directed_toggle4, layout4=layout4, graph4=graph_path4)
+
+@app.route('/node/kcore', endpoint='node_kcore', methods=['GET', 'POST'])
 def node_kcore():
-    node_kcoreDF = cache.get('node_kcoreDF')
-    if node_kcoreDF is None:
-        node_kcoreDF = compute_kcore(networkGraphs, directed=False)
-        cache.set('node_kcoreDF', node_kcoreDF)
-    return render_template('node_kcore.html', example=node_kcoreDF)
+    filename2 = session['filename2']
+    metrics = 'kcore'
+    multi_toggle = True
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    multi_toggle2 = True
+    dynamic_toggle2 = False
+    directed_toggle2 = False
+    layout2 = 'map'
+    multi_toggle3 = True
+    dynamic_toggle3 = False
+    directed_toggle3 = False
+    layout3 = 'map'
+    multi_toggle4 = True
+    dynamic_toggle4 = False
+    directed_toggle4 = False
+    layout4 = 'map'
+    tab = 'tab1'
+    
+    if request.method == 'POST':
+        if (request.form.get('multi_toggle') is not None or request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+            tab = 'tab1'
+        if (request.form.get('multi_toggle2') is not None or request.form.get('dynamic_toggle2') is not None or request.form.get('directed_toggle2') is not None or request.form.get('layout2') is not None):
+            multi_toggle2 = bool(request.form.get('multi_toggle2'))
+            dynamic_toggle2 = bool(request.form.get('dynamic_toggle2'))
+            directed_toggle2 = bool(request.form.get('directed_toggle2'))
+            layout2 = request.form.get('layout2')
+            df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+            session['graph_name2'] = graph_name2
+            tab = 'tab2'
+        if (request.form.get('multi_toggle3') is not None or request.form.get('dynamic_toggle3') is not None or request.form.get('directed_toggle3') is not None or request.form.get('layout3') is not None):
+            multi_toggle3 = bool(request.form.get('multi_toggle3'))
+            dynamic_toggle3 = bool(request.form.get('dynamic_toggle3'))
+            directed_toggle3 = bool(request.form.get('directed_toggle3'))
+            layout3 = request.form.get('layout3')
+            df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+            session['graph_name3'] = graph_name3
+            tab = 'tab3'
+        if (request.form.get('multi_toggle4') is not None or request.form.get('dynamic_toggle4') is not None or request.form.get('directed_toggle4') is not None or request.form.get('layout4') is not None):
+            multi_toggle4 = bool(request.form.get('multi_toggle4'))
+            dynamic_toggle4 = bool(request.form.get('dynamic_toggle4'))
+            directed_toggle4 = bool(request.form.get('directed_toggle4'))
+            layout4 = request.form.get('layout4')
+            df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+            session['graph_name4'] = graph_name4
+            tab = 'tab4'
+    else:
+        df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+        df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+        session['graph_name2'] = graph_name2
+        df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+        session['graph_name3'] = graph_name3
+        df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+        session['graph_name4'] = graph_name4
+    graph1 = session['graph_name1']
+    graph2 = session['graph_name2']
+    graph3 = session['graph_name3']
+    graph4 = session['graph_name4']
+    
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
 
-@app.route('/node/triangle', endpoint='node_triangle')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
+    if graph2 == 'no_graph.html':
+        graph_path2 = '../static/' + graph2
+    else:
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
+    
+    if graph3 == 'no_graph.html':
+        graph_path3 = '../static/' + graph3
+    else:
+        graph_path3 = '../static/uploads/' + filename2 + '/' + graph3
+
+    if graph4 == 'no_graph.html':
+        graph_path4 = '../static/' + graph4
+    else:
+        graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
+
+    return render_template('node_kcore.html', example=df, tab=tab, 
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
+    multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
+    multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
+    multi_toggle4=multi_toggle4, dynamic_toggle4=dynamic_toggle4, directed_toggle4=directed_toggle4, layout4=layout4, graph4=graph_path4)
+
+@app.route('/node/triangle', endpoint='node_triangle', methods=['GET', 'POST'])
 def node_triangle():
-    node_triangleDF = cache.get('node_triangleDF')
-    if node_triangleDF is None:
-        node_triangleDF = compute_triangles(networkGraphs, directed=False)
-        cache.set('node_triangleDF', node_triangleDF)
-    return render_template('node_triangle.html', example=node_triangleDF)
+    filename2 = session['filename2']
+    metrics = 'triangles'
+    multi_toggle = True
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    multi_toggle2 = True
+    dynamic_toggle2 = False
+    directed_toggle2 = False
+    layout2 = 'map'
+    multi_toggle3 = True
+    dynamic_toggle3 = False
+    directed_toggle3 = False
+    layout3 = 'map'
+    multi_toggle4 = True
+    dynamic_toggle4 = False
+    directed_toggle4 = False
+    layout4 = 'map'
+    tab = 'tab1'
+    
+    if request.method == 'POST':
+        if (request.form.get('multi_toggle') is not None or request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+            tab = 'tab1'
+        if (request.form.get('multi_toggle2') is not None or request.form.get('dynamic_toggle2') is not None or request.form.get('directed_toggle2') is not None or request.form.get('layout2') is not None):
+            multi_toggle2 = bool(request.form.get('multi_toggle2'))
+            dynamic_toggle2 = bool(request.form.get('dynamic_toggle2'))
+            directed_toggle2 = bool(request.form.get('directed_toggle2'))
+            layout2 = request.form.get('layout2')
+            df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+            session['graph_name2'] = graph_name2
+            tab = 'tab2'
+        if (request.form.get('multi_toggle3') is not None or request.form.get('dynamic_toggle3') is not None or request.form.get('directed_toggle3') is not None or request.form.get('layout3') is not None):
+            multi_toggle3 = bool(request.form.get('multi_toggle3'))
+            dynamic_toggle3 = bool(request.form.get('dynamic_toggle3'))
+            directed_toggle3 = bool(request.form.get('directed_toggle3'))
+            layout3 = request.form.get('layout3')
+            df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+            session['graph_name3'] = graph_name3
+            tab = 'tab3'
+        if (request.form.get('multi_toggle4') is not None or request.form.get('dynamic_toggle4') is not None or request.form.get('directed_toggle4') is not None or request.form.get('layout4') is not None):
+            multi_toggle4 = bool(request.form.get('multi_toggle4'))
+            dynamic_toggle4 = bool(request.form.get('dynamic_toggle4'))
+            directed_toggle4 = bool(request.form.get('directed_toggle4'))
+            layout4 = request.form.get('layout4')
+            df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+            session['graph_name4'] = graph_name4
+            tab = 'tab4'
+    else:
+        df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+        df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+        session['graph_name2'] = graph_name2
+        df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+        session['graph_name3'] = graph_name3
+        df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+        session['graph_name4'] = graph_name4
+    graph1 = session['graph_name1']
+    graph2 = session['graph_name2']
+    graph3 = session['graph_name3']
+    graph4 = session['graph_name4']
+    
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
 
-@app.route('/node/pagerank', endpoint='node_pagerank')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
+    if graph2 == 'no_graph.html':
+        graph_path2 = '../static/' + graph2
+    else:
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
+    
+    if graph3 == 'no_graph.html':
+        graph_path3 = '../static/' + graph3
+    else:
+        graph_path3 = '../static/uploads/' + filename2 + '/' + graph3
+
+    if graph4 == 'no_graph.html':
+        graph_path4 = '../static/' + graph4
+    else:
+        graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
+
+    return render_template('node_triangle.html', example=df, tab=tab, 
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
+    multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
+    multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
+    multi_toggle4=multi_toggle4, dynamic_toggle4=dynamic_toggle4, directed_toggle4=directed_toggle4, layout4=layout4, graph4=graph_path4)
+
+@app.route('/node/pagerank', endpoint='node_pagerank', methods=['GET', 'POST'])
 def node_pagerank():
-    node_pagerankDF = cache.get('node_pagerankDF')
-    if node_pagerankDF is None:
-        node_pagerankDF = compute_page_rank(networkGraphs, directed=False)
-        cache.set('node_pagerankDF', node_pagerankDF)
-    return render_template('node_pagerank.html', example=node_pagerankDF)
+    filename2 = session['filename2']
+    metrics = 'pagerank'
+    multi_toggle = True
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    multi_toggle2 = True
+    dynamic_toggle2 = False
+    directed_toggle2 = False
+    layout2 = 'map'
+    multi_toggle3 = True
+    dynamic_toggle3 = False
+    directed_toggle3 = False
+    layout3 = 'map'
+    multi_toggle4 = True
+    dynamic_toggle4 = False
+    directed_toggle4 = False
+    layout4 = 'map'
+    tab = 'tab1'
+    
+    if request.method == 'POST':
+        if (request.form.get('multi_toggle') is not None or request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+            tab = 'tab1'
+        if (request.form.get('multi_toggle2') is not None or request.form.get('dynamic_toggle2') is not None or request.form.get('directed_toggle2') is not None or request.form.get('layout2') is not None):
+            multi_toggle2 = bool(request.form.get('multi_toggle2'))
+            dynamic_toggle2 = bool(request.form.get('dynamic_toggle2'))
+            directed_toggle2 = bool(request.form.get('directed_toggle2'))
+            layout2 = request.form.get('layout2')
+            df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+            session['graph_name2'] = graph_name2
+            tab = 'tab2'
+        if (request.form.get('multi_toggle3') is not None or request.form.get('dynamic_toggle3') is not None or request.form.get('directed_toggle3') is not None or request.form.get('layout3') is not None):
+            multi_toggle3 = bool(request.form.get('multi_toggle3'))
+            dynamic_toggle3 = bool(request.form.get('dynamic_toggle3'))
+            directed_toggle3 = bool(request.form.get('directed_toggle3'))
+            layout3 = request.form.get('layout3')
+            df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+            session['graph_name3'] = graph_name3
+            tab = 'tab3'
+        if (request.form.get('multi_toggle4') is not None or request.form.get('dynamic_toggle4') is not None or request.form.get('directed_toggle4') is not None or request.form.get('layout4') is not None):
+            multi_toggle4 = bool(request.form.get('multi_toggle4'))
+            dynamic_toggle4 = bool(request.form.get('dynamic_toggle4'))
+            directed_toggle4 = bool(request.form.get('directed_toggle4'))
+            layout4 = request.form.get('layout4')
+            df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+            session['graph_name4'] = graph_name4
+            tab = 'tab4'
+    else:
+        df, graph_name1 = plot_metric(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, dynamic=dynamic_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+        df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
+        session['graph_name2'] = graph_name2
+        df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
+        session['graph_name3'] = graph_name3
+        df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
+        session['graph_name4'] = graph_name4
+    graph1 = session['graph_name1']
+    graph2 = session['graph_name2']
+    graph3 = session['graph_name3']
+    graph4 = session['graph_name4']
+    
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+
+    if graph2 == 'no_graph.html':
+        graph_path2 = '../static/' + graph2
+    else:
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
+    
+    if graph3 == 'no_graph.html':
+        graph_path3 = '../static/' + graph3
+    else:
+        graph_path3 = '../static/uploads/' + filename2 + '/' + graph3
+
+    if graph4 == 'no_graph.html':
+        graph_path4 = '../static/' + graph4
+    else:
+        graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
+
+    return render_template('node_pagerank.html', example=df, tab=tab, 
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
+    multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
+    multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
+    multi_toggle4=multi_toggle4, dynamic_toggle4=dynamic_toggle4, directed_toggle4=directed_toggle4, layout4=layout4, graph4=graph_path4)
 
 #-------------------------------------------EDGE--------------------------------------------
 
-@app.route('/edge_all', endpoint='edge_all')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
+@app.route('/edge_all', endpoint='edge_all', methods=['GET', 'POST'])
 def edge_all():
     edge_allDF = cache.get('edge_allDF')
     if edge_allDF is None:
@@ -285,14 +1249,43 @@ def edge_all():
 
 #-------------------------------------------ML-CLUSTERING-----------------------------------
 
-@app.route('/clustering/louvanian', endpoint='clustering_louvanian')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
+@app.route('/clustering/louvain', endpoint='clustering_louvanian', methods=['GET', 'POST'])
 def clustering_louvanian():
-    clustering_louvanianDF = cache.get('clustering_louvanianDF')
-    if clustering_louvanianDF is None:
-        clustering_louvanianDF = compute_load_centrality(networkGraphs, directed=False)
-        cache.set('clustering_louvanianDF', clustering_louvanianDF)
-    return render_template('clustering_louvanian.html', example=clustering_louvanianDF)
+    filename2 = session['filename2']
+    clusterType = 'louvain'
+    multi_toggle = True
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    
+    if request.method == 'POST':
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+    else:
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+    graph1 = session['graph_name1']
+ 
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+
+    return render_template('node_degree.html', example=df,
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1)
+
+
+#-------------------------------------------RESILIENCE_ANALYSIS-----------------------------------
+
+@app.route('/resilience/random', endpoint='resilience_random', methods=['GET', 'POST'])
+def resilience_analyisis_random():
+    return render_template('resilience_analyisis_random.html')
+
+
 
 #-------------------------------------------MAIN--------------------------------------------
 if __name__ == '__main__':

@@ -1,10 +1,6 @@
-import plotly.graph_objects as go
-from itertools import zip_longest
-from src.visualisation_src.utils_visualisation import *
 from tqdm import tqdm
 from pyvis import network as net
 
-import src.machineLearning as ml
 from src.visualisation_src.utils_visualisation import *
 
 
@@ -98,7 +94,6 @@ def generate_dynamic_cluster(networkGraphs, df_, filename):  # USING PYVIS
     :return: Pyvis plot
     """
     G = networkGraphs.Graph
-    metrics_name = df_.columns[1]
 
     for u, d in G.nodes(data=True):
         metric_df = df_[df_['Node'] == u]
@@ -114,7 +109,6 @@ def generate_dynamic_cluster(networkGraphs, df_, filename):  # USING PYVIS
     Net.options.physics.use_force_atlas_2based(
         params={'central_gravity': 0.01, 'gravity': -50, 'spring_length': 100, 'spring_strength': 0.08, 'damping': 0.4,
                 'overlap': 0})
-
     Net.write_html(filename)
 
     return Net

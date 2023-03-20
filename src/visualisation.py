@@ -5,19 +5,19 @@ Purpose: Visualisation for the NetworkX graphs
 """
 
 # ----------------------------------------------------------------------------------------
-
 import numpy as np
-
+from pandas.api.types import is_numeric_dtype
 import src.machineLearning as ml
 import src.metrics as m
-from src.utils import memoize
 from src.visualisation_src.ML_visualisation import *
+from src.visualisation_src.basic_network_visualisation import *
 from src.visualisation_src.metrics_visualisation import *
 from src.visualisation_src.basic_network_visualisation import *
 from src.visualisation_src.temporal_visualisation import *
 from pandas.api.types import is_numeric_dtype
 import pandas as pd
 import os
+from src.visualisation_src.utils_visualisation import *
 
 
 # ----------------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ def plot_network(networkGraphs, layout='map', dynamic=False):
         return 'no_graph.html'
 
     filename = f"{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
+    filepath = get_file_path(networkGraphs, filename)
     if dynamic:
         filepath = filepath.replace(f"_{layout}", "")
 
@@ -72,6 +72,11 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
         - 'girvan_newman',
         - 'edge_betweenness'
         - 'k_clique'
+        - 'spectral'
+        - 'kmeans'
+        - 'agglomerative'
+        - 'dbscan'
+        - 'hierarchical'
     Layouts:
         - 'map'
         - 'twopi'
@@ -87,6 +92,10 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
     :return: Cluster and filename of the plot
     :rtype: pd.DataFrame, str
     """
+    if clusterType not in ['louvain', 'greedy_modularity', 'label_propagation', 'asyn_lpa', 'girvan_newman',
+                           'edge_betweenness', 'k_clique', 'spectral', 'kmeans', 'dbscan', 'hierarchical',
+                           'agglomerative']:
+        return ValueError("Cluster type not recognised")
     if not networkGraphs.is_spatial() and layout == 'map':
         print(ValueError("Graph is not spatial with coordinates"))
         # creatr empty pd.DataFrame
@@ -96,9 +105,8 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
         return df, 'no_graph.html'
 
     cluster = ml.get_communities(networkGraphs, clusterType)
-
     filename = f"{clusterType}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
+    filepath = get_file_path(networkGraphs, filename)
     if dynamic:
         filepath = filepath.replace(f"_{layout}", "")
 
@@ -153,7 +161,7 @@ def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False
         return df, "no_graph.html"
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
+    filepath = get_file_path(networkGraphs, filename)
     if dynamic:
         filepath = filepath.replace(f"_{layout}", "")
 
@@ -206,8 +214,8 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
     else:
         return ValueError('Please select a valid metric, either "centralities" or "nodes"')
 
-    filename = f"All_{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_{layout}.html"
-    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
+    filename = f"All_{metrics}_{'Directed' if directed else 'Undirected'}_{'Multi' if multi else ''}_{layout}.html"
+    filepath = get_file_path(networkGraphs, filename)
 
     if not os.path.isfile(filepath):
         generate_static_all_metrics(networkGraphs, df, filepath, layout_=layout)
@@ -252,8 +260,7 @@ def plot_histogram(networkGraphs, metrics, directed=True, multi=True):
         df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi, clean=False)
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Histogram.html"
-    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
-
+    filepath = get_file_path(networkGraphs, filename)
     if not os.path.isfile(filepath):
         generate_histogram_metric(df, filepath)
 
@@ -277,7 +284,7 @@ def plot_hotspot(networkGraphs):
     hotspot = ml.get_hotspot(networkGraphs)
 
     filename = f"Density_hotspot.html"
-    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
+    filepath = get_file_path(networkGraphs, filename)
     print(filepath)
 
     if not os.path.isfile(filepath):
@@ -323,7 +330,7 @@ def plot_boxplot(networkGraphs, metrics, directed=True, multi=True):
         df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi, clean=False)
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Boxplot.html"
-    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
+    filepath = get_file_path(networkGraphs, filename)
 
     if not os.path.isfile(filepath):
         generate_boxplot_metric(df, filepath)
@@ -368,28 +375,29 @@ def plot_violin(networkGraphs, metrics, directed=True, multi=True):
         df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi, clean=False)
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Violin.html"
-    filepath = f"../application/{networkGraphs.session_folder}/{filename}"
+    filepath = get_file_path(networkGraphs, filename)
 
     if not os.path.isfile(filepath):
         generate_violin_metric(df, filepath)
 
     return df, filename
 
+
 # ----------------------------------------------------------------------------------------
 
 
-def plot_heatmap(networkGraph):
+def plot_heatmap(networkGraphs):
     """
     :Function: Plot the heatmap for the given graph
-    :param networkGraph:
-    :type networkGraph: NetworkGraph
+    :param networkGraphs:
+    :type networkGraphs: NetworkGraphs
     :return: filename
     :rtype: str
     """
     filename = f"heatmap.html"
-    filepath = f"../application/{networkGraph.session_folder}/{filename}"
+    filepath = get_file_path(networkGraphs, filename)
 
     if not os.path.isfile(filepath):
-        generate_heatmap(networkGraph, filepath)
+        generate_heatmap(networkGraphs, filepath)
 
     return filename

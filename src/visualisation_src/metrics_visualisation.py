@@ -1,14 +1,10 @@
-import matplotlib.pyplot as plt
-import networkx as nx
-from plotly import graph_objects as go
-from src.visualisation_src.utils_visualisation import *
-from tqdm import tqdm
-from itertools import zip_longest
-from pyvis import network as net
 import matplotlib as mpl
-import plotly.figure_factory as ff
-import plotly.express as px
-import json
+import networkx as nx
+from pyvis import network as net
+from tqdm import tqdm
+
+from src.visualisation_src.utils_visualisation import *
+
 
 
 # ----------------------------------------------------------------------------------------

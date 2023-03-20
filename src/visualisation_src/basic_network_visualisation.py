@@ -1,9 +1,9 @@
-import matplotlib.pyplot as plt
-from src.visualisation_src.utils_visualisation import *
-from src.utils import memoize
-import networkx as nx
-from pyvis import network as net
 from itertools import zip_longest
+
+from pyvis import network as net
+
+from src.visualisation_src.utils_visualisation import *
+
 
 # ----------------------------------------------------------------------------------------
 
@@ -62,7 +62,7 @@ def static_visualisation(networkGraphs, filepath, directed=True, multi=False, la
                 )
             )
         fig.add_trace(go.Scattergeo(lon=x_, lat=y_, text=text, mode='markers', hoverinfo='text',
-                                        marker=dict(showscale=True, color='black', size=5)))
+                                    marker=dict(showscale=True, color='black', size=5)))
     else:
         for i, edge in enumerate(G.edges()):
             fig.add_trace(
@@ -81,6 +81,7 @@ def static_visualisation(networkGraphs, filepath, directed=True, multi=False, la
     fig.write_html(filepath)
 
     return fig
+
 
 # ----------------------------------------------------------------------------------------
 

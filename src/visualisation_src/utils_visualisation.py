@@ -1,8 +1,10 @@
-import matplotlib.pyplot as plt
+import os
+
 import geopandas as gpd
+import matplotlib.pyplot as plt
 from plotly import graph_objects as go
+
 from src.utils import memoize
-from tqdm import tqdm
 
 
 # ----------------------------------------------------------------------------------------
@@ -105,8 +107,23 @@ def generate_edge_trace(Graph, pos, layout):
         y_list.extend([y0, y1, None])
 
     if layout == 'map':
-        edge_trace = go.Scattergeo(lon=x_list, lat=y_list, hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
+        edge_trace = go.Scattergeo(lon=x_list, lat=y_list, hoverinfo='none', mode='lines',
+                                   line=dict(width=0.5, color='#888'))
     else:
         edge_trace = go.Scatter(x=x_list, y=y_list, hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
 
     return edge_trace
+
+
+def get_file_path(networkGraphs, file_name):
+    """
+    :Function: Get the file path for the plotly plot
+    :param networkGraphs: Network graph
+    :param file_name: Name of the file
+    :return: Filepath
+    """
+    folder = f"../application/{networkGraphs.session_folder}/"
+    if not os.path.isdir(folder):
+        os.mkdir(folder)
+
+    return f"{folder}{file_name}"

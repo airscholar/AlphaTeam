@@ -4,9 +4,17 @@ Date: March 2023
 Purpose: Machine Learning for the NetworkX graphs
 """
 
+import warnings
+
+import networkx as nx
 import networkx.algorithms.community as nx_comm
+import numpy as np
 import pandas as pd
 from distinctipy import distinctipy
+from kneed import KneeLocator
+from sklearn.cluster import SpectralClustering, KMeans, AgglomerativeClustering, DBSCAN
+
+warnings.filterwarnings("ignore")
 
 
 # ----------------------------------------------------------------------------------------
@@ -53,6 +61,7 @@ def create_comm_dataframe(communities, colors):
     :return: dataframe
     """
     df = pd.DataFrame()
+
     for idx, community in enumerate(communities):
         color = colors.pop()
         for node in community:
@@ -161,6 +170,120 @@ def k_clique_clustering(networkGraphs):
     return df
 
 
+def spectral_clustering(networkGraphs):
+    """
+    :Function: Detect communities based on spectral
+    :param networkGraphs: NetworkGraphs
+    :return: dataframe
+    """
+    G = networkGraphs.Graph
+    adj_mat, optimal_k = compute_clustering(G)
+
+    clustering = SpectralClustering(optimal_k, affinity='precomputed', eigen_solver='arpack', n_init=100).fit(adj_mat)
+
+    df = clustering_response(G, clustering, optimal_k)
+
+    return df
+
+
+def compute_clustering(networkGraph, max_range=30):
+    """
+    :Function: Compute the optimal number of clusters
+    :param networkGraph: NetworkGraphs
+    :param max_range: maximum range of clusters
+    :return: adjacent matrics, optimal number of clusters
+    :rtype: numpy array, int
+    """
+    np.random.seed(0)
+
+    adj_mat = nx.to_numpy_array(networkGraph)
+
+    # get optimal number of clusters
+    wcss = []
+    for i in range(1, max_range):
+        kmeans = KMeans(n_clusters=i, init='k-means++', random_state=4).fit(adj_mat)
+        wcss.append(kmeans.inertia_)
+
+    # find the optimal number of clusters
+    optimal_k = KneeLocator(range(1, max_range), wcss, curve='convex', direction='decreasing').elbow
+    print('Optimal k is : ', optimal_k)
+
+    return adj_mat, optimal_k
+
+
+def clustering_response(networkGraph, clustering_alg, optimal_k):
+    """
+    :Function: Create a dataframe with the Node, communities ID and their colors
+    :param networkGraph: NetworkGraphs
+    :param clustering_alg: clustering algorithm
+    :param optimal_k: optimal number of clusters
+    :return: dataframe
+    """
+    clusters = clustering_alg.labels_
+    df = pd.DataFrame()
+    colors = create_comm_colors(list(range(optimal_k)))
+    for i, node in enumerate(networkGraph.nodes()):
+        df = pd.concat([df, pd.DataFrame({'Node': node,
+                                          'Color': colors[clusters[i]],
+                                          'Cluster_id': clusters[i]
+                                          }, index=[0])], ignore_index=True)
+    return df
+
+
+def kmeans_clustering(networkGraphs):
+    """
+    :Function: Detect communities based on k-means
+    :param networkGraphs: NetworkGraphs
+    :return: dataframe
+    """
+    G = networkGraphs.Graph
+    adj_mat, optimal_k = compute_clustering(G)
+
+    # Cluster
+    clustering = KMeans(n_clusters=optimal_k, init='k-means++', random_state=4, max_iter=10).fit(adj_mat)
+
+    df = clustering_response(G, clustering, optimal_k)
+
+    return df
+
+
+def agglomerative_clustering(networkGraphs):
+    """
+    :Function: Detect communities based on agglomerative
+    :param networkGraphs: NetworkGraphs
+    :return: dataframe
+    """
+    G = networkGraphs.Graph
+    adj_mat, optimal_k = compute_clustering(G)
+
+    # Cluster
+    clustering = AgglomerativeClustering(n_clusters=optimal_k, affinity='euclidean', linkage='ward').fit(adj_mat)
+
+    df = clustering_response(G, clustering, optimal_k)
+
+    return df
+
+
+def dbscan_clustering(networkGraphs):
+    """
+    :Function: Detect communities based on dbscan
+    :param networkGraphs: NetworkGraphs
+    :return: dataframe
+    """
+
+    G = networkGraphs.Graph
+    adj_mat, optimal_k = compute_clustering(G)
+    # compute DBSCAN clustering algorithm on Graph
+    db = DBSCAN(eps=0.3, min_samples=10).fit(adj_mat)
+    labels = db.labels_
+    # Number of clusters in labels, ignoring noise if present.
+    n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+    n_noise_ = list(labels).count(-1)
+    df = clustering_response(G, db, n_clusters_)
+
+    return df
+
+
 # ----------------------------------------------------------------------------------------
 
 def get_communities(networkGraphs, method):
@@ -171,10 +294,11 @@ def get_communities(networkGraphs, method):
     :return: dataframe
     """
     if method not in ['louvain', 'greedy_modularity', 'label_propagation', 'asyn_lpa', 'girvan_newman',
-                      'edge_betweenness', 'k_clique']:
-        ValueError("Invalid cluster type", "please choose from the following: 'louvain', 'greedy_modularity', "
-                                           "'label_propagation', 'asyn_lpa', 'girvan_newman', 'edge_betweenness', 'k_clique'")
-        return
+                      'edge_betweenness', 'k_clique', 'spectral', 'kmeans', 'agglomerative', 'hierarchical', 'dbscan']:
+        return ValueError("Invalid cluster type", "please choose from the following: 'louvain', 'greedy_modularity', "
+                                                  "'label_propagation', 'asyn_lpa', 'girvan_newman',"
+                                                  "'edge_betweenness', 'k_clique', 'spectral', 'kmeans' "
+                                                  "'agglomerative', 'hierarchical', 'dbscan'")
 
     if method == 'louvain':
         return louvain_clustering(networkGraphs)
@@ -190,6 +314,16 @@ def get_communities(networkGraphs, method):
         return edge_betweenness_clustering(networkGraphs)
     elif method == 'k_clique':
         return k_clique_clustering(networkGraphs)
+    elif method == 'kmeans':
+        return kmeans_clustering(networkGraphs)
+    elif method == 'spectral':
+        return spectral_clustering(networkGraphs)
+    elif method == 'agglomerative':
+        return agglomerative_clustering(networkGraphs)
+    elif method == 'dbscan':
+        return dbscan_clustering(networkGraphs)
+    # elif method == 'hierarchical':
+    #     return hierarchical_clustering(networkGraphs)
     else:
         return None
 
