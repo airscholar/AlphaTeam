@@ -15,7 +15,7 @@ def generate_static_cluster(networkGraphs, df_, filename, layout_='map'):  # USI
     G = networkGraphs.Graph
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
-        layout_ = 'sfdp'
+        raise ValueError('No spatial graph')
     pos = networkGraphs.pos[layout_]
 
     x_list = []

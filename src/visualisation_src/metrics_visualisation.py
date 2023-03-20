@@ -25,7 +25,7 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
     G = networkGraphs.Graph
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
-        layout_ = 'sfdp'
+        raise ValueError('No spatial graph')
     pos = networkGraphs.pos[layout_]
 
     metrics_name = df_.columns[1]
@@ -81,7 +81,7 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
     G = networkGraphs.Graph
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
-        layout_ = 'sfdp'
+        raise ValueError('No spatial graph')
     pos = networkGraphs.pos[layout_]
 
     metrics_names = df_.columns[1:]
