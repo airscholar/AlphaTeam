@@ -1275,9 +1275,124 @@ def clustering_louvanian():
     else:
         graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
 
-    return render_template('node_degree.html', example=df,
-    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1)
+    return render_template('clustering_louvanian.html', example=df,
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, method_name='Louvain')
 
+@app.route('/clustering/greedy_modularity', endpoint='clustering_greedy_modularity', methods=['GET', 'POST'])
+def clustering_greedy_modularity():
+    filename2 = session['filename2']
+    clusterType = 'greedy_modularity'
+    multi_toggle = True
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    
+    if request.method == 'POST':
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+    else:
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+    graph1 = session['graph_name1']
+ 
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+
+    return render_template('clustering_greedy_modularity.html', example=df,
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, method_name='Greedy Modularity')
+
+@app.route('/clustering/label_propagation', endpoint='clustering_label_propagation', methods=['GET', 'POST'])
+def clustering_label_propagation():
+    filename2 = session['filename2']
+    clusterType = 'label_propagation'
+    multi_toggle = True
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    
+    if request.method == 'POST':
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+    else:
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+    graph1 = session['graph_name1']
+ 
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+
+    return render_template('clustering_label_propagation.html', example=df,
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, method_name='Label Propagation')
+
+@app.route('/clustering/asyn_lpa', endpoint='clustering_asyn_lpa', methods=['GET', 'POST'])
+def clustering_asyn_lpa():
+    filename2 = session['filename2']
+    clusterType = 'asyn_lpa'
+    multi_toggle = True
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    
+    if request.method == 'POST':
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+    else:
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+    graph1 = session['graph_name1']
+ 
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+
+    return render_template('clustering_asyn_lpa.html', example=df,
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, method_name='Asyn Lpa')
+
+@app.route('/clustering/girvan_newman', endpoint='clustering_girvan_newman', methods=['GET', 'POST'])
+def clustering_girvan_newman():
+    filename2 = session['filename2']
+    clusterType = 'girvan_newman'
+    multi_toggle = True
+    dynamic_toggle = False
+    directed_toggle = False
+    layout = 'map'
+    
+    if request.method == 'POST':
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+            layout = request.form.get('layout')
+            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            session['graph_name1'] = graph_name1
+    else:
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        session['graph_name1'] = graph_name1
+    graph1 = session['graph_name1']
+ 
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+
+    return render_template('clustering_girvan_newman.html', example=df,
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, method_name='Girvan Newman')
 
 #-------------------------------------------RESILIENCE_ANALYSIS-----------------------------------
 
