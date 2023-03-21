@@ -317,21 +317,27 @@ def node_degree():
     metrics = 'degree'
     multi_toggle = True
     dynamic_toggle = False
-    directed_toggle = False
-    layout = 'map'
+    directed_toggle = True
     multi_toggle2 = True
     dynamic_toggle2 = False
-    directed_toggle2 = False
-    layout2 = 'map'
+    directed_toggle2 = True
     multi_toggle3 = True
     dynamic_toggle3 = False
-    directed_toggle3 = False
-    layout3 = 'map'
+    directed_toggle3 = True
     multi_toggle4 = True
     dynamic_toggle4 = False
-    directed_toggle4 = False
-    layout4 = 'map'
+    directed_toggle4 = True
     tab = 'tab1'
+    if networkGraphs.is_spatial():
+        layout = 'map'
+        layout2 = 'map'
+        layout3 = 'map'
+        layout4 = 'map'
+    else:
+        layout = 'sfdp'
+        layout2 = 'sfdp'
+        layout3 = 'sfdp'
+        layout4 = 'sfdp'
     
     if request.method == 'POST':
         if (request.form.get('multi_toggle') is not None or request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
@@ -400,7 +406,7 @@ def node_degree():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('node_degree.html', example=df, tab=tab, 
+    return render_template('node_degree.html', example=df, tab=tab, method_name='Node Degree',
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
@@ -413,21 +419,27 @@ def node_kcore():
     metrics = 'kcore'
     multi_toggle = True
     dynamic_toggle = False
-    directed_toggle = False
-    layout = 'map'
+    directed_toggle = True
     multi_toggle2 = True
     dynamic_toggle2 = False
-    directed_toggle2 = False
-    layout2 = 'map'
+    directed_toggle2 = True
     multi_toggle3 = True
     dynamic_toggle3 = False
-    directed_toggle3 = False
-    layout3 = 'map'
+    directed_toggle3 = True
     multi_toggle4 = True
     dynamic_toggle4 = False
-    directed_toggle4 = False
-    layout4 = 'map'
+    directed_toggle4 = True
     tab = 'tab1'
+    if networkGraphs.is_spatial():
+        layout = 'map'
+        layout2 = 'map'
+        layout3 = 'map'
+        layout4 = 'map'
+    else:
+        layout = 'sfdp'
+        layout2 = 'sfdp'
+        layout3 = 'sfdp'
+        layout4 = 'sfdp'
     
     if request.method == 'POST':
         if (request.form.get('multi_toggle') is not None or request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
@@ -496,7 +508,7 @@ def node_kcore():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('node_kcore.html', example=df, tab=tab, 
+    return render_template('node_kcore.html', example=df, tab=tab, method_name='Node K Core',
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
@@ -509,21 +521,27 @@ def node_triangle():
     metrics = 'triangles'
     multi_toggle = True
     dynamic_toggle = False
-    directed_toggle = False
-    layout = 'map'
+    directed_toggle = True
     multi_toggle2 = True
     dynamic_toggle2 = False
-    directed_toggle2 = False
-    layout2 = 'map'
+    directed_toggle2 = True
     multi_toggle3 = True
     dynamic_toggle3 = False
-    directed_toggle3 = False
-    layout3 = 'map'
+    directed_toggle3 = True
     multi_toggle4 = True
     dynamic_toggle4 = False
-    directed_toggle4 = False
-    layout4 = 'map'
+    directed_toggle4 = True
     tab = 'tab1'
+    if networkGraphs.is_spatial():
+        layout = 'map'
+        layout2 = 'map'
+        layout3 = 'map'
+        layout4 = 'map'
+    else:
+        layout = 'sfdp'
+        layout2 = 'sfdp'
+        layout3 = 'sfdp'
+        layout4 = 'sfdp'
     
     if request.method == 'POST':
         if (request.form.get('multi_toggle') is not None or request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
@@ -592,7 +610,7 @@ def node_triangle():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('node_triangle.html', example=df, tab=tab, 
+    return render_template('node_triangle.html', example=df, tab=tab, method_name='Node Triangle',
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
@@ -605,21 +623,27 @@ def node_pagerank():
     metrics = 'pagerank'
     multi_toggle = True
     dynamic_toggle = False
-    directed_toggle = False
-    layout = 'map'
+    directed_toggle = True
     multi_toggle2 = True
     dynamic_toggle2 = False
-    directed_toggle2 = False
-    layout2 = 'map'
+    directed_toggle2 = True
     multi_toggle3 = True
     dynamic_toggle3 = False
-    directed_toggle3 = False
-    layout3 = 'map'
+    directed_toggle3 = True
     multi_toggle4 = True
     dynamic_toggle4 = False
-    directed_toggle4 = False
-    layout4 = 'map'
+    directed_toggle4 = True
     tab = 'tab1'
+    if networkGraphs.is_spatial():
+        layout = 'map'
+        layout2 = 'map'
+        layout3 = 'map'
+        layout4 = 'map'
+    else:
+        layout = 'sfdp'
+        layout2 = 'sfdp'
+        layout3 = 'sfdp'
+        layout4 = 'sfdp'
     
     if request.method == 'POST':
         if (request.form.get('multi_toggle') is not None or request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
@@ -688,7 +712,7 @@ def node_pagerank():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('node_pagerank.html', example=df, tab=tab, 
+    return render_template('node_pagerank.html', example=df, tab=tab, method_name='Node Page Rank',
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
