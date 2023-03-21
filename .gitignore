@@ -11,3 +11,4 @@ __pycache__/
 src/*.html
 uploads
 *.emb
+lib/
