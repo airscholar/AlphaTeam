@@ -5,14 +5,18 @@ Purpose: Visualisation for the NetworkX graphs
 """
 
 # ----------------------------------------------------------------------------------------
-
+import numpy as np
 from pandas.api.types import is_numeric_dtype
-
 import src.machineLearning as ml
 import src.metrics as m
 from src.visualisation_src.ML_visualisation import *
 from src.visualisation_src.basic_network_visualisation import *
 from src.visualisation_src.metrics_visualisation import *
+from src.visualisation_src.basic_network_visualisation import *
+from src.visualisation_src.temporal_visualisation import *
+from pandas.api.types import is_numeric_dtype
+import pandas as pd
+import os
 from src.visualisation_src.utils_visualisation import *
 
 
@@ -36,7 +40,8 @@ def plot_network(networkGraphs, layout='map', dynamic=False):
     :rtype: str
     """
     if not networkGraphs.is_spatial() and layout == 'map':
-        ValueError("Graph is not spatial with coordinates")
+        print(ValueError("Graph is not spatial with coordinates"))
+        return 'no_graph.html'
 
     filename = f"{'Dynamic' if dynamic else 'Static'}_{layout}.html"
     filepath = get_file_path(networkGraphs, filename)
@@ -91,6 +96,11 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
                            'edge_betweenness', 'k_clique', 'spectral', 'kmeans', 'dbscan', 'hierarchical',
                            'agglomerative']:
         return ValueError("Cluster type not recognised")
+    if not networkGraphs.is_spatial() and layout == 'map':
+        print(ValueError("Graph is not spatial with coordinates"))
+        df = m.return_nan(networkGraphs, 'Cluster')
+        return df, 'no_graph.html'
+
     cluster = ml.get_communities(networkGraphs, clusterType)
     filename = f"{clusterType}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
     filepath = get_file_path(networkGraphs, filename)
@@ -143,9 +153,8 @@ def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False
     """
     df = m.get_metrics(networkGraphs, metrics, clean=False, directed=directed, multi=multi)
 
-    if df.empty or df.isnull().values.any() or not is_numeric_dtype(df[df.columns.values[1]]):
-        print(ValueError('Metric column is empty. Please select a different metric.'))
-        # In future create a html page to display no graph for this metrics
+    if df.empty or df.isnull().values.any() or not is_numeric_dtype(df[df.columns.values[1]]) or (not networkGraphs.is_spatial() and layout == 'map'):
+        print(ValueError('Metric column is empty. Please select a different metric or select different layout because graphs is not spatial with coordinates '))
         return df, "no_graph.html"
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
@@ -188,6 +197,11 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
     :return: Dataframe with all the metrics and the filename of the plot
     :rtype: pd.DataFrame, str
     """
+    if not networkGraphs.is_spatial() and layout == 'map':
+        print(ValueError('Metric column is empty. Please select a different metric or select different layout because graphs is not spatial with coordinates '))
+        df = m.return_nan(networkGraphs, 'Metrics')
+        return df, "no_graph.html"
+
     if metrics == 'centralities':
         df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
     elif metrics == 'nodes':
