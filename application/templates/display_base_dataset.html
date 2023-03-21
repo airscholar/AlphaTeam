@@ -6,23 +6,26 @@
 
     <div class="row">
         <div class="col-md-12">
-            <h3>Global Metrics</h3>
+            <h3>Uploaded Dataset</h3>
             <hr> <!-- Add a horizontal rule for visual separation -->
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-body">
-                <table id="example" class="display" style="width:100%">
+            <h3>Dataset</h3>
+            <hr> <!-- Add a horizontal rule for visual separation -->
+            <div class="card card-body" style="margin-bottom: 50px;">
+
+                <table id="example1" class="display" style="width:100%">
                     <thead>
                         <tr>
-                            {% for cell in example.columns %}
+                            {% for cell in data.columns %}
                             <th>{{ cell }}</th>
                             {% endfor %}
                         </tr>
                     </thead>
                     <tbody>
-                        {% for row in example.itertuples() %}
+                        {% for row in data.itertuples() %}
                         <tr>
                             {% for cell in row[1:] %}
                             <td>{{ cell }}</td>
@@ -33,10 +36,8 @@
                 </table>
             </div>
 
-
         </div>
     </div>
-
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
