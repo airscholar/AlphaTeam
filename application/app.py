@@ -732,8 +732,26 @@ def edge_all():
     table_rows = edge_allDF.values.tolist()
     return render_template('edge_all.html', example=edge_allDF)
 
+#-------------------------------------------HOTSPOT-----------------------------------------
 
-#-------------------------------------------RESILIENCE_ANALYSIS-----------------------------------
+@app.route('/hotspot/density', endpoint='hotspot_density', methods=['GET', 'POST'])
+def hotspot_density():
+    networkGraphs = session['network_graphs']
+    filename2 = session['filename2']
+   
+    df, graph_name1 = plot_hotspot(networkGraphs)
+    session['graph_name1'] = graph_name1
+    graph1 = session['graph_name1']
+ 
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+
+    return render_template('hotspot_density.html', example=df, graph1=graph_path1, method_name='Density')
+
+
+#-------------------------------------------RESILIENCE_ANALYSIS-----------------------------
 
 @app.route('/resilience/random', endpoint='resilience_random', methods=['GET', 'POST'])
 def resilience_analyisis_random():
