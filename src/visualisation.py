@@ -98,10 +98,7 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
         return ValueError("Cluster type not recognised")
     if not networkGraphs.is_spatial() and layout == 'map':
         print(ValueError("Graph is not spatial with coordinates"))
-        # creatr empty pd.DataFrame
-        df = pd.DataFrame(columns=['Node', 'Cluster'])
-        df['Node'] = list(networkGraphs.Graph.nodes())
-        df['Cluster'] = np.nan
+        df = m.return_nan(networkGraphs, 'Cluster')
         return df, 'no_graph.html'
 
     cluster = ml.get_communities(networkGraphs, clusterType)
@@ -202,9 +199,7 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
     """
     if not networkGraphs.is_spatial() and layout == 'map':
         print(ValueError('Metric column is empty. Please select a different metric or select different layout because graphs is not spatial with coordinates '))
-        df = pd.DataFrame(columns=['Node', 'Metric'])
-        df['Node'] = list(networkGraphs.Graph.nodes())
-        df['Metric'] = np.nan
+        df = m.return_nan(networkGraphs, 'Metrics')
         return df, "no_graph.html"
 
     if metrics == 'centralities':
