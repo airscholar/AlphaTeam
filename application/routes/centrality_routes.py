@@ -27,11 +27,9 @@ def centrality_all():
     filename2 = session['filename2']
     metrics = 'centralities'
     multi_toggle = True
-    dynamic_toggle = False
     directed_toggle = False
     layout = 'map'
     multi_toggle2 = True
-    dynamic_toggle2 = False
     directed_toggle2 = False
     layout2 = 'map'
     multi_toggle3 = True
@@ -45,33 +43,29 @@ def centrality_all():
     tab = 'tab1'
     
     if request.method == 'POST':
-        if (request.form.get('multi_toggle') is not None or request.form.get('dynamic_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
+        if (request.form.get('multi_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
             multi_toggle = bool(request.form.get('multi_toggle'))
-            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             df, graph_name1 = plot_all_metrics(networkGraphs, metrics, directed=directed_toggle, multi=multi_toggle, layout=layout)
             session['graph_name1'] = graph_name1
             tab = 'tab1'
-        if (request.form.get('multi_toggle2') is not None or request.form.get('dynamic_toggle2') is not None or request.form.get('directed_toggle2') is not None or request.form.get('layout2') is not None):
+        if (request.form.get('multi_toggle2') is not None or request.form.get('directed_toggle2') is not None or request.form.get('layout2') is not None):
             multi_toggle2 = bool(request.form.get('multi_toggle2'))
-            dynamic_toggle2 = bool(request.form.get('dynamic_toggle2'))
             directed_toggle2 = bool(request.form.get('directed_toggle2'))
             layout2 = request.form.get('layout2')
             df, graph_name2 = plot_histogram(networkGraphs, metrics, directed=directed_toggle2, multi=multi_toggle2)
             session['graph_name2'] = graph_name2
             tab = 'tab2'
-        if (request.form.get('multi_toggle3') is not None or request.form.get('dynamic_toggle3') is not None or request.form.get('directed_toggle3') is not None or request.form.get('layout3') is not None):
+        if (request.form.get('multi_toggle3') is not None or request.form.get('directed_toggle3') is not None or request.form.get('layout3') is not None):
             multi_toggle3 = bool(request.form.get('multi_toggle3'))
-            dynamic_toggle3 = bool(request.form.get('dynamic_toggle3'))
             directed_toggle3 = bool(request.form.get('directed_toggle3'))
             layout3 = request.form.get('layout3')
             df, graph_name3 = plot_boxplot(networkGraphs, metrics, directed=directed_toggle3, multi=multi_toggle3)
             session['graph_name3'] = graph_name3
             tab = 'tab3'
-        if (request.form.get('multi_toggle4') is not None or request.form.get('dynamic_toggle4') is not None or request.form.get('directed_toggle4') is not None or request.form.get('layout4') is not None):
+        if (request.form.get('multi_toggle4') is not None or request.form.get('directed_toggle4') is not None or request.form.get('layout4') is not None):
             multi_toggle4 = bool(request.form.get('multi_toggle4'))
-            dynamic_toggle4 = bool(request.form.get('dynamic_toggle4'))
             directed_toggle4 = bool(request.form.get('directed_toggle4'))
             layout4 = request.form.get('layout4')
             df, graph_name4 = plot_violin(networkGraphs, metrics, directed=directed_toggle4, multi=multi_toggle4)
@@ -111,11 +105,11 @@ def centrality_all():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('centrality_all.html', example=df, tab=tab, 
-    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
-    multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
-    multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
-    multi_toggle4=multi_toggle4, dynamic_toggle4=dynamic_toggle4, directed_toggle4=directed_toggle4, layout4=layout4, graph4=graph_path4)
+    return render_template('centrality_all.html', example=df, tab=tab, method_name='All Centrality',
+    multi_toggle=multi_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
+    multi_toggle2=multi_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
+    multi_toggle3=multi_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
+    multi_toggle4=multi_toggle4, directed_toggle4=directed_toggle4, layout4=layout4, graph4=graph_path4)
 
 @centrality_routes.route('/centrality/degree', endpoint='degree', methods=['GET', 'POST'])
 def centrality_degree():

@@ -10,5 +10,6 @@ __pycache__/
 *.mtx
 src/*.html
 uploads
+__pycache__
 *.emb
 lib/
