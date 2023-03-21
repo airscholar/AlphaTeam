@@ -221,20 +221,26 @@ def node_all():
     metrics = 'nodes'
     multi_toggle = True
     directed_toggle = False
-    layout = 'map'
     multi_toggle2 = True
     directed_toggle2 = False
-    layout2 = 'map'
     multi_toggle3 = True
     dynamic_toggle3 = False
     directed_toggle3 = False
-    layout3 = 'map'
     multi_toggle4 = True
     dynamic_toggle4 = False
     directed_toggle4 = False
-    layout4 = 'map'
     tab = 'tab1'
-    
+    if networkGraphs.is_spatial():
+        layout = 'map'
+        layout2 = 'map'
+        layout3 = 'map'
+        layout4 = 'map'
+    else:
+        layout = 'sfdp'
+        layout2 = 'sfdp'
+        layout3 = 'sfdp'
+        layout4 = 'sfdp'
+
     if request.method == 'POST':
         if (request.form.get('multi_toggle') is not None or request.form.get('directed_toggle') is not None or request.form.get('layout') is not None):
             multi_toggle = bool(request.form.get('multi_toggle'))
