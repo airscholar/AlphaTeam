@@ -31,6 +31,10 @@
                             </option>
                         </select>
                     </div>
+                    <label for="number_of_clusters" style="margin-top: 5px;">Number of Clusters</label>
+                    <input type="number" id="number_of_clusters" style="margin: 5px;" name="number_of_clusters"
+                        class="form-control" min="1" step="1" placeholder="None" {% if number_of_clusters is not none
+                        %}value="{{ number_of_clusters }}" {% endif %}>
                     <button type="submit" class="btn btn-primary" style="margin:5px; width: 100%;">Submit</button>
                 </form>
             </div>

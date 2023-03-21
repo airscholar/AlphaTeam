@@ -23,6 +23,7 @@ cluster_routes = Blueprint('cluster_routes', __name__)
 
 @cluster_routes.route('/clustering/louvain', endpoint='clustering_louvanian', methods=['GET', 'POST'])
 def clustering_louvanian():
+    number_of_clusters = None
     networkGraphs = session['network_graphs']
     filename2 = session['filename2']
     clusterType = 'louvain'
@@ -32,10 +33,12 @@ def clustering_louvanian():
     layout = 'map'
     
     if request.method == 'POST':
+            number_of_clusters = request.form.get('number_of_clusters', None)
             multi_toggle = bool(request.form.get('multi_toggle'))
             dynamic_toggle = bool(request.form.get('dynamic_toggle'))
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
+            number_of_clusters = int(number_of_clusters) if number_of_clusters else None
             df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
             session['graph_name1'] = graph_name1
     else:
@@ -48,7 +51,9 @@ def clustering_louvanian():
     else:
         graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
 
-    return render_template('clustering_louvanian.html', example=df,
+    print(number_of_clusters)
+
+    return render_template('clustering_louvanian.html', example=df, number_of_clusters=number_of_clusters,
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, method_name='Louvain')
 
 @cluster_routes.route('/clustering/greedy_modularity', endpoint='clustering_greedy_modularity', methods=['GET', 'POST'])
