@@ -214,7 +214,6 @@ def generate_boxplot_metric(df_, filename):
                       )
 
     fig.write_html(filename)
-    fig.show()
 
     return fig
 
@@ -245,7 +244,6 @@ def generate_violin_metric(df_, filename):
                       )
 
     fig.write_html(filename)
-    fig.show()
 
     return fig
 
