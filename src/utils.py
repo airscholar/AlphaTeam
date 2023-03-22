@@ -8,10 +8,10 @@ green = "\033[0;92m"
 yellow = "\033[0;93m"
 blue = "\033[0;94m"
 
+networkGraphs_cache = {}
 
 def memoize(func):
     cache = {}
-
     def wrapper(*args, **kwargs):
         key = (func, args, tuple(kwargs.items()))
         key_hash = md5(str(key).encode('utf-8')).hexdigest()
@@ -24,6 +24,23 @@ def memoize(func):
         return result
 
     return wrapper
+
+def set_networkGraph(networkGraph, session_id):
+    """
+    Set the network graph
+    :param networkGraph: Network graph
+    :return: None
+    """
+    networkGraphs_cache[session_id] = networkGraph
+    return 0
+
+@memoize
+def get_networkGraph(session_id):
+    """
+    Get the network graph
+    :return: Network graph
+    """
+    return networkGraphs_cache[session_id]
 
 # def cache_data1(networkGraph):
 #     """
