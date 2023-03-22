@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Resilience{% endblock %}
+{% block span %}Resilience Analysis{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Cluster Resilience Analysis</h3>
+            <hr> <!-- Add a horizontal rule for visual separation -->
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card mx-auto" style="width: 30rem;">
+            <div class="card-body">
+                <form method="post">
+                    <label for="type_of_attack" style="margin-top: 5px;">Type of Cluster</label>
+                    <div class="dropdown" style="margin:5px">
+                        <select id="dropdown-menu" class="mx-auto" name="layout">
+                            <option value="map" {% if layout=='map' %}selected{% endif %}>Map</option>
+                            <option value="sfdp" {% if layout=='sfdp' %}selected{% endif %}>Sfdp
+                            </option>
+                            <option value="twopi" {% if layout=='twopi' %}selected{% endif %}>Twopi
+                            </option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <label for="number_of_clusters" style="margin-top: 5px;">Total Number of Clusters</label>
+                        <input type="number" id="number_of_clusters" style="margin: 5px;" name="number_of_clusters"
+                            class="form-control" min="1" step="1" placeholder="None" {% if number_of_clusters is not
+                            none %}value="{{ number_of_clusters }}" {% endif %}>
+                        <label for="cluster_to_attack" style="margin-top: 5px;">Number of Edges</label>
+                        <input type="number" id="cluster_to_attack" style="margin: 5px;" name="cluster_to_attack"
+                            class="form-control" min="1" step="1" placeholder="None" {% if cluster_to_attack is not none
+                            %}value="{{ cluster_to_attack }}" {% endif %}>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin:5px; width: 100%;">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <div class="container px-4 text-center">
+        <div class="row gx-5">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        Image will be load here.
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        This is some text within a card body.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        Image will be load here.
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        This is some text within a card body.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        Image will be load here.
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        This is some text within a card body.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+
+{% endblock %}

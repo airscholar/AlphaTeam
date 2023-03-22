@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Resilience{% endblock %}
+{% block span %}Resilience Analysis{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Random Resilience Analysis</h3>
+            <hr> <!-- Add a horizontal rule for visual separation -->
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card mx-auto" style="width: 30rem;">
+            <div class="card-body">
+                <form method="post">
+                    <div class="row">
+                        <div class="container mt-3">
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item">
+                                    <a class="nav-link {% if tab_main=='tab1' %}active{% else %}{% endif %}"
+                                        data-toggle="tab" href="#form_tab1">Nodes</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {% if tab_main=='tab2' %}active{% else %}{% endif %}"
+                                        data-toggle="tab" href="#form_tab2">Edges</a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" style="background-color: white; padding-bottom: 25px;">
+                                <div id="form_tab1"
+                                    class="container tab-pane {% if tab_main=='tab1' %}active{% else %}fade{% endif %}">
+                                    <br />
+                                    <div class="row">
+                                        <label for="number_of_nodes" style="margin-top: 5px;">Number of Nodes</label>
+                                        <input type="number" id="number_of_nodes" style="margin: 5px;"
+                                            name="number_of_nodes" class="form-control" min="1" step="1"
+                                            placeholder="None" {% if number_of_nodes is not none
+                                            %}value="{{ number_of_nodes }}" {% endif %}>
+                                    </div>
+                                </div>
+                                <div id="form_tab2"
+                                    class="container tab-pane {% if tab_main=='tab2' %}active{% else %}fade{% endif %}">
+                                    <br />
+
+                                    <div class="row">
+                                        <label for="number_of_edges" style="margin-top: 5px;">Number of Edges</label>
+                                        <input type="number" id="number_of_edges" style="margin: 5px;"
+                                            name="number_of_edges" class="form-control" min="1" step="1"
+                                            placeholder="None" {% if number_of_edges is not none
+                                            %}value="{{ number_of_edges }}" {% endif %}>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin:5px; width: 100%;">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <div class="container px-4 text-center">
+        <div class="row gx-5">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        Image will be load here.
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        This is some text within a card body.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        Image will be load here.
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        This is some text within a card body.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        Image will be load here.
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        This is some text within a card body.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+
+{% endblock %}
