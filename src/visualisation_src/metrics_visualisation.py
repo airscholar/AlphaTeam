@@ -267,5 +267,8 @@ def generate_heatmap(networkGraph, filename):
     fig = go.Figure(data=go.Heatmap(z=mat, x=ax, y=ax))
     fig.update_layout(title_text="Heatmap of connections between nodes")
 
+    fig.update_xaxes(showticklabels=False)
+    fig.update_yaxes(showticklabels=False)
+
     fig.write_html(filename)
     return fig
