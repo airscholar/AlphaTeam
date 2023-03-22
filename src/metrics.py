@@ -76,24 +76,24 @@ def get_metrics(networkGraphs, method, clean=True, directed=False, multi=False):
 # ------------------------------------ GLOBAL METRICS ------------------------------------
 # ----------------------------------------------------------------------------------------
 @memoize
-def compute_global_metrics(networkGraphs):
+def compute_global_metrics(networkGraphs, directed=False, multi=False):
     """
     :Function: Compute the global metrics for the NetworkGraphs object (all the graphs)
     :param networkGraphs: NetworkGraphs
     :type networkGraphs: NetworkGraphs
+    :param directed: Compute the metrics for the directed graph
+    :type directed: bool
+    :param multi: Compute the metrics for the multi graph
+    :type multi: bool
     :return: Pandas dataframe with the metrics and values (for each graph type)
     :rtype: pd.DataFrame
     """
-    directed = compute_metrics(networkGraphs.DiGraph)  # compute for directed
-    undirected = compute_metrics(networkGraphs.Graph)  # compute for undirected
-    multidi = compute_metrics(networkGraphs.MultiDiGraph)  # compute for multidi
-    multi = compute_metrics(networkGraphs.MultiGraph)  # compute for multi
+    if multi:
+        G = networkGraphs.MultiDiGraph if directed else networkGraphs.MultiGraph
+    else:
+        G = networkGraphs.DiGraph if directed else networkGraphs.Graph
 
-    df = pd.merge(directed, undirected, how='inner', on='Metrics'). \
-        merge(multidi, how='inner', on='Metrics'). \
-        merge(multi, how='inner', on='Metrics')
-    df.columns = ['Metrics', 'Directed', 'Undirected', 'MultiDi', 'Multi']
-    return df
+    return compute_metrics(G)
 
 
 # ----------------------------------------------------------------------------------------
