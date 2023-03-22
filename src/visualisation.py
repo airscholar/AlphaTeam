@@ -396,3 +396,25 @@ def plot_heatmap(networkGraphs):
         generate_heatmap(networkGraphs, filepath)
 
     return filename
+
+
+# ----------------------------------------------------------------------------------------
+
+def plot_temporal(neworkGraphs, layout='map'):
+    """
+    :Function: Plot the temporal graph for the given graph
+    :param neworkGraphs: NetworkGraphs object
+    :type neworkGraphs: NetworkGraphs
+    :return: filename
+    :rtype: str
+    """
+    if not neworkGraphs.is_spatial() and layout == 'map':
+        print(ValueError('Graph is not spatial. Please select a spatial graph.'))
+        return 'no_graph.html'
+    filename = f"temporal_{layout}.html"
+    filepath = get_file_path(neworkGraphs, filename)
+
+    if not os.path.isfile(filepath):
+        generate_temporal(neworkGraphs, filepath, layout_=layout)
+
+    return filename
