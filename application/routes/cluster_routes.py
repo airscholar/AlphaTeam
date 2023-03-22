@@ -9,7 +9,7 @@ import time
 import shutil
 
 sys.path.insert(1, '../')
-
+from src.utils import *
 from src.NetworkGraphs import *
 from src.metrics import *
 from src.preprocessing import *
@@ -23,8 +23,8 @@ cluster_routes = Blueprint('cluster_routes', __name__)
 
 @cluster_routes.route('/clustering/louvain', endpoint='clustering_louvanian', methods=['GET', 'POST'])
 def clustering_louvanian():
-    networkGraphs = session['network_graphs']
     filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     clusterType = 'louvain'
     multi_toggle = True
     dynamic_toggle = False
@@ -56,8 +56,8 @@ def clustering_louvanian():
 
 @cluster_routes.route('/clustering/greedy_modularity', endpoint='clustering_greedy_modularity', methods=['GET', 'POST'])
 def clustering_greedy_modularity():
-    networkGraphs = session['network_graphs']
     filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     clusterType = 'greedy_modularity'
     multi_toggle = True
     dynamic_toggle = False
@@ -89,8 +89,8 @@ def clustering_greedy_modularity():
 
 @cluster_routes.route('/clustering/label_propagation', endpoint='clustering_label_propagation', methods=['GET', 'POST'])
 def clustering_label_propagation():
-    networkGraphs = session['network_graphs']
     filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     clusterType = 'label_propagation'
     multi_toggle = True
     dynamic_toggle = False
@@ -122,8 +122,8 @@ def clustering_label_propagation():
 
 @cluster_routes.route('/clustering/asyn_lpa', endpoint='clustering_asyn_lpa', methods=['GET', 'POST'])
 def clustering_asyn_lpa():
-    networkGraphs = session['network_graphs']
     filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     clusterType = 'asyn_lpa'
     multi_toggle = True
     dynamic_toggle = False
@@ -155,8 +155,8 @@ def clustering_asyn_lpa():
 
 @cluster_routes.route('/clustering/k_clique', endpoint='clustering_k_clique', methods=['GET', 'POST'])
 def clustering_k_clique():
-    networkGraphs = session['network_graphs']
     filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     clusterType = 'k_clique'
     multi_toggle = True
     dynamic_toggle = False
@@ -188,8 +188,8 @@ def clustering_k_clique():
 
 @cluster_routes.route('/clustering/spectral', endpoint='clustering_spectral', methods=['GET', 'POST'])
 def clustering_spectral():
-    networkGraphs = session['network_graphs']
     filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     clusterType = 'spectral'
     multi_toggle = True
     dynamic_toggle = False
@@ -221,8 +221,8 @@ def clustering_spectral():
 
 @cluster_routes.route('/clustering/kmeans', endpoint='clustering_kmeans', methods=['GET', 'POST'])
 def clustering_kmeans():
-    networkGraphs = session['network_graphs']
     filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     clusterType = 'kmeans'
     multi_toggle = True
     dynamic_toggle = False
@@ -254,8 +254,8 @@ def clustering_kmeans():
 
 @cluster_routes.route('/clustering/agglomerative', endpoint='clustering_agglomerative', methods=['GET', 'POST'])
 def clustering_agglomerative():
-    networkGraphs = session['network_graphs']
     filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     clusterType = 'agglomerative'
     multi_toggle = True
     dynamic_toggle = False
@@ -287,8 +287,8 @@ def clustering_agglomerative():
 
 @cluster_routes.route('/clustering/dbscan', endpoint='clustering_dbscan', methods=['GET', 'POST'])
 def clustering_dbscan():
-    networkGraphs = session['network_graphs']
     filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     clusterType = 'dbscan'
     multi_toggle = True
     dynamic_toggle = False
@@ -320,8 +320,8 @@ def clustering_dbscan():
 
 @cluster_routes.route('/clustering/hierarchical', endpoint='clustering_hierarchical', methods=['GET', 'POST'])
 def clustering_hierarchical():
-    networkGraphs = session['network_graphs']
     filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     clusterType = 'hierarchical'
     multi_toggle = True
     dynamic_toggle = False

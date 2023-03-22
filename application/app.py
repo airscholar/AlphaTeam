@@ -10,7 +10,7 @@ from src.NetworkGraphs import *
 from src.metrics import *
 from src.preprocessing import *
 from src.visualisation import *
-from flask import g  # Add this import at the beginning of the file
+from src.utils import *
 
 import scipy as sp
 from flask_caching import Cache
@@ -46,6 +46,7 @@ def internal_server_error(e):
         session.pop('filename2', None)
         session.pop('filepath', None)
         session.pop('option', None)
+        session.clear()
     return render_template('500.html')
 
 # Define a custom error page for 404 Not Found Error
@@ -71,6 +72,7 @@ def index():
         session.pop('filename2', None)
         session.pop('filepath', None)
         session.pop('option', None)
+        session.clear()
     return render_template('index.html')
 
 @app.route('/index/sample-dataset')
@@ -138,50 +140,52 @@ def upload():
         session['option'] = option    
 
     networkGraphs = NetworkGraphs(filepath, session_folder='static/uploads/'+filename2, type=option)
-    session['network_graphs'] = networkGraphs
+    set_networkGraph(networkGraphs, filename2)
     # Redirect the user to the success page
     return redirect(url_for('home'))
 
 @app.route('/home')
-@cache.cached(timeout=3600) # Cache the result for 1 hour
 def home():
     # Get the filename from the session variable
-    networkGraphs = session['network_graphs']
     filename = session['filename']
     filename2 = session['filename2']
     filepath = session['filepath']
     option = session['option']
+    networkGraphs = get_networkGraph(filename2)
 
+    # Pass the data to the HTML template
+    return render_template('home.html', data=networkGraphs.df.head(100))
+
+@app.route('/global-metrics')
+def globalmetrics():
+    filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     global_metrics = cache.get('global_metrics')
     if global_metrics is None:
         global_metrics = compute_global_metrics(networkGraphs)
         cache.set('global_metrics', global_metrics)
-    
-    # Pass the data to the HTML template
-    return render_template('home.html', example=global_metrics)
-
-@app.route('/uploaded_dataset')
-def uploaded_dataset():
-    return render_template('display_base_dataset.html', data=networkGraphs.df.head(100))
+    return render_template('global_metrics.html', example=global_metrics)
 
 #-------------------------------------------VISUALISATION-----------------------------------
 
 @app.route('/visualisation', methods=['GET', 'POST'], endpoint='visualisation')
 def visualisation():
-    networkGraphs = session['network_graphs']
     filename = session['filename']
     filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     dynamic_toggle = False
     dynamic_toggle2 = False
     tab = 'tab1'
     if networkGraphs.is_spatial():
         layout = 'map'
         layout2 = 'map'
-        tab_false = 'true'
+        show_temporal = str(networkGraphs.is_temporal()).lower()
+        print('tab false spatial', show_temporal)
     else:
         layout = 'sfdp'
         layout2 = 'sfdp'
-        tab_false = 'false'
+        show_temporal = str(networkGraphs.is_temporal()).lower()
+        print('tab is temporal', show_temporal)
 
 
     if request.method == 'POST':
@@ -216,10 +220,9 @@ def visualisation():
         graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
     
 
-    return render_template('visualisation.html', tab=tab, tab_false=tab_false,
+    return render_template('visualisation.html', tab=tab, show_temporal=show_temporal,
     dynamic_toggle=dynamic_toggle, layout=layout, graph1=graph_path1, 
     dynamic_toggle2=dynamic_toggle2, layout2=layout2, graph2=graph_path2)
-
 
 #-------------------------------------------EDGE--------------------------------------------
 
@@ -239,9 +242,9 @@ def edge_all():
 
 @app.route('/hotspot/density', endpoint='hotspot_density', methods=['GET', 'POST'])
 def hotspot_density():
-    networkGraphs = session['network_graphs']
     filename2 = session['filename2']
-   
+    networkGraphs = get_networkGraph(filename2)
+
     df, graph_name1 = plot_hotspot(networkGraphs)
     session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']

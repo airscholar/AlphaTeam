@@ -16,7 +16,7 @@
                     <a class="nav-link {% if tab=='tab1' %}active{% else %}{% endif %}" data-toggle="tab"
                         href="#tab1">Network</a>
                 </li>
-                {% if tab_false=='false' %}
+                {% if show_temporal=='true' %}
                 <li class="nav-item">
                     <a class="nav-link {% if tab=='tab2' %}active{% else %}{% endif %}" data-toggle="tab"
                         href="#tab2">Temporal</a>
@@ -61,7 +61,7 @@
                         </div>
                     </div>
                 </div>
-                {% if tab_false=='false' %}
+                {% if show_temporal=='true' %}
                 <div id="tab2" class="container tab-pane {% if tab=='tab2' %}active{% else %}fade{% endif %}">
                     <br />
                     <div class="row">

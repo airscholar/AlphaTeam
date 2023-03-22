@@ -9,7 +9,7 @@ import time
 import shutil
 
 sys.path.insert(1, '../')
-
+from src.utils import *
 from src.NetworkGraphs import *
 from src.metrics import *
 from src.preprocessing import *
@@ -23,8 +23,8 @@ centrality_routes = Blueprint('centrality_routes', __name__)
 
 @centrality_routes.route('/centrality', endpoint='centrality', methods=['GET', 'POST'])
 def centrality_all():
-    networkGraphs = session['network_graphs']
     filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     metrics = 'centralities'
     multi_toggle = True
     directed_toggle = False
@@ -119,8 +119,8 @@ def centrality_all():
 
 @centrality_routes.route('/centrality/degree', endpoint='degree', methods=['GET', 'POST'])
 def centrality_degree():
-    networkGraphs = session['network_graphs']
     filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     metrics = 'degree_centrality'
     multi_toggle = True
     dynamic_toggle = False
@@ -221,8 +221,8 @@ def centrality_degree():
 
 @centrality_routes.route('/centrality/eigenvector', endpoint='eigenvector', methods=['GET', 'POST'])
 def centrality_eigenvector():
-    networkGraphs = session['network_graphs']
     filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     metrics = 'eigenvector_centrality'
     multi_toggle = True
     dynamic_toggle = False
@@ -323,8 +323,8 @@ def centrality_eigenvector():
 
 @centrality_routes.route('/centrality/closeness', endpoint='closeness', methods=['GET', 'POST'])
 def centrality_closeness():
-    networkGraphs = session['network_graphs']
     filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     metrics = 'closeness_centrality'
     multi_toggle = True
     dynamic_toggle = False
@@ -425,8 +425,8 @@ def centrality_closeness():
 
 @centrality_routes.route('/centrality/betwenness', endpoint='betwenness', methods=['GET', 'POST'])
 def centrality_betwenness():
-    networkGraphs = session['network_graphs']
     filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     metrics = 'betweenness_centrality'
     multi_toggle = True
     dynamic_toggle = False
@@ -527,8 +527,8 @@ def centrality_betwenness():
 
 @centrality_routes.route('/centrality/load', endpoint='load', methods=['GET', 'POST'])
 def centrality_load():
-    networkGraphs = session['network_graphs']
     filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
     metrics = 'load_centrality'
     multi_toggle = True
     dynamic_toggle = False
