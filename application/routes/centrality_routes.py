@@ -111,7 +111,7 @@ def centrality_all():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('centrality_all.html', example=df, tab=tab, method_name='All Centrality',
+    return render_template('centrality/centrality_all.html', example=df, tab=tab, method_name='All Centrality',
     multi_toggle=multi_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
@@ -213,7 +213,7 @@ def centrality_degree():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('centrality_degree.html', example=df, tab=tab, method_name='Degree Centrality',
+    return render_template('centrality/centrality_degree.html', example=df, tab=tab, method_name='Degree Centrality',
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
@@ -315,7 +315,7 @@ def centrality_eigenvector():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('centrality_eigenvector.html', example=df, tab=tab, method_name='Eigenvector Centrality',
+    return render_template('centrality/centrality_eigenvector.html', example=df, tab=tab, method_name='Eigenvector Centrality',
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
@@ -417,7 +417,7 @@ def centrality_closeness():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('centrality_closeness.html', example=df, tab=tab, method_name='Closeness Centrality',
+    return render_template('centrality/centrality_closeness.html', example=df, tab=tab, method_name='Closeness Centrality',
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
@@ -519,7 +519,7 @@ def centrality_betwenness():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('centrality_betwenness.html', example=df, tab=tab, method_name='Betwenness Centrality',
+    return render_template('centrality/centrality_betwenness.html', example=df, tab=tab, method_name='Betwenness Centrality',
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
@@ -621,7 +621,7 @@ def centrality_load():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('centrality_load.html', example=df, tab=tab, method_name='Load Centrality',
+    return render_template('centrality/centrality_load.html', example=df, tab=tab, method_name='Load Centrality',
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
