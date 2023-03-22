@@ -5,8 +5,6 @@ from tqdm import tqdm
 
 from src.visualisation_src.utils_visualisation import *
 
-
-
 # ----------------------------------------------------------------------------------------
 
 def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USING PLOTLY

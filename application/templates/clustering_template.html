@@ -17,23 +17,11 @@
 
                 <form method="post">
                     <div class="toggle-btn" style="margin:5px">
-                        <input type="checkbox" id="multi-toggle" name="multi_toggle" {% if multi_toggle %}checked{%
-                            endif %}>
-                        <label for="multi-toggle"></label>
-                    </div>
-                    <span>Multi</span>
-                    <div class="toggle-btn" style="margin:5px">
                         <input type="checkbox" id="dynamic-toggle" name="dynamic_toggle" {% if dynamic_toggle
                             %}checked{% endif %}>
                         <label for="dynamic-toggle"></label>
                     </div>
                     <span>Dynamic</span>
-                    <div class="toggle-btn" style="margin:5px">
-                        <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if directed_toggle
-                            %}checked{% endif %}>
-                        <label for="directed-toggle"></label>
-                    </div>
-                    <span>Directed</span>
                     <div class="dropdown" style="margin:5px">
                         <select id="dropdown-menu" class="mx-auto" name="layout">
                             <option value="map" {% if layout=='map' %}selected{% endif %}>Map</option>
@@ -43,6 +31,10 @@
                             </option>
                         </select>
                     </div>
+                    <label for="number_of_clusters" style="margin-top: 5px;">Number of Clusters</label>
+                    <input type="number" id="number_of_clusters" style="margin: 5px;" name="number_of_clusters"
+                        class="form-control" min="1" step="1" placeholder="None" {% if number_of_clusters is not none
+                        %}value="{{ number_of_clusters }}" {% endif %}>
                     <button type="submit" class="btn btn-primary" style="margin:5px; width: 100%;">Submit</button>
                 </form>
             </div>

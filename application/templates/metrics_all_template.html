@@ -1,11 +1,7 @@
-{% extends "base.html" %}
-{% block title %}Centrality{% endblock %}
-{% block span %}Centrality Page{% endblock %}
-{% block content %}
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <h3>All Centrality</h3>
+            <h3>{{method_name}}</h3>
             <hr> <!-- Add a horizontal rule for visual separation -->
         </div>
     </div>
@@ -52,12 +48,6 @@
                                     </div>
                                     <span>Multi</span>
                                     <div class="toggle-btn" style="margin:5px">
-                                        <input type="checkbox" id="dynamic-toggle" name="dynamic_toggle" {% if
-                                            dynamic_toggle %}checked{% endif %}>
-                                        <label for="dynamic-toggle"></label>
-                                    </div>
-                                    <span>Dynamic</span>
-                                    <div class="toggle-btn" style="margin:5px">
                                         <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if
                                             directed_toggle %}checked{% endif %}>
                                         <label for="directed-toggle"></label>
@@ -98,12 +88,6 @@
                                         <label for="multi-toggle2"></label>
                                     </div>
                                     <span>Multi</span>
-                                    <div class="toggle-btn" style="margin:5px">
-                                        <input type="checkbox" id="dynamic-toggle2" name="dynamic_toggle2" {% if
-                                            dynamic_toggle2 %}checked{% endif %}>
-                                        <label for="dynamic-toggle2"></label>
-                                    </div>
-                                    <span>Dynamic</span>
                                     <div class="toggle-btn" style="margin:5px">
                                         <input type="checkbox" id="directed-toggle2" name="directed_toggle2" {% if
                                             directed_toggle2 %}checked{% endif %}>
@@ -146,12 +130,6 @@
                                     </div>
                                     <span>Multi</span>
                                     <div class="toggle-btn" style="margin:5px">
-                                        <input type="checkbox" id="dynamic-toggle3" name="dynamic_toggle3" {% if
-                                            dynamic_toggle3 %}checked{% endif %}>
-                                        <label for="dynamic-toggle3"></label>
-                                    </div>
-                                    <span>Dynamic</span>
-                                    <div class="toggle-btn" style="margin:5px">
                                         <input type="checkbox" id="directed-toggle3" name="directed_toggle3" {% if
                                             directed_toggle3 %}checked{% endif %}>
                                         <label for="directed-toggle3"></label>
@@ -192,12 +170,6 @@
                                         <label for="multi-toggle4"></label>
                                     </div>
                                     <span>Multi</span>
-                                    <div class="toggle-btn" style="margin:5px">
-                                        <input type="checkbox" id="dynamic-toggle4" name="dynamic_toggle4" {% if
-                                            dynamic_toggle4 %}checked{% endif %}>
-                                        <label for="dynamic-toggle4"></label>
-                                    </div>
-                                    <span>Dynamic</span>
                                     <div class="toggle-btn" style="margin:5px">
                                         <input type="checkbox" id="directed-toggle4" name="directed_toggle4" {% if
                                             directed_toggle4 %}checked{% endif %}>
@@ -254,7 +226,16 @@
     </div>
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"></script>
+
 <script>
     $(document).ready(function () {
         // Get the submitted tab value from the server
@@ -269,5 +250,3 @@
         $('#' + submittedTab).addClass('active show');
     });
 </script>
-
-{% endblock %}
