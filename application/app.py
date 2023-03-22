@@ -156,15 +156,21 @@ def home():
     # Pass the data to the HTML template
     return render_template('home.html', data=networkGraphs.df.head(100))
 
-@app.route('/global-metrics')
+@app.route('/global-metrics', methods=['GET', 'POST'])
 def globalmetrics():
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
-    global_metrics = cache.get('global_metrics')
-    if global_metrics is None:
-        global_metrics = compute_global_metrics(networkGraphs)
-        cache.set('global_metrics', global_metrics)
-    return render_template('global_metrics.html', example=global_metrics)
+    multi_toggle = False
+    directed_toggle = False
+    
+    if request.method == 'POST':
+        multi_toggle = bool(request.form.get('multi_toggle'))
+        directed_toggle = bool(request.form.get('directed_toggle'))
+        global_metrics = compute_global_metrics(networkGraphs, directed_toggle, multi_toggle)
+    else:
+        global_metrics = compute_global_metrics(networkGraphs, directed_toggle, multi_toggle)
+
+    return render_template('global_metrics.html', example=global_metrics, multi_toggle=multi_toggle, directed_toggle=directed_toggle)
 
 #-------------------------------------------VISUALISATION-----------------------------------
 
@@ -174,7 +180,6 @@ def visualisation():
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     dynamic_toggle = False
-    dynamic_toggle2 = False
     tab = 'tab1'
     if networkGraphs.is_spatial():
         layout = 'map'
@@ -195,16 +200,15 @@ def visualisation():
             graph_name1 = plot_network(networkGraphs, layout=layout, dynamic=dynamic_toggle)
             session['graph_name1'] = graph_name1
             tab = 'tab1'
-        if (request.form.get('dynamic_toggle2') is not None or request.form.get('layout2') is not None):
-            dynamic_toggle2 = bool(request.form.get('dynamic_toggle2'))
+        if (request.form.get('layout2') is not None):
             layout2 = request.form.get('layout2')
-            graph_name2 = plot_network(networkGraphs, layout=layout2, dynamic=dynamic_toggle2)
+            graph_name2 = plot_temporal(networkGraphs, layout=layout2)
             session['graph_name2'] = graph_name2
             tab = 'tab2'
     else:
         graph_name1 = plot_network(networkGraphs, layout=layout, dynamic=dynamic_toggle)
         session['graph_name1'] = graph_name1
-        graph_name2 = plot_network(networkGraphs, layout=layout2, dynamic=dynamic_toggle2)
+        graph_name2 = plot_temporal(networkGraphs, layout=layout2)
         session['graph_name2'] = graph_name2
     graph1 = session['graph_name1']
     graph2 = session['graph_name2']
@@ -222,7 +226,7 @@ def visualisation():
 
     return render_template('visualisation.html', tab=tab, show_temporal=show_temporal,
     dynamic_toggle=dynamic_toggle, layout=layout, graph1=graph_path1, 
-    dynamic_toggle2=dynamic_toggle2, layout2=layout2, graph2=graph_path2)
+    layout2=layout2, graph2=graph_path2)
 
 #-------------------------------------------EDGE--------------------------------------------
 
