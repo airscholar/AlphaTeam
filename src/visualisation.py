@@ -50,8 +50,7 @@ def plot_network(networkGraphs, layout='map', dynamic=False):
 
     if not os.path.isfile(filepath):
         if dynamic:
-            return 0
-            # dynamic_visualisation(networkGraphs, filepath)
+            dynamic_visualisation(networkGraphs, filepath)
         else:
             static_visualisation(networkGraphs, filepath, layout_=layout)
 
