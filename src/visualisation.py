@@ -112,7 +112,7 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
         else:
             generate_static_cluster(networkGraphs, cluster, filepath, layout_=layout)
 
-    return cluster, filename
+    return m.clean_df(cluster), filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -167,7 +167,7 @@ def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False
         else:
             generate_static_metric(networkGraphs, df, filepath, layout_=layout)
 
-    return df, filename
+    return m.clean_df(df), filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -214,7 +214,7 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
     if not os.path.isfile(filepath):
         generate_static_all_metrics(networkGraphs, df, filepath, layout_=layout)
 
-    return df, filename
+    return m.clean_df(df), filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -258,7 +258,7 @@ def plot_histogram(networkGraphs, metrics, directed=True, multi=True):
     if not os.path.isfile(filepath):
         generate_histogram_metric(df, filepath)
 
-    return df, filename
+    return m.clean_df(df), filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -275,16 +275,16 @@ def plot_hotspot(networkGraphs):
     if not networkGraphs.is_spatial():
         return ValueError('Graph is not spatial. Please select a spatial graph.')
 
-    hotspot = ml.get_hotspot(networkGraphs)
+    df = ml.get_hotspot(networkGraphs)
 
     filename = f"Density_hotspot.html"
     filepath = get_file_path(networkGraphs, filename)
     print(filepath)
 
     if not os.path.isfile(filepath):
-        generate_hotspot(networkGraphs, hotspot, filepath)
+        generate_hotspot(networkGraphs, df, filepath)
 
-    return hotspot, filename
+    return m.clean_df(df), filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -329,7 +329,7 @@ def plot_boxplot(networkGraphs, metrics, directed=True, multi=True):
     if not os.path.isfile(filepath):
         generate_boxplot_metric(df, filepath)
 
-    return df, filename
+    return m.clean_df(df), filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -374,7 +374,7 @@ def plot_violin(networkGraphs, metrics, directed=True, multi=True):
     if not os.path.isfile(filepath):
         generate_violin_metric(df, filepath)
 
-    return df, filename
+    return m.clean_df(df), filename
 
 
 # ----------------------------------------------------------------------------------------
