@@ -5,7 +5,6 @@ from tqdm import tqdm
 
 from src.visualisation_src.utils_visualisation import *
 
-
 # ----------------------------------------------------------------------------------------
 
 def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USING PLOTLY
@@ -20,7 +19,9 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
     G = networkGraphs.Graph
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
-        layout_ = 'sfdp'
+        print(ValueError('No spatial graph'))
+        return 'no_graph.html'
+
     pos = networkGraphs.pos[layout_]
 
     metrics_name = df_.columns[1]
@@ -76,7 +77,9 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
     G = networkGraphs.Graph
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
-        layout_ = 'sfdp'
+        print(ValueError('No spatial graph'))
+        return 'no_graph.html'
+
     pos = networkGraphs.pos[layout_]
 
     metrics_names = df_.columns[1:]
@@ -209,7 +212,6 @@ def generate_boxplot_metric(df_, filename):
                       )
 
     fig.write_html(filename)
-    fig.show()
 
     return fig
 
@@ -240,7 +242,6 @@ def generate_violin_metric(df_, filename):
                       )
 
     fig.write_html(filename)
-    fig.show()
 
     return fig
 
@@ -265,6 +266,9 @@ def generate_heatmap(networkGraph, filename):
 
     fig = go.Figure(data=go.Heatmap(z=mat, x=ax, y=ax))
     fig.update_layout(title_text="Heatmap of connections between nodes")
+
+    fig.update_xaxes(showticklabels=False)
+    fig.update_yaxes(showticklabels=False)
 
     fig.write_html(filename)
     return fig

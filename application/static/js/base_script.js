@@ -9,6 +9,10 @@ setSpinnerVisibility(showSpinner);
 
 $(document).ready(function () {
     $('#example1').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
         "pageLength": 10, // Show 10 rows per page
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]] // Customize page length menu
     });
@@ -16,6 +20,13 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $('#example').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5'
+        ],
         "pageLength": 10, // Show 10 rows per page
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]] // Customize page length menu
     });
@@ -73,3 +84,13 @@ $(document).ready(function () {
         document.body.removeChild(link);
     });
 });
+
+function validateLayout() {
+    var layout = document.getElementById('dropdown-menu').value;
+    if (layout === 'option1') {
+        alert('Please select a layout option.');
+        return false;
+    }
+
+    return true;
+}

@@ -19,7 +19,9 @@ def static_visualisation(networkGraphs, filepath, directed=True, multi=False, la
     G = networkGraphs.Graph
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
-        return ValueError("Graph is not spatial with coordinates")
+        print(ValueError('No spatial graph'))
+        return 'no_graph.html'
+
     pos = networkGraphs.pos[layout_]
     text = [f"Node: {node}" for node in G.nodes()]
 

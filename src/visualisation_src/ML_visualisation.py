@@ -1,3 +1,4 @@
+from tqdm import tqdm
 from pyvis import network as net
 
 from src.visualisation_src.utils_visualisation import *
@@ -10,7 +11,9 @@ def generate_static_cluster(networkGraphs, df_, filename, layout_='map'):  # USI
     G = networkGraphs.Graph
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
-        layout_ = 'sfdp'
+        print(ValueError('No spatial graph'))
+        return 'no_graph.html'
+
     pos = networkGraphs.pos[layout_]
 
     x_list = []
