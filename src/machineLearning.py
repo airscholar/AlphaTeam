@@ -5,6 +5,7 @@ Purpose: Machine Learning for the NetworkX graphs
 """
 
 import warnings
+from itertools import takewhile
 
 import networkx as nx
 import networkx.algorithms.community as nx_comm
@@ -12,7 +13,12 @@ import numpy as np
 import pandas as pd
 from distinctipy import distinctipy
 from kneed import KneeLocator
+import src.metrics as m
+from networkx.algorithms.community import girvan_newman
+from scipy.cluster.hierarchy import dendrogram, linkage
 from sklearn.cluster import SpectralClustering, KMeans, AgglomerativeClustering, DBSCAN
+import random
+import matplotlib.pyplot as plt
 
 warnings.filterwarnings("ignore")
 
@@ -61,10 +67,11 @@ def create_comm_dataframe(communities, colors):
     :return: dataframe
     """
     df = pd.DataFrame()
-
+    print('len', len(communities))
     for idx, community in enumerate(communities):
         color = colors.pop()
         for node in community:
+            print(node)
             df = pd.concat([df, pd.DataFrame({'Node': node,
                                               'Color': color,
                                               'Cluster_id': idx
@@ -137,20 +144,6 @@ def girvan_newman_clustering(networkGraphs):
     :return: dataframe
     """
     communities = list(nx_comm.girvan_newman(networkGraphs.Graph))
-    colors = create_comm_colors(communities)
-    df = create_comm_dataframe(communities, colors)
-    return df
-
-
-# ----------------------------------------------------------------------------------------
-
-def edge_betweenness_clustering(networkGraphs):
-    """
-    Detect communities based on edge betweenness
-    :param networkGraphs: NetworkGraphs
-    :return: dataframe
-    """
-    communities = list(nx_comm.centrality.girvan_newman(networkGraphs.Graph))
     colors = create_comm_colors(communities)
     df = create_comm_dataframe(communities, colors)
     return df
@@ -295,10 +288,12 @@ def get_communities(networkGraphs, method):
     """
     if method not in ['louvain', 'greedy_modularity', 'label_propagation', 'asyn_lpa', 'girvan_newman',
                       'edge_betweenness', 'k_clique', 'spectral', 'kmeans', 'agglomerative', 'hierarchical', 'dbscan']:
-        return ValueError("Invalid cluster type", "please choose from the following: 'louvain', 'greedy_modularity', "
+        print(ValueError("Invalid cluster type", "please choose from the following: 'louvain', 'greedy_modularity', "
                                                   "'label_propagation', 'asyn_lpa', 'girvan_newman',"
-                                                  "'edge_betweenness', 'k_clique', 'spectral', 'kmeans' "
-                                                  "'agglomerative', 'hierarchical', 'dbscan'")
+                                                  "'k_clique', 'spectral', 'kmeans' "
+                                                  "'agglomerative', 'hierarchical', 'dbscan'"))
+        df = m.return_nan(networkGraphs, 'Cluster')
+        return df, 'no_graph.html'
 
     if method == 'louvain':
         return louvain_clustering(networkGraphs)
@@ -310,8 +305,6 @@ def get_communities(networkGraphs, method):
         return asyn_lpa_clustering(networkGraphs)
     elif method == 'girvan_newman':
         return girvan_newman_clustering(networkGraphs)
-    elif method == 'edge_betweenness':
-        return edge_betweenness_clustering(networkGraphs)
     elif method == 'k_clique':
         return k_clique_clustering(networkGraphs)
     elif method == 'kmeans':
