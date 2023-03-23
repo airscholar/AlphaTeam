@@ -44,9 +44,9 @@ def plot_network(networkGraphs, layout='map', dynamic=False):
         return 'no_graph.html'
 
     filename = f"{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    filepath = get_file_path(networkGraphs, filename)
     if dynamic:
-        filepath = filepath.replace(f"_{layout}", "")
+        filename = filename.replace(f"_{layout}", "")
+    filepath = get_file_path(networkGraphs, filename)
 
     if not os.path.isfile(filepath):
         if dynamic:
@@ -102,9 +102,9 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
 
     cluster = ml.get_communities(networkGraphs, clusterType)
     filename = f"{clusterType}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    filepath = get_file_path(networkGraphs, filename)
     if dynamic:
-        filepath = filepath.replace(f"_{layout}", "")
+        filename = filename.replace(f"_{layout}", "")
+    filepath = get_file_path(networkGraphs, filename)
 
     if not os.path.isfile(filepath):
         if dynamic:
@@ -157,9 +157,9 @@ def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False
         return df, "no_graph.html"
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    filepath = get_file_path(networkGraphs, filename)
     if dynamic:
-        filepath = filepath.replace(f"_{layout}", "")
+        filename = filename.replace(f"_{layout}", "")
+    filepath = get_file_path(networkGraphs, filename)
 
     if not os.path.isfile(filepath):
         if dynamic:
