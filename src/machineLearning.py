@@ -61,6 +61,7 @@ def create_comm_dataframe(communities, colors):
     :return: dataframe
     """
     df = pd.DataFrame()
+
     for idx, community in enumerate(communities):
         color = colors.pop()
         for node in community:
