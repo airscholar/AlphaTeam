@@ -94,3 +94,7 @@ function validateLayout() {
 
     return true;
 }
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})

@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import re
 import time
 import shutil
+from dictionary.information import *
 
 sys.path.insert(1, '../')
 from src.utils import *
@@ -15,6 +16,7 @@ from src.metrics import *
 from src.preprocessing import *
 from src.visualisation import *
 from flask import g
+import html
 
 centrality_routes = Blueprint('centrality_routes', __name__)
 
@@ -91,6 +93,8 @@ def centrality_all():
     graph3 = session['graph_name3']
     graph4 = session['graph_name4']
     
+    print('graph1 value',graph1)
+
     if graph1 == 'no_graph.html':
         graph_path1 = '../static/' + graph1
     else:
@@ -111,7 +115,7 @@ def centrality_all():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('centrality/centrality_all.html', example=df, tab=tab, method_name='All Centrality',
+    return render_template('centrality/centrality_all.html', example=df, tab=tab, method_name=html.escape(tooltips['multi']),
     multi_toggle=multi_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,

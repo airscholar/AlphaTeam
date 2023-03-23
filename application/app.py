@@ -1,8 +1,10 @@
 from flask import Flask, request, render_template, redirect, url_for, session
 from flask_session import Session
+from dictionary.information import *
 from routes.cluster_routes import cluster_routes
 from routes.centrality_routes import centrality_routes 
 from routes.node_routes import node_routes
+import html
 import csv
 import sys
 sys.path.insert(1, '../')
@@ -41,12 +43,12 @@ def internal_server_error(e):
             shutil.rmtree(filepath)        
         cache.clear()
          # Remove the keys from the session
-        session.pop('network_graphs', None)
-        session.pop('filename', None)
-        session.pop('filename2', None)
-        session.pop('filepath', None)
-        session.pop('option', None)
-        session.clear()
+        #session.pop('network_graphs', None)
+        #session.pop('filename', None)
+        #session.pop('filename2', None)
+        #session.pop('filepath', None)
+        #session.pop('option', None)
+        #session.clear()
     return render_template('500.html')
 
 # Define a custom error page for 404 Not Found Error
@@ -213,6 +215,7 @@ def visualisation():
     graph1 = session['graph_name1']
     graph2 = session['graph_name2']
     
+
     if graph1 == 'no_graph.html':
         graph_path1 = '../static/' + graph1
     else:
@@ -258,6 +261,11 @@ def hotspot_density():
     else:
         graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
 
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+        
     return render_template('hotspot_density.html', example=df, graph1=graph_path1, method_name='Density')
 
 
@@ -265,7 +273,7 @@ def hotspot_density():
 
 @app.route('/resilience/malicious', endpoint='resilience_malicious', methods=['GET', 'POST'])
 def resilience_analyisis_malicious():
-    layout = 'map'
+    layout = 'degree_centrality'
     layout2 = 'equal_to'
     tab_main = 'tab1'
     
