@@ -70,6 +70,7 @@ def get_layout(networkGraphs, title=None, layout_='map'):  # FOR PLOTLY
             titlefont=dict(size=16, color='Black'),
             showlegend=False,
             hovermode='closest',
+            margin=dict(l=0, r=0, t=0, b=0),
             annotations=[
                 dict(
                     text="Alpha Team - 2023",

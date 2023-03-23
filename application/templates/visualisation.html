@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
-{% block span %}Home Page{% endblock %}
+{% block title %}Visualisation{% endblock %}
+{% block span %}Visualisation Page{% endblock %}
 {% block content %}
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <h3>Static Visualisation </h3>
+            <h3>Visualisation</h3>
             <hr> <!-- Add a horizontal rule for visual separation -->
         </div>
     </div>
@@ -13,20 +13,24 @@
         <div class="container mt-3">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#tab1">Tab 1</a>
+                    <a class="nav-link {% if tab=='tab1' %}active{% else %}{% endif %}" data-toggle="tab"
+                        href="#tab1">Network</a>
                 </li>
+                {% if show_temporal=='true' %}
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#tab2">Tab 2</a>
+                    <a class="nav-link {% if tab=='tab2' %}active{% else %}{% endif %}" data-toggle="tab"
+                        href="#tab2">Temporal</a>
                 </li>
+                {% endif %}
             </ul>
 
             <div class="tab-content" style="background-color: white; padding-bottom: 25px;">
-                <div id="tab1" class="container tab-pane active">
+                <div id="tab1" class="container tab-pane {% if tab=='tab1' %}active{% else %}fade{% endif %}">
                     <br />
                     <div class="row">
                         <div class="col-10">
                             <div class="card card-body" style="align-items: center;">
-                                <iframe src="{{ graph_name }}" width="100%" height="500"></iframe>
+                                <iframe src="{{ graph1 }}" width="100%" height="500"></iframe>
                                 <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
                             </div>
                         </div>
@@ -34,24 +38,15 @@
                             <div class="card card-body" style="align-items: center;">
 
                                 <form method="post">
-                                    <input type="hidden" name="tab" value="tab1">
-                                    <!-- Add this line to include tab information -->
+
                                     <div class="toggle-btn" style="margin:5px">
                                         <input type="checkbox" id="dynamic-toggle" name="dynamic_toggle" {% if
                                             dynamic_toggle %}checked{% endif %}>
                                         <label for="dynamic-toggle"></label>
                                     </div>
                                     <span>Dynamic</span>
-                                    <div class="toggle-btn" style="margin:5px">
-                                        <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if
-                                            directed_toggle %}checked{% endif %}>
-                                        <label for="directed-toggle"></label>
-                                    </div>
-                                    <span>Directed</span>
                                     <div class="dropdown" style="margin:5px">
                                         <select id="dropdown-menu" class="mx-auto" name="layout">
-                                            <option value="option1" {% if layout=='option1' %}selected{% endif %}>Select
-                                                Layout</option>
                                             <option value="map" {% if layout=='map' %}selected{% endif %}>Map</option>
                                             <option value="sfdp" {% if layout=='sfdp' %}selected{% endif %}>Sfdp
                                             </option>
@@ -66,42 +61,27 @@
                         </div>
                     </div>
                 </div>
-                <div id="tab2" class="container tab-pane fade">
+                {% if show_temporal=='true' %}
+                <div id="tab2" class="container tab-pane {% if tab=='tab2' %}active{% else %}fade{% endif %}">
                     <br />
                     <div class="row">
-                        <div class="col-8">
+                        <div class="col-10">
                             <div class="card card-body" style="align-items: center;">
-                                <iframe
-                                    src="{{ url_for('static', filename='graphs/degree_centrality_Undirected_Static_map.html') }}"
-                                    width="100%" height="500"></iframe>
+                                <iframe src="{{ graph2 }}" width="100%" height="500"></iframe>
                                 <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-2">
                             <div class="card card-body" style="align-items: center;">
+
                                 <form method="post">
-                                    <input type="hidden" name="tab" value="tab2">
-                                    <!-- Add this line to include tab information -->
-                                    <div class="toggle-btn" style="margin:5px">
-                                        <input type="checkbox" id="dynamic-toggle" name="dynamic_toggle" {% if
-                                            dynamic_toggle %}checked{% endif %}>
-                                        <label for="dynamic-toggle"></label>
-                                    </div>
-                                    <span>Dynamic</span>
-                                    <div class="toggle-btn" style="margin:5px">
-                                        <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if
-                                            directed_toggle %}checked{% endif %}>
-                                        <label for="directed-toggle"></label>
-                                    </div>
-                                    <span>Directed</span>
+
                                     <div class="dropdown" style="margin:5px">
-                                        <select id="dropdown-menu" class="mx-auto" name="layout">
-                                            <option value="option1" {% if layout=='option1' %}selected{% endif %}>Select
-                                                Layout</option>
-                                            <option value="map" {% if layout=='map' %}selected{% endif %}>Map</option>
-                                            <option value="sfdp" {% if layout=='sfdp' %}selected{% endif %}>Sfdp
+                                        <select id="dropdown-menu2" class="mx-auto" name="layout2">
+                                            <option value="map" {% if layout2=='map' %}selected{% endif %}>Map</option>
+                                            <option value="sfdp" {% if layout2=='sfdp' %}selected{% endif %}>Sfdp
                                             </option>
-                                            <option value="twopi" {% if layout=='twopi' %}selected{% endif %}>Twopi
+                                            <option value="twopi" {% if layout2=='twopi' %}selected{% endif %}>Twopi
                                             </option>
                                         </select>
                                     </div>
@@ -112,12 +92,13 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
     <hr>
-
 </div>
+
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>

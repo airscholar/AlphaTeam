@@ -10,5 +10,10 @@ __pycache__/
 *.mtx
 src/*.html
 uploads
+__pycache__
 *.emb
 lib/
+application/flask_session/
+application/__pycache__/app.cpython-311.pyc
+*.pyc
+*.pyc
