@@ -41,8 +41,8 @@ def internal_server_error(e):
         filepath = 'static/uploads/'+filename2
         if os.path.exists(filepath):
             shutil.rmtree(filepath)        
-        cache.clear()
-         # Remove the keys from the session
+        #cache.clear()
+        # Remove the keys from the session
         #session.pop('network_graphs', None)
         #session.pop('filename', None)
         #session.pop('filename2', None)
@@ -142,7 +142,7 @@ def upload():
         session['option'] = option    
 
     networkGraphs = NetworkGraphs(filepath, session_folder='static/uploads/'+filename2, type=option)
-    set_networkGraph(networkGraphs, filename2)
+    set_networkGraph(networkGraphs, 'networkGraphs')
     # Redirect the user to the success page
     return redirect(url_for('home'))
 
@@ -153,7 +153,7 @@ def home():
     filename2 = session['filename2']
     filepath = session['filepath']
     option = session['option']
-    networkGraphs = get_networkGraph(filename2)
+    networkGraphs = get_networkGraph('networkGraphs')
 
     # Pass the data to the HTML template
     return render_template('home.html', data=networkGraphs.df.head(100))
@@ -161,7 +161,7 @@ def home():
 @app.route('/global-metrics', methods=['GET', 'POST'])
 def globalmetrics():
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph(filename2)
+    networkGraphs = get_networkGraph('networkGraphs')
     multi_toggle = False
     directed_toggle = False
     
@@ -180,7 +180,7 @@ def globalmetrics():
 def visualisation():
     filename = session['filename']
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph(filename2)
+    networkGraphs = get_networkGraph('networkGraphs')
     dynamic_toggle = False
     tab = 'tab1'
     if networkGraphs.is_spatial():
@@ -250,7 +250,7 @@ def edge_all():
 @app.route('/hotspot/density', endpoint='hotspot_density', methods=['GET', 'POST'])
 def hotspot_density():
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph(filename2)
+    networkGraphs = get_networkGraph('networkGraphs')
 
     df, graph_name1 = plot_hotspot(networkGraphs)
     session['graph_name1'] = graph_name1
@@ -331,19 +331,19 @@ def resilience_analyisis_random():
 
 @app.route('/resilience/cluster', endpoint='resilience_cluster', methods=['GET', 'POST'])
 def resilience_analyisis_cluster():
-    layout = 'map'
+    layout = 'louvain'
     
     if request.method == 'POST':
-        number_of_clusters = request.form.get('number_of_clusters', None)
-        number_of_clusters = int(number_of_clusters) if number_of_clusters else None
+        number_of_cluster_to_generate = request.form.get('number_of_cluster_to_generate', None)
+        number_of_cluster_to_generate = int(number_of_cluster_to_generate) if number_of_cluster_to_generate else None
         cluster_to_attack = request.form.get('cluster_to_attack', None)
         cluster_to_attack = int(cluster_to_attack) if cluster_to_attack else None
         layout = request.form.get('layout')
     else:
-        number_of_clusters = None
+        number_of_cluster_to_generate = None
         cluster_to_attack = None
  
-    return render_template('resilience/resilience_analyisis_cluster.html', layout=layout, number_of_clusters=number_of_clusters, cluster_to_attack=cluster_to_attack)
+    return render_template('resilience/resilience_analyisis_cluster.html', layout=layout, number_of_cluster_to_generate=number_of_cluster_to_generate, cluster_to_attack=cluster_to_attack)
 #-------------------------------------------MAIN--------------------------------------------
 if __name__ == '__main__':
     app.run(debug=True)

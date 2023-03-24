@@ -79,3 +79,23 @@ p {
 .black-text {
 	color: #483EA8;
 }
+
+.btn-circle {
+	border-radius: 100%;
+	width: 30px;
+	height: 30px;
+	font-size: 12px;
+}
+
+.btn-info.btn-circle:hover {
+	background-color: #f4f4f4;
+}
+
+.btn-circle i {
+	color: black;
+}
+
+/* Optional styling for the tooltip */
+.tooltip {
+	font-size: 14px;
+}
