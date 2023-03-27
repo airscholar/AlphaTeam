@@ -411,9 +411,14 @@ def plot_temporal(neworkGraphs, layout='map'):
     :return: filename
     :rtype: str
     """
+    if not neworkGraphs.is_temporal():
+        print(ValueError('Graph is not temporal. Please select a temporal graph.'))
+        return 'no_graph.html'
+
     if not neworkGraphs.is_spatial() and layout == 'map':
         print(ValueError('Graph is not spatial. Please select a spatial graph.'))
         return 'no_graph.html'
+
     filename = f"temporal_{layout}.html"
     filepath = get_file_path(neworkGraphs, filename)
 
