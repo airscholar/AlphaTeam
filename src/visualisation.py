@@ -203,9 +203,9 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
         return df, "no_graph.html"
 
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_centralities(networkGraphs, directed=directed, multi=multi, clean=False)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_metrics(networkGraphs, directed=directed, multi=multi, clean=False)
     else:
         print(ValueError('Please select a valid metric, either "centralities" or "nodes"'))
         df = m.return_nan(networkGraphs, 'Metrics')
@@ -411,9 +411,14 @@ def plot_temporal(neworkGraphs, layout='map'):
     :return: filename
     :rtype: str
     """
+    if not neworkGraphs.is_temporal():
+        print(ValueError('Graph is not temporal. Please select a temporal graph.'))
+        return 'no_graph.html'
+
     if not neworkGraphs.is_spatial() and layout == 'map':
         print(ValueError('Graph is not spatial. Please select a spatial graph.'))
         return 'no_graph.html'
+
     filename = f"temporal_{layout}.html"
     filepath = get_file_path(neworkGraphs, filename)
 
