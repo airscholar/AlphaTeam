@@ -18,7 +18,7 @@ from src.visualisation_src.utils_visualisation import *
 
 # ----------------------------------------------------------------------------------------
 
-@memoize
+
 def plot_network(networkGraphs, layout='map', dynamic=False):
     """
     :Function: Plot the NetworkX graph on as map
@@ -55,7 +55,6 @@ def plot_network(networkGraphs, layout='map', dynamic=False):
 
 # ----------------------------------------------------------------------------------------
 
-@memoize
 def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
     """
     :Function: Plot the cluster for the given graph
@@ -114,7 +113,6 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
 
 # ----------------------------------------------------------------------------------------
 
-@memoize
 def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False, layout='map'):
     """
     :Function: Plot the metric for the given graph
@@ -147,7 +145,7 @@ def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False
     :return: Dataframe with the metric and the filename of the plot
     :rtype: pd.DataFrame, str
     """
-    df = m.get_metrics(networkGraphs, metrics, clean=False, directed=directed, multi=multi)
+    df = m.get_metrics(networkGraphs, metrics, directed=directed, multi=multi)
 
     if df.empty or df.isnull().values.any() or not is_numeric_dtype(df[df.columns.values[1]]) or (
             not networkGraphs.is_spatial() and layout == 'map'):
@@ -166,12 +164,12 @@ def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False
         else:
             generate_static_metric(networkGraphs, df, filepath, layout_=layout)
 
-    return m.clean_df(df), filename
+    return df, filename
 
 
 # ----------------------------------------------------------------------------------------
 
-@memoize
+
 def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='map'):
     """
     :Function: Plot all the metrics for the given graph
@@ -203,9 +201,9 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
         return df, "no_graph.html"
 
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=directed, multi=multi, clean=False)
+        df = m.compute_node_centralities(networkGraphs, directed=directed, multi=multi)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=directed, multi=multi, clean=False)
+        df = m.compute_node_metrics(networkGraphs, directed=directed, multi=multi)
     else:
         print(ValueError('Please select a valid metric, either "centralities" or "nodes"'))
         df = m.return_nan(networkGraphs, 'Metrics')
@@ -250,11 +248,11 @@ def plot_histogram(networkGraphs, metrics, directed=True, multi=True):
     :rtype: pd.DataFrame, str
     """
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi)
     else:
-        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi, clean=False)
+        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi)
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Histogram.html"
     filepath = get_file_path(networkGraphs, filename)
@@ -321,11 +319,11 @@ def plot_boxplot(networkGraphs, metrics, directed=True, multi=True):
     :rtype: pd.DataFrame, str
     """
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi)
     else:
-        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi, clean=False)
+        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi)
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Boxplot.html"
     filepath = get_file_path(networkGraphs, filename)
@@ -366,11 +364,11 @@ def plot_violin(networkGraphs, metrics, directed=True, multi=True):
     :rtype: pd.DataFrame, str
     """
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi)
     else:
-        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi, clean=False)
+        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi)
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Violin.html"
     filepath = get_file_path(networkGraphs, filename)
