@@ -4,14 +4,15 @@ Date: March 2023
 Purpose: Visualisation for the NetworkX graphs
 """
 
-from pandas.api.types import is_numeric_dtype
 
 # ----------------------------------------------------------------------------------------
 import src.machineLearning as ml
 import src.metrics as m
 from src.visualisation_src.ML_visualisation import *
-from src.visualisation_src.basic_network_visualisation import *
 from src.visualisation_src.metrics_visualisation import *
+from src.visualisation_src.basic_network_visualisation import *
+from src.visualisation_src.temporal_visualisation import *
+from pandas.api.types import is_numeric_dtype
 from src.visualisation_src.utils_visualisation import *
 
 
