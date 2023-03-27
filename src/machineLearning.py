@@ -292,7 +292,7 @@ def get_communities(networkGraphs, method):
                                                   "'k_clique', 'spectral', 'kmeans' "
                                                   "'agglomerative', 'hierarchical', 'dbscan'"))
         df = m.return_nan(networkGraphs, 'Cluster')
-        return df, 'no_graph.html'
+        return df
 
     if method == 'louvain':
         return louvain_clustering(networkGraphs)
