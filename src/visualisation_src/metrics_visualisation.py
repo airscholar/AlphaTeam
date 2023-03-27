@@ -5,8 +5,6 @@ from tqdm import tqdm
 
 from src.visualisation_src.utils_visualisation import *
 
-
-
 # ----------------------------------------------------------------------------------------
 
 def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USING PLOTLY
@@ -214,7 +212,6 @@ def generate_boxplot_metric(df_, filename):
                       )
 
     fig.write_html(filename)
-    fig.show()
 
     return fig
 
@@ -245,7 +242,6 @@ def generate_violin_metric(df_, filename):
                       )
 
     fig.write_html(filename)
-    fig.show()
 
     return fig
 
@@ -270,6 +266,9 @@ def generate_heatmap(networkGraph, filename):
 
     fig = go.Figure(data=go.Heatmap(z=mat, x=ax, y=ax))
     fig.update_layout(title_text="Heatmap of connections between nodes")
+
+    fig.update_xaxes(showticklabels=False)
+    fig.update_yaxes(showticklabels=False)
 
     fig.write_html(filename)
     return fig

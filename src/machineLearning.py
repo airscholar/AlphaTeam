@@ -89,7 +89,6 @@ def louvain_clustering(networkGraphs):
     communities = list(nx_comm.louvain_communities(networkGraphs.Graph))
     colors = create_comm_colors(communities)
     df = create_comm_dataframe(communities, colors)
-
     return df
 
 
@@ -157,7 +156,7 @@ def k_clique_clustering(networkGraphs):
     :param networkGraphs: NetworkGraphs
     :return: dataframe
     """
-    communities = list(nx_comm.k_clique_communities(networkGraphs.Graph, 3))
+    communities = list(nx_comm.k_clique_communities(networkGraphs.Graph, 2))
     colors = create_comm_colors(communities)
     df = create_comm_dataframe(communities, colors)
     return df

@@ -39,14 +39,13 @@ def plot_network(networkGraphs, layout='map', dynamic=False):
         return 'no_graph.html'
 
     filename = f"{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    filepath = get_file_path(networkGraphs, filename)
     if dynamic:
-        filepath = filepath.replace(f"_{layout}", "")
+        filename = filename.replace(f"_{layout}", "")
+    filepath = get_file_path(networkGraphs, filename)
 
     if not os.path.isfile(filepath):
         if dynamic:
-            return 0
-            # dynamic_visualisation(networkGraphs, filepath)
+            dynamic_visualisation(networkGraphs, filepath)
         else:
             static_visualisation(networkGraphs, filepath, layout_=layout)
 
@@ -99,9 +98,9 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
 
     cluster = ml.get_communities(networkGraphs, clusterType)
     filename = f"{clusterType}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    filepath = get_file_path(networkGraphs, filename)
     if dynamic:
-        filepath = filepath.replace(f"_{layout}", "")
+        filename = filename.replace(f"_{layout}", "")
+    filepath = get_file_path(networkGraphs, filename)
 
     if not os.path.isfile(filepath):
         if dynamic:
@@ -109,7 +108,7 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
         else:
             generate_static_cluster(networkGraphs, cluster, filepath, layout_=layout)
 
-    return cluster, filename
+    return m.clean_df(cluster), filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -156,9 +155,9 @@ def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False
         return df, "no_graph.html"
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    filepath = get_file_path(networkGraphs, filename)
     if dynamic:
-        filepath = filepath.replace(f"_{layout}", "")
+        filename = filename.replace(f"_{layout}", "")
+    filepath = get_file_path(networkGraphs, filename)
 
     if not os.path.isfile(filepath):
         if dynamic:
@@ -166,7 +165,7 @@ def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False
         else:
             generate_static_metric(networkGraphs, df, filepath, layout_=layout)
 
-    return df, filename
+    return m.clean_df(df), filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -217,7 +216,7 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
     if not os.path.isfile(filepath):
         generate_static_all_metrics(networkGraphs, df, filepath, layout_=layout)
 
-    return df, filename
+    return m.clean_df(df), filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -261,7 +260,7 @@ def plot_histogram(networkGraphs, metrics, directed=True, multi=True):
     if not os.path.isfile(filepath):
         generate_histogram_metric(df, filepath)
 
-    return df, filename
+    return m.clean_df(df), filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -280,15 +279,15 @@ def plot_hotspot(networkGraphs):
         df = m.return_nan(networkGraphs, 'Cluster')
         return df, 'no_graph.html'
 
-    hotspot = ml.get_hotspot(networkGraphs)
+    df = ml.get_hotspot(networkGraphs)
 
     filename = f"Density_hotspot.html"
     filepath = get_file_path(networkGraphs, filename)
 
     if not os.path.isfile(filepath):
-        generate_hotspot(networkGraphs, hotspot, filepath)
+        generate_hotspot(networkGraphs, df, filepath)
 
-    return hotspot, filename
+    return m.clean_df(df), filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -333,7 +332,7 @@ def plot_boxplot(networkGraphs, metrics, directed=True, multi=True):
     if not os.path.isfile(filepath):
         generate_boxplot_metric(df, filepath)
 
-    return df, filename
+    return m.clean_df(df), filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -378,7 +377,7 @@ def plot_violin(networkGraphs, metrics, directed=True, multi=True):
     if not os.path.isfile(filepath):
         generate_violin_metric(df, filepath)
 
-    return df, filename
+    return m.clean_df(df), filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -397,5 +396,27 @@ def plot_heatmap(networkGraphs):
 
     if not os.path.isfile(filepath):
         generate_heatmap(networkGraphs, filepath)
+
+    return filename
+
+
+# ----------------------------------------------------------------------------------------
+
+def plot_temporal(neworkGraphs, layout='map'):
+    """
+    :Function: Plot the temporal graph for the given graph
+    :param neworkGraphs: NetworkGraphs object
+    :type neworkGraphs: NetworkGraphs
+    :return: filename
+    :rtype: str
+    """
+    if not neworkGraphs.is_spatial() and layout == 'map':
+        print(ValueError('Graph is not spatial. Please select a spatial graph.'))
+        return 'no_graph.html'
+    filename = f"temporal_{layout}.html"
+    filepath = get_file_path(neworkGraphs, filename)
+
+    if not os.path.isfile(filepath):
+        generate_temporal(neworkGraphs, filepath, layout_=layout)
 
     return filename

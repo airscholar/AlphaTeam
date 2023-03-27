@@ -16,7 +16,7 @@
                     <a class="nav-link {% if tab=='tab1' %}active{% else %}{% endif %}" data-toggle="tab"
                         href="#tab1">Network</a>
                 </li>
-                {% if tab_false=='false' %}
+                {% if show_temporal=='true' %}
                 <li class="nav-item">
                     <a class="nav-link {% if tab=='tab2' %}active{% else %}{% endif %}" data-toggle="tab"
                         href="#tab2">Temporal</a>
@@ -61,7 +61,7 @@
                         </div>
                     </div>
                 </div>
-                {% if tab_false=='false' %}
+                {% if show_temporal=='true' %}
                 <div id="tab2" class="container tab-pane {% if tab=='tab2' %}active{% else %}fade{% endif %}">
                     <br />
                     <div class="row">
@@ -75,13 +75,6 @@
                             <div class="card card-body" style="align-items: center;">
 
                                 <form method="post">
-
-                                    <div class="toggle-btn" style="margin:5px">
-                                        <input type="checkbox" id="dynamic-toggle2" name="dynamic_toggle2" {% if
-                                            dynamic_toggle2 %}checked{% endif %}>
-                                        <label for="dynamic-toggle2"></label>
-                                    </div>
-                                    <span>Dynamic</span>
 
                                     <div class="dropdown" style="margin:5px">
                                         <select id="dropdown-menu2" class="mx-auto" name="layout2">
