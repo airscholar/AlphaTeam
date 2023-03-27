@@ -98,3 +98,10 @@ function validateLayout() {
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 })
+
+$(document).ready(function () {
+    $('#mainform-accordian').submit(function () {
+        $('#accordion-button-two').click();
+        return false;
+    });
+});

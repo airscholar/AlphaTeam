@@ -88,3 +88,4 @@ setSpinnerVisibility(showSpinner);
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 })
+

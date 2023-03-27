@@ -497,3 +497,31 @@
 .tooltip {
     font-size: 14px;
 }
+
+.home-section {
+    position: relative;
+    /* Set position to relative for the parent container */
+}
+
+.sidebar.close~.home-section {
+    position: relative;
+}
+
+.home-section .home-content {
+    position: absolute;
+    /* Set position to absolute */
+    top: 0;
+    /* Position at the top of the parent container */
+    left: 0;
+    /* Position at the left of the parent container */
+    z-index: 1;
+    /* Set a higher z-index than the container div to make it appear on top */
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.styledh3 {
+    margin-left: 40px;
+    margin-top: 13px;
+}

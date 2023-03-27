@@ -232,20 +232,6 @@ def visualisation():
     dynamic_toggle=dynamic_toggle, layout=layout, graph1=graph_path1, 
     layout2=layout2, graph2=graph_path2)
 
-#-------------------------------------------EDGE--------------------------------------------
-
-@app.route('/edge_all', endpoint='edge_all', methods=['GET', 'POST'])
-def edge_all():
-    networkGraphs = session['network_graphs']
-
-    edge_allDF = cache.get('edge_allDF')
-    if edge_allDF is None:
-        edge_allDF = compute_load_centrality(networkGraphs, directed=False)
-        cache.set('edge_allDF', edge_allDF)
-    table_headers = list(edge_allDF.columns.values)
-    table_rows = edge_allDF.values.tolist()
-    return render_template('edge_all.html', example=edge_allDF)
-
 #-------------------------------------------HOTSPOT-----------------------------------------
 
 @app.route('/hotspot/density', endpoint='hotspot_density', methods=['GET', 'POST'])
