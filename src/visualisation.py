@@ -259,7 +259,7 @@ def plot_histogram(networkGraphs, metrics, directed=True, multi=True):
     if not os.path.isfile(filepath):
         generate_histogram_metric(df, filepath)
 
-    return m.clean_df(df), filename
+    return df, filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -331,7 +331,7 @@ def plot_boxplot(networkGraphs, metrics, directed=True, multi=True):
     if not os.path.isfile(filepath):
         generate_boxplot_metric(df, filepath)
 
-    return m.clean_df(df), filename
+    return df, filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -376,7 +376,7 @@ def plot_violin(networkGraphs, metrics, directed=True, multi=True):
     if not os.path.isfile(filepath):
         generate_violin_metric(df, filepath)
 
-    return m.clean_df(df), filename
+    return df, filename
 
 
 # ----------------------------------------------------------------------------------------
