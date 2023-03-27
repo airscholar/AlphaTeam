@@ -135,6 +135,7 @@ def upload():
         # (e.g., process the file data and store it in a database)
 
         filepath = destination_dir + '/' + filename
+        
         # Store the filename in a session variable
         session['filename'] = filename
         session['filename2'] = filename2
