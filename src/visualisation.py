@@ -203,9 +203,9 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
         return df, "no_graph.html"
 
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_centralities(networkGraphs, directed=directed, multi=multi, clean=False)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_metrics(networkGraphs, directed=directed, multi=multi, clean=False)
     else:
         print(ValueError('Please select a valid metric, either "centralities" or "nodes"'))
         df = m.return_nan(networkGraphs, 'Metrics')
