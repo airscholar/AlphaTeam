@@ -23,7 +23,7 @@ node_routes = Blueprint('node_routes', __name__)
 @node_routes.route('/node_all', endpoint='node_all', methods=['GET', 'POST'])
 def node_all():
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph('networkGraphs')
+    networkGraphs = get_networkGraph(filename2)
     
     metrics = 'nodes'
     multi_toggle = True
@@ -120,7 +120,7 @@ def node_all():
 @node_routes.route('/node/degree', endpoint='node_degree', methods=['GET', 'POST'])
 def node_degree():
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph('networkGraphs')
+    networkGraphs = get_networkGraph(filename2)
     metrics = 'degree'
     multi_toggle = True
     dynamic_toggle = False
@@ -222,7 +222,7 @@ def node_degree():
 @node_routes.route('/node/kcore', endpoint='node_kcore', methods=['GET', 'POST'])
 def node_kcore():
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph('networkGraphs')
+    networkGraphs = get_networkGraph(filename2)
     metrics = 'kcore'
     multi_toggle = True
     dynamic_toggle = False
@@ -324,7 +324,7 @@ def node_kcore():
 @node_routes.route('/node/triangle', endpoint='node_triangle', methods=['GET', 'POST'])
 def node_triangle():
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph('networkGraphs')
+    networkGraphs = get_networkGraph(filename2)
     metrics = 'triangles'
     multi_toggle = True
     dynamic_toggle = False
@@ -426,7 +426,7 @@ def node_triangle():
 @node_routes.route('/node/pagerank', endpoint='node_pagerank', methods=['GET', 'POST'])
 def node_pagerank():
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph('networkGraphs')
+    networkGraphs = get_networkGraph(filename2)
     metrics = 'pagerank'
     multi_toggle = True
     dynamic_toggle = False

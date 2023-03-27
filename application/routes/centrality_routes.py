@@ -26,7 +26,7 @@ centrality_routes = Blueprint('centrality_routes', __name__)
 @centrality_routes.route('/centrality', endpoint='centrality', methods=['GET', 'POST'])
 def centrality_all():
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph('networkGraphs')
+    networkGraphs = get_networkGraph(filename2)
     metrics = 'centralities'
     multi_toggle = True
     directed_toggle = False
@@ -125,7 +125,7 @@ def centrality_all():
 @centrality_routes.route('/centrality/degree', endpoint='degree', methods=['GET', 'POST'])
 def centrality_degree():
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph('networkGraphs')
+    networkGraphs = get_networkGraph(filename2)
     metrics = 'degree_centrality'
     multi_toggle = True
     dynamic_toggle = False
@@ -219,7 +219,7 @@ def centrality_degree():
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
     return render_template('centrality/centrality_degree.html', example=df, tab=tab, method_name='Degree Centrality',
-    description=description['degree_centrality'],
+    description = description['centrality_degree'], tooltip_multi= tooltips['multi'],
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
@@ -228,7 +228,7 @@ def centrality_degree():
 @centrality_routes.route('/centrality/eigenvector', endpoint='eigenvector', methods=['GET', 'POST'])
 def centrality_eigenvector():
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph('networkGraphs')
+    networkGraphs = get_networkGraph(filename2)
     metrics = 'eigenvector_centrality'
     multi_toggle = True
     dynamic_toggle = False
@@ -322,6 +322,7 @@ def centrality_eigenvector():
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
     return render_template('centrality/centrality_eigenvector.html', example=df, tab=tab, method_name='Eigenvector Centrality',
+    description = description['centrality_eigenvector'], tooltip_multi= tooltips['multi'],
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
@@ -330,7 +331,7 @@ def centrality_eigenvector():
 @centrality_routes.route('/centrality/closeness', endpoint='closeness', methods=['GET', 'POST'])
 def centrality_closeness():
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph('networkGraphs')
+    networkGraphs = get_networkGraph(filename2)
     metrics = 'closeness_centrality'
     multi_toggle = True
     dynamic_toggle = False
@@ -424,6 +425,7 @@ def centrality_closeness():
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
     return render_template('centrality/centrality_closeness.html', example=df, tab=tab, method_name='Closeness Centrality',
+    description = description['centrality_closeness'], tooltip_multi= tooltips['multi'],
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
@@ -432,7 +434,7 @@ def centrality_closeness():
 @centrality_routes.route('/centrality/betwenness', endpoint='betwenness', methods=['GET', 'POST'])
 def centrality_betwenness():
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph('networkGraphs')
+    networkGraphs = get_networkGraph(filename2)
     metrics = 'betweenness_centrality'
     multi_toggle = True
     dynamic_toggle = False
@@ -526,6 +528,7 @@ def centrality_betwenness():
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
     return render_template('centrality/centrality_betwenness.html', example=df, tab=tab, method_name='Betwenness Centrality',
+    description = description['centrality_betwenness'], tooltip_multi= tooltips['multi'],
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
@@ -534,7 +537,7 @@ def centrality_betwenness():
 @centrality_routes.route('/centrality/load', endpoint='load', methods=['GET', 'POST'])
 def centrality_load():
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph('networkGraphs')
+    networkGraphs = get_networkGraph(filename2)
     metrics = 'load_centrality'
     multi_toggle = True
     dynamic_toggle = False
@@ -628,6 +631,7 @@ def centrality_load():
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
     return render_template('centrality/centrality_load.html', example=df, tab=tab, method_name='Load Centrality',
+    description = description['centrality_load'], tooltip_multi= tooltips['multi'],
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,

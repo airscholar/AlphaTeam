@@ -142,7 +142,7 @@ def upload():
         session['option'] = option    
 
     networkGraphs = NetworkGraphs(filepath, session_folder='static/uploads/'+filename2, type=option)
-    set_networkGraph(networkGraphs, 'networkGraphs')
+    set_networkGraph(networkGraphs, filename2)
     # Redirect the user to the success page
     return redirect(url_for('home'))
 
@@ -153,7 +153,7 @@ def home():
     filename2 = session['filename2']
     filepath = session['filepath']
     option = session['option']
-    networkGraphs = get_networkGraph('networkGraphs')
+    networkGraphs = get_networkGraph(filename2)
 
     # Pass the data to the HTML template
     return render_template('home.html', data=networkGraphs.df.head(100))
@@ -161,7 +161,7 @@ def home():
 @app.route('/global-metrics', methods=['GET', 'POST'])
 def globalmetrics():
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph('networkGraphs')
+    networkGraphs = get_networkGraph(filename2)
     multi_toggle = False
     directed_toggle = False
     
@@ -180,7 +180,7 @@ def globalmetrics():
 def visualisation():
     filename = session['filename']
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph('networkGraphs')
+    networkGraphs = get_networkGraph(filename2)
     dynamic_toggle = False
     tab = 'tab1'
     if networkGraphs.is_spatial():
@@ -250,7 +250,7 @@ def edge_all():
 @app.route('/hotspot/density', endpoint='hotspot_density', methods=['GET', 'POST'])
 def hotspot_density():
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph('networkGraphs')
+    networkGraphs = get_networkGraph(filename2)
 
     df, graph_name1 = plot_hotspot(networkGraphs)
     session['graph_name1'] = graph_name1
