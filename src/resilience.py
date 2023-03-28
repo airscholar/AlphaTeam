@@ -12,6 +12,7 @@ import src.machineLearning as ml
 from src.NetworkGraphs import NetworkGraphs
 from src.metrics import *
 from src.preprocessing import convert_to_DiGraph
+from src.visualisation import plot_cluster
 
 # -------------------------------------- FUNCTIONS -------------------------------------------
 
@@ -83,9 +84,7 @@ def resilience(networkGraph, attack, **kwargs):
             if key not in ["cluster_algorithm", "total_clusters", "number_of_clusters"]:
                 print(f"Argument {key} not recognized")
                 return 0
-        cluster_algorithm = kwargs["cluster_algorithm"]
-        total_clusters = kwargs["total_clusters"]
-        number_of_clusters = kwargs["number_of_clusters"]
+
         return resilience_cluster(networkGraph, **kwargs)
 
     else:
@@ -209,14 +208,13 @@ def resilience_cluster(networkGraph, cluster_algorithm=None, total_clusters=0, n
 
     clusters = ml.get_communities(G, cluster_algorithm, total_clusters)
 
-    if number_of_clusters > 0:
-        cluster_ids = clusters['Cluster_id'].unique()
-        cluster_ids = random.sample(sorted(cluster_ids), number_of_clusters)
-        clusters_to_remove = clusters[clusters['Cluster_id'].isin(cluster_ids)]
-        nodes_to_remove = []
-        for cluster in clusters_to_remove.iterrows():
-            nodes_to_remove.append(cluster[1]['Node'])
-        networkGraph = remove_nodes(G, nodes_to_remove)
+    cluster_ids = clusters['Cluster_id'].unique()
+    cluster_ids = random.sample(sorted(cluster_ids), number_of_clusters)
+    clusters_to_remove = clusters[clusters['Cluster_id'].isin(cluster_ids)]
+    nodes_to_remove = []
+    for cluster in clusters_to_remove.iterrows():
+        nodes_to_remove.append(cluster[1]['Node'])
+    networkGraph = remove_nodes(G, nodes_to_remove)
 
     return networkGraph
 

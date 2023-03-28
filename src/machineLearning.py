@@ -213,7 +213,6 @@ def clustering_response(networkGraph, clustering_alg, optimal_k):
     """
     clusters = clustering_alg.labels_
     df = pd.DataFrame()
-    print('Number of communities detected: ', optimal_k)
     colors = create_comm_colors(list(range(optimal_k)))
     for i, node in enumerate(networkGraph.nodes()):
         df = pd.concat([df, pd.DataFrame({'Node': node,
