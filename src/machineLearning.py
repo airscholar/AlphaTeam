@@ -88,7 +88,11 @@ def louvain_clustering(networkGraphs, noOfClusters=0):
     :param noOfClusters: maximum number of communities
     :return: dataframe
     """
-    communities = list(nx_comm.louvain_communities(networkGraphs.Graph))
+    if noOfClusters > 0:
+        communities = binary_search('louvain_communities',networkGraphs, noOfClusters)
+    else:
+        communities = list(nx_comm.louvain_communities(networkGraphs.Graph))
+
     colors = create_comm_colors(communities)
     df = create_comm_dataframe(communities, colors)
     return df
@@ -96,14 +100,17 @@ def louvain_clustering(networkGraphs, noOfClusters=0):
 
 # ----------------------------------------------------------------------------------------
 
-def greedy_modularity_clustering(networkGraphs):
+def greedy_modularity_clustering(networkGraphs, noOfClusters=0):
     """
     Detect communities based on greedy modularity.
     :param networkGraphs: NetworkGraphs
     :return: dataframe
     """
-    communities = list(
-        nx_comm.greedy_modularity_communities(networkGraphs.Graph))
+    if noOfClusters > 0:
+        communities = binary_search('greedy_modularity_communities',networkGraphs, noOfClusters)
+    else:
+        communities = list(nx_comm.greedy_modularity_communities(networkGraphs.Graph))
+
     colors = create_comm_colors(communities)
     df = create_comm_dataframe(communities, colors)
     return df
@@ -361,3 +368,37 @@ def get_hotspot(networkGraphs):
     df = pd.DataFrame(data)
 
     return df
+
+
+def binary_search(func, networkGraphs, noOfClusters=0):
+    lower_bound, upper_bound = 0, None
+    step = 0.1
+    tolerance = 0.0001
+    function = getattr(nx_comm, func)
+    # Perform binary search for optimal resolution parameter
+    for i in range(500):
+        if upper_bound is None:
+            resolution = lower_bound + step
+        else:
+            resolution = (lower_bound + upper_bound) / 2
+
+        communities = list(function(networkGraphs.Graph, resolution=resolution))
+        num_communities = len(communities)
+        print('iter %d: num_clusters=%d, resolution=%.4f' % (i, num_communities, resolution))
+
+        # Check convergence criterion
+        if i > 0 and abs(resolution - prev_resolution) < tolerance:
+            break
+
+        # Update bounds based on number of communities
+        if num_communities < noOfClusters:
+            if upper_bound is not None:
+                step /= 2
+            lower_bound = resolution
+        elif num_communities > noOfClusters:
+            upper_bound = resolution
+        else:
+            break
+        prev_resolution = resolution
+
+    return communities
