@@ -260,6 +260,52 @@ class NetworkGraphs:
         else:
             raise ValueError("The graph is not weighted")
 
+    def update_attributes(self):
+        """
+        :Function: Update the attributes of the graph
+        :return: None
+        """
+        if self.colors is not None:
+            self.colors = {'MultiDiGraph': nx.get_edge_attributes(self.MultiDiGraph, 'color').values(),
+                           'MultiGraph': nx.get_edge_attributes(self.MultiGraph, 'color').values(),
+                           'DiGraph': nx.get_edge_attributes(self.DiGraph, 'color').values(),
+                           'Graph': nx.get_edge_attributes(self.Graph, 'color').values()}
+
+        if self.is_weighted():
+            self.weights = {'Graph': list(nx.get_edge_attributes(self.Graph, 'weight').values()),
+                            'MultiGraph': list(nx.get_edge_attributes(self.MultiGraph, 'weight').values()),
+                            'DiGraph': list(nx.get_edge_attributes(self.DiGraph, 'weight').values()),
+                            'MultiDiGraph': list(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())}
+            self.min_weight = {'Graph': min(nx.get_edge_attributes(self.Graph, 'weight').values()),
+                               'MultiGraph': min(nx.get_edge_attributes(self.MultiGraph, 'weight').values()),
+                               'DiGraph': min(nx.get_edge_attributes(self.DiGraph, 'weight').values()),
+                               'MultiDiGraph': min(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())}
+
+            self.max_weight = {'Graph': max(nx.get_edge_attributes(self.Graph, 'weight').values()),
+                               'MultiGraph': max(nx.get_edge_attributes(self.MultiGraph, 'weight').values()),
+                               'DiGraph': max(nx.get_edge_attributes(self.DiGraph, 'weight').values()),
+                               'MultiDiGraph': max(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())}
+
+            self.standardize_weights()
+
+        self.pos = {}
+        self.pos['twopi'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='twopi')
+        self.pos['sfdp'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='sfdp')
+
+        if self.is_spatial():
+            self.pos['map'] = nx.get_node_attributes(self.Graph, 'pos')
+            location = self.pos['map'].values()
+            self.set_min_long(min(location, key=lambda x: x[0])[0] - 0.5)
+            self.set_min_lat(min(location, key=lambda x: x[1])[1] - 0.5)
+            self.set_max_long(max(location, key=lambda x: x[0])[0] + 0.5)
+            self.set_max_lat(max(location, key=lambda x: x[1])[1] + 0.5)
+            self.set_mid_long()
+            self.set_mid_lat()
+
+        if self.is_temporal():
+            self.start = min(nx.get_edge_attributes(self.MultiDiGraph, 'start').values())
+            self.end = max(nx.get_edge_attributes(self.MultiDiGraph, 'end').values())
+
     # ------------------------------------------------------------------------------------------------------------------
     # ---------------------------------------------- METHODS -----------------------------------------------------------
     # ------------------------------------------------------------------------------------------------------------------

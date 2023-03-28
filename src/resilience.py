@@ -7,9 +7,12 @@ Purpose: Resilience of the network
 # -------------------------------------- IMPORT ---------------------------------------------
 
 from src.NetworkGraphs import NetworkGraphs
+from src.preprocessing import convert_to_DiGraph
+import random
 
 # -------------------------------------- FUNCTIONS -------------------------------------------
 
+idx = {}
 
 def resilience(networkGraph, attack, **kwargs):
     """
@@ -88,7 +91,19 @@ def resilience_random(networkGraph, number_of_nodes, number_of_edges):
     :return: NetworkGraph with the nodes removed
     :rtype: NetworkGraph
     """
-    return 0
+    G = copy_networkGraph(networkGraph)
+
+    if number_of_nodes > 0:
+        nodes = G.MultiDiGraph.nodes()
+        nodes_to_remove = random.sample(nodes, number_of_nodes)
+        G = remove_nodes(G, nodes_to_remove)
+
+    if number_of_edges > 0:
+        edges = G.MultiDiGraph.edges()
+        edges_to_remove = random.sample(sorted(edges), number_of_edges)
+        G = remove_edges(G, edges_to_remove)
+
+    return G
 
 
 # ------------------------------------------------------------------------------------------
@@ -137,12 +152,17 @@ def resilience_cluster(networkGraph, cluster_algorithm, total_clusters, number_o
 def copy_networkGraph(networkGraph):
     """
     :Function: Copy the networkGraph object
-    :param neworkGraph: NetworkGraph
-    :type neworkGraph: NetworkGraph
+    :param networkGraph: NetworkGraph
+    :type networkGraph: NetworkGraph
     :return: Copy of the networkGraph
     :rtype: NetworkGraph
     """
-    return 0
+    if networkGraph.session_folder not in idx.keys():
+        idx[networkGraph.session_folder] = 0
+    else:
+        idx[networkGraph.session_folder]=idx[networkGraph.session_folder]+1
+    session_folder = f'{networkGraph.session_folder}/resilience{idx[networkGraph.session_folder]}'
+    return NetworkGraphs(networkGraph.filename, type=networkGraph.type, session_folder=session_folder)
 
 
 # ------------------------------------------------------------------------------------------
@@ -158,7 +178,13 @@ def remove_nodes(networkGraph, nodes):
     :return: NetworkGraph with the nodes removed
     :rtype: NetworkGraph
     """
-    return 0
+    for node in nodes:
+        networkGraph.MultiDiGraph.remove_node(node)
+
+    networkGraph.DiGraph = convert_to_DiGraph(networkGraph.MultiDiGraph)
+    networkGraph.Graph, networkGraph.MultiGraph = networkGraph.DiGraph.to_undirected(), networkGraph.MultiDiGraph.to_undirected()
+    networkGraph.update_attributes()
+    return networkGraph
 
 
 # ------------------------------------------------------------------------------------------
@@ -174,6 +200,10 @@ def remove_edges(networkGraph, edges):
     :return: NetworkGraph with the edges removed
     :rtype: NetworkGraph
     """
-    return 0
+    for edge in edges:
+        networkGraph.MultiDiGraph.remove_edge(edge[0], edge[1])
 
-# ------------------------------------------------------------------------------------------
+    networkGraph.DiGraph = convert_to_DiGraph(networkGraph.MultiDiGraph)
+    networkGraph.Graph, networkGraph.MultiGraph = networkGraph.DiGraph.to_undirected(), networkGraph.MultiDiGraph.to_undirected()
+    networkGraph.update_attributes()
+    return networkGraph
