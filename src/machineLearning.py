@@ -196,6 +196,10 @@ def compute_clustering(networkGraph, max_range=30):
 
     adj_mat = nx.to_numpy_array(networkGraph)
 
+    if max_range >= len(networkGraph.nodes()):
+        print('overriding max range', len(networkGraph.nodes())-1)
+        max_range = len(networkGraph.nodes())-1
+
     # get optimal number of clusters
     wcss = []
     for i in range(1, max_range):
