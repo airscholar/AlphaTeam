@@ -10,15 +10,13 @@ import random
 
 import src.machineLearning as ml
 from src.NetworkGraphs import NetworkGraphs
-<<<<<<< Updated upstream
-=======
 from src.preprocessing import convert_to_DiGraph
 from src.visualisation import plot_cluster
->>>>>>> Stashed changes
 
 # -------------------------------------- FUNCTIONS -------------------------------------------
 
 
+idx = {}
 
 def resilience(networkGraph, attack, **kwargs):
     """
@@ -48,7 +46,38 @@ def resilience(networkGraph, attack, **kwargs):
     :return: NetworkGraph with the nodes removed
     :rtype: NetworkGraph
     """
-    return 0
+    if attack == "random":
+        for key in kwargs.keys():
+            if key not in ["number_of_nodes", "number_of_edges"]:
+                print(f"Argument {key} not recognized")
+                return 0
+        nrb_nodes = kwargs["number_of_nodes"] if "number_of_nodes" in kwargs.keys() else 0
+        nrb_edges = kwargs["number_of_edges"] if "number_of_edges" in kwargs.keys() else 0
+        return resilience_random(networkGraph, nrb_nodes, nrb_edges)
+
+    elif attack == "malicious":
+        for key in kwargs.keys():
+            if key not in ["metric", "number_of_nodes", "threshold"]:
+                print(f"Argument {key} not recognized")
+                return 0
+        metric = kwargs["metric"]
+        nrb_nodes = kwargs["number_of_nodes"] if "number_of_nodes" in kwargs.keys() else 0
+        threshold = kwargs["threshold"] if "threshold" in kwargs.keys() else 0
+        return resilience_malicious(networkGraph, metric, nrb_nodes, threshold)
+
+    elif attack == "cluster":
+        for key in kwargs.keys():
+            if key not in ["cluster_algorithm", "total_clusters", "number_of_clusters"]:
+                print(f"Argument {key} not recognized")
+                return 0
+        cluster_algorithm = kwargs["cluster_algorithm"]
+        total_clusters = kwargs["total_clusters"]
+        number_of_clusters = kwargs["number_of_clusters"]
+        return resilience_cluster(networkGraph, cluster_algorithm, total_clusters, number_of_clusters)
+
+    else:
+        print("Attack not recognized")
+        return 0
 
 
 # ------------------------------------------------------------------------------------------
@@ -66,7 +95,19 @@ def resilience_random(networkGraph, number_of_nodes, number_of_edges):
     :return: NetworkGraph with the nodes removed
     :rtype: NetworkGraph
     """
-    return 0
+    G = copy_networkGraph(networkGraph)
+
+    if number_of_nodes > 0:
+        nodes = G.MultiDiGraph.nodes()
+        nodes_to_remove = random.sample(nodes, number_of_nodes)
+        G = remove_nodes(G, nodes_to_remove)
+
+    if number_of_edges > 0:
+        edges = G.MultiDiGraph.edges()
+        edges_to_remove = random.sample(sorted(edges), number_of_edges)
+        G = remove_edges(G, edges_to_remove)
+
+    return G
 
 
 # ------------------------------------------------------------------------------------------
@@ -143,21 +184,12 @@ def resilience_cluster(networkGraph, cluster_algorithm, total_clusters, number_o
 def copy_networkGraph(networkGraph):
     """
     :Function: Copy the networkGraph object
-    :param neworkGraph: NetworkGraph
-    :type neworkGraph: NetworkGraph
+    :param networkGraph: NetworkGraph
+    :type networkGraph: NetworkGraph
     :return: Copy of the networkGraph
     :rtype: NetworkGraph
     """
-<<<<<<< Updated upstream
     return 0
-=======
-    if networkGraph.session_folder not in idx.keys():
-        idx[networkGraph.session_folder] = 0
-    else:
-        idx[networkGraph.session_folder] = idx[networkGraph.session_folder] + 1
-    session_folder = f'{networkGraph.session_folder}/resilience{idx[networkGraph.session_folder]}'
-    return NetworkGraphs(networkGraph.filename, type=networkGraph.type, session_folder=session_folder)
->>>>>>> Stashed changes
 
 
 # ------------------------------------------------------------------------------------------
@@ -173,7 +205,13 @@ def remove_nodes(networkGraph, nodes):
     :return: NetworkGraph with the nodes removed
     :rtype: NetworkGraph
     """
-    return 0
+    for node in nodes:
+        networkGraph.MultiDiGraph.remove_node(node)
+
+    networkGraph.DiGraph = convert_to_DiGraph(networkGraph.MultiDiGraph)
+    networkGraph.Graph, networkGraph.MultiGraph = networkGraph.DiGraph.to_undirected(), networkGraph.MultiDiGraph.to_undirected()
+    networkGraph.update_attributes()
+    return networkGraph
 
 
 # ------------------------------------------------------------------------------------------
@@ -189,6 +227,10 @@ def remove_edges(networkGraph, edges):
     :return: NetworkGraph with the edges removed
     :rtype: NetworkGraph
     """
-    return 0
+    for edge in edges:
+        networkGraph.MultiDiGraph.remove_edge(edge[0], edge[1])
 
-# ------------------------------------------------------------------------------------------
+    networkGraph.DiGraph = convert_to_DiGraph(networkGraph.MultiDiGraph)
+    networkGraph.Graph, networkGraph.MultiGraph = networkGraph.DiGraph.to_undirected(), networkGraph.MultiDiGraph.to_undirected()
+    networkGraph.update_attributes()
+    return networkGraph

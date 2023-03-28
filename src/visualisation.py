@@ -93,8 +93,8 @@ def plot_cluster(networkGraphs, clusterType, noOfClusters=0, dynamic=False, layo
         print(ValueError("Cluster type is not valid"))
         df = m.return_nan(networkGraphs, 'Cluster')
         return df, 'no_graph.html'
-    if not networkGraphs.is_spatial() and layout == 'map':
-        print(ValueError("Graph is not spatial with coordinates"))
+    if not (networkGraphs.is_spatial() and layout == 'map') or noOfClusters >= len(networkGraphs.Graph.nodes)//2:
+        print(ValueError("Graph is not spatial with coordinates, or max number of clusters is reached"))
         df = m.return_nan(networkGraphs, 'Cluster')
         return df, 'no_graph.html'
 
