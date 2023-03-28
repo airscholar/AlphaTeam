@@ -104,11 +104,11 @@ def plot_cluster(networkGraphs, clusterType, noOfClusters=0, dynamic=False, layo
         filename = filename.replace(f"_{layout}", "")
     filepath = get_file_path(networkGraphs, filename)
 
-    if not os.path.isfile(filepath):
+    if not os.path.isfile(filepath) or noOfClusters > 0:
         if dynamic:
             generate_dynamic_cluster(networkGraphs, cluster, filepath)
         else:
-            generate_static_cluster(networkGraphs, cluster, filepath, layout_=layout)
+            generate_static_cluster(networkGraphs, cluster, filepath, clusterType, layout_=layout, nbr=noOfClusters)
 
     return cluster, filename
 
