@@ -5,7 +5,6 @@ Purpose: Machine Learning for the NetworkX graphs
 """
 
 import warnings
-
 import networkx as nx
 import networkx.algorithms.community as nx_comm
 import numpy as np
@@ -13,8 +12,7 @@ import pandas as pd
 from distinctipy import distinctipy
 from kneed import KneeLocator
 from sklearn.cluster import SpectralClustering, KMeans, AgglomerativeClustering, DBSCAN
-
-import src.metrics as m
+import src.utils as utils
 
 warnings.filterwarnings("ignore")
 
@@ -315,7 +313,7 @@ def get_communities(networkGraphs, method, noOfClusters=0):
                                                  "'label_propagation', 'asyn_lpa',"
                                                  "'k_clique', 'spectral', 'kmeans' "
                                                  "'agglomerative', 'hierarchical', 'dbscan'"))
-        df = m.return_nan(networkGraphs, 'Cluster')
+        df = utils.return_nan(networkGraphs, 'Cluster')
         return df
 
     if method == 'louvain':

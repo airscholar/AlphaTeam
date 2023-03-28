@@ -6,13 +6,11 @@ Purpose: Resilience of the network
 
 # -------------------------------------- IMPORT ---------------------------------------------
 
-import random
-
 import src.machineLearning as ml
 from src.NetworkGraphs import NetworkGraphs
-from src.metrics import *
 from src.preprocessing import convert_to_DiGraph
-from src.visualisation import plot_cluster
+from src.metrics import *
+import random
 
 # -------------------------------------- FUNCTIONS -------------------------------------------
 
@@ -67,8 +65,7 @@ def resilience(networkGraph, attack, **kwargs):
     if attack == "random":
         for key in kwargs.keys():
             if key not in ["number_of_nodes", "number_of_edges"]:
-                print(f"Argument {key} not recognized")
-                return 0
+                raise ValueError(f"Argument {key} not recognized")
         return resilience_random(networkGraph, **kwargs)
 
     elif attack == "malicious":
@@ -84,7 +81,8 @@ def resilience(networkGraph, attack, **kwargs):
             if key not in ["cluster_algorithm", "total_clusters", "number_of_clusters"]:
                 print(f"Argument {key} not recognized")
                 return 0
-
+        if "cluster_algorithm" not in kwargs.keys():
+            raise ValueError("Cluster algorithm not specified")
         return resilience_cluster(networkGraph, **kwargs)
 
     else:
@@ -139,6 +137,11 @@ def resilience_malicious(networkGraph, metric=None, number_of_nodes=None, thresh
         - 'eigenvector_centrality'
         - 'load_centrality'
         - 'degree_centrality'
+    operators:
+        - ">" (default)
+        - "<"
+        - ">="
+        - "<="
     :param networkGraph: NetworkGraph
     :type networkGraph: NetworkGraph
     :param metric: Metric to be used to select the nodes to be removed
