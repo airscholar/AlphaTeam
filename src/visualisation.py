@@ -110,7 +110,7 @@ def plot_cluster(networkGraphs, clusterType, noOfClusters=0, dynamic=False, layo
         else:
             generate_static_cluster(networkGraphs, cluster, filepath, layout_=layout)
 
-    return m.clean_df(cluster), filename
+    return cluster, filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -217,7 +217,7 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
     if not os.path.isfile(filepath):
         generate_static_all_metrics(networkGraphs, df, filepath, layout_=layout)
 
-    return m.clean_df(df), filename
+    return df, filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -288,7 +288,7 @@ def plot_hotspot(networkGraphs):
     if not os.path.isfile(filepath):
         generate_hotspot(networkGraphs, df, filepath)
 
-    return m.clean_df(df), filename
+    return df, filename
 
 
 # ----------------------------------------------------------------------------------------
