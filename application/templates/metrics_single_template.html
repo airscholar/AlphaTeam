@@ -8,36 +8,40 @@
     </div>
     <div class="row">
         <div class="container mt-3">
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link {% if tab=='tab1' %}active{% else %}{% endif %}" data-toggle="tab"
-                        href="#tab1">Layout <span style="display: inline-block; margin-left: 5px;"><img
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <!-- Layout Tab UL -->
+                    <button class="nav-link {% if tab=='tab1' %} active {% else %}{% endif %}" id="nav-layout-tab"
+                        data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab" aria-controls="nav-layout"
+                        aria-selected="true">Layout <span style="display: inline-block; margin-left: 5px;"><img
                                 src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
                                 alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
-                                data-placement="bottom" title="{{tooltip_layut_tab}}"></span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if tab=='tab2' %}active{% else %}{% endif %}" data-toggle="tab"
-                        href="#tab2">Histogram<span style="display: inline-block; margin-left: 5px;"><img
+                                data-placement="bottom" title="{{tooltip_layout_tab}}"></span></button>
+                    <!-- Histogram Tab UL -->
+                    <button class="nav-link {% if tab=='tab2' %} active {% else %}{% endif %}" id="nav-histogram-tab"
+                        data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab"
+                        aria-controls="nav-histogram" aria-selected="true">Histogram <span
+                            style="display: inline-block; margin-left: 5px;"><img
                                 src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
                                 alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
-                                data-placement="bottom" title="{{tooltip_histogram_tab}}"></span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if tab=='tab3' %}active{% else %}{% endif %}" data-toggle="tab"
-                        href="#tab3">Boxplot<span style="display: inline-block; margin-left: 5px;"><img
+                                data-placement="bottom" title="{{tooltip_histogram_tab}}"></span></button>
+                    <!-- Boxplot Tab UL -->
+                    <button class="nav-link {% if tab=='tab3' %} active {% else %}{% endif %}" id="nav-boxplot-tab"
+                        data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab" aria-controls="nav-boxplot"
+                        aria-selected="true">Boxplot <span style="display: inline-block; margin-left: 5px;"><img
                                 src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
                                 alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
-                                data-placement="bottom" title="{{tooltip_boxplot_tab}}"></span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if tab=='tab4' %}active{% else %}{% endif %}" data-toggle="tab"
-                        href="#tab4">Violinplot<span style="display: inline-block; margin-left: 5px;"><img
+                                data-placement="bottom" title="{{tooltip_boxplot_tab}}"></span></button>
+                    <!-- Violinplot Tab UL -->
+                    <button class="nav-link {% if tab=='tab4' %} active {% else %}{% endif %}" id="nav-violinplot-tab"
+                        data-bs-toggle="tab" data-bs-target="#tab4" type="button" role="tab"
+                        aria-controls="nav-violinplot" aria-selected="true">Violinplot <span
+                            style="display: inline-block; margin-left: 5px;"><img
                                 src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
                                 alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
-                                data-placement="bottom" title="{{tooltip_violinplot_tab}}"></span></a>
-                </li>
-            </ul>
+                                data-placement="bottom" title="{{tooltip_violinplot_tab}}"></span></button>
+                </div>
+            </nav>
 
             <div class="tab-content" style="background-color: white; padding-bottom: 25px;">
                 <div id="tab1" class="container tab-pane {% if tab=='tab1' %}active{% else %}fade{% endif %}">

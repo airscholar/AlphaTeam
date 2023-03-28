@@ -43,10 +43,13 @@ def clustering_louvanian():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
  
@@ -79,10 +82,13 @@ def clustering_greedy_modularity():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
  
@@ -115,10 +121,13 @@ def clustering_label_propagation():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
  
@@ -151,10 +160,13 @@ def clustering_asyn_lpa():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
  
@@ -187,10 +199,13 @@ def clustering_k_clique():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
  
@@ -223,10 +238,13 @@ def clustering_spectral():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
  
@@ -259,10 +277,13 @@ def clustering_kmeans():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
  
@@ -295,13 +316,16 @@ def clustering_agglomerative():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
- 
+  
     if graph1 == 'no_graph.html':
         graph_path1 = '../static/' + graph1
     else:
@@ -331,10 +355,13 @@ def clustering_dbscan():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
  

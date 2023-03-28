@@ -112,7 +112,7 @@ def node_all():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('node_all.html', example=df, tab=tab, method_name='All Nodes',
+    return render_template('nodes/node_all.html', example=df, tab=tab, method_name='All Nodes',
      description = description['node_all'],
     multi_toggle=multi_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
@@ -215,7 +215,7 @@ def node_degree():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('node_degree.html', example=df, tab=tab, method_name='Node Degree',
+    return render_template('nodes/node_degree.html', example=df, tab=tab, method_name='Node Degree',
     description = description['node_degree'],
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
@@ -318,7 +318,7 @@ def node_kcore():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('node_kcore.html', example=df, tab=tab, method_name='Node K Core',
+    return render_template('nodes/node_kcore.html', example=df, tab=tab, method_name='Node K Core',
         description = description['node_kcore'],
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
@@ -421,7 +421,7 @@ def node_triangle():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('node_triangle.html', example=df, tab=tab, method_name='Node Triangle',
+    return render_template('nodes/node_triangle.html', example=df, tab=tab, method_name='Node Triangle',
         description = description['node_triangle'],
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
@@ -524,7 +524,7 @@ def node_pagerank():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('node_pagerank.html', example=df, tab=tab, method_name='Node Page Rank',
+    return render_template('nodes/node_pagerank.html', example=df, tab=tab, method_name='Node Page Rank',
         description = description['node_pagerank'],
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,

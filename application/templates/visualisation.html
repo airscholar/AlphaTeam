@@ -11,18 +11,29 @@
     </div>
     <div class="row">
         <div class="container mt-3">
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link {% if tab=='tab1' %}active{% else %}{% endif %}" data-toggle="tab"
-                        href="#tab1">Network</a>
-                </li>
-                {% if show_temporal=='true' %}
-                <li class="nav-item">
-                    <a class="nav-link {% if tab=='tab2' %}active{% else %}{% endif %}" data-toggle="tab"
-                        href="#tab2">Temporal</a>
-                </li>
-                {% endif %}
-            </ul>
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <!-- Network Tab UL -->
+                    <button class="nav-link {% if tab=='tab1' %} active {% else %}{% endif %}" id="nav-network-tab"
+                        data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab" aria-controls="nav-network"
+                        aria-selected="true">Network <span style="display: inline-block; margin-left: 5px;"><img
+                                src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                data-placement="bottom" title="{{tooltip_network_tab}}"></span></button>
+                    <!-- Temporal Tab UL -->
+                    {% if show_temporal=='true' %}
+                    <button class="nav-link {% if tab=='tab2' %} active {% else %}{% endif %}" id="nav-temporal-tab"
+                        data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab"
+                        aria-controls="nav-temporal" aria-selected="true">Temporal <span
+                            style="display: inline-block; margin-left: 5px;"><img
+                                src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                data-placement="bottom" title="{{tooltip_temporal_tab}}"></span></button>
+                    {% endif %}
+
+                </div>
+            </nav>
+
 
             <div class="tab-content" style="background-color: white; padding-bottom: 25px;">
                 <div id="tab1" class="container tab-pane {% if tab=='tab1' %}active{% else %}fade{% endif %}">
