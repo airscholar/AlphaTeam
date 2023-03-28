@@ -384,7 +384,6 @@ def binary_search(func, networkGraphs, noOfClusters=0):
 
         communities = list(function(networkGraphs.Graph, resolution=resolution))
         num_communities = len(communities)
-        print('iter %d: num_clusters=%d, resolution=%.4f' % (i, num_communities, resolution))
 
         # Check convergence criterion
         if i > 0 and abs(resolution - prev_resolution) < tolerance:
