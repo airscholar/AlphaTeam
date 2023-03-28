@@ -55,7 +55,7 @@ def plot_network(networkGraphs, layout='map', dynamic=False):
 
 # ----------------------------------------------------------------------------------------
 
-def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
+def plot_cluster(networkGraphs, clusterType, noOfClusters=0, dynamic=False, layout='map'):
     """
     :Function: Plot the cluster for the given graph
     Clusters:
@@ -78,6 +78,8 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
     :type networkGraphs: NetworkGraphs
     :param clusterType: Type of cluster
     :type clusterType: str
+    :param noOfClusters: Size of the cluster
+    :type noOfClusters: int
     :param dynamic: Boolean to indicate if the plot is dynamic or not
     :type dynamic: bool
     :param layout: Layout of the plot
@@ -96,7 +98,7 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
         df = m.return_nan(networkGraphs, 'Cluster')
         return df, 'no_graph.html'
 
-    cluster = ml.get_communities(networkGraphs, clusterType)
+    cluster = ml.get_communities(networkGraphs, clusterType, noOfClusters)
     filename = f"{clusterType}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
     if dynamic:
         filename = filename.replace(f"_{layout}", "")
