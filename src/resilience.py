@@ -79,10 +79,10 @@ def resilience(networkGraph, attack, **kwargs):
             if key not in ["cluster_algorithm", "total_clusters", "number_of_clusters"]:
                 print(f"Argument {key} not recognized")
                 return 0
-        cluster_algorithm = kwargs["cluster_algorithm"]
-        total_clusters = kwargs["total_clusters"]
-        number_of_clusters = kwargs["number_of_clusters"]
-        return resilience_cluster(networkGraph, cluster_algorithm, total_clusters, number_of_clusters,)
+        if "cluster_algorithm" not in kwargs.keys():
+            print("Cluster algorithm not specified")
+            return 0
+        return resilience_cluster(networkGraph, **kwargs)
 
     else:
         print("Attack not recognized")
@@ -171,7 +171,7 @@ def resilience_malicious(networkGraph, metric=None, number_of_nodes=None, thresh
 # ------------------------------------------------------------------------------------------
 
 
-def resilience_cluster(networkGraph, cluster_algorithm, total_clusters, number_of_clusters):
+def resilience_cluster(networkGraph, cluster_algorithm=None, total_clusters=0, number_of_clusters=0):
     """
     :Function: Compute the resilience of the networkGraph using the cluster attack
     :param networkGraph: NetworkGraph
