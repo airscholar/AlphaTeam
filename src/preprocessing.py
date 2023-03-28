@@ -273,6 +273,17 @@ def preprocess_mtx(filename_: str):
     mtx = sio.mmread(filename_)
 
     MultiDiGraph = nx.MultiDiGraph(mtx)
+
+    # convert node labels to strings to avoid errors when using pyvis from_nx() function
+    temp = {}
+    for node in MultiDiGraph.nodes():
+        temp[node] = str(node)
+    MultiDiGraph = nx.relabel_nodes(MultiDiGraph, temp)
+    temp = {}
+    for edge in MultiDiGraph.edges():
+        temp[edge] = str(edge)
+    MultiDiGraph = nx.relabel_nodes(MultiDiGraph, temp)
+
     DiGraph = convert_to_DiGraph(MultiDiGraph)
 
     MultiDiGraph.remove_edges_from(nx.selfloop_edges(MultiDiGraph))
@@ -306,6 +317,10 @@ def preprocess_custom(filename_: str):
     df = pd.read_csv(filename_)
     df.sort_values(by=['from', 'to'], inplace=True)
     MultiDiGraph = nx.MultiDiGraph()
+
+    # Convert labels to string to avoid errors when using pyvis from_nx() function
+    df['from'] = df['from'].astype(str)
+    df['to'] = df['to'].astype(str)
 
     if not 'from' in df.columns and not 'to' in df.columns:
         print('No "from" and "to" columns in the dataset')

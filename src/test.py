@@ -2,14 +2,20 @@
 
 from src.NetworkGraphs import NetworkGraphs
 from src.visualisation import *
+from src.machineLearning import *
 
-networkGraph = NetworkGraphs('../datasets/Dune_Eth_transaction.csv', session_folder='plots', type="CRYPTO")
-# networkGraph = NetworkGraphs('../datasets/Railway.csv', session_folder='plots', type="RAILWAY")
+# networkGraph = NetworkGraphs('../datasets/Dune_Eth_transaction.csv', session_folder='plots', type="CRYPTO")
+networkGraph = NetworkGraphs('../datasets/Railway.csv', session_folder='plots', type="RAILWAY")
 # spectral_clustering(networkGraph)
-
-# agglomerative_clustering(networkGraph)
-plot_cluster(networkGraph, 'dbscan', dynamic=False, layout='sfdp')
-# hierarchical_clustering(networkGraph)
+# plot_hotspot(networkGraph)
+# k_clique_clustering(networkGraph)
+hierarchical_clustering(networkGraph)
+# plot_cluster(networkGraph, 'k_clique', dynamic=False, layout='map')
+# edge_betweenness_clustering(networkGraph)
+# plot_cluster(networkGraph, 'edge_betweenness', dynamic=False, layout='sfdp')
+# plot_cluster(networkGraph, 'k_clique', dynamic=False, layout='twopi')
+# plot_cluster(networkGraph, 'spectral', dynamic=False, layout='map')
+# # hierarchical_clustering(networkGraph)
 
 # def hierarchical_clustering(G):
 #     # create a distance matrix based on the shortest path length between nodes in the graph

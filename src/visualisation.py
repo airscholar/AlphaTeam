@@ -4,25 +4,21 @@ Date: March 2023
 Purpose: Visualisation for the NetworkX graphs
 """
 
+
 # ----------------------------------------------------------------------------------------
-import numpy as np
-from pandas.api.types import is_numeric_dtype
 import src.machineLearning as ml
 import src.metrics as m
 from src.visualisation_src.ML_visualisation import *
-from src.visualisation_src.basic_network_visualisation import *
 from src.visualisation_src.metrics_visualisation import *
 from src.visualisation_src.basic_network_visualisation import *
 from src.visualisation_src.temporal_visualisation import *
 from pandas.api.types import is_numeric_dtype
-import pandas as pd
-import os
 from src.visualisation_src.utils_visualisation import *
 
 
 # ----------------------------------------------------------------------------------------
 
-@memoize
+
 def plot_network(networkGraphs, layout='map', dynamic=False):
     """
     :Function: Plot the NetworkX graph on as map
@@ -44,14 +40,13 @@ def plot_network(networkGraphs, layout='map', dynamic=False):
         return 'no_graph.html'
 
     filename = f"{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    filepath = get_file_path(networkGraphs, filename)
     if dynamic:
-        filepath = filepath.replace(f"_{layout}", "")
+        filename = filename.replace(f"_{layout}", "")
+    filepath = get_file_path(networkGraphs, filename)
 
     if not os.path.isfile(filepath):
         if dynamic:
-            return 0
-            # dynamic_visualisation(networkGraphs, filepath)
+            dynamic_visualisation(networkGraphs, filepath)
         else:
             static_visualisation(networkGraphs, filepath, layout_=layout)
 
@@ -60,8 +55,7 @@ def plot_network(networkGraphs, layout='map', dynamic=False):
 
 # ----------------------------------------------------------------------------------------
 
-@memoize
-def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
+def plot_cluster(networkGraphs, clusterType, noOfClusters=0, dynamic=False, layout='map'):
     """
     :Function: Plot the cluster for the given graph
     Clusters:
@@ -70,7 +64,6 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
         - 'label_propagation'
         - 'asyn_lpa'
         - 'girvan_newman',
-        - 'edge_betweenness'
         - 'k_clique'
         - 'spectral'
         - 'kmeans'
@@ -85,6 +78,8 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
     :type networkGraphs: NetworkGraphs
     :param clusterType: Type of cluster
     :type clusterType: str
+    :param noOfClusters: Size of the cluster
+    :type noOfClusters: int
     :param dynamic: Boolean to indicate if the plot is dynamic or not
     :type dynamic: bool
     :param layout: Layout of the plot
@@ -95,30 +90,31 @@ def plot_cluster(networkGraphs, clusterType, dynamic=False, layout='map'):
     if clusterType not in ['louvain', 'greedy_modularity', 'label_propagation', 'asyn_lpa', 'girvan_newman',
                            'edge_betweenness', 'k_clique', 'spectral', 'kmeans', 'dbscan', 'hierarchical',
                            'agglomerative']:
-        return ValueError("Cluster type not recognised")
+        print(ValueError("Cluster type is not valid"))
+        df = m.return_nan(networkGraphs, 'Cluster')
+        return df, 'no_graph.html'
     if not networkGraphs.is_spatial() and layout == 'map':
         print(ValueError("Graph is not spatial with coordinates"))
         df = m.return_nan(networkGraphs, 'Cluster')
         return df, 'no_graph.html'
 
-    cluster = ml.get_communities(networkGraphs, clusterType)
+    cluster = ml.get_communities(networkGraphs, clusterType, noOfClusters=noOfClusters)
     filename = f"{clusterType}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    filepath = get_file_path(networkGraphs, filename)
     if dynamic:
-        filepath = filepath.replace(f"_{layout}", "")
+        filename = filename.replace(f"_{layout}", "")
+    filepath = get_file_path(networkGraphs, filename)
 
-    if not os.path.isfile(filepath):
+    if not os.path.isfile(filepath) or noOfClusters > 0:
         if dynamic:
             generate_dynamic_cluster(networkGraphs, cluster, filepath)
         else:
-            generate_static_cluster(networkGraphs, cluster, filepath, layout_=layout)
+            generate_static_cluster(networkGraphs, cluster, filepath, clusterType, layout_=layout, nbr=noOfClusters)
 
     return cluster, filename
 
 
 # ----------------------------------------------------------------------------------------
 
-@memoize
 def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False, layout='map'):
     """
     :Function: Plot the metric for the given graph
@@ -151,16 +147,18 @@ def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False
     :return: Dataframe with the metric and the filename of the plot
     :rtype: pd.DataFrame, str
     """
-    df = m.get_metrics(networkGraphs, metrics, clean=False, directed=directed, multi=multi)
+    df = m.get_metrics(networkGraphs, metrics, directed=directed, multi=multi)
 
-    if df.empty or df.isnull().values.any() or not is_numeric_dtype(df[df.columns.values[1]]) or (not networkGraphs.is_spatial() and layout == 'map'):
-        print(ValueError('Metric column is empty. Please select a different metric or select different layout because graphs is not spatial with coordinates '))
+    if df.empty or df.isnull().values.any() or not is_numeric_dtype(df[df.columns.values[1]]) or (
+            not networkGraphs.is_spatial() and layout == 'map'):
+        print(ValueError(
+            'Metric column is empty. Please select a different metric or select different layout because graphs is not spatial with coordinates '))
         return df, "no_graph.html"
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
-    filepath = get_file_path(networkGraphs, filename)
     if dynamic:
-        filepath = filepath.replace(f"_{layout}", "")
+        filename = filename.replace(f"_{layout}", "")
+    filepath = get_file_path(networkGraphs, filename)
 
     if not os.path.isfile(filepath):
         if dynamic:
@@ -173,7 +171,7 @@ def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False
 
 # ----------------------------------------------------------------------------------------
 
-@memoize
+
 def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='map'):
     """
     :Function: Plot all the metrics for the given graph
@@ -198,16 +196,20 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
     :rtype: pd.DataFrame, str
     """
     if not networkGraphs.is_spatial() and layout == 'map':
-        print(ValueError('Metric column is empty. Please select a different metric or select different layout because graphs is not spatial with coordinates '))
+        print(ValueError(
+            'Metric column is empty. Please select a different metric or select different layout because graphs is '
+            'not spatial with coordinates '))
         df = m.return_nan(networkGraphs, 'Metrics')
         return df, "no_graph.html"
 
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_centralities(networkGraphs, directed=directed, multi=multi)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_metrics(networkGraphs, directed=directed, multi=multi)
     else:
-        return ValueError('Please select a valid metric, either "centralities" or "nodes"')
+        print(ValueError('Please select a valid metric, either "centralities" or "nodes"'))
+        df = m.return_nan(networkGraphs, 'Metrics')
+        return df, 'no_graph.html'
 
     filename = f"All_{metrics}_{'Directed' if directed else 'Undirected'}_{'Multi' if multi else ''}_{layout}.html"
     filepath = get_file_path(networkGraphs, filename)
@@ -248,11 +250,11 @@ def plot_histogram(networkGraphs, metrics, directed=True, multi=True):
     :rtype: pd.DataFrame, str
     """
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi)
     else:
-        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi, clean=False)
+        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi)
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Histogram.html"
     filepath = get_file_path(networkGraphs, filename)
@@ -274,18 +276,19 @@ def plot_hotspot(networkGraphs):
     :rtype: pd.DataFrame, str
     """
     if not networkGraphs.is_spatial():
-        return ValueError('Graph is not spatial. Please select a spatial graph.')
+        print(ValueError('Graph is not spatial. Please select a spatial graph.'))
+        df = m.return_nan(networkGraphs, 'Cluster')
+        return df, 'no_graph.html'
 
-    hotspot = ml.get_hotspot(networkGraphs)
+    df = ml.get_hotspot(networkGraphs)
 
     filename = f"Density_hotspot.html"
     filepath = get_file_path(networkGraphs, filename)
-    print(filepath)
 
     if not os.path.isfile(filepath):
-        generate_hotspot(networkGraphs, hotspot, filepath)
+        generate_hotspot(networkGraphs, df, filepath)
 
-    return hotspot, filename
+    return df, filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -318,11 +321,11 @@ def plot_boxplot(networkGraphs, metrics, directed=True, multi=True):
     :rtype: pd.DataFrame, str
     """
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi)
     else:
-        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi, clean=False)
+        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi)
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Boxplot.html"
     filepath = get_file_path(networkGraphs, filename)
@@ -363,11 +366,11 @@ def plot_violin(networkGraphs, metrics, directed=True, multi=True):
     :rtype: pd.DataFrame, str
     """
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi, clean=False)
+        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi)
     else:
-        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi, clean=False)
+        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi)
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Violin.html"
     filepath = get_file_path(networkGraphs, filename)
@@ -408,9 +411,14 @@ def plot_temporal(neworkGraphs, layout='map'):
     :return: filename
     :rtype: str
     """
+    if not neworkGraphs.is_temporal():
+        print(ValueError('Graph is not temporal. Please select a temporal graph.'))
+        return 'no_graph.html'
+
     if not neworkGraphs.is_spatial() and layout == 'map':
         print(ValueError('Graph is not spatial. Please select a spatial graph.'))
         return 'no_graph.html'
+
     filename = f"temporal_{layout}.html"
     filepath = get_file_path(neworkGraphs, filename)
 
