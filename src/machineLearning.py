@@ -53,8 +53,7 @@ def create_comm_colors(communities):
     colors = distinctipy.get_colors(len(communities))
     colors = [tuple([i * 255 for i in c]) for c in colors]
     # convert rgb tuple to hex
-    colors = [
-        f'#{int(c[0]):02x}{int(c[1]):02x}{int(c[2]):02x}' for c in colors]
+    colors = [f'#{int(c[0]):02x}{int(c[1]):02x}{int(c[2]):02x}' for c in colors]
 
     return colors
 
@@ -86,7 +85,7 @@ def louvain_clustering(networkGraphs, noOfClusters=0):
     :param noOfClusters: maximum number of communities
     :return: dataframe
     """
-    if noOfClusters > 0:
+    if 0 < noOfClusters:
         communities = binary_search('louvain_communities',networkGraphs, noOfClusters)
     else:
         communities = list(nx_comm.louvain_communities(networkGraphs.Graph))
@@ -104,7 +103,7 @@ def greedy_modularity_clustering(networkGraphs, noOfClusters=0):
     :param networkGraphs: NetworkGraphs
     :return: dataframe
     """
-    if noOfClusters > 0:
+    if 0 < noOfClusters:
         communities = binary_search('greedy_modularity_communities',networkGraphs, noOfClusters)
     else:
         communities = list(nx_comm.greedy_modularity_communities(networkGraphs.Graph))
@@ -157,24 +156,7 @@ def k_clique_clustering(networkGraphs, noOfClusters=0):
     return df
 
 
-def override_no_of_clusters(G, noOfClusters, optimal_k):
-    """
-    :Function: Override the optimal number of clusters
-    :param G: NetworkX graph
-    :param noOfClusters: number of clusters
-    :param optimal_k: optimal number of clusters
-    :return: optimal number of clusters
-    """
-    if noOfClusters <= 0:
-        return optimal_k
-    if noOfClusters < len(G.nodes) // 2:
-        optimal_k = noOfClusters
-    elif noOfClusters >= len(G.nodes) // 2:
-        optimal_k = len(G.nodes) // 2
-
-    print('overriding optimal k ', optimal_k)
-
-    return optimal_k
+# ----------------------------------------------------------------------------------------
 
 
 def spectral_clustering(networkGraphs, noOfClusters=0):
@@ -185,14 +167,20 @@ def spectral_clustering(networkGraphs, noOfClusters=0):
     :return: dataframe
     """
     G = networkGraphs.Graph
-    adj_mat, optimal_k = compute_clustering(G)
-    optimal_k = override_no_of_clusters(G, noOfClusters, optimal_k)
-    clustering = SpectralClustering(
-        optimal_k, affinity='precomputed', eigen_solver='arpack', n_init=100).fit(adj_mat)
 
+    if 0 < noOfClusters:
+        adj_mat = nx.to_numpy_array(G)
+        optimal_k = noOfClusters
+    else:
+        adj_mat, optimal_k = compute_clustering(G)
+
+    clustering = SpectralClustering(optimal_k, affinity='precomputed', eigen_solver='arpack', n_init=100).fit(adj_mat)
     df = clustering_response(G, clustering, optimal_k)
 
     return df
+
+
+# ----------------------------------------------------------------------------------------
 
 
 def compute_clustering(networkGraph, max_range=30):
@@ -226,6 +214,9 @@ def compute_clustering(networkGraph, max_range=30):
     return adj_mat, optimal_k
 
 
+# ----------------------------------------------------------------------------------------
+
+
 def clustering_response(networkGraph, clustering_alg, optimal_k):
     """
     :Function: Create a dataframe with the Node, communities ID and their colors
@@ -245,6 +236,9 @@ def clustering_response(networkGraph, clustering_alg, optimal_k):
     return df
 
 
+# ----------------------------------------------------------------------------------------
+
+
 def kmeans_clustering(networkGraphs, noOfClusters=0):
     """
     :Function: Detect communities based on k-means
@@ -252,7 +246,7 @@ def kmeans_clustering(networkGraphs, noOfClusters=0):
     :return: dataframe
     """
     G = networkGraphs.Graph
-    if noOfClusters <= 0:
+    if 0 < noOfClusters:
         adj_mat, optimal_k = compute_clustering(G)
         clustering = KMeans(n_clusters=optimal_k, init='k-means++',
                             random_state=4, max_iter=10).fit(adj_mat)
@@ -262,10 +256,8 @@ def kmeans_clustering(networkGraphs, noOfClusters=0):
         clustering = KMeans(n_clusters=optimal_k, init='k-means++',
                             random_state=4, max_iter=10).fit(adj_mat)
 
-    # # Cluster
     clustering = KMeans(n_clusters=optimal_k, init='k-means++',
                         random_state=4, max_iter=10).fit(adj_mat)
-
     df = clustering_response(G, clustering, optimal_k)
 
     return df
@@ -279,9 +271,12 @@ def agglomerative_clustering(networkGraphs, noOfClusters=0):
     :return: dataframe
     """
     G = networkGraphs.Graph
-    adj_mat, optimal_k = compute_clustering(G)
-    optimal_k = override_no_of_clusters(G, noOfClusters, optimal_k)
-    # Cluster
+    if 0 < noOfClusters:
+        optimal_k = noOfClusters
+        adj_mat = nx.to_numpy_array(G)
+    else:
+        adj_mat, optimal_k = compute_clustering(G)
+
     clustering = AgglomerativeClustering(
         n_clusters=optimal_k, affinity='euclidean', linkage='ward').fit(adj_mat)
 
@@ -296,10 +291,12 @@ def dbscan_clustering(networkGraphs, noOfClusters=0):
     :param networkGraphs: NetworkGraphs
     :return: dataframe
     """
-
     G = networkGraphs.Graph
-    adj_mat, optimal_k = compute_clustering(G)
-    optimal_k = override_no_of_clusters(G, noOfClusters, optimal_k)
+    if 0 < noOfClusters:
+        optimal_k = noOfClusters
+        adj_mat = nx.to_numpy_array(G)
+    else:
+        adj_mat, optimal_k = compute_clustering(G)
     # compute DBSCAN clustering algorithm on Graph
     db = DBSCAN(eps=0.3, min_samples=10).fit(adj_mat)
     labels = db.labels_
@@ -312,6 +309,7 @@ def dbscan_clustering(networkGraphs, noOfClusters=0):
 
 
 # ----------------------------------------------------------------------------------------
+
 
 def get_communities(networkGraphs, method, noOfClusters=0):
     """
@@ -355,6 +353,9 @@ def get_communities(networkGraphs, method, noOfClusters=0):
         return None
 
 
+# ----------------------------------------------------------------------------------------
+
+
 def get_hotspot(networkGraphs):
     data = []
     for node in networkGraphs.Graph.nodes():
@@ -370,6 +371,9 @@ def get_hotspot(networkGraphs):
     df = pd.DataFrame(data)
 
     return df
+
+
+# ----------------------------------------------------------------------------------------
 
 
 def binary_search(func, networkGraphs, noOfClusters=0):
