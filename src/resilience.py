@@ -8,6 +8,7 @@ Purpose: Resilience of the network
 
 from src.NetworkGraphs import NetworkGraphs
 from src.preprocessing import convert_to_DiGraph
+from src.metrics import *
 import random
 
 # -------------------------------------- FUNCTIONS -------------------------------------------
@@ -27,8 +28,24 @@ def resilience(networkGraph, attack, **kwargs):
             - "number_of_edges": Number of edges to be removed
         - "malicious":
             - "metric": Metric to be used to select the nodes to be removed
+                - 'kcore'
+                - 'degree'
+                - 'triangles'
+                - 'pagerank'
+                - 'betweenness_centrality'
+                - 'closeness_centrality'
+                - 'eigenvector_centrality'
+                - 'load_centrality'
+                - 'degree_centrality'
+            - 'directed': True or False
+            - 'multi': True or False
             - "number_of_nodes": Number of nodes to be removed
             - "threshold": Threshold to be used to select the nodes to be removed
+            - "operator" can be:
+                    - ">"
+                    - "<"
+                    - ">="
+                    - "<="
         - "cluster":
             - "cluster_algorithm": Algorithm to be used to compute the clusters
             - "total_clusters": Total number of clusters to be generated
@@ -47,19 +64,15 @@ def resilience(networkGraph, attack, **kwargs):
             if key not in ["number_of_nodes", "number_of_edges"]:
                 print(f"Argument {key} not recognized")
                 return 0
-        nrb_nodes = kwargs["number_of_nodes"] if "number_of_nodes" in kwargs.keys() else 0
-        nrb_edges = kwargs["number_of_edges"] if "number_of_edges" in kwargs.keys() else 0
-        return resilience_random(networkGraph, nrb_nodes, nrb_edges)
+        return resilience_random(networkGraph, **kwargs)
 
     elif attack == "malicious":
         for key in kwargs.keys():
-            if key not in ["metric", "number_of_nodes", "threshold"]:
-                print(f"Argument {key} not recognized")
-                return 0
-        metric = kwargs["metric"]
-        nrb_nodes = kwargs["number_of_nodes"] if "number_of_nodes" in kwargs.keys() else 0
-        threshold = kwargs["threshold"] if "threshold" in kwargs.keys() else 0
-        return resilience_malicious(networkGraph, metric, nrb_nodes, threshold)
+            if key not in ["metric", "number_of_nodes", "threshold", "operator", "multi", "directed"]:
+                raise ValueError(f"Argument {key} not recognized")
+        if "metric" not in kwargs.keys():
+            raise ValueError("Metric not specified")
+        return resilience_malicious(networkGraph, **kwargs)
 
     elif attack == "cluster":
         for key in kwargs.keys():
@@ -69,7 +82,7 @@ def resilience(networkGraph, attack, **kwargs):
         cluster_algorithm = kwargs["cluster_algorithm"]
         total_clusters = kwargs["total_clusters"]
         number_of_clusters = kwargs["number_of_clusters"]
-        return resilience_cluster(networkGraph, cluster_algorithm, total_clusters, number_of_clusters)
+        return resilience_cluster(networkGraph, cluster_algorithm, total_clusters, number_of_clusters,)
 
     else:
         print("Attack not recognized")
@@ -79,7 +92,7 @@ def resilience(networkGraph, attack, **kwargs):
 # ------------------------------------------------------------------------------------------
 
 
-def resilience_random(networkGraph, number_of_nodes, number_of_edges):
+def resilience_random(networkGraph, number_of_nodes=0, number_of_edges=0):
     """
     :Function: Compute the resilience of the networkGraph using the random attack
     :param networkGraph: NetworkGraph
@@ -109,9 +122,19 @@ def resilience_random(networkGraph, number_of_nodes, number_of_edges):
 # ------------------------------------------------------------------------------------------
 
 
-def resilience_malicious(networkGraph, metric, number_of_nodes, threshold):
+def resilience_malicious(networkGraph, metric=None, number_of_nodes=None, threshold=None, operator='>', multi=False, directed=False):
     """
     :Function: Compute the resilience of the networkGraph using the malicious attack
+    Metrics:
+        - 'kcore'
+        - 'degree'
+        - 'triangles'
+        - 'pagerank'
+        - 'betweenness_centrality'
+        - 'closeness_centrality'
+        - 'eigenvector_centrality'
+        - 'load_centrality'
+        - 'degree_centrality'
     :param networkGraph: NetworkGraph
     :type networkGraph: NetworkGraph
     :param metric: Metric to be used to select the nodes to be removed
@@ -120,10 +143,29 @@ def resilience_malicious(networkGraph, metric, number_of_nodes, threshold):
     :type number_of_nodes: int
     :param threshold: Threshold to be used to select the nodes to be removed
     :type threshold: float
+    :param operator: Operator to be used to select the nodes to be removed
+    :type operator: str
+    :param multi: True if the graph is multi
+    :type multi: bool
+    :param directed: True if the graph is directed
+    :type directed: bool
     :return: NetworkGraph with the nodes removed
     :rtype: NetworkGraph
     """
-    return 0
+    G = copy_networkGraph(networkGraph)
+
+    df = get_metrics(G, metric, directed=directed, multi=multi)
+    metric = df.columns[1]
+    df = df.sort_values(by=metric, ascending=False)
+
+    if threshold:
+        nodes_to_remove = execute_threshold(df, metric, threshold, operator)
+
+    if number_of_nodes:
+        nodes_to_remove = df['Node'][:number_of_nodes].values
+
+    G = remove_nodes(G, nodes_to_remove)
+    return G
 
 
 # ------------------------------------------------------------------------------------------
@@ -207,3 +249,32 @@ def remove_edges(networkGraph, edges):
     networkGraph.Graph, networkGraph.MultiGraph = networkGraph.DiGraph.to_undirected(), networkGraph.MultiDiGraph.to_undirected()
     networkGraph.update_attributes()
     return networkGraph
+
+
+# ------------------------------------------------------------------------------------------
+
+
+def execute_threshold(df, metric, threshold, operator='>'):
+    """
+    :Function: Execute the threshold operation
+    :param df: DataFrame with the metrics
+    :type df: DataFrame
+    :param threshold: Threshold to be used to select the nodes to be removed
+    :type threshold: float
+    :param operator: Operator to be used to select the nodes to be removed
+    :type operator: str
+    :return: DataFrame with the nodes to be removed
+    :rtype: DataFrame
+    """
+    if operator == '>':
+        nodes_to_remove = df[df[metric] > threshold]['Node'].values
+    elif operator == '<':
+        nodes_to_remove = df[df[metric] < threshold]['Node'].values
+    elif operator == '>=':
+        nodes_to_remove = df[df[metric] >= threshold]['Node'].values
+    elif operator == '<=':
+        nodes_to_remove = df[df[metric] <= threshold]['Node'].values
+    else:
+        raise ValueError(f"Operator {operator} not supported")
+
+    return nodes_to_remove
