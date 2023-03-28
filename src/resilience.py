@@ -6,6 +6,7 @@ Purpose: Resilience of the network
 
 # -------------------------------------- IMPORT ---------------------------------------------
 
+import src.machineLearning as ml
 from src.NetworkGraphs import NetworkGraphs
 from src.preprocessing import convert_to_DiGraph
 from src.metrics import *
@@ -13,7 +14,9 @@ import random
 
 # -------------------------------------- FUNCTIONS -------------------------------------------
 
+
 idx = {}
+
 
 def resilience(networkGraph, attack, **kwargs):
     """
@@ -63,7 +66,6 @@ def resilience(networkGraph, attack, **kwargs):
         for key in kwargs.keys():
             if key not in ["number_of_nodes", "number_of_edges"]:
                 raise ValueError(f"Argument {key} not recognized")
-                return 0
         return resilience_random(networkGraph, **kwargs)
 
     elif attack == "malicious":
@@ -121,7 +123,8 @@ def resilience_random(networkGraph, number_of_nodes=0, number_of_edges=0):
 # ------------------------------------------------------------------------------------------
 
 
-def resilience_malicious(networkGraph, metric=None, number_of_nodes=None, threshold=None, operator='>', multi=False, directed=False):
+def resilience_malicious(networkGraph, metric=None, number_of_nodes=None, threshold=None, operator='>', multi=False,
+                         directed=False):
     """
     :Function: Compute the resilience of the networkGraph using the malicious attack
     Metrics:
@@ -189,7 +192,34 @@ def resilience_cluster(networkGraph, cluster_algorithm=None, total_clusters=0, n
     :return: NetworkGraph with the nodes removed
     :rtype: NetworkGraph
     """
-    return 0
+    G = copy_networkGraph(networkGraph)
+    if cluster_algorithm not in ['louvain', 'greedy_modularity', 'label_propagation', 'asyn_lpa',
+                                 'k_clique', 'spectral', 'kmeans', 'agglomerative', 'hierarchical', 'dbscan']:
+        print(ValueError("Invalid cluster type", "please choose from the following: 'louvain', 'greedy_modularity', "
+                                                 "'label_propagation', 'asyn_lpa',"
+                                                 "'k_clique', 'spectral', 'kmeans' "
+                                                 "'agglomerative', 'hierarchical', 'dbscan'"))
+        return 0
+
+    if number_of_clusters > total_clusters:
+        print(ValueError("Invalid number of clusters",
+                         "please choose a number of clusters smaller than the total number of clusters"))
+        return 0
+    elif number_of_clusters <= 0:
+        print(ValueError("Invalid number of clusters, please choose a positive number"))
+        return 0
+
+    clusters = ml.get_communities(G, cluster_algorithm, total_clusters)
+
+    cluster_ids = clusters['Cluster_id'].unique()
+    cluster_ids = random.sample(sorted(cluster_ids), number_of_clusters)
+    clusters_to_remove = clusters[clusters['Cluster_id'].isin(cluster_ids)]
+    nodes_to_remove = []
+    for cluster in clusters_to_remove.iterrows():
+        nodes_to_remove.append(cluster[1]['Node'])
+    networkGraph = remove_nodes(G, nodes_to_remove)
+
+    return networkGraph
 
 
 # ------------------------------------------------------------------------------------------
@@ -206,7 +236,7 @@ def copy_networkGraph(networkGraph):
     if networkGraph.session_folder not in idx.keys():
         idx[networkGraph.session_folder] = 0
     else:
-        idx[networkGraph.session_folder]=idx[networkGraph.session_folder]+1
+        idx[networkGraph.session_folder] = idx[networkGraph.session_folder] + 1
     session_folder = f'{networkGraph.session_folder}/resilience{idx[networkGraph.session_folder]}'
     return NetworkGraphs(networkGraph.filename, type=networkGraph.type, session_folder=session_folder)
 

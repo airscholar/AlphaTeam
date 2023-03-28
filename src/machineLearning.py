@@ -25,18 +25,6 @@ def short_path_distance(networkx_, from_, to_):
 
 
 # ----------------------------------------------------------------------------------------
-def get_cold_spot(networkx_):
-    # return dataframe
-    return 0
-
-
-# ----------------------------------------------------------------------------------------
-def get_hot_spot(networkx_):
-    # return dataframe
-    return 0
-
-
-# ----------------------------------------------------------------------------------------
 
 def create_comm_colors(communities):
     """
@@ -86,6 +74,7 @@ def louvain_clustering(networkGraphs, noOfClusters=0):
 
     colors = create_comm_colors(communities)
     df = create_comm_dataframe(communities, colors)
+
     return df
 
 
@@ -93,8 +82,9 @@ def louvain_clustering(networkGraphs, noOfClusters=0):
 
 def greedy_modularity_clustering(networkGraphs, noOfClusters=0):
     """
-    Detect communities based on greedy modularity.
+    :Function: Detect communities based on greedy modularity clustering with a maximum of `noOfClusters`
     :param networkGraphs: NetworkGraphs
+    :param noOfClusters: maximum number of communities
     :return: dataframe
     """
     if 0 < noOfClusters:
@@ -237,6 +227,7 @@ def kmeans_clustering(networkGraphs, noOfClusters=0):
     """
     :Function: Detect communities based on k-means
     :param networkGraphs: NetworkGraphs
+    :param noOfClusters: number of clusters
     :return: dataframe
     """
     G = networkGraphs.Graph
@@ -292,7 +283,7 @@ def dbscan_clustering(networkGraphs, noOfClusters=0):
     else:
         adj_mat, optimal_k = compute_clustering(G)
     # compute DBSCAN clustering algorithm on Graph
-    db = DBSCAN(eps=0.3, min_samples=10).fit(adj_mat)
+    db = DBSCAN(eps=0.3, min_samples=optimal_k).fit(adj_mat)
     labels = db.labels_
     # Number of clusters in labels, ignoring noise if present.
     n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
@@ -312,7 +303,7 @@ def get_communities(networkGraphs, method, noOfClusters=0):
     :type networkGraphs: NetworkGraphs
     :param method: method to use
     :type method: str
-    :param clusterSize: size of the cluster
+    :param noOfClusters: size of the cluster
     :type noOfClusters: int
     :return: dataframe
     """
