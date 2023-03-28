@@ -53,7 +53,8 @@ def create_comm_colors(communities):
     colors = distinctipy.get_colors(len(communities))
     colors = [tuple([i * 255 for i in c]) for c in colors]
     # convert rgb tuple to hex
-    colors = [f'#{int(c[0]):02x}{int(c[1]):02x}{int(c[2]):02x}' for c in colors]
+    colors = [
+        f'#{int(c[0]):02x}{int(c[1]):02x}{int(c[2]):02x}' for c in colors]
 
     return colors
 
@@ -101,7 +102,8 @@ def greedy_modularity_clustering(networkGraphs):
     :param networkGraphs: NetworkGraphs
     :return: dataframe
     """
-    communities = list(nx_comm.greedy_modularity_communities(networkGraphs.Graph))
+    communities = list(
+        nx_comm.greedy_modularity_communities(networkGraphs.Graph))
     colors = create_comm_colors(communities)
     df = create_comm_dataframe(communities, colors)
     return df
@@ -115,7 +117,8 @@ def label_propagation_clustering(networkGraphs, noOfClusters=0):
     :param networkGraphs: NetworkGraphs
     :return: dataframe
     """
-    communities = list(nx_comm.label_propagation_communities(networkGraphs.Graph))
+    communities = list(
+        nx_comm.label_propagation_communities(networkGraphs.Graph))
     colors = create_comm_colors(communities)
     df = create_comm_dataframe(communities, colors)
     return df
@@ -157,9 +160,9 @@ def override_no_of_clusters(G, noOfClusters, optimal_k):
     :param optimal_k: optimal number of clusters
     :return: optimal number of clusters
     """
-    if noOfClusters == 0:
+    if noOfClusters <= 0:
         return optimal_k
-    if noOfClusters != 0 and noOfClusters < len(G.nodes) // 2:
+    if noOfClusters < len(G.nodes) // 2:
         optimal_k = noOfClusters
     elif noOfClusters >= len(G.nodes) // 2:
         optimal_k = len(G.nodes) // 2
@@ -179,7 +182,8 @@ def spectral_clustering(networkGraphs, noOfClusters=0):
     G = networkGraphs.Graph
     adj_mat, optimal_k = compute_clustering(G)
     optimal_k = override_no_of_clusters(G, noOfClusters, optimal_k)
-    clustering = SpectralClustering(optimal_k, affinity='precomputed', eigen_solver='arpack', n_init=100).fit(adj_mat)
+    clustering = SpectralClustering(
+        optimal_k, affinity='precomputed', eigen_solver='arpack', n_init=100).fit(adj_mat)
 
     df = clustering_response(G, clustering, optimal_k)
 
@@ -201,11 +205,13 @@ def compute_clustering(networkGraph, max_range=30):
     # get optimal number of clusters
     wcss = []
     for i in range(1, max_range):
-        kmeans = KMeans(n_clusters=i, init='k-means++', random_state=4).fit(adj_mat)
+        kmeans = KMeans(n_clusters=i, init='k-means++',
+                        random_state=4).fit(adj_mat)
         wcss.append(kmeans.inertia_)
 
     # find the optimal number of clusters
-    optimal_k = KneeLocator(range(1, max_range), wcss, curve='convex', direction='decreasing').elbow
+    optimal_k = KneeLocator(range(1, max_range), wcss,
+                            curve='convex', direction='decreasing').elbow
     print('Optimal k is : ', optimal_k)
 
     return adj_mat, optimal_k
@@ -240,7 +246,8 @@ def kmeans_clustering(networkGraphs):
     adj_mat, optimal_k = compute_clustering(G)
 
     # Cluster
-    clustering = KMeans(n_clusters=optimal_k, init='k-means++', random_state=4, max_iter=10).fit(adj_mat)
+    clustering = KMeans(n_clusters=optimal_k, init='k-means++',
+                        random_state=4, max_iter=10).fit(adj_mat)
 
     df = clustering_response(G, clustering, optimal_k)
 
@@ -258,7 +265,8 @@ def agglomerative_clustering(networkGraphs, noOfClusters=0):
     adj_mat, optimal_k = compute_clustering(G)
     optimal_k = override_no_of_clusters(G, noOfClusters, optimal_k)
     # Cluster
-    clustering = AgglomerativeClustering(n_clusters=optimal_k, affinity='euclidean', linkage='ward').fit(adj_mat)
+    clustering = AgglomerativeClustering(
+        n_clusters=optimal_k, affinity='euclidean', linkage='ward').fit(adj_mat)
 
     df = clustering_response(G, clustering, optimal_k)
 
@@ -288,7 +296,7 @@ def dbscan_clustering(networkGraphs, noOfClusters=0):
 
 # ----------------------------------------------------------------------------------------
 
-def get_communities(networkGraphs, method, clusterSize):
+def get_communities(networkGraphs, method, noOfClusters=0):
     """
     :Function: Get communities based on the method
     :param networkGraphs: NetworkGraphs
@@ -296,7 +304,7 @@ def get_communities(networkGraphs, method, clusterSize):
     :param method: method to use
     :type method: str
     :param clusterSize: size of the cluster
-    :type clusterSize: int
+    :type noOfClusters: int
     :return: dataframe
     """
     if method not in ['louvain', 'greedy_modularity', 'label_propagation', 'asyn_lpa',
@@ -309,23 +317,23 @@ def get_communities(networkGraphs, method, clusterSize):
         return df
 
     if method == 'louvain':
-        return louvain_clustering(networkGraphs, clusterSize)
+        return louvain_clustering(networkGraphs, noOfClusters)
     elif method == 'greedy_modularity':
-        return greedy_modularity_clustering(networkGraphs, clusterSize)
+        return greedy_modularity_clustering(networkGraphs, noOfClusters)
     elif method == 'label_propagation':
-        return label_propagation_clustering(networkGraphs, clusterSize)
+        return label_propagation_clustering(networkGraphs, noOfClusters)
     elif method == 'asyn_lpa':
-        return asyn_lpa_clustering(networkGraphs, clusterSize)
+        return asyn_lpa_clustering(networkGraphs, noOfClusters)
     elif method == 'k_clique':
-        return k_clique_clustering(networkGraphs, clusterSize)
+        return k_clique_clustering(networkGraphs, noOfClusters)
     elif method == 'kmeans':
-        return kmeans_clustering(networkGraphs, clusterSize)
+        return kmeans_clustering(networkGraphs, noOfClusters)
     elif method == 'spectral':
-        return spectral_clustering(networkGraphs, clusterSize)
+        return spectral_clustering(networkGraphs, noOfClusters)
     elif method == 'agglomerative':
-        return agglomerative_clustering(networkGraphs, clusterSize)
+        return agglomerative_clustering(networkGraphs, noOfClusters)
     elif method == 'dbscan':
-        return dbscan_clustering(networkGraphs, clusterSize)
+        return dbscan_clustering(networkGraphs, noOfClusters)
     else:
         return None
 
