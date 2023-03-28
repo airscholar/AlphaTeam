@@ -39,7 +39,7 @@ def generate_static_cluster(networkGraphs, df_, filename, algo, layout_='map', n
     edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
 
     layout = get_layout(networkGraphs,
-                        title=f"{algo} {f'with {nbr} ' if nbr > 0 else ''}weights using {layout_} layout",
+                        title=f"{algo} {f'with {nbr} ' if nbr > 0 else ''}clusters using {layout_} layout",
                         layout_=layout_)
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
