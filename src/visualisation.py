@@ -98,7 +98,7 @@ def plot_cluster(networkGraphs, clusterType, noOfClusters=0, dynamic=False, layo
         df = m.return_nan(networkGraphs, 'Cluster')
         return df, 'no_graph.html'
 
-    cluster = ml.get_communities(networkGraphs, clusterType, noOfClusters)
+    cluster = ml.get_communities(networkGraphs, clusterType, noOfClusters=noOfClusters)
     filename = f"{clusterType}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
     if dynamic:
         filename = filename.replace(f"_{layout}", "")
