@@ -13,7 +13,7 @@ networkGraphs_cache = {}
 def memoize(func):
     cache = {}
     def wrapper(*args, **kwargs):
-        key = (func, args, tuple(kwargs.items()))
+        key = (func, args, tuple(sorted(kwargs.items())))
         key_hash = md5(str(key).encode('utf-8')).hexdigest()
         if key_hash in cache:
             print(f"{green}CACHE: Using cache for {func.__name__}, hash: {yellow}{key_hash}")
