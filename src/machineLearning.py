@@ -5,7 +5,6 @@ Purpose: Machine Learning for the NetworkX graphs
 """
 
 import warnings
-from itertools import takewhile
 
 import networkx as nx
 import networkx.algorithms.community as nx_comm
@@ -13,12 +12,9 @@ import numpy as np
 import pandas as pd
 from distinctipy import distinctipy
 from kneed import KneeLocator
-import src.metrics as m
-from networkx.algorithms.community import girvan_newman
-from scipy.cluster.hierarchy import dendrogram, linkage
 from sklearn.cluster import SpectralClustering, KMeans, AgglomerativeClustering, DBSCAN
-import random
-import matplotlib.pyplot as plt
+
+import src.metrics as m
 
 warnings.filterwarnings("ignore")
 
@@ -26,18 +22,6 @@ warnings.filterwarnings("ignore")
 # ----------------------------------------------------------------------------------------
 
 def short_path_distance(networkx_, from_, to_):
-    # return dataframe
-    return 0
-
-
-# ----------------------------------------------------------------------------------------
-def get_cold_spot(networkx_):
-    # return dataframe
-    return 0
-
-
-# ----------------------------------------------------------------------------------------
-def get_hot_spot(networkx_):
     # return dataframe
     return 0
 
@@ -88,22 +72,39 @@ def louvain_clustering(networkGraphs, noOfClusters=0):
     :param noOfClusters: maximum number of communities
     :return: dataframe
     """
-    communities = list(nx_comm.louvain_communities(networkGraphs.Graph))
+    communities = None
+    if noOfClusters <= 0:
+        communities = list(nx_comm.louvain_communities(networkGraphs.Graph))
+    elif 0 < noOfClusters < len(networkGraphs.Graph.nodes()) // 2:
+        communities = list(nx_comm.louvain_communities(networkGraphs.Graph, weight=noOfClusters))
+    elif noOfClusters >= len(networkGraphs.Graph.nodes()) // 2:
+        communities = list(
+            nx_comm.louvain_communities(networkGraphs.Graph, weight=len(networkGraphs.Graph.nodes()) // 2))
+
     colors = create_comm_colors(communities)
     df = create_comm_dataframe(communities, colors)
+
     return df
 
 
 # ----------------------------------------------------------------------------------------
 
-def greedy_modularity_clustering(networkGraphs):
+def greedy_modularity_clustering(networkGraphs, noOfClusters=0):
     """
-    Detect communities based on greedy modularity.
+    :Function: Detect communities based on greedy modularity clustering with a maximum of `noOfClusters`
     :param networkGraphs: NetworkGraphs
+    :param noOfClusters: maximum number of communities
     :return: dataframe
     """
-    communities = list(
-        nx_comm.greedy_modularity_communities(networkGraphs.Graph))
+    communities = None
+    if noOfClusters <= 0:
+        communities = list(nx_comm.greedy_modularity_communities(networkGraphs.Graph))
+    elif 0 < noOfClusters < len(networkGraphs.Graph.nodes()) // 2:
+        communities = list(nx_comm.greedy_modularity_communities(networkGraphs.Graph, weight=noOfClusters))
+    elif noOfClusters >= len(networkGraphs.Graph.nodes()) // 2:
+        communities = list(
+            nx_comm.greedy_modularity_communities(networkGraphs.Graph, weight=len(networkGraphs.Graph.nodes()) // 2))
+
     colors = create_comm_colors(communities)
     df = create_comm_dataframe(communities, colors)
     return df
@@ -236,14 +237,17 @@ def clustering_response(networkGraph, clustering_alg, optimal_k):
     return df
 
 
-def kmeans_clustering(networkGraphs):
+def kmeans_clustering(networkGraphs, noOfClusters=0):
     """
     :Function: Detect communities based on k-means
     :param networkGraphs: NetworkGraphs
+    :param noOfClusters: number of clusters
     :return: dataframe
     """
     G = networkGraphs.Graph
     adj_mat, optimal_k = compute_clustering(G)
+
+    optimal_k = override_no_of_clusters(G, noOfClusters, optimal_k)
 
     # Cluster
     clustering = KMeans(n_clusters=optimal_k, init='k-means++',
@@ -284,7 +288,7 @@ def dbscan_clustering(networkGraphs, noOfClusters=0):
     adj_mat, optimal_k = compute_clustering(G)
     optimal_k = override_no_of_clusters(G, noOfClusters, optimal_k)
     # compute DBSCAN clustering algorithm on Graph
-    db = DBSCAN(eps=0.3, min_samples=10).fit(adj_mat)
+    db = DBSCAN(eps=0.3, min_samples=optimal_k).fit(adj_mat)
     labels = db.labels_
     # Number of clusters in labels, ignoring noise if present.
     n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
@@ -303,7 +307,7 @@ def get_communities(networkGraphs, method, noOfClusters=0):
     :type networkGraphs: NetworkGraphs
     :param method: method to use
     :type method: str
-    :param clusterSize: size of the cluster
+    :param noOfClusters: size of the cluster
     :type noOfClusters: int
     :return: dataframe
     """
