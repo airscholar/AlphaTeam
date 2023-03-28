@@ -236,16 +236,24 @@ def clustering_response(networkGraph, clustering_alg, optimal_k):
     return df
 
 
-def kmeans_clustering(networkGraphs):
+def kmeans_clustering(networkGraphs, noOfClusters=0):
     """
     :Function: Detect communities based on k-means
     :param networkGraphs: NetworkGraphs
     :return: dataframe
     """
     G = networkGraphs.Graph
-    adj_mat, optimal_k = compute_clustering(G)
+    if noOfClusters <= 0:
+        adj_mat, optimal_k = compute_clustering(G)
+        clustering = KMeans(n_clusters=optimal_k, init='k-means++',
+                            random_state=4, max_iter=10).fit(adj_mat)
+    else:
+        optimal_k = noOfClusters
+        adj_mat = nx.to_numpy_array(G)
+        clustering = KMeans(n_clusters=optimal_k, init='k-means++',
+                            random_state=4, max_iter=10).fit(adj_mat)
 
-    # Cluster
+    # # Cluster
     clustering = KMeans(n_clusters=optimal_k, init='k-means++',
                         random_state=4, max_iter=10).fit(adj_mat)
 
