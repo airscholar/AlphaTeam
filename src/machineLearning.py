@@ -70,7 +70,6 @@ def create_comm_dataframe(communities, colors):
     for idx, community in enumerate(communities):
         color = colors.pop()
         for node in community:
-            # print(node)
             df = pd.concat([df, pd.DataFrame({'Node': node,
                                               'Color': color,
                                               'Cluster_id': idx
@@ -195,6 +194,10 @@ def compute_clustering(networkGraph, max_range=30):
     np.random.seed(0)
 
     adj_mat = nx.to_numpy_array(networkGraph)
+
+    if max_range >= len(networkGraph.nodes()):
+        print('overriding max range', len(networkGraph.nodes())-1)
+        max_range = len(networkGraph.nodes())-1
 
     # get optimal number of clusters
     wcss = []
