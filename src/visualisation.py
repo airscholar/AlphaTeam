@@ -98,19 +98,19 @@ def plot_cluster(networkGraphs, clusterType, noOfClusters=0, dynamic=False, layo
         df = m.return_nan(networkGraphs, 'Cluster')
         return df, 'no_graph.html'
 
-    cluster = ml.get_communities(networkGraphs, clusterType, noOfClusters)
+    cluster = ml.get_communities(networkGraphs, clusterType, noOfClusters=noOfClusters)
     filename = f"{clusterType}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
     if dynamic:
         filename = filename.replace(f"_{layout}", "")
     filepath = get_file_path(networkGraphs, filename)
 
-    if not os.path.isfile(filepath):
+    if not os.path.isfile(filepath) or noOfClusters > 0:
         if dynamic:
             generate_dynamic_cluster(networkGraphs, cluster, filepath)
         else:
-            generate_static_cluster(networkGraphs, cluster, filepath, layout_=layout)
+            generate_static_cluster(networkGraphs, cluster, filepath, clusterType, layout_=layout, nbr=noOfClusters)
 
-    return m.clean_df(cluster), filename
+    return cluster, filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -217,7 +217,7 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
     if not os.path.isfile(filepath):
         generate_static_all_metrics(networkGraphs, df, filepath, layout_=layout)
 
-    return m.clean_df(df), filename
+    return df, filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -288,7 +288,7 @@ def plot_hotspot(networkGraphs):
     if not os.path.isfile(filepath):
         generate_hotspot(networkGraphs, df, filepath)
 
-    return m.clean_df(df), filename
+    return df, filename
 
 
 # ----------------------------------------------------------------------------------------

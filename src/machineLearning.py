@@ -317,23 +317,23 @@ def get_communities(networkGraphs, method, noOfClusters=0):
         return df
 
     if method == 'louvain':
-        return louvain_clustering(networkGraphs, noOfClusters)
+        return louvain_clustering(networkGraphs, noOfClusters=noOfClusters)
     elif method == 'greedy_modularity':
-        return greedy_modularity_clustering(networkGraphs, noOfClusters)
+        return greedy_modularity_clustering(networkGraphs, noOfClusters=noOfClusters)
     elif method == 'label_propagation':
-        return label_propagation_clustering(networkGraphs, noOfClusters)
+        return label_propagation_clustering(networkGraphs, noOfClusters=noOfClusters)
     elif method == 'asyn_lpa':
-        return asyn_lpa_clustering(networkGraphs, noOfClusters)
+        return asyn_lpa_clustering(networkGraphs, noOfClusters=noOfClusters)
     elif method == 'k_clique':
-        return k_clique_clustering(networkGraphs, noOfClusters)
+        return k_clique_clustering(networkGraphs, noOfClusters=noOfClusters)
     elif method == 'kmeans':
-        return kmeans_clustering(networkGraphs, noOfClusters)
+        return kmeans_clustering(networkGraphs, noOfClusters=noOfClusters)
     elif method == 'spectral':
-        return spectral_clustering(networkGraphs, noOfClusters)
+        return spectral_clustering(networkGraphs, noOfClusters=noOfClusters)
     elif method == 'agglomerative':
-        return agglomerative_clustering(networkGraphs, noOfClusters)
+        return agglomerative_clustering(networkGraphs, noOfClusters=noOfClusters)
     elif method == 'dbscan':
-        return dbscan_clustering(networkGraphs, noOfClusters)
+        return dbscan_clustering(networkGraphs, noOfClusters=noOfClusters)
     else:
         return None
 
