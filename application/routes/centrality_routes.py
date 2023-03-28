@@ -115,6 +115,7 @@ def centrality_all():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
+
     return render_template('centrality/centrality_all.html', example=df, tab=tab, method_name='All Centrality', 
     description = description['all_centrality'], tooltip_multi= tooltips['multi'],
     multi_toggle=multi_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
