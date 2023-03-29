@@ -85,6 +85,12 @@ def resilience(networkGraph, attack, **kwargs):
             raise ValueError("Cluster algorithm not specified")
         return resilience_cluster(networkGraph, **kwargs)
 
+    elif attack == "custom":
+        for key in kwargs.keys():
+            if key not in ["list_of_nodes"]:
+                raise ValueError(f"Argument {key} not recognized")
+        return resilience_custom(networkGraph, **kwargs)
+
     else:
         print("Attack not recognized")
         return 0
@@ -220,6 +226,24 @@ def resilience_cluster(networkGraph, cluster_algorithm=None, total_clusters=0, n
     networkGraph = remove_nodes(G, nodes_to_remove)
 
     return networkGraph
+
+
+# ------------------------------------------------------------------------------------------
+
+
+def resilience_custom(networkGraph, list_of_nodes=None):
+    """
+    :Function: Compute the resilience of the networkGraph using the custom attack
+    :param networkGraph: NetworkGraph
+    :type networkGraph: NetworkGraph
+    :param list_of_nodes: List of nodes to be removed
+    :type list_of_nodes: list
+    :return: NetworkGraph with the nodes removed
+    :rtype: NetworkGraph
+    """
+    G = copy_networkGraph(networkGraph)
+    G = remove_nodes(G, list_of_nodes)
+    return G
 
 
 # ------------------------------------------------------------------------------------------
