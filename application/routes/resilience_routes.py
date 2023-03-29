@@ -15,6 +15,7 @@ from src.NetworkGraphs import *
 from src.metrics import *
 from src.preprocessing import *
 from src.visualisation import *
+from src.resilience import *
 from flask import g
 
 resilience_routes = Blueprint('resilience_routes', __name__)
@@ -55,7 +56,9 @@ def resilience_analyisis_malicious():
 @resilience_routes.route('/resilience/random', endpoint='resilience_random', methods=['GET', 'POST'])
 def resilience_analyisis_random():
     tab_main = 'tab1'
-    
+    filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
+
     if request.method == 'POST':
         number_of_nodes = request.form.get('number_of_nodes', None)
         number_of_nodes = int(number_of_nodes) if number_of_nodes else None
@@ -72,10 +75,17 @@ def resilience_analyisis_random():
     if val1 != number_of_nodes:
         session['val1'] = number_of_nodes
         tab_main = 'tab1'
+        networkGraphs2 = resilience(networkGraphs, attack='random', number_of_nodes=number_of_nodes)
+        graph_name1 = plot_network(networkGraphs, layout='sfdp', dynamic=False)
+        graph_name2 = plot_network(networkGraphs2, layout='sfdp', dynamic=False)
+        print('1',graph_name1)
+        print('2',graph_name1)
     if val2 != number_of_edges:
-        session['val2'] = number_of_edges
+        session['val2'] = number_of_edge
         tab_main = 'tab2'
- 
+
+    print('number_of_nodes',number_of_nodes)
+     
     return render_template('resilience/resilience_analyisis_random.html', tab_main=tab_main, 
     number_of_nodes=number_of_nodes, number_of_edges=number_of_edges)
 
