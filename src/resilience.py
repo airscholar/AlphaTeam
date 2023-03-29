@@ -6,12 +6,12 @@ Purpose: Resilience of the network
 
 # -------------------------------------- IMPORT ---------------------------------------------
 
+import random
+
 import src.machineLearning as ml
 from src.NetworkGraphs import NetworkGraphs
-from src.preprocessing import convert_to_DiGraph
 from src.metrics import *
-import random
-from src.visualisation import plot_cluster
+from src.preprocessing import convert_to_DiGraph
 
 # -------------------------------------- FUNCTIONS -------------------------------------------
 
@@ -86,7 +86,14 @@ def resilience(networkGraph, attack, **kwargs):
         if "cluster_algorithm" not in kwargs.keys():
             raise ValueError("Cluster algorithm not specified")
         return resilience_cluster(networkGraph, **kwargs)
-
+    elif attack == "cluster_custom":
+        for key in kwargs.keys():
+            if key not in ["cluster_algorithm", "total_clusters", "cluster_ids"]:
+                print(f"Argument {key} not recognized")
+                return 0
+        if "cluster_algorithm" not in kwargs.keys():
+            raise ValueError("Cluster algorithm not specified")
+        return resilience_cluster_custom(networkGraph, **kwargs)
     else:
         print("Attack not recognized")
         return 0
@@ -316,3 +323,34 @@ def execute_threshold(df, metric, threshold, operator='>'):
         raise ValueError(f"Operator {operator} not supported")
 
     return nodes_to_remove
+
+
+def resilience_cluster_custom(networkGraph, cluster_algorithm=None, total_clusters=None, cluster_ids=None):
+    """
+    :Function: Compute the clusters of the networkGraph
+    :param networkGraph: NetworkGraph
+    :type networkGraph: NetworkGraph
+    :param cluster_algorithm: Algorithm to be used to compute the clusters
+    :type cluster_algorithm: str
+    :param total_clusters: Total number of clusters
+    :type total_clusters: int
+    :param cluster_ids: Cluster ids to be removed
+    :type cluster_ids: list
+    """
+    if cluster_algorithm not in ['louvain', 'greedy_modularity', 'label_propagation', 'asyn_lpa',
+                                 'k_clique', 'spectral', 'kmeans', 'agglomerative', 'hierarchical', 'dbscan']:
+        print(ValueError("Invalid cluster type", "please choose from the following: 'louvain', 'greedy_modularity', "
+                                                 "'label_propagation', 'asyn_lpa',"
+                                                 "'k_clique', 'spectral', 'kmeans' "
+                                                 "'agglomerative', 'hierarchical', 'dbscan'"))
+        return 0
+
+    G = copy_networkGraph(networkGraph)
+    clusters = ml.get_communities(networkGraph, cluster_algorithm, total_clusters)
+
+    if cluster_ids is not None and len(cluster_ids) > 0:
+        for cluster_id in cluster_ids:
+            nodes_to_remove = clusters[clusters['Cluster_id'] == cluster_id]['Node'].values
+            G = remove_nodes(G, nodes_to_remove)
+
+    return G
