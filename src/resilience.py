@@ -54,6 +54,10 @@ def resilience(networkGraph, attack, **kwargs):
             - "cluster_algorithm": Algorithm to be used to compute the clusters
             - "total_clusters": Total number of clusters to be generated
             - "number_of_clusters": Number of clusters to be removed
+        - "cluster_custom":
+            - "cluster_algorithm": Algorithm to be used to compute the clusters
+            - "total_clusters": Total number of clusters to be generated
+            - "cluster_ids": List of cluster ids to be removed
     :param networkGraph: NetworkGraph
     :type networkGraph: NetworkGraph
     :param attack: Attack to be performed
