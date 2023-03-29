@@ -11,31 +11,29 @@
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <!-- Layout Tab UL -->
-                    <button class="nav-link {% if tab=='tab1' %} active {% else %}{% endif %}" id="nav-layout-tab"
-                        data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab" aria-controls="nav-layout"
-                        aria-selected="true">Layout <span style="display: inline-block; margin-left: 5px;"><img
+                    <button class="nav-link active" id="nav-layout-tab" data-bs-toggle="tab" data-bs-target="#tab1"
+                        type="button" role="tab" aria-controls="nav-layout" aria-selected="true">Layout <span
+                            style="display: inline-block; margin-left: 5px;"><img
                                 src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
                                 alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
                                 data-placement="bottom" title="{{tooltip_layout_tab}}"></span></button>
                     <!-- Histogram Tab UL -->
-                    <button class="nav-link {% if tab=='tab2' %} active {% else %}{% endif %}" id="nav-histogram-tab"
-                        data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab"
-                        aria-controls="nav-histogram" aria-selected="true">Histogram <span
+                    <button class="nav-link" id="nav-histogram-tab" data-bs-toggle="tab" data-bs-target="#tab2"
+                        type="button" role="tab" aria-controls="nav-histogram" aria-selected="true">Histogram <span
                             style="display: inline-block; margin-left: 5px;"><img
                                 src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
                                 alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
                                 data-placement="bottom" title="{{tooltip_histogram_tab}}"></span></button>
                     <!-- Boxplot Tab UL -->
-                    <button class="nav-link {% if tab=='tab3' %} active {% else %}{% endif %}" id="nav-boxplot-tab"
-                        data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab" aria-controls="nav-boxplot"
-                        aria-selected="true">Boxplot <span style="display: inline-block; margin-left: 5px;"><img
+                    <button class="nav-link" id="nav-boxplot-tab" data-bs-toggle="tab" data-bs-target="#tab3"
+                        type="button" role="tab" aria-controls="nav-boxplot" aria-selected="true">Boxplot <span
+                            style="display: inline-block; margin-left: 5px;"><img
                                 src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
                                 alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
                                 data-placement="bottom" title="{{tooltip_boxplot_tab}}"></span></button>
                     <!-- Violinplot Tab UL -->
-                    <button class="nav-link {% if tab=='tab4' %} active {% else %}{% endif %}" id="nav-violinplot-tab"
-                        data-bs-toggle="tab" data-bs-target="#tab4" type="button" role="tab"
-                        aria-controls="nav-violinplot" aria-selected="true">Violinplot <span
+                    <button class="nav-link" id="nav-violinplot-tab" data-bs-toggle="tab" data-bs-target="#tab4"
+                        type="button" role="tab" aria-controls="nav-violinplot" aria-selected="true">Violinplot <span
                             style="display: inline-block; margin-left: 5px;"><img
                                 src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
                                 alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
@@ -44,7 +42,7 @@
             </nav>
 
             <div class="tab-content" style="background-color: white; padding-bottom: 25px;">
-                <div id="tab1" class="container tab-pane {% if tab=='tab1' %}active{% else %}fade{% endif %}">
+                <div id="tab1" class="container tab-pane active">
                     <br />
                     <div class="row">
                         <div class="col-10">
@@ -139,7 +137,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="tab2" class="container tab-pane {% if tab=='tab2' %}active{% else %}fade{% endif %}">
+                <div id="tab2" class="container tab-pane fade">
                     <br />
                     <div class="row">
                         <div class="col-10">
@@ -165,8 +163,8 @@
                                     <div class="toggle-container"
                                         style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
                                         <div class="toggle-btn">
-                                            <input type="checkbox" id="multi-toggle2" name="multi_toggle2" {% if
-                                                multi_toggle2 %}checked{% endif %}>
+                                            <input type="checkbox" id="multi-toggle2" name="multi_toggle" {% if
+                                                multi_toggle %}checked{% endif %}>
                                             <label for="multi-toggle2"></label>
                                         </div>
                                     </div>
@@ -184,8 +182,8 @@
                                     <div class="toggle-container"
                                         style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
                                         <div class="toggle-btn">
-                                            <input type="checkbox" id="directed-toggle2" name="directed_toggle2" {% if
-                                                directed_toggle2 %}checked{% endif %}>
+                                            <input type="checkbox" id="directed-toggle2" name="directed_toggle" {% if
+                                                directed_toggle %}checked{% endif %}>
                                             <label for="directed-toggle2"></label>
                                         </div>
                                     </div>
@@ -197,7 +195,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="tab3" class="container tab-pane {% if tab=='tab3' %}active{% else %}fade{% endif %}">
+                <div id="tab3" class="container tab-pane fade">
                     <br />
                     <div class="row">
                         <div class="col-10">
@@ -223,8 +221,8 @@
                                     <div class="toggle-container"
                                         style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
                                         <div class="toggle-btn">
-                                            <input type="checkbox" id="multi-toggle3" name="multi_toggle3" {% if
-                                                multi_toggle3 %}checked{% endif %}>
+                                            <input type="checkbox" id="multi-toggle3" name="multi_toggle" {% if
+                                                multi_toggle %}checked{% endif %}>
                                             <label for="multi-toggle3"></label>
                                         </div>
                                     </div>
@@ -242,8 +240,8 @@
                                     <div class="toggle-container"
                                         style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
                                         <div class="toggle-btn">
-                                            <input type="checkbox" id="directed-toggle3" name="directed_toggle3" {% if
-                                                directed_toggle3 %}checked{% endif %}>
+                                            <input type="checkbox" id="directed-toggle3" name="directed_toggle" {% if
+                                                directed_toggle %}checked{% endif %}>
                                             <label for="directed-toggle3"></label>
                                         </div>
                                     </div>
@@ -255,7 +253,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="tab4" class="container tab-pane {% if tab=='tab4' %}active{% else %}fade{% endif %}">
+                <div id="tab4" class="container tab-pane fade">
                     <br />
                     <div class="row">
                         <div class="col-10">
@@ -281,8 +279,8 @@
                                     <div class="toggle-container"
                                         style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
                                         <div class="toggle-btn">
-                                            <input type="checkbox" id="multi-toggle4" name="multi_toggle4" {% if
-                                                multi_toggle4 %}checked{% endif %}>
+                                            <input type="checkbox" id="multi-toggle4" name="multi_toggle" {% if
+                                                multi_toggle %}checked{% endif %}>
                                             <label for="multi-toggle4"></label>
                                         </div>
                                     </div>
@@ -300,8 +298,8 @@
                                     <div class="toggle-container"
                                         style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
                                         <div class="toggle-btn">
-                                            <input type="checkbox" id="directed-toggle4" name="directed_toggle4" {% if
-                                                directed_toggle4 %}checked{% endif %}>
+                                            <input type="checkbox" id="directed-toggle4" name="directed_toggle" {% if
+                                                directed_toggle%}checked{% endif %}>
                                             <label for="directed-toggle4"></label>
                                         </div>
                                     </div>
