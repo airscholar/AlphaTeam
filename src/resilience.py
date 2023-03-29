@@ -53,6 +53,11 @@ def resilience(networkGraph, attack, **kwargs):
             - "cluster_algorithm": Algorithm to be used to compute the clusters
             - "total_clusters": Total number of clusters to be generated
             - "number_of_clusters": Number of clusters to be removed
+        - "custom":
+            - "list_of_nodes": List of nodes to be removed
+                If "cluster_algorithm" is specified, the list of nodes will be recomputed to delete the whole cluster that belong to each node
+            - "cluster_algorithm": Algorithm to be used to compute the clusters
+            - "total_clusters": Total number of clusters to be generated
     :param networkGraph: NetworkGraph
     :type networkGraph: NetworkGraph
     :param attack: Attack to be performed
@@ -87,7 +92,7 @@ def resilience(networkGraph, attack, **kwargs):
 
     elif attack == "custom":
         for key in kwargs.keys():
-            if key not in ["list_of_nodes"]:
+            if key not in ["list_of_nodes", "cluster_algorithm", "total_clusters"]:
                 raise ValueError(f"Argument {key} not recognized")
         return resilience_custom(networkGraph, **kwargs)
 
@@ -231,7 +236,7 @@ def resilience_cluster(networkGraph, cluster_algorithm=None, total_clusters=0, n
 # ------------------------------------------------------------------------------------------
 
 
-def resilience_custom(networkGraph, list_of_nodes=None):
+def resilience_custom(networkGraph, list_of_nodes=None, cluster_algorithm=None, total_clusters=0):
     """
     :Function: Compute the resilience of the networkGraph using the custom attack
     :param networkGraph: NetworkGraph
@@ -242,6 +247,32 @@ def resilience_custom(networkGraph, list_of_nodes=None):
     :rtype: NetworkGraph
     """
     G = copy_networkGraph(networkGraph)
+
+    if cluster_algorithm:
+        if cluster_algorithm not in ['louvain', 'greedy_modularity', 'label_propagation', 'asyn_lpa',
+                                     'k_clique', 'spectral', 'kmeans', 'agglomerative', 'hierarchical', 'dbscan']:
+            print(ValueError("Invalid cluster type", "please choose from the following: 'louvain', 'greedy_modularity', "
+                                                     "'label_propagation', 'asyn_lpa',"
+                                                     "'k_clique', 'spectral', 'kmeans' "
+                                                     "'agglomerative', 'hierarchical', 'dbscan'"))
+            return 0
+
+        if total_clusters <= 0:
+            print(ValueError("Invalid number of clusters, please choose a positive number"))
+            return 0
+
+        clusters = ml.get_communities(G, cluster_algorithm, total_clusters)
+
+        list_cluster_ids = []
+        for node in list_of_nodes:
+            cluster_id = clusters[clusters['Node'] == node]['Cluster_id'].values[0]
+            list_cluster_ids.append(cluster_id)
+
+        list_of_nodes = []
+        for cluster_id in list_cluster_ids:
+            nodes = clusters[clusters['Cluster_id'] == cluster_id]['Node'].values
+            list_of_nodes.append(nodes)
+
     G = remove_nodes(G, list_of_nodes)
     return G
 
