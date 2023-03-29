@@ -5,8 +5,6 @@ Purpose: Machine Learning for the NetworkX graphs
 """
 
 import warnings
-from itertools import takewhile
-
 import networkx as nx
 import networkx.algorithms.community as nx_comm
 import numpy as np
@@ -14,8 +12,7 @@ import pandas as pd
 from distinctipy import distinctipy
 from kneed import KneeLocator
 from sklearn.cluster import SpectralClustering, KMeans, AgglomerativeClustering, DBSCAN
-import random
-import matplotlib.pyplot as plt
+import src.utils as utils
 
 warnings.filterwarnings("ignore")
 
