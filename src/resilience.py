@@ -349,8 +349,11 @@ def resilience_cluster_custom(networkGraph, cluster_algorithm=None, total_cluste
     clusters = ml.get_communities(networkGraph, cluster_algorithm, total_clusters)
 
     if cluster_ids is not None and len(cluster_ids) > 0:
+        nodes_to_remove = []
         for cluster_id in cluster_ids:
-            nodes_to_remove = clusters[clusters['Cluster_id'] == cluster_id]['Node'].values
-            G = remove_nodes(G, nodes_to_remove)
+            nodes = clusters[clusters['Cluster_id'] == cluster_id]['Node'].values
+            nodes_to_remove.extend(nodes)
+
+        G = remove_nodes(G, nodes_to_remove)
 
     return G
