@@ -9,9 +9,9 @@ Purpose: Compute the metrics for the NetworkX graphs
 import networkx as nx
 import numpy as np
 import pandas as pd
-from pandas.api.types import is_numeric_dtype
 
 from src.utils import memoize
+from utils import return_nan
 
 
 # ----------------------------------------------------------------------------------------
@@ -590,43 +590,3 @@ def export_to_csv(df, filename):
     """
     df.to_csv(filename, index=False)
     return 1
-
-
-# ----------------------------------------------------------------------------------------
-
-def clean_df(df):
-    """
-    :Function: Clean the dataframe by rounding the values to 6 decimals and shortening the strings to 12 characters
-    :param df: Pandas dataframe to clean
-    :type df: pd.DataFrame
-    :return: Pandas dataframe cleaned
-    :rtype: pd.DataFrame
-    """
-
-    # if the columns is float round it to 6 decimals
-    for column in df.columns:
-        # if the columns is a number round it to 6 decimals
-        if is_numeric_dtype(df[column]):
-            df[column] = df[column].round(6)
-
-        if df[column].dtype == object:
-            df[column] = df[column].apply(lambda x: x[:6] + '...' + x[-6:] if len(x) > 15 and x[:2] == '0x' else x[:12])
-
-    return df
-
-
-# ----------------------------------------------------------------------------------------
-
-
-def return_nan(networkGraphs, metric):
-    """
-    :Function: Return a dataframe with NaN values for the given metric
-    :param networkGraphs: NetworkGraphs object
-    :type networkGraphs: NetworkGraphs
-    :param metric: Metric name
-    :return: Pandas dataframe with the metric and NaN values
-    """
-    df = pd.DataFrame(columns=['Node', metric])
-    df['Node'] = list(networkGraphs.Graph.nodes())
-    df[metric] = np.nan
-    return df

@@ -1,14 +1,25 @@
-# from src.metrics import
-from _md5 import md5
+"""
+Author: Alpha Team Group Project
+Date: March 2023
+Purpose: utils.py contains utility functions for the project
+"""
 
-# import jenkins hashing function
+# ----------------------------------------- Imports ----------------------------------------- #
+
+from _md5 import md5
+import numpy as np
+import pandas as pd
+from pandas.core.dtypes.common import is_numeric_dtype
+
+# ----------------------------------------- CONSTANT ----------------------------------------- #
 
 red = "\033[0;91m"
 green = "\033[0;92m"
 yellow = "\033[0;93m"
 blue = "\033[0;94m"
-
 networkGraphs_cache = {}
+
+# ----------------------------------------- Functions ----------------------------------------- #
 
 def memoize(func):
     cache = {}
@@ -25,6 +36,10 @@ def memoize(func):
 
     return wrapper
 
+
+# ---------------------------------------------------------------------------------------- #
+
+
 def set_networkGraph(networkGraph, session_id):
     """
     Set the network graph
@@ -34,6 +49,10 @@ def set_networkGraph(networkGraph, session_id):
     networkGraphs_cache[session_id] = networkGraph
     return 0
 
+
+# ---------------------------------------------------------------------------------------- #
+
+
 @memoize
 def get_networkGraph(session_id):
     """
@@ -42,39 +61,43 @@ def get_networkGraph(session_id):
     """
     return networkGraphs_cache[session_id]
 
-# def cache_data1(networkGraph):
-#     """
-#     Cache the data for the network graph for metrics functions
-#     :param networkGraph: Network graph
-#     :return: None
-#     """
-#     for directed in [True, False]:
-#         for multi in [True, False]:
-#             compute_eigen_centrality(networkGraph, directed=directed, multi=multi)
-#             compute_betweeness_centrality(networkGraph, directed=directed, multi=multi)
-#             compute_closeness_centrality(networkGraph, directed=directed, multi=multi)
-#             compute_degree_centrality(networkGraph, directed=directed, multi=multi)
-#             compute_load_centrality(networkGraph, directed=directed, multi=multi)
-#             compute_kcore(networkGraph, directed=directed, multi=multi)
-#             compute_nodes_degree(networkGraph, directed=directed, multi=multi)
-#             compute_page_rank(networkGraph, directed=directed, multi=multi)
-#             compute_triangles(networkGraph, directed=directed, multi=multi)
-# def cache_data2(networkGraph):
-#     """
-#     Cache the data for the network graph for global metrics functions
-#     :param networkGraph: Network graph
-#     :return: None
-#     """
-#     compute_global_metrics(networkGraph)
-#     print('Computed global metrics')
-#
-# def cache_data3(networkGraph):
-#     """
-#     Cache the data for the network graph for node metrics functions
-#     :param networkGraph: Network graph
-#     :return: Nones
-#     """
-#     for directed in [True, False]:
-#         for multi in [True, False]:
-#             compute_node_metrics(networkGraph, directed=directed, multi=multi)
-#             compute_node_centralities(networkGraph, directed=directed, multi=multi)
+
+# ---------------------------------------------------------------------------------------- #
+
+
+def return_nan(networkGraphs, column):
+    """
+    :Function: Return a dataframe with NaN values for the given metric
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: NetworkGraphs
+    :param column: Column name
+    :return: Pandas dataframe with the metric and NaN values
+    """
+    df = pd.DataFrame(columns=['Node', column])
+    df['Node'] = list(networkGraphs.Graph.nodes())
+    df[column] = np.nan
+    return df
+
+
+# ---------------------------------------------------------------------------------------- #
+
+
+def clean_df(df):
+    """
+    :Function: Clean the dataframe by rounding the values to 6 decimals and shortening the strings to 12 characters
+    :param df: Pandas dataframe to clean
+    :type df: pd.DataFrame
+    :return: Pandas dataframe cleaned
+    :rtype: pd.DataFrame
+    """
+
+    # if the columns is float round it to 6 decimals
+    for column in df.columns:
+        # if the columns is a number round it to 6 decimals
+        if is_numeric_dtype(df[column]):
+            df[column] = df[column].round(6)
+
+        if df[column].dtype == object:
+            df[column] = df[column].apply(lambda x: x[:6] + '...' + x[-6:] if len(x) > 15 and x[:2] == '0x' else x[:12])
+
+    return df
