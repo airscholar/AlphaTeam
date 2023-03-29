@@ -7,7 +7,7 @@ Purpose: Visualisation for the NetworkX graphs
 # ----------------------------------------------------------------------------------------
 import src.machineLearning as ml
 import src.metrics as m
-import utils
+import src.utils
 from src.visualisation_src.ML_visualisation import *
 from src.visualisation_src.metrics_visualisation import *
 from src.visualisation_src.basic_network_visualisation import *
