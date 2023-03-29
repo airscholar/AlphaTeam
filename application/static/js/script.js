@@ -84,3 +84,8 @@ function setSpinnerVisibility(visible) {
 // Example usage
 let showSpinner = false; // Set this variable to true to display the spinner or false to hide it
 setSpinnerVisibility(showSpinner);
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+

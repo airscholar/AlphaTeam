@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import re
 import time
 import shutil
+from dictionary.information import *
 
 sys.path.insert(1, '../')
 from src.utils import *
@@ -15,6 +16,7 @@ from src.metrics import *
 from src.preprocessing import *
 from src.visualisation import *
 from flask import g
+import html
 
 centrality_routes = Blueprint('centrality_routes', __name__)
 
@@ -91,6 +93,8 @@ def centrality_all():
     graph3 = session['graph_name3']
     graph4 = session['graph_name4']
     
+    print('graph1 value',graph1)
+
     if graph1 == 'no_graph.html':
         graph_path1 = '../static/' + graph1
     else:
@@ -111,7 +115,9 @@ def centrality_all():
     else:
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
-    return render_template('centrality/centrality_all.html', example=df, tab=tab, method_name='All Centrality',
+
+    return render_template('centrality/centrality_all.html', example=df, tab=tab, method_name='All Centrality', 
+    description = description['all_centrality'], tooltip_multi= tooltips['multi'],
     multi_toggle=multi_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
@@ -214,6 +220,7 @@ def centrality_degree():
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
     return render_template('centrality/centrality_degree.html', example=df, tab=tab, method_name='Degree Centrality',
+    description = description['centrality_degree'], tooltip_multi= tooltips['multi'],
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
@@ -316,6 +323,7 @@ def centrality_eigenvector():
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
     return render_template('centrality/centrality_eigenvector.html', example=df, tab=tab, method_name='Eigenvector Centrality',
+    description = description['centrality_eigenvector'], tooltip_multi= tooltips['multi'],
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
@@ -418,6 +426,7 @@ def centrality_closeness():
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
     return render_template('centrality/centrality_closeness.html', example=df, tab=tab, method_name='Closeness Centrality',
+    description = description['centrality_closeness'], tooltip_multi= tooltips['multi'],
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
@@ -520,6 +529,7 @@ def centrality_betwenness():
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
     return render_template('centrality/centrality_betwenness.html', example=df, tab=tab, method_name='Betwenness Centrality',
+    description = description['centrality_betwenness'], tooltip_multi= tooltips['multi'],
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,
@@ -622,6 +632,7 @@ def centrality_load():
         graph_path4 = '../static/uploads/' + filename2 + '/' + graph4
 
     return render_template('centrality/centrality_load.html', example=df, tab=tab, method_name='Load Centrality',
+    description = description['centrality_load'], tooltip_multi= tooltips['multi'],
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, 
     multi_toggle2=multi_toggle2, dynamic_toggle2=dynamic_toggle2, directed_toggle2=directed_toggle2, layout2=layout2, graph2=graph_path2,
     multi_toggle3=multi_toggle3, dynamic_toggle3=dynamic_toggle3, directed_toggle3=directed_toggle3, layout3=layout3, graph3=graph_path3,

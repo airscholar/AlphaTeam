@@ -29,8 +29,12 @@ def clustering_louvanian():
     multi_toggle = True
     dynamic_toggle = False
     directed_toggle = False
-    layout = 'map'
     number_of_clusters = None
+    if networkGraphs.is_spatial():
+        layout = 'map'
+    else:
+        layout = 'sfdp'
+
 
     if request.method == 'POST':
             number_of_clusters = request.form.get('number_of_clusters', None)
@@ -39,10 +43,13 @@ def clustering_louvanian():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
  
@@ -62,8 +69,11 @@ def clustering_greedy_modularity():
     multi_toggle = True
     dynamic_toggle = False
     directed_toggle = False
-    layout = 'map'
     number_of_clusters = None
+    if networkGraphs.is_spatial():
+        layout = 'map'
+    else:
+        layout = 'sfdp'
 
     if request.method == 'POST':
             number_of_clusters = request.form.get('number_of_clusters', None)
@@ -72,10 +82,13 @@ def clustering_greedy_modularity():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
  
@@ -95,8 +108,11 @@ def clustering_label_propagation():
     multi_toggle = True
     dynamic_toggle = False
     directed_toggle = False
-    layout = 'map'
     number_of_clusters = None
+    if networkGraphs.is_spatial():
+        layout = 'map'
+    else:
+        layout = 'sfdp'
 
     if request.method == 'POST':
             number_of_clusters = request.form.get('number_of_clusters', None)
@@ -105,10 +121,13 @@ def clustering_label_propagation():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
  
@@ -128,8 +147,11 @@ def clustering_asyn_lpa():
     multi_toggle = True
     dynamic_toggle = False
     directed_toggle = False
-    layout = 'map'
     number_of_clusters = None
+    if networkGraphs.is_spatial():
+        layout = 'map'
+    else:
+        layout = 'sfdp'
 
     if request.method == 'POST':
             number_of_clusters = request.form.get('number_of_clusters', None)
@@ -138,10 +160,13 @@ def clustering_asyn_lpa():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
  
@@ -161,8 +186,11 @@ def clustering_k_clique():
     multi_toggle = True
     dynamic_toggle = False
     directed_toggle = False
-    layout = 'map'
     number_of_clusters = None
+    if networkGraphs.is_spatial():
+        layout = 'map'
+    else:
+        layout = 'sfdp'
 
     if request.method == 'POST':
             number_of_clusters = request.form.get('number_of_clusters', None)
@@ -171,10 +199,13 @@ def clustering_k_clique():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
  
@@ -194,8 +225,11 @@ def clustering_spectral():
     multi_toggle = True
     dynamic_toggle = False
     directed_toggle = False
-    layout = 'map'
     number_of_clusters = None
+    if networkGraphs.is_spatial():
+        layout = 'map'
+    else:
+        layout = 'sfdp'
 
     if request.method == 'POST':
             number_of_clusters = request.form.get('number_of_clusters', None)
@@ -204,10 +238,13 @@ def clustering_spectral():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
  
@@ -217,7 +254,7 @@ def clustering_spectral():
         graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
 
     return render_template('cluster/clustering_spectral.html', example=df, number_of_clusters=number_of_clusters,
-    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, method_name='spectrals')
+    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, method_name='Spectral')
 
 @cluster_routes.route('/clustering/kmeans', endpoint='clustering_kmeans', methods=['GET', 'POST'])
 def clustering_kmeans():
@@ -227,8 +264,11 @@ def clustering_kmeans():
     multi_toggle = True
     dynamic_toggle = False
     directed_toggle = False
-    layout = 'map'
     number_of_clusters = None
+    if networkGraphs.is_spatial():
+        layout = 'map'
+    else:
+        layout = 'sfdp'
 
     if request.method == 'POST':
             number_of_clusters = request.form.get('number_of_clusters', None)
@@ -237,10 +277,13 @@ def clustering_kmeans():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
  
@@ -260,8 +303,11 @@ def clustering_agglomerative():
     multi_toggle = True
     dynamic_toggle = False
     directed_toggle = False
-    layout = 'map'
     number_of_clusters = None
+    if networkGraphs.is_spatial():
+        layout = 'map'
+    else:
+        layout = 'sfdp'
 
     if request.method == 'POST':
             number_of_clusters = request.form.get('number_of_clusters', None)
@@ -270,13 +316,16 @@ def clustering_agglomerative():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
- 
+  
     if graph1 == 'no_graph.html':
         graph_path1 = '../static/' + graph1
     else:
@@ -293,8 +342,11 @@ def clustering_dbscan():
     multi_toggle = True
     dynamic_toggle = False
     directed_toggle = False
-    layout = 'map'
     number_of_clusters = None
+    if networkGraphs.is_spatial():
+        layout = 'map'
+    else:
+        layout = 'sfdp'
 
     if request.method == 'POST':
             number_of_clusters = request.form.get('number_of_clusters', None)
@@ -303,10 +355,13 @@ def clustering_dbscan():
             directed_toggle = bool(request.form.get('directed_toggle'))
             layout = request.form.get('layout')
             number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+            if number_of_clusters is not None:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=number_of_clusters,dynamic=dynamic_toggle, layout=layout)
+            else:
+                df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
             session['graph_name1'] = graph_name1
     else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
+        df, graph_name1 = plot_cluster(networkGraphs, clusterType, noOfClusters=0,dynamic=dynamic_toggle, layout=layout)                   
         session['graph_name1'] = graph_name1
     graph1 = session['graph_name1']
  
@@ -317,36 +372,3 @@ def clustering_dbscan():
 
     return render_template('cluster/clustering_dbscan.html', example=df, number_of_clusters=number_of_clusters,
     multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, method_name='Dbscan')
-
-@cluster_routes.route('/clustering/hierarchical', endpoint='clustering_hierarchical', methods=['GET', 'POST'])
-def clustering_hierarchical():
-    filename2 = session['filename2']
-    networkGraphs = get_networkGraph(filename2)
-    clusterType = 'hierarchical'
-    multi_toggle = True
-    dynamic_toggle = False
-    directed_toggle = False
-    layout = 'map'
-    number_of_clusters = None
-
-    if request.method == 'POST':
-            number_of_clusters = request.form.get('number_of_clusters', None)
-            multi_toggle = bool(request.form.get('multi_toggle'))
-            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
-            directed_toggle = bool(request.form.get('directed_toggle'))
-            layout = request.form.get('layout')
-            number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-            df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
-            session['graph_name1'] = graph_name1
-    else:
-        df, graph_name1 = plot_cluster(networkGraphs, clusterType, dynamic=dynamic_toggle, layout=layout)
-        session['graph_name1'] = graph_name1
-    graph1 = session['graph_name1']
- 
-    if graph1 == 'no_graph.html':
-        graph_path1 = '../static/' + graph1
-    else:
-        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
-
-    return render_template('cluster/clustering_hierarchical.html', example=df, number_of_clusters=number_of_clusters,
-    multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle, layout=layout, graph1=graph_path1, method_name='Hierarchical')

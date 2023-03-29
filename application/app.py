@@ -1,8 +1,11 @@
 from flask import Flask, request, render_template, redirect, url_for, session
 from flask_session import Session
+from dictionary.information import *
 from routes.cluster_routes import cluster_routes
 from routes.centrality_routes import centrality_routes 
 from routes.node_routes import node_routes
+from routes.resilience_routes import resilience_routes
+import html
 import csv
 import sys
 sys.path.insert(1, '../')
@@ -28,6 +31,7 @@ cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 app.register_blueprint(cluster_routes)
 app.register_blueprint(centrality_routes)
 app.register_blueprint(node_routes)
+app.register_blueprint(resilience_routes)
 
 # Define a custom error page for 500 Internal Server Error
 @app.errorhandler(500)
@@ -39,14 +43,14 @@ def internal_server_error(e):
         filepath = 'static/uploads/'+filename2
         if os.path.exists(filepath):
             shutil.rmtree(filepath)        
-        cache.clear()
-         # Remove the keys from the session
-        session.pop('network_graphs', None)
-        session.pop('filename', None)
-        session.pop('filename2', None)
-        session.pop('filepath', None)
-        session.pop('option', None)
-        session.clear()
+        #cache.clear()
+        # Remove the keys from the session
+        #session.pop('network_graphs', None)
+        #session.pop('filename', None)
+        #session.pop('filename2', None)
+        #session.pop('filepath', None)
+        #session.pop('option', None)
+        #session.clear()
     return render_template('500.html')
 
 # Define a custom error page for 404 Not Found Error
@@ -133,6 +137,7 @@ def upload():
         # (e.g., process the file data and store it in a database)
 
         filepath = destination_dir + '/' + filename
+        
         # Store the filename in a session variable
         session['filename'] = filename
         session['filename2'] = filename2
@@ -213,6 +218,7 @@ def visualisation():
     graph1 = session['graph_name1']
     graph2 = session['graph_name2']
     
+
     if graph1 == 'no_graph.html':
         graph_path1 = '../static/' + graph1
     else:
@@ -227,20 +233,6 @@ def visualisation():
     return render_template('visualisation.html', tab=tab, show_temporal=show_temporal,
     dynamic_toggle=dynamic_toggle, layout=layout, graph1=graph_path1, 
     layout2=layout2, graph2=graph_path2)
-
-#-------------------------------------------EDGE--------------------------------------------
-
-@app.route('/edge_all', endpoint='edge_all', methods=['GET', 'POST'])
-def edge_all():
-    networkGraphs = session['network_graphs']
-
-    edge_allDF = cache.get('edge_allDF')
-    if edge_allDF is None:
-        edge_allDF = compute_load_centrality(networkGraphs, directed=False)
-        cache.set('edge_allDF', edge_allDF)
-    table_headers = list(edge_allDF.columns.values)
-    table_rows = edge_allDF.values.tolist()
-    return render_template('edge_all.html', example=edge_allDF)
 
 #-------------------------------------------HOTSPOT-----------------------------------------
 
@@ -258,84 +250,14 @@ def hotspot_density():
     else:
         graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
 
+    if graph1 == 'no_graph.html':
+        graph_path1 = '../static/' + graph1
+    else:
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+        
     return render_template('hotspot_density.html', example=df, graph1=graph_path1, method_name='Density')
 
 
-#-------------------------------------------RESILIENCE_ANALYSIS-----------------------------
-
-@app.route('/resilience/malicious', endpoint='resilience_malicious', methods=['GET', 'POST'])
-def resilience_analyisis_malicious():
-    layout = 'map'
-    layout2 = 'equal_to'
-    tab_main = 'tab1'
-    
-    if request.method == 'POST':
-        number_of_levels = request.form.get('number_of_levels', None)
-        number_of_levels = int(number_of_levels) if number_of_levels else None
-        number_of_threashold = request.form.get('number_of_threashold', None)
-        layout2 = request.form.get('layout2')
-        number_of_threashold = int(number_of_threashold) if number_of_threashold else None
-        layout = request.form.get('layout')
-    else:
-        number_of_levels = None
-        number_of_threashold = None
-        session['val1'] = None
-        session['val2'] = None
-
-    val1 = session.get('val1', None)
-    val2 = session.get('val2', None)
-    if val1 != number_of_levels:
-        session['val1'] = number_of_levels
-        tab_main = 'tab1'
-    if val2 != number_of_threashold:
-        session['val2'] = number_of_threashold
-        tab_main = 'tab2'
- 
-    return render_template('resilience/resilience_analyisis_malicious.html', tab_main=tab_main, 
-    layout=layout, layout2=layout2, number_of_levels=number_of_levels, number_of_threashold=number_of_threashold)
-
-@app.route('/resilience/random', endpoint='resilience_random', methods=['GET', 'POST'])
-def resilience_analyisis_random():
-    tab_main = 'tab1'
-    
-    if request.method == 'POST':
-        number_of_nodes = request.form.get('number_of_nodes', None)
-        number_of_nodes = int(number_of_nodes) if number_of_nodes else None
-        number_of_edges = request.form.get('number_of_edges', None)
-        number_of_edges = int(number_of_edges) if number_of_edges else None
-    else:
-        number_of_nodes = None
-        number_of_edges = None
-        session['val1'] = None
-        session['val2'] = None
-
-    val1 = session.get('val1', None)
-    val2 = session.get('val2', None)
-    if val1 != number_of_nodes:
-        session['val1'] = number_of_nodes
-        tab_main = 'tab1'
-    if val2 != number_of_edges:
-        session['val2'] = number_of_edges
-        tab_main = 'tab2'
- 
-    return render_template('resilience/resilience_analyisis_random.html', tab_main=tab_main, 
-    number_of_nodes=number_of_nodes, number_of_edges=number_of_edges)
-
-@app.route('/resilience/cluster', endpoint='resilience_cluster', methods=['GET', 'POST'])
-def resilience_analyisis_cluster():
-    layout = 'map'
-    
-    if request.method == 'POST':
-        number_of_clusters = request.form.get('number_of_clusters', None)
-        number_of_clusters = int(number_of_clusters) if number_of_clusters else None
-        cluster_to_attack = request.form.get('cluster_to_attack', None)
-        cluster_to_attack = int(cluster_to_attack) if cluster_to_attack else None
-        layout = request.form.get('layout')
-    else:
-        number_of_clusters = None
-        cluster_to_attack = None
- 
-    return render_template('resilience/resilience_analyisis_cluster.html', layout=layout, number_of_clusters=number_of_clusters, cluster_to_attack=cluster_to_attack)
 #-------------------------------------------MAIN--------------------------------------------
 if __name__ == '__main__':
     app.run(debug=True)
