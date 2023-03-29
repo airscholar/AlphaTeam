@@ -6,7 +6,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <h3>Global Metrics</h3>
+            <h3 class="styledh3">Global Metrics</h3>
             <hr> <!-- Add a horizontal rule for visual separation -->
         </div>
     </div>
@@ -37,18 +37,38 @@
             <div class="card card-body" style="align-items: center;">
 
                 <form method="post">
-                    <div class="toggle-btn" style="margin:5px">
-                        <input type="checkbox" id="multi-toggle" name="multi_toggle" {% if multi_toggle %}checked{%
-                            endif %}>
-                        <label for="multi-toggle"></label>
+                    <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                        <span>Multi</span>
+                        <img src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                            alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                            data-placement="bottom" title="{{tooltip_multi}}">
                     </div>
-                    <span>Multi</span>
-                    <div class="toggle-btn" style="margin:5px">
-                        <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if directed_toggle
-                            %}checked{% endif %}>
-                        <label for="directed-toggle"></label>
+
+                    <div class="toggle-container"
+                        style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
+                        <div class="toggle-btn">
+                            <input type="checkbox" id="multi-toggle" name="multi_toggle" {% if multi_toggle %}checked{%
+                                endif %}>
+                            <label for="multi-toggle"></label>
+                        </div>
                     </div>
-                    <span>Directed</span>
+
+
+                    <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                        <span style="display: inline-block; margin-right: 5px;">Directed</span>
+                        <img src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                            alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                            data-placement="bottom" title="{{tooltip_directed}}">
+                    </div>
+
+                    <div class="toggle-container"
+                        style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
+                        <div class="toggle-btn">
+                            <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if directed_toggle
+                                %}checked{% endif %}>
+                            <label for="directed-toggle"></label>
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-primary" style="margin:5px; width: 100%;">Submit</button>
                 </form>
             </div>

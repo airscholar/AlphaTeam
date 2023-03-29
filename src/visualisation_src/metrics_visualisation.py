@@ -81,7 +81,7 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
         return 'no_graph.html'
 
     pos = networkGraphs.pos[layout_]
-
+    
     metrics_names = df_.columns[1:]
 
     x_list = []
