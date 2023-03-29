@@ -11,6 +11,7 @@
     </div>
 
     <div class="col">
+        <!-- Input Accordion Starts -->
         <div class="accordion accordion-flush" id="accordionFlushExample">
             <div class="accordion-item">
                 <h2 class="accordion-header" id="flush-headingOne">
@@ -84,6 +85,7 @@
                 </div>
             </div>
         </div>
+        <!-- Output Accordion Starts -->
         <div class="accordion accordion-flush" id="accordionFlushExample1">
             <div class="accordion-item">
                 <h2 class="accordion-header" id="flush-headingTwo">
@@ -96,56 +98,35 @@
                 <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
                     data-bs-parent="#accordionFlushExample1">
                     <div class="accordion-body">
-                        <div class="container px-4 text-center">
-                            <div class="row gx-5">
-                                <div class="col">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            Image will be load here.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            This is some text within a card body.
-                                        </div>
-                                    </div>
-                                </div>
+                        <!-- Start the Main content from here -->
+                        <nav>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <button class="nav-link active" id="nav-Visualisation-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-Visualisation" type="button" role="tab"
+                                    aria-controls="nav-Visualisation" aria-selected="true">Visualisation</button>
+                                <button class="nav-link" id="nav-Centrality-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-Centrality" type="button" role="tab"
+                                    aria-controls="nav-Centrality" aria-selected="false">Centrality</button>
+                                <button class="nav-link" id="nav-Nodes-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-Nodes" type="button" role="tab" aria-controls="nav-Nodes"
+                                    aria-selected="false">Nodes</button>
+                                <button class="nav-link" id="nav-Clusters-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-Clusters" type="button" role="tab" aria-controls="nav-Clusters"
+                                    aria-selected="false">Clusters</button>
                             </div>
-                            <div class="row gx-5">
-                                <div class="col">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            Image will be load here.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            This is some text within a card body.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row gx-5">
-                                <div class="col">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            Image will be load here.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            This is some text within a card body.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        </nav>
+
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-Visualisation" role="tabpanel"
+                                aria-labelledby="nav-Visualisation-tab">Network</div>
+                            <div class="tab-pane fade" id="nav-Centrality" role="tabpanel"
+                                aria-labelledby="nav-Centrality-tab">Centrality</div>
+                            <div class="tab-pane fade" id="nav-Nodes" role="tabpanel" aria-labelledby="nav-Nodes-tab">
+                                Nodes</div>
+                            <div class="tab-pane fade" id="nav-Clusters" role="tabpanel"
+                                aria-labelledby="nav-Clusters-tab">Clusters</div>
                         </div>
+                        <!-- End the Main content here -->
                     </div>
                 </div>
             </div>

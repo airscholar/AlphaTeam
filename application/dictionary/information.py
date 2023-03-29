@@ -11,7 +11,7 @@ description = {
     'centrality_load' : 'Load centrality is a measure in network analysis that quantifies the importance of a node based on the amount of flow (e.g., information or resources) it handles within a network. It is closely related to betweenness centrality',
     'node_all' : 'node_all',
     'node_degree' : 'node_degree',
-    'node_kcore' : '',
+    'node_kcore' : '<i>k-core computation allows for Directed but not Multi graphs.</i>',
     'node_triangle' : '',
     'node_pagerank' : '',
     '' : '',

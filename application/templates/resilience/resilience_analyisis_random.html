@@ -11,106 +11,129 @@
     </div>
 
     <div class="col">
-        <div class="card mx-auto" style="width: 30rem;">
-            <div class="card-body">
-                <form method="post">
-                    <div class="row">
-                        <div class="container mt-3">
-                            <ul class="nav nav-tabs">
-                                <li class="nav-item">
-                                    <a class="nav-link {% if tab_main=='tab1' %}active{% else %}{% endif %}"
-                                        data-toggle="tab" href="#form_tab1">Nodes</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link {% if tab_main=='tab2' %}active{% else %}{% endif %}"
-                                        data-toggle="tab" href="#form_tab2">Edges</a>
-                                </li>
-                            </ul>
-
-                            <div class="tab-content" style="background-color: white; padding-bottom: 25px;">
-                                <div id="form_tab1"
-                                    class="container tab-pane {% if tab_main=='tab1' %}active{% else %}fade{% endif %}">
-                                    <br />
+        <!-- Input Accordion Starts -->
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        Input Form
+                    </button>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne"
+                    data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <div class="card mx-auto" style="width: 30rem;">
+                            <div class="card-body">
+                                <form id="mainform-accordian" method="post">
                                     <div class="row">
-                                        <label for="number_of_nodes" style="margin-top: 5px;">Number of Nodes</label>
-                                        <input type="number" id="number_of_nodes" style="margin: 5px;"
-                                            name="number_of_nodes" class="form-control" min="1" step="1"
-                                            placeholder="None" {% if number_of_nodes is not none
-                                            %}value="{{ number_of_nodes }}" {% endif %}>
-                                    </div>
-                                </div>
-                                <div id="form_tab2"
-                                    class="container tab-pane {% if tab_main=='tab2' %}active{% else %}fade{% endif %}">
-                                    <br />
+                                        <div class="container mt-3">
 
-                                    <div class="row">
-                                        <label for="number_of_edges" style="margin-top: 5px;">Number of Edges</label>
-                                        <input type="number" id="number_of_edges" style="margin: 5px;"
-                                            name="number_of_edges" class="form-control" min="1" step="1"
-                                            placeholder="None" {% if number_of_edges is not none
-                                            %}value="{{ number_of_edges }}" {% endif %}>
+                                            <nav>
+                                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                                    <button
+                                                        class="nav-link {% if tab_main=='tab1' %}active{% else %}{% endif %}"
+                                                        id="nav-Nodes-tab" data-bs-toggle="tab"
+                                                        data-bs-target="#form_tab1" type="button" role="tab"
+                                                        aria-controls="nav-Nodes" aria-selected="true">Nodes</button>
+                                                    <button
+                                                        class="nav-link {% if tab_main=='tab2' %}active{% else %}{% endif %}"
+                                                        id="nav-Edges-tab" data-bs-toggle="tab"
+                                                        data-bs-target="#form_tab2" type="button" role="tab"
+                                                        aria-controls="nav-Edges" aria-selected="false">Edges</button>
+                                                </div>
+                                            </nav>
+
+
+                                            <div class="tab-content"
+                                                style="background-color: white; padding-bottom: 25px;">
+                                                <div id="form_tab1"
+                                                    class="container tab-pane {% if tab_main=='tab1' %}active{% else %}fade{% endif %}">
+                                                    <br />
+                                                    <div class="row">
+                                                        <label for="number_of_nodes" style="margin-top: 5px;">Number of
+                                                            Nodes</label>
+                                                        <input type="number" id="number_of_nodes" style="margin: 5px;"
+                                                            name="number_of_nodes" class="form-control" min="1" step="1"
+                                                            placeholder="None" {% if number_of_nodes is not none
+                                                            %}value="{{ number_of_nodes }}" {% endif %}>
+                                                    </div>
+                                                </div>
+                                                <div id="form_tab2"
+                                                    class="container tab-pane {% if tab_main=='tab2' %}active{% else %}fade{% endif %}">
+                                                    <br />
+
+                                                    <div class="row">
+                                                        <label for="number_of_edges" style="margin-top: 5px;">Number of
+                                                            Edges</label>
+                                                        <input type="number" id="number_of_edges" style="margin: 5px;"
+                                                            name="number_of_edges" class="form-control" min="1" step="1"
+                                                            placeholder="None" {% if number_of_edges is not none
+                                                            %}value="{{ number_of_edges }}" {% endif %}>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                    <button type="submit" class="btn btn-primary"
+                                        style="margin:5px; width: 100%;">Submit</button>
+                                </form>
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="margin:5px; width: 100%;">Submit</button>
-                </form>
+                </div>
+            </div>
+        </div>
+        <!-- Output Accordion Starts -->
+        <div class="accordion accordion-flush" id="accordionFlushExample1">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingTwo">
+                    <button id="accordion-button-two" class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                        aria-controls="flush-collapseTwo">
+                        Output
+                    </button>
+                </h2>
+                <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
+                    data-bs-parent="#accordionFlushExample1">
+                    <div class="accordion-body">
+                        <!-- Start the Main content from here -->
+                        <nav>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <button class="nav-link active" id="nav-Visualisation-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-Visualisation" type="button" role="tab"
+                                    aria-controls="nav-Visualisation" aria-selected="true">Visualisation</button>
+                                <button class="nav-link" id="nav-Centrality-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-Centrality" type="button" role="tab"
+                                    aria-controls="nav-Centrality" aria-selected="false">Centrality</button>
+                                <button class="nav-link" id="nav-Nodes-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-Nodes" type="button" role="tab" aria-controls="nav-Nodes"
+                                    aria-selected="false">Nodes</button>
+                                <button class="nav-link" id="nav-Clusters-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-Clusters" type="button" role="tab" aria-controls="nav-Clusters"
+                                    aria-selected="false">Clusters</button>
+                            </div>
+                        </nav>
+
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-Visualisation" role="tabpanel"
+                                aria-labelledby="nav-Visualisation-tab">Network</div>
+                            <div class="tab-pane fade" id="nav-Centrality" role="tabpanel"
+                                aria-labelledby="nav-Centrality-tab">Centrality</div>
+                            <div class="tab-pane fade" id="nav-Nodes" role="tabpanel" aria-labelledby="nav-Nodes-tab">
+                                Nodes</div>
+                            <div class="tab-pane fade" id="nav-Clusters" role="tabpanel"
+                                aria-labelledby="nav-Clusters-tab">Clusters</div>
+                        </div>
+                        <!-- End the Main content here -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
     <hr>
 
-    <div class="container px-4 text-center">
-        <div class="row gx-5">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        Image will be load here.
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        This is some text within a card body.
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row gx-5">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        Image will be load here.
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        This is some text within a card body.
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row gx-5">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        Image will be load here.
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        This is some text within a card body.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
