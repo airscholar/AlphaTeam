@@ -109,7 +109,7 @@ def resilience_random(networkGraph, number_of_nodes=0, number_of_edges=0):
 
     if number_of_nodes > 0:
         nodes = G.MultiDiGraph.nodes()
-        nodes_to_remove = random.sample(nodes, number_of_nodes)
+        nodes_to_remove = random.sample(sorted(nodes), number_of_nodes)
         G = remove_nodes(G, nodes_to_remove)
 
     if number_of_edges > 0:
