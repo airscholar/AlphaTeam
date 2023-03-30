@@ -2,6 +2,7 @@ import matplotlib as mpl
 import networkx as nx
 from pyvis import network as net
 from tqdm import tqdm
+import numpy as np
 
 from src.visualisation_src.utils_visualisation import *
 
@@ -27,6 +28,8 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
     metrics_name = df_.columns[1]
     df_['std'] = (df_[metrics_name] - df_[metrics_name].min()) / (df_[metrics_name].max() - df_[metrics_name].min())
     size_ = 5 / df_['std'].mean()  # normalise the size of the nodes
+    df_['std'] = df_['std'].apply(lambda x: 0.05 if x < 0.1 else x)  # to avoid nodes with size 0
+    df_['std'] = df_['std'].apply(lambda x: x * size_)
 
     x_list = []
     y_list = []
@@ -45,13 +48,13 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
                                    marker=dict(showscale=True,
                                                colorbar=dict(thickness=10, title=metrics_name, xanchor='left',
                                                              titleside='right'), color=df_[metrics_name],
-                                               size=df_['std'] * size_))
+                                               size=df_['std']))
     else:
         node_trace = go.Scatter(x=x_list, y=y_list, text=text_list, mode='markers', hoverinfo='text',
                                 marker=dict(showscale=True,
                                             colorbar=dict(thickness=10, title=metrics_name, xanchor='left',
                                                           titleside='right'), color=df_[metrics_name],
-                                            size=df_['std'] * size_))
+                                            size=df_['std']))
 
     edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
 
@@ -59,7 +62,26 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
 
-    fig.write_html(filename)
+    steps = []
+    range_ = np.arange(0.2, 2, 0.4)
+    for i in range_:
+        step = dict(
+            method="restyle",
+            label=f"Scale {round(i,2)}",
+        )
+        step["args"] = ["marker.size", [i * df_['std']]]
+        steps.append(step)
+
+    sliders = [dict(
+        active=2,
+        currentvalue={"prefix": "Size: ", "visible": False},
+        pad={"t": 10},
+        steps=steps
+    )]
+
+    fig.update_layout(sliders=sliders)
+
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
     return fig
 
 
@@ -110,7 +132,7 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
     return fig
 
 
@@ -181,7 +203,7 @@ def generate_histogram_metric(df_, filename):
                       bargap=0.1, )
     fig.update_traces(opacity=0.75)
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
 
     return fig
 
@@ -211,7 +233,7 @@ def generate_boxplot_metric(df_, filename):
                       yaxis_title="Values",
                       )
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
 
     return fig
 
@@ -241,7 +263,7 @@ def generate_violin_metric(df_, filename):
                       yaxis_title="Values",
                       )
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
 
     return fig
 
@@ -270,5 +292,5 @@ def generate_heatmap(networkGraph, filename):
     fig.update_xaxes(showticklabels=False)
     fig.update_yaxes(showticklabels=False)
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
     return fig

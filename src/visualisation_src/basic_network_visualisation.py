@@ -63,7 +63,7 @@ def static_visualisation(networkGraphs, filepath, directed=True, multi=False, la
                 )
             )
         fig.add_trace(go.Scattergeo(lon=x_, lat=y_, text=text, mode='markers', hoverinfo='text',
-                                    marker=dict(showscale=True, color='black', size=2)))
+                                    marker=dict(showscale=False, color='black', size=2)))
     else:
         for i, edge in enumerate(G.edges()):
             fig.add_trace(
@@ -74,12 +74,12 @@ def static_visualisation(networkGraphs, filepath, directed=True, multi=False, la
                 )
             )
         fig.add_trace(go.Scatter(x=x_, y=y_, text=text, mode='markers', hoverinfo='text',
-                                 marker=dict(showscale=True, color='black', size=2)))
+                                 marker=dict(showscale=False, color='black', size=2)))
 
     layout = get_layout(networkGraphs, title=f"Visualisation using {layout_} layout", layout_=layout_)
     fig.update_layout(layout)
 
-    fig.write_html(filepath)
+    fig.write_html(filepath, full_html=False, include_plotlyjs='cdn')
 
     return fig
 
