@@ -5,6 +5,8 @@ Purpose: Visualisation for the NetworkX graphs
 """
 
 # ----------------------------------------------------------------------------------------
+
+# Internal Imports
 import src.machineLearning as ml
 import src.metrics as m
 from src import utils
@@ -12,8 +14,10 @@ from src.visualisation_src.ML_visualisation import *
 from src.visualisation_src.metrics_visualisation import *
 from src.visualisation_src.basic_network_visualisation import *
 from src.visualisation_src.temporal_visualisation import *
-from pandas.api.types import is_numeric_dtype
 from src.visualisation_src.utils_visualisation import *
+
+# External Imports
+from pandas.api.types import is_numeric_dtype
 
 
 # ----------------------------------------------------------------------------------------
@@ -93,7 +97,7 @@ def plot_cluster(networkGraphs, clusterType, noOfClusters=0, dynamic=False, layo
         print(ValueError("Cluster type is not valid"))
         df = utils.return_nan(networkGraphs, 'Cluster')
         return df, 'no_graph.html'
-    if not networkGraphs.is_spatial() and layout == 'map' or noOfClusters >= len(networkGraphs.Graph.nodes)//2:
+    if not networkGraphs.is_spatial() and layout == 'map' or noOfClusters >= len(networkGraphs.Graph.nodes) // 2:
         print(ValueError("Graph is not spatial with coordinates, or max number of clusters is reached"))
         df = utils.return_nan(networkGraphs, 'Cluster')
         return df, 'no_graph.html'

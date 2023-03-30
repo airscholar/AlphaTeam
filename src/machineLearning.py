@@ -4,6 +4,12 @@ Date: March 2023
 Purpose: Machine Learning for the NetworkX graphs
 """
 
+# ----------------------------------------- Imports ----------------------------------------- #
+
+# Internal imports
+import src.utils as utils
+
+# External imports
 import warnings
 import networkx as nx
 import networkx.algorithms.community as nx_comm
@@ -12,7 +18,6 @@ import pandas as pd
 from distinctipy import distinctipy
 from kneed import KneeLocator
 from sklearn.cluster import SpectralClustering, KMeans, AgglomerativeClustering, DBSCAN
-import src.utils as utils
 
 warnings.filterwarnings("ignore")
 
@@ -68,7 +73,7 @@ def louvain_clustering(networkGraphs, noOfClusters=0):
     :return: dataframe
     """
     if 0 < noOfClusters:
-        communities = binary_search('louvain_communities',networkGraphs, noOfClusters)
+        communities = binary_search('louvain_communities', networkGraphs, noOfClusters)
     else:
         communities = list(nx_comm.louvain_communities(networkGraphs.Graph))
 
@@ -88,7 +93,7 @@ def greedy_modularity_clustering(networkGraphs, noOfClusters=0):
     :return: dataframe
     """
     if 0 < noOfClusters:
-        communities = binary_search('greedy_modularity_communities',networkGraphs, noOfClusters)
+        communities = binary_search('greedy_modularity_communities', networkGraphs, noOfClusters)
     else:
         communities = list(nx_comm.greedy_modularity_communities(networkGraphs.Graph))
 
@@ -180,8 +185,8 @@ def compute_clustering(networkGraph, max_range=30):
     adj_mat = nx.to_numpy_array(networkGraph)
 
     if max_range >= len(networkGraph.nodes()):
-        print('overriding max range', len(networkGraph.nodes())-1)
-        max_range = len(networkGraph.nodes())-1
+        print('overriding max range', len(networkGraph.nodes()) - 1)
+        max_range = len(networkGraph.nodes()) - 1
 
     # get optimal number of clusters
     wcss = []

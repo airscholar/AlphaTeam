@@ -6,6 +6,7 @@ Purpose: utils.py contains utility functions for the project
 
 # ----------------------------------------- Imports ----------------------------------------- #
 
+# External imports
 from _md5 import md5
 import numpy as np
 import pandas as pd
@@ -19,10 +20,12 @@ yellow = "\033[0;93m"
 blue = "\033[0;94m"
 networkGraphs_cache = {}
 
+
 # ----------------------------------------- Functions ----------------------------------------- #
 
 def memoize(func):
     cache = {}
+
     def wrapper(*args, **kwargs):
         key = (func, args, tuple(sorted(kwargs.items())))
         key_hash = md5(str(key).encode('utf-8')).hexdigest()

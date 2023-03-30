@@ -1,8 +1,17 @@
-from itertools import zip_longest
+"""
+Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Basic network visualisation module contains functions for basic network visualisation
+"""
 
-from pyvis import network as net
+# ----------------------------------------- Imports ----------------------------------------- #
 
+# Internal imports
 from src.visualisation_src.utils_visualisation import *
+
+# External imports
+from itertools import zip_longest
+from pyvis import network as net
 
 
 # ----------------------------------------------------------------------------------------

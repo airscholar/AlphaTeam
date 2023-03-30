@@ -1,10 +1,19 @@
-import os
+"""
+Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Visualisation utilities module contains functions for visualising the network graphs
+"""
 
+# ----------------------------------------- Imports ----------------------------------------- #
+
+# Internal imports
+from src.utils import memoize
+
+# External imports
+import os
 import geopandas as gpd
 import matplotlib.pyplot as plt
 from plotly import graph_objects as go
-
-from src.utils import memoize
 
 
 # ----------------------------------------------------------------------------------------
