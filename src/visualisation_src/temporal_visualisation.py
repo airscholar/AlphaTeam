@@ -114,6 +114,6 @@ def generate_temporal(networkGraphs, filename, layout_='map'):
     layout = get_layout(networkGraphs, layout_)
     fig.update_layout(layout)
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
 
     return filename

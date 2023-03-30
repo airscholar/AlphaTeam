@@ -8,6 +8,8 @@ Purpose: Resilience of the network
 
 import random
 
+import pandas as pd
+
 import src.machineLearning as ml
 from src.NetworkGraphs import NetworkGraphs
 from src.metrics import *
@@ -136,14 +138,14 @@ def resilience_random(networkGraph, number_of_nodes=0, number_of_edges=0):
     if number_of_nodes > 0:
         nodes = G.MultiDiGraph.nodes()
         nodes_to_remove = random.sample(sorted(nodes), number_of_nodes)
-        G = remove_nodes(G, nodes_to_remove)
+        G, df = remove_nodes(G, nodes_to_remove)
 
     if number_of_edges > 0:
         edges = G.MultiDiGraph.edges()
         edges_to_remove = random.sample(sorted(edges), number_of_edges)
-        G = remove_edges(G, edges_to_remove)
+        G, df = remove_edges(G, edges_to_remove)
 
-    return G
+    return G, df
 
 
 # ------------------------------------------------------------------------------------------
@@ -197,8 +199,8 @@ def resilience_malicious(networkGraph, metric=None, number_of_nodes=None, thresh
     if number_of_nodes:
         nodes_to_remove = df['Node'][:number_of_nodes].values
 
-    G = remove_nodes(G, nodes_to_remove)
-    return G
+    G, df = remove_nodes(G, nodes_to_remove)
+    return G, df
 
 
 # ------------------------------------------------------------------------------------------
@@ -227,12 +229,10 @@ def resilience_cluster(networkGraph, cluster_algorithm=None, total_clusters=0, n
                                                  "'agglomerative', 'hierarchical', 'dbscan'"))
         return 0
 
-    if number_of_clusters > total_clusters:
+    if 0 >= number_of_clusters > total_clusters:
         print(ValueError("Invalid number of clusters",
-                         "please choose a number of clusters smaller than the total number of clusters"))
-        return 0
-    elif number_of_clusters <= 0:
-        print(ValueError("Invalid number of clusters, please choose a positive number"))
+                         "please choose a number of clusters smaller than the total number of clusters",
+                         "or a positive number"))
         return 0
 
     clusters = ml.get_communities(G, cluster_algorithm, total_clusters)
@@ -243,9 +243,9 @@ def resilience_cluster(networkGraph, cluster_algorithm=None, total_clusters=0, n
     nodes_to_remove = []
     for cluster in clusters_to_remove.iterrows():
         nodes_to_remove.append(cluster[1]['Node'])
-    networkGraph = remove_nodes(G, nodes_to_remove)
+    networkGraph, df = remove_nodes(G, nodes_to_remove)
 
-    return networkGraph
+    return networkGraph, df
 
 
 # ------------------------------------------------------------------------------------------
@@ -263,8 +263,8 @@ def resilience_custom(networkGraph, list_of_nodes=None):
     """
     G = copy_networkGraph(networkGraph)
 
-    G = remove_nodes(G, list_of_nodes)
-    return G
+    G, df = remove_nodes(G, list_of_nodes)
+    return G, df
 
 
 # ------------------------------------------------------------------------------------------
@@ -283,6 +283,7 @@ def copy_networkGraph(networkGraph):
     else:
         idx[networkGraph.session_folder] = idx[networkGraph.session_folder] + 1
     session_folder = f'{networkGraph.session_folder}/resilience{idx[networkGraph.session_folder]}'
+
     return NetworkGraphs(networkGraph.filename, type=networkGraph.type, session_folder=session_folder)
 
 
@@ -306,7 +307,9 @@ def remove_nodes(networkGraph, nodes):
     networkGraph.Graph, networkGraph.MultiGraph = networkGraph.DiGraph.to_undirected(
     ), networkGraph.MultiDiGraph.to_undirected()
     networkGraph.update_attributes()
-    return networkGraph
+
+    df = pd.DataFrame(nodes, columns=['Node'])
+    return networkGraph, df
 
 
 # ------------------------------------------------------------------------------------------
@@ -329,7 +332,9 @@ def remove_edges(networkGraph, edges):
     networkGraph.Graph, networkGraph.MultiGraph = networkGraph.DiGraph.to_undirected(
     ), networkGraph.MultiDiGraph.to_undirected()
     networkGraph.update_attributes()
-    return networkGraph
+
+    df = pd.DataFrame(edges, columns=['Source', 'Target'])
+    return networkGraph, df
 
 
 # ------------------------------------------------------------------------------------------
@@ -384,15 +389,20 @@ def resilience_cluster_custom(networkGraph, cluster_algorithm=None, total_cluste
                                                  "'agglomerative', 'hierarchical', 'dbscan'"))
         return 0
 
+    if 0 >= len(cluster_ids) > total_clusters:
+        print(ValueError("Invalid number of clusters",
+                         "please choose a number of clusters smaller than the total number of clusters",
+                         "or a positive number"))
+        return 0
+
     G = copy_networkGraph(networkGraph)
     clusters = ml.get_communities(networkGraph, cluster_algorithm, total_clusters)
 
-    if cluster_ids is not None and len(cluster_ids) > 0:
-        nodes_to_remove = []
-        for cluster_id in cluster_ids:
-            nodes = clusters[clusters['Cluster_id'] == cluster_id]['Node'].values
-            nodes_to_remove.extend(nodes)
+    nodes_to_remove = []
+    for cluster_id in cluster_ids:
+        nodes = clusters[clusters['Cluster_id'] == cluster_id]['Node'].values
+        nodes_to_remove.extend(nodes)
 
-        G = remove_nodes(G, nodes_to_remove)
+    G, df = remove_nodes(G, nodes_to_remove)
 
-    return G
+    return G, df
