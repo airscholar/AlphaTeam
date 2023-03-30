@@ -1,10 +1,21 @@
+"""
+Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Metrics visualisation module contains functions for visualising metrics
+"""
+
+# ----------------------------------------- Imports ----------------------------------------- #
+
+# Internal imports
+from src.visualisation_src.utils_visualisation import *
+
+# External imports
 import matplotlib as mpl
 import networkx as nx
 from pyvis import network as net
 from tqdm import tqdm
 import numpy as np
 
-from src.visualisation_src.utils_visualisation import *
 
 # ----------------------------------------------------------------------------------------
 
@@ -67,7 +78,7 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
     for i in range_:
         step = dict(
             method="restyle",
-            label=f"Scale {round(i,2)}",
+            label=f"Scale {round(i, 2)}",
         )
         step["args"] = ["marker.size", [i * df_['std']]]
         steps.append(step)
@@ -103,7 +114,7 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
         return 'no_graph.html'
 
     pos = networkGraphs.pos[layout_]
-    
+
     metrics_names = df_.columns[1:]
 
     x_list = []
@@ -188,6 +199,9 @@ def generate_histogram_metric(df_, filename):
     :return: Plotly plot
     :rtype: plotly.graph_objects.Figure
     """
+    if 'std' in df_.columns:
+        df_ = df_.drop(columns=['std'])
+
     metrics_names = df_.columns[1:]
     metrics = df_[metrics_names].values
     title = f"Histogram distribution of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
@@ -220,6 +234,9 @@ def generate_boxplot_metric(df_, filename):
     :return: Plotly plot
     :rtype: plotly.graph_objects.Figure
     """
+    if 'std' in df_.columns:
+        df_ = df_.drop(columns=['std'])
+
     metrics_names = df_.columns[1:]
     metrics = df_[metrics_names].values
     title = f"Boxplot of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
@@ -250,6 +267,9 @@ def generate_violin_metric(df_, filename):
     :return: Plotly plot
     :rtype: plotly.graph_objects.Figure
     """
+    if 'std' in df_.columns:
+        df_ = df_.drop(columns=['std'])
+
     metrics_names = df_.columns[1:]
     metrics = df_[metrics_names].values
     title = f"Violin plot of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"

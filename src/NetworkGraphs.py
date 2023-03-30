@@ -1,16 +1,20 @@
-# Imports
-import scipy.io as sio
-from pandas.api.types import is_numeric_dtype
-
-from src.preprocessing import *
-from src.visualisation import *
-
-# ----------------------------------------------------------------------------------------
 """
 Author: Alpha Team Group Project
 Date: March 2023
-Purpose: Class containing the NetworkX graphs
+Purpose: NetworkGraphs.py contains the NetworkGraphs custom class
+"""
 
+# ----------------------------------------- Imports ----------------------------------------- #
+
+# Internal imports
+from src.preprocessing import *
+from src.visualisation import *
+
+# External imports
+import scipy.io as sio
+from pandas.api.types import is_numeric_dtype
+
+"""
 ----------------------------------------------------------------------------------------
 
 INFORMATION ABOUT GRAPH ATTRIBUTES
@@ -44,9 +48,6 @@ GRAPHS:
 - 'weighted': True if the graph is weighted, False otherwise
 
 """
-
-
-# ----------------------------------------------------------------------------------------
 
 
 class NetworkGraphs:

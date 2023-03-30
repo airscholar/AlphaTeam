@@ -1,19 +1,25 @@
-import os
+"""
+Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Temporal visualisation module contains functions for generating temporal visualisations
+"""
 
-import cv2
-import geopandas as gpd
-import ipywidgets as widgets
-import matplotlib.pyplot as plt
+# ----------------------------------------- Imports ----------------------------------------- #
+
+# Internal imports
+from src.visualisation_src.utils_visualisation import get_layout
+
+# External imports
 import networkx as nx
 import plotly.graph_objects as go
 import numpy as np
 from tqdm import tqdm
-from src.visualisation_src.utils_visualisation import get_layout
+
 
 # ----------------------------------------------------------------------------------------
 
-def generate_temporal(networkGraphs, filename, layout_='map'):
 
+def generate_temporal(networkGraphs, filename, layout_='map'):
     if not networkGraphs.is_spatial() and layout_ == 'map':
         print(ValueError('The graph is not spatial, please choose a different layout'))
         return 'no_graph.html'
@@ -46,8 +52,8 @@ def generate_temporal(networkGraphs, filename, layout_='map'):
                 reversescale=True,
                 color='black',
                 size=1,
-                line_width=1,),
-                text=text_list)
+                line_width=1, ),
+            text=text_list)
     else:
         node_trace = go.Scatter(
             x=node_x, y=node_y,
@@ -57,12 +63,12 @@ def generate_temporal(networkGraphs, filename, layout_='map'):
                 reversescale=True,
                 color='black',
                 size=1,
-                line_width=1,),
-                text=text_list)
+                line_width=1, ),
+            text=text_list)
 
     fig.add_trace(node_trace)
 
-    for t in tqdm(np.arange(start, end+step , step)):
+    for t in tqdm(np.arange(start, end + step, step)):
         G2 = nx.DiGraph(((source, target, attr) for source, target, attr in G.edges(data=True) if
                          attr['start'] <= t and t <= attr['end']))
 
@@ -97,7 +103,7 @@ def generate_temporal(networkGraphs, filename, layout_='map'):
     for i in range(len(fig.data)):
         step = dict(
             method="update",
-            args=[{"visible": [True]+[False] * len(fig.data)},
+            args=[{"visible": [True] + [False] * len(fig.data)},
                   {"title": "Date time " + str(i)}],  # layout attribute
         )
         step["args"][0]["visible"][i] = True  # Toggle i'th trace to "visible"

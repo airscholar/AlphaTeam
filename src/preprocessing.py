@@ -6,7 +6,7 @@
 
 # ----------------------------------------------------------------------------------------
 
-# Imports
+# External imports
 import networkx as nx
 import pandas as pd
 import scipy.io as sio
@@ -249,7 +249,7 @@ def preprocess_crypto(filename_: str):
     MultiDiGraph.add_nodes_from(df['from'].unique())
     MultiDiGraph.add_nodes_from(df['to'].unique())
     for from_, to_, value_, time_ in df[['from', 'to', 'value', 'block_time']].values:
-        MultiDiGraph.add_edge(from_, to_, weight=value_, start=time_, end=time_+1)
+        MultiDiGraph.add_edge(from_, to_, weight=value_, start=time_, end=time_ + 1)
 
     DiGraph = convert_to_DiGraph(MultiDiGraph)
 
