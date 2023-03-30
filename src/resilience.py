@@ -361,6 +361,9 @@ def execute_threshold(df, metric, threshold, operator='>'):
     return nodes_to_remove
 
 
+# ------------------------------------------------------------------------------------------
+
+
 def resilience_cluster_custom(networkGraph, cluster_algorithm=None, total_clusters=None, cluster_ids=None):
     """
     :Function: Compute the clusters of the networkGraph
