@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import re
 import time
 import shutil
-
+from dictionary.information import *
 sys.path.insert(1, '../')
 from src.utils import *
 from src.NetworkGraphs import *
