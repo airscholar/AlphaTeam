@@ -292,7 +292,7 @@ def plot_hotspot(networkGraphs):
     if not os.path.isfile(filepath):
         generate_hotspot(networkGraphs, df, filepath)
 
-    return df, filename
+    return df.iloc[:, :2], filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -337,7 +337,7 @@ def plot_boxplot(networkGraphs, metrics, directed=True, multi=True):
     if not os.path.isfile(filepath):
         generate_boxplot_metric(df, filepath)
 
-    return df, filename
+    return df.iloc[:, :2], filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -382,7 +382,7 @@ def plot_violin(networkGraphs, metrics, directed=True, multi=True):
     if not os.path.isfile(filepath):
         generate_violin_metric(df, filepath)
 
-    return df, filename
+    return df.iloc[:, :2], filename
 
 
 # ----------------------------------------------------------------------------------------

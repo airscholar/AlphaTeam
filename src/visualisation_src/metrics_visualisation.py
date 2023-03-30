@@ -199,6 +199,9 @@ def generate_histogram_metric(df_, filename):
     :return: Plotly plot
     :rtype: plotly.graph_objects.Figure
     """
+    if 'std' in df_.columns:
+        df_ = df_.drop(columns=['std'])
+
     metrics_names = df_.columns[1:]
     metrics = df_[metrics_names].values
     title = f"Histogram distribution of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
@@ -231,6 +234,9 @@ def generate_boxplot_metric(df_, filename):
     :return: Plotly plot
     :rtype: plotly.graph_objects.Figure
     """
+    if 'std' in df_.columns:
+        df_ = df_.drop(columns=['std'])
+
     metrics_names = df_.columns[1:]
     metrics = df_[metrics_names].values
     title = f"Boxplot of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
@@ -261,6 +267,9 @@ def generate_violin_metric(df_, filename):
     :return: Plotly plot
     :rtype: plotly.graph_objects.Figure
     """
+    if 'std' in df_.columns:
+        df_ = df_.drop(columns=['std'])
+
     metrics_names = df_.columns[1:]
     metrics = df_[metrics_names].values
     title = f"Violin plot of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
