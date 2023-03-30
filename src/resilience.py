@@ -58,6 +58,11 @@ def resilience(networkGraph, attack, **kwargs):
             - "cluster_algorithm": Algorithm to be used to compute the clusters
             - "total_clusters": Total number of clusters to be generated
             - "cluster_ids": List of cluster ids to be removed
+        - "custom":
+            - "list_of_nodes": List of nodes to be removed
+                If "cluster_algorithm" is specified, the list of nodes will be recomputed to delete the whole cluster that belong to each node
+            - "cluster_algorithm": Algorithm to be used to compute the clusters
+            - "total_clusters": Total number of clusters to be generated
     :param networkGraph: NetworkGraph
     :type networkGraph: NetworkGraph
     :param attack: Attack to be performed
@@ -90,6 +95,7 @@ def resilience(networkGraph, attack, **kwargs):
         if "cluster_algorithm" not in kwargs.keys():
             raise ValueError("Cluster algorithm not specified")
         return resilience_cluster(networkGraph, **kwargs)
+
     elif attack == "cluster_custom":
         for key in kwargs.keys():
             if key not in ["cluster_algorithm", "total_clusters", "cluster_ids"]:
@@ -98,6 +104,13 @@ def resilience(networkGraph, attack, **kwargs):
         if "cluster_algorithm" not in kwargs.keys():
             raise ValueError("Cluster algorithm not specified")
         return resilience_cluster_custom(networkGraph, **kwargs)
+
+    elif attack == "custom":
+        for key in kwargs.keys():
+            if key not in ["list_of_nodes"]:
+                raise ValueError(f"Argument {key} not recognized")
+        return resilience_custom(networkGraph, **kwargs)
+
     else:
         print("Attack not recognized")
         return 0
@@ -233,6 +246,25 @@ def resilience_cluster(networkGraph, cluster_algorithm=None, total_clusters=0, n
     networkGraph = remove_nodes(G, nodes_to_remove)
 
     return networkGraph
+
+
+# ------------------------------------------------------------------------------------------
+
+
+def resilience_custom(networkGraph, list_of_nodes=None):
+    """
+    :Function: Compute the resilience of the networkGraph using the custom attack
+    :param networkGraph: NetworkGraph
+    :type networkGraph: NetworkGraph
+    :param list_of_nodes: List of nodes to be removed
+    :type list_of_nodes: list
+    :return: NetworkGraph with the nodes removed
+    :rtype: NetworkGraph
+    """
+    G = copy_networkGraph(networkGraph)
+
+    G = remove_nodes(G, list_of_nodes)
+    return G
 
 
 # ------------------------------------------------------------------------------------------
