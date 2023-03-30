@@ -229,7 +229,7 @@ def resilience_cluster(networkGraph, cluster_algorithm=None, total_clusters=0, n
                                                  "'agglomerative', 'hierarchical', 'dbscan'"))
         return 0
 
-    if 0 <= number_of_clusters > total_clusters:
+    if 0 >= number_of_clusters > total_clusters:
         print(ValueError("Invalid number of clusters",
                          "please choose a number of clusters smaller than the total number of clusters",
                          "or a positive number"))
@@ -389,7 +389,7 @@ def resilience_cluster_custom(networkGraph, cluster_algorithm=None, total_cluste
                                                  "'agglomerative', 'hierarchical', 'dbscan'"))
         return 0
 
-    if 0 <= len(cluster_ids) > total_clusters:
+    if 0 >= len(cluster_ids) > total_clusters:
         print(ValueError("Invalid number of clusters",
                          "please choose a number of clusters smaller than the total number of clusters",
                          "or a positive number"))
