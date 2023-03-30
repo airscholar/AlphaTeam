@@ -99,6 +99,52 @@
                 <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
                     data-bs-parent="#accordionFlushExample1">
                     <div class="accordion-body">
+                        <form method="post" class="mx-auto" style="margin: 25px;">
+                            <div class="row justify-content-center align-items-center">
+                                <div class="col-auto"><label for="visualisation_layout"
+                                        style="margin-top: 5px;">Multi:</label>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="toggle-btn">
+                                        <input type="checkbox" id="multi-toggle" name="multi_toggle" {% if multi_toggle
+                                            %}checked{% endif %}>
+                                        <label for="multi-toggle"></label>
+                                    </div>
+                                </div>
+                                <div class="col-auto"><label for="visualisation_layout"
+                                        style="margin-top: 5px;">Directed:</label>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="toggle-btn">
+                                        <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if
+                                            directed_toggle %}checked{% endif %}>
+                                        <label for="directed-toggle"></label>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <label for="visualisation_layout" style="margin-top: 5px;">Layout:</label>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="dropdown" style="margin:5px">
+                                        <select id="dropdown-menu" name="visualisation_layout">
+                                            <option value="map" {% if visualisation_layout=='map' %}selected{% endif %}>
+                                                Map
+                                            </option>
+                                            <option value="sfdp" {% if visualisation_layout=='sfdp' %}selected{% endif
+                                                %}>Sfdp
+                                            </option>
+                                            <option value="twopi" {% if visualisation_layout=='twopi' %}selected{% endif
+                                                %}>Twopi
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-primary" style="margin:5px;">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+
                         <!-- Start the Main content from here -->
                         <nav>
                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -136,7 +182,7 @@
                                                 <div class="card-body">
                                                     <iframe src="{{ graph1 }}" width="100%" height="300"></iframe>
                                                 </div>
-                                                <form method="post" class="mx-auto">
+                                                <!-- <form method="post" class="mx-auto">
                                                     <div class="row justify-content-start align-items-center">
                                                         <div class="col-auto">
                                                             <label for="visualisation_layout"
@@ -162,7 +208,7 @@
                                                                 style="margin:5px;">Submit</button>
                                                         </div>
                                                     </div>
-                                                </form>
+                                                </form> -->
                                             </div>
                                         </div>
                                         <div class="col">
@@ -170,7 +216,7 @@
                                                 <div class="card-body">
                                                     <iframe src="{{ graph2 }}" width="100%" height="300"></iframe>
                                                 </div>
-                                                <form method="post" class="mx-auto">
+                                                <!-- <form method="post" class="mx-auto">
                                                     <div class="row justify-content-start align-items-center">
                                                         <div class="col-auto">
                                                             <label for="visualisation_layout"
@@ -196,7 +242,7 @@
                                                                 style="margin:5px;">Submit</button>
                                                         </div>
                                                     </div>
-                                                </form>
+                                                </form> -->
                                             </div>
                                         </div>
                                     </div>
@@ -206,7 +252,7 @@
                             <div class="tab-pane fade" id="nav-Centrality" role="tabpanel"
                                 aria-labelledby="nav-Centrality-tab">
                                 <!-- From here starts the centrality tabs section -->
-                                <nav>
+                                <nav style="margin-top: 15px;">
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                         <button class="nav-link active" id="nav-DegreeCentrality-tab"
                                             data-bs-toggle="tab" data-bs-target="#nav-DegreeCentrality" type="button"
@@ -218,8 +264,8 @@
                                             Centrality</button>
                                         <button class="nav-link" id="nav-ClosenessCentrality-tab" data-bs-toggle="tab"
                                             data-bs-target="#nav-ClosenessCentrality" type="button" role="tab"
-                                            aria-controls="nav-ClosenessCentrality"
-                                            aria-selected="false">ClosenessCentrality</button>
+                                            aria-controls="nav-ClosenessCentrality" aria-selected="false">Closeness
+                                            Centrality</button>
                                         <button class="nav-link" id="nav-BetwennessCentrality-tab" data-bs-toggle="tab"
                                             data-bs-target="#nav-BetwennessCentrality" type="button" role="tab"
                                             aria-controls="nav-BetwennessCentrality" aria-selected="false">Betwenness
@@ -232,7 +278,864 @@
                                 </nav>
                                 <div class="tab-content" id="nav-tabContent">
                                     <div class="tab-pane fade show active" id="nav-DegreeCentrality" role="tabpanel"
-                                        aria-labelledby="nav-DegreeCentrality-tab">Degree Centrality</div>
+                                        aria-labelledby="nav-DegreeCentrality-tab">
+                                        <!-- Degree Centrality Tab starts here -->
+                                        <nav style="margin-top: 15px;">
+                                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                                <button class="nav-link active" id="nav-Layouts-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-Layouts" type="button"
+                                                    role="tab" aria-controls="nav-Layouts"
+                                                    aria-selected="true">Layouts</button>
+                                                <button class="nav-link" id="nav-Histogram-tab" data-bs-toggle="tab"
+                                                    data-bs-target="#nav-Histogram" type="button" role="tab"
+                                                    aria-controls="nav-Histogram"
+                                                    aria-selected="false">Histogram</button>
+                                                <button class="nav-link" id="nav-Boxplot-tab" data-bs-toggle="tab"
+                                                    data-bs-target="#nav-Boxplot" type="button" role="tab"
+                                                    aria-controls="nav-Boxplot" aria-selected="false">Boxplot</button>
+                                                <button class="nav-link" id="nav-Violinplot-tab" data-bs-toggle="tab"
+                                                    data-bs-target="#nav-Violinplot" type="button" role="tab"
+                                                    aria-controls="nav-Violinplot"
+                                                    aria-selected="false">Violinplot</button>
+                                            </div>
+                                        </nav>
+                                        <div class="tab-content" id="nav-tabContent">
+                                            <div class="tab-pane fade show active" id="nav-Layouts" role="tabpanel"
+                                                aria-labelledby="nav-Layouts-tab">
+                                                <!-- Layouts tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe src="{{ graph_degree_centrality_layout_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                                <!-- <form method="post" class="mx-auto">
+                                                                    <div
+                                                                        class="row justify-content-center align-items-center">
+                                                                        <div class="col-auto"><label
+                                                                                for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Multi:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="toggle-btn">
+                                                                                <input type="checkbox" id="multi-toggle"
+                                                                                    name="multi_toggle" {% if
+                                                                                    multi_toggle %}checked{% endif %}>
+                                                                                <label for="multi-toggle"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-auto"><label
+                                                                                for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Directed:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="toggle-btn">
+                                                                                <input type="checkbox"
+                                                                                    id="directed-toggle"
+                                                                                    name="directed_toggle" {% if
+                                                                                    directed_toggle %}checked{% endif
+                                                                                    %}>
+                                                                                <label for="directed-toggle"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <label for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Layout:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="dropdown" style="margin:5px">
+                                                                                <select id="dropdown-menu"
+                                                                                    name="visualisation_layout">
+                                                                                    <option value="map" {% if
+                                                                                        visualisation_layout=='map'
+                                                                                        %}selected{% endif %}>Map
+                                                                                    </option>
+                                                                                    <option value="sfdp" {% if
+                                                                                        visualisation_layout=='sfdp'
+                                                                                        %}selected{% endif %}>Sfdp
+                                                                                    </option>
+                                                                                    <option value="twopi" {% if
+                                                                                        visualisation_layout=='twopi'
+                                                                                        %}selected{% endif %}>Twopi
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col align-self-center">
+                                                                            <button type="submit"
+                                                                                class="btn btn-primary"
+                                                                                style="margin:5px;">Submit</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form> -->
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe src="{{ graph_degree_centrality_layout_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                                <!-- <form method="post" class="mx-auto">
+                                                                    <div
+                                                                        class="row justify-content-center align-items-center">
+                                                                        <div class="col-auto"><label
+                                                                                for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Multi:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="toggle-btn">
+                                                                                <input type="checkbox" id="multi-toggle"
+                                                                                    name="multi_toggle" {% if
+                                                                                    multi_toggle %}checked{% endif %}>
+                                                                                <label for="multi-toggle"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-auto"><label
+                                                                                for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Directed:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="toggle-btn">
+                                                                                <input type="checkbox"
+                                                                                    id="directed-toggle"
+                                                                                    name="directed_toggle" {% if
+                                                                                    directed_toggle %}checked{% endif
+                                                                                    %}>
+                                                                                <label for="directed-toggle"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <label for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Layout:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="dropdown" style="margin:5px">
+                                                                                <select id="dropdown-menu"
+                                                                                    name="visualisation_layout">
+                                                                                    <option value="map" {% if
+                                                                                        visualisation_layout=='map'
+                                                                                        %}selected{% endif %}>Map
+                                                                                    </option>
+                                                                                    <option value="sfdp" {% if
+                                                                                        visualisation_layout=='sfdp'
+                                                                                        %}selected{% endif %}>Sfdp
+                                                                                    </option>
+                                                                                    <option value="twopi" {% if
+                                                                                        visualisation_layout=='twopi'
+                                                                                        %}selected{% endif %}>Twopi
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col align-self-center">
+                                                                            <button type="submit"
+                                                                                class="btn btn-primary"
+                                                                                style="margin:5px;">Submit</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form> -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example9" class="display" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_degree_centrality_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_degree_centrality_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example1" class="display" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_degree_centrality_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_degree_centrality_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Layouts tab Before After content ends here -->
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-Histogram" role="tabpanel"
+                                                aria-labelledby="nav-Histogram-tab">
+                                                <!-- Histogram tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_degree_centrality_histogram_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                                <!-- <form method="post" class="mx-auto">
+                                                                    <div
+                                                                        class="row justify-content-center align-items-center">
+                                                                        <div class="col-auto"><label
+                                                                                for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Multi:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="toggle-btn">
+                                                                                <input type="checkbox"
+                                                                                    id="multi-toggle2"
+                                                                                    name="multi_toggle" {% if
+                                                                                    multi_toggle %}checked{% endif %}>
+                                                                                <label for="multi-toggle2"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-auto"><label
+                                                                                for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Directed:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="toggle-btn">
+                                                                                <input type="checkbox"
+                                                                                    id="directed-toggle2"
+                                                                                    name="directed_toggle" {% if
+                                                                                    directed_toggle %}checked{% endif
+                                                                                    %}>
+                                                                                <label for="directed-toggle2"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <label for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Layout:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="dropdown" style="margin:5px">
+                                                                                <select id="dropdown-menu"
+                                                                                    name="visualisation_layout">
+                                                                                    <option value="map" {% if
+                                                                                        visualisation_layout=='map'
+                                                                                        %}selected{% endif %}>Map
+                                                                                    </option>
+                                                                                    <option value="sfdp" {% if
+                                                                                        visualisation_layout=='sfdp'
+                                                                                        %}selected{% endif %}>Sfdp
+                                                                                    </option>
+                                                                                    <option value="twopi" {% if
+                                                                                        visualisation_layout=='twopi'
+                                                                                        %}selected{% endif %}>Twopi
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col align-self-center">
+                                                                            <button type="submit"
+                                                                                class="btn btn-primary"
+                                                                                style="margin:5px;">Submit</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form> -->
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_degree_centrality_histogram_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                                <!-- <form method="post" class="mx-auto">
+                                                                    <div
+                                                                        class="row justify-content-center align-items-center">
+                                                                        <div class="col-auto"><label
+                                                                                for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Multi:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="toggle-btn">
+                                                                                <input type="checkbox"
+                                                                                    id="multi-toggle2"
+                                                                                    name="multi_toggle" {% if
+                                                                                    multi_toggle %}checked{% endif %}>
+                                                                                <label for="multi-toggle2"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-auto"><label
+                                                                                for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Directed:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="toggle-btn">
+                                                                                <input type="checkbox"
+                                                                                    id="directed-toggle2"
+                                                                                    name="directed_toggle" {% if
+                                                                                    directed_toggle %}checked{% endif
+                                                                                    %}>
+                                                                                <label for="directed-toggle2"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <label for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Layout:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="dropdown" style="margin:5px">
+                                                                                <select id="dropdown-menu"
+                                                                                    name="visualisation_layout">
+                                                                                    <option value="map" {% if
+                                                                                        visualisation_layout=='map'
+                                                                                        %}selected{% endif %}>Map
+                                                                                    </option>
+                                                                                    <option value="sfdp" {% if
+                                                                                        visualisation_layout=='sfdp'
+                                                                                        %}selected{% endif %}>Sfdp
+                                                                                    </option>
+                                                                                    <option value="twopi" {% if
+                                                                                        visualisation_layout=='twopi'
+                                                                                        %}selected{% endif %}>Twopi
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col align-self-center">
+                                                                            <button type="submit"
+                                                                                class="btn btn-primary"
+                                                                                style="margin:5px;">Submit</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form> -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example2" class="display" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_degree_centrality_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_degree_centrality_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example3" class="display" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_degree_centrality_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_degree_centrality_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Histogram tab Before After content ends here -->
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-Boxplot" role="tabpanel"
+                                                aria-labelledby="nav-Boxplot-tab">
+                                                <!-- Boxplot tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_degree_centrality_boxplot_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                                <!-- <form method="post" class="mx-auto">
+                                                                    <div
+                                                                        class="row justify-content-center align-items-center">
+                                                                        <div class="col-auto"><label
+                                                                                for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Multi:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="toggle-btn">
+                                                                                <input type="checkbox" id="multi-toggle"
+                                                                                    name="multi_toggle" {% if
+                                                                                    multi_toggle %}checked{% endif %}>
+                                                                                <label for="multi-toggle"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-auto"><label
+                                                                                for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Directed:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="toggle-btn">
+                                                                                <input type="checkbox"
+                                                                                    id="directed-toggle"
+                                                                                    name="directed_toggle" {% if
+                                                                                    directed_toggle %}checked{% endif
+                                                                                    %}>
+                                                                                <label for="directed-toggle"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <label for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Layout:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="dropdown" style="margin:5px">
+                                                                                <select id="dropdown-menu"
+                                                                                    name="visualisation_layout">
+                                                                                    <option value="map" {% if
+                                                                                        visualisation_layout=='map'
+                                                                                        %}selected{% endif %}>Map
+                                                                                    </option>
+                                                                                    <option value="sfdp" {% if
+                                                                                        visualisation_layout=='sfdp'
+                                                                                        %}selected{% endif %}>Sfdp
+                                                                                    </option>
+                                                                                    <option value="twopi" {% if
+                                                                                        visualisation_layout=='twopi'
+                                                                                        %}selected{% endif %}>Twopi
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col align-self-center">
+                                                                            <button type="submit"
+                                                                                class="btn btn-primary"
+                                                                                style="margin:5px;">Submit</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form> -->
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_degree_centrality_boxplot_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                                <!-- <form method="post" class="mx-auto">
+                                                                    <div
+                                                                        class="row justify-content-center align-items-center">
+                                                                        <div class="col-auto"><label
+                                                                                for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Multi:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="toggle-btn">
+                                                                                <input type="checkbox" id="multi-toggle"
+                                                                                    name="multi_toggle" {% if
+                                                                                    multi_toggle %}checked{% endif %}>
+                                                                                <label for="multi-toggle"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-auto"><label
+                                                                                for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Directed:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="toggle-btn">
+                                                                                <input type="checkbox"
+                                                                                    id="directed-toggle"
+                                                                                    name="directed_toggle" {% if
+                                                                                    directed_toggle %}checked{% endif
+                                                                                    %}>
+                                                                                <label for="directed-toggle"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <label for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Layout:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="dropdown" style="margin:5px">
+                                                                                <select id="dropdown-menu"
+                                                                                    name="visualisation_layout">
+                                                                                    <option value="map" {% if
+                                                                                        visualisation_layout=='map'
+                                                                                        %}selected{% endif %}>Map
+                                                                                    </option>
+                                                                                    <option value="sfdp" {% if
+                                                                                        visualisation_layout=='sfdp'
+                                                                                        %}selected{% endif %}>Sfdp
+                                                                                    </option>
+                                                                                    <option value="twopi" {% if
+                                                                                        visualisation_layout=='twopi'
+                                                                                        %}selected{% endif %}>Twopi
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col align-self-center">
+                                                                            <button type="submit"
+                                                                                class="btn btn-primary"
+                                                                                style="margin:5px;">Submit</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form> -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example8" class="display" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_degree_centrality_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_degree_centrality_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example5" class="display" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_degree_centrality_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_degree_centrality_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Boxplot tab Before After content ends here -->
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-Violinplot" role="tabpanel"
+                                                aria-labelledby="nav-Violinplot-tab">
+                                                <!-- Violinplot tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_degree_centrality_violinplot_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                                <!-- <form method="post" class="mx-auto">
+                                                                    <div
+                                                                        class="row justify-content-center align-items-center">
+                                                                        <div class="col-auto"><label
+                                                                                for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Multi:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="toggle-btn">
+                                                                                <input type="checkbox" id="multi-toggle"
+                                                                                    name="multi_toggle" {% if
+                                                                                    multi_toggle %}checked{% endif %}>
+                                                                                <label for="multi-toggle"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-auto"><label
+                                                                                for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Directed:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="toggle-btn">
+                                                                                <input type="checkbox"
+                                                                                    id="directed-toggle"
+                                                                                    name="directed_toggle" {% if
+                                                                                    directed_toggle %}checked{% endif
+                                                                                    %}>
+                                                                                <label for="directed-toggle"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <label for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Layout:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="dropdown" style="margin:5px">
+                                                                                <select id="dropdown-menu"
+                                                                                    name="visualisation_layout">
+                                                                                    <option value="map" {% if
+                                                                                        visualisation_layout=='map'
+                                                                                        %}selected{% endif %}>Map
+                                                                                    </option>
+                                                                                    <option value="sfdp" {% if
+                                                                                        visualisation_layout=='sfdp'
+                                                                                        %}selected{% endif %}>Sfdp
+                                                                                    </option>
+                                                                                    <option value="twopi" {% if
+                                                                                        visualisation_layout=='twopi'
+                                                                                        %}selected{% endif %}>Twopi
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col align-self-center">
+                                                                            <button type="submit"
+                                                                                class="btn btn-primary"
+                                                                                style="margin:5px;">Submit</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form> -->
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_degree_centrality_violinplot_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                                <!-- <form method="post" class="mx-auto">
+                                                                    <div
+                                                                        class="row justify-content-center align-items-center">
+                                                                        <div class="col-auto"><label
+                                                                                for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Multi:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="toggle-btn">
+                                                                                <input type="checkbox" id="multi-toggle"
+                                                                                    name="multi_toggle" {% if
+                                                                                    multi_toggle %}checked{% endif %}>
+                                                                                <label for="multi-toggle"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-auto"><label
+                                                                                for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Directed:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="toggle-btn">
+                                                                                <input type="checkbox"
+                                                                                    id="directed-toggle"
+                                                                                    name="directed_toggle" {% if
+                                                                                    directed_toggle %}checked{% endif
+                                                                                    %}>
+                                                                                <label for="directed-toggle"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <label for="visualisation_layout"
+                                                                                style="margin-top: 5px;">Layout:</label>
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <div class="dropdown" style="margin:5px">
+                                                                                <select id="dropdown-menu"
+                                                                                    name="visualisation_layout">
+                                                                                    <option value="map" {% if
+                                                                                        visualisation_layout=='map'
+                                                                                        %}selected{% endif %}>Map
+                                                                                    </option>
+                                                                                    <option value="sfdp" {% if
+                                                                                        visualisation_layout=='sfdp'
+                                                                                        %}selected{% endif %}>Sfdp
+                                                                                    </option>
+                                                                                    <option value="twopi" {% if
+                                                                                        visualisation_layout=='twopi'
+                                                                                        %}selected{% endif %}>Twopi
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col align-self-center">
+                                                                            <button type="submit"
+                                                                                class="btn btn-primary"
+                                                                                style="margin:5px;">Submit</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form> -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example6" class="display" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_degree_centrality_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_degree_centrality_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example7" class="display" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_degree_centrality_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_degree_centrality_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Violinplot tab Before After content ends here -->
+                                            </div>
+                                        </div>
+                                        <!-- Degree Centrality Tab Ends here -->
+                                    </div>
                                     <div class="tab-pane fade" id="nav-EigenvectorCentrality" role="tabpanel"
                                         aria-labelledby="nav-EigenvectorCentrality-tab">Eigenvector Centrality</div>
                                     <div class="tab-pane fade" id="nav-ClosenessCentrality" role="tabpanel"

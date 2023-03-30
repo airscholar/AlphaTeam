@@ -101,6 +101,8 @@ def resilience_analyisis_random():
 def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_edges_arg, tab_main_arg):
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
+    multi_toggle = True
+    directed_toggle = True
     if networkGraphs.is_spatial():
         visualisation_layout = 'map'
     else:
@@ -108,17 +110,25 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
     
     if networkGraphs2 is not None:
         # check POST condition
-        if(request.form.get('visualisation_layout') is not None):
+        if request.method == 'POST':
             visualisation_layout = request.form.get('visualisation_layout')
-            graph_name1 = plot_network(networkGraphs, layout=visualisation_layout, dynamic=False)
-            graph_name2 = plot_network(networkGraphs2, layout=visualisation_layout, dynamic=False)  
-        else:
-            graph_name1 = plot_network(networkGraphs, layout=visualisation_layout, dynamic=False)
-            graph_name2 = plot_network(networkGraphs2, layout=visualisation_layout, dynamic=False)  
+            multi_toggle = bool(request.form.get('multi_toggle'))
+            directed_toggle = bool(request.form.get('directed_toggle'))
+        graph_name1 = plot_network(networkGraphs, layout=visualisation_layout, dynamic=False)
+        graph_name2 = plot_network(networkGraphs2, layout=visualisation_layout, dynamic=False)
+        df_degree_centrality_before, graph_degree_centrality_layout_name_1 = plot_metric(networkGraphs, 'degree_centrality', directed=directed_toggle, multi=multi_toggle, dynamic=False, layout=visualisation_layout)
+        df_degree_centrality_after, graph_degree_centrality_layout_name_2 = plot_metric(networkGraphs2, 'degree_centrality', directed=directed_toggle, multi=multi_toggle, dynamic=False, layout=visualisation_layout)
+        df_degree_centrality_before, graph_degree_centrality_histogram_name_1 = plot_histogram(networkGraphs, 'degree_centrality', directed=directed_toggle, multi=multi_toggle)
+        df_degree_centrality_after, graph_degree_centrality_histogram_name_2 = plot_histogram(networkGraphs2, 'degree_centrality', directed=directed_toggle, multi=multi_toggle)
+        df_degree_centrality_before, graph_degree_centrality_boxplot_name_1 = plot_boxplot(networkGraphs, 'degree_centrality', directed=directed_toggle, multi=multi_toggle)
+        df_degree_centrality_after, graph_degree_centrality_boxplot_name_2 = plot_boxplot(networkGraphs2, 'degree_centrality', directed=directed_toggle, multi=multi_toggle)
+        df_degree_centrality_before, graph_degree_centrality_violinplot_name_1 = plot_violin(networkGraphs, 'degree_centrality', directed=directed_toggle, multi=multi_toggle)
+        df_degree_centrality_after, graph_degree_centrality_violinplot_name_2 = plot_violin(networkGraphs2, 'degree_centrality', directed=directed_toggle, multi=multi_toggle)
         # end POST condition
 
         print('visualisation layout',visualisation_layout)
 
+        # checking all graphs have graphs
         if graph_name1 == 'no_graph.html':
             graph_path1 = '../static/' + graph_name1
         else:
@@ -128,13 +138,68 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
             graph_path2 = '../static/' + graph_name2
         else:
             graph_path2 = '../'+ networkGraphs2.session_folder + '/' + graph_name2
+        
+        if graph_degree_centrality_layout_name_1 == 'no_graph.html':
+            graph_degree_centrality_layout_path_1 = '../static/' + graph_degree_centrality_layout_name_1
+        else:
+            graph_degree_centrality_layout_path_1 = '../static/uploads/' + filename2 + '/' + graph_degree_centrality_layout_name_1
+
+        if graph_degree_centrality_layout_name_2 == 'no_graph.html':
+            graph_degree_centrality_layout_path_2 = '../static/' + graph_degree_centrality_layout_name_2
+        else:
+            graph_degree_centrality_layout_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_degree_centrality_layout_name_2
+    
+        if graph_degree_centrality_histogram_name_1 == 'no_graph.html':
+            graph_degree_centrality_histogram_path_1 = '../static/' + graph_degree_centrality_histogram_name_1
+        else:
+            graph_degree_centrality_histogram_path_1 = '../static/uploads/' + filename2 + '/' + graph_degree_centrality_histogram_name_1
+
+        if graph_degree_centrality_histogram_name_2 == 'no_graph.html':
+            graph_degree_centrality_histogram_path_2 = '../static/' + graph_degree_centrality_histogram_name_2
+        else:
+            graph_degree_centrality_histogram_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_degree_centrality_histogram_name_2
+        
+        if graph_degree_centrality_boxplot_name_1 == 'no_graph.html':
+            graph_degree_centrality_boxplot_path_1 = '../static/' + graph_degree_centrality_boxplot_name_1
+        else:
+            graph_degree_centrality_boxplot_path_1 = '../static/uploads/' + filename2 + '/' + graph_degree_centrality_boxplot_name_1
+
+        if graph_degree_centrality_boxplot_name_2 == 'no_graph.html':
+            graph_degree_centrality_boxplot_path_2 = '../static/' + graph_degree_centrality_boxplot_name_2
+        else:
+            graph_degree_centrality_boxplot_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_degree_centrality_boxplot_name_2
+        
+        if graph_degree_centrality_violinplot_name_1 == 'no_graph.html':
+            graph_degree_centrality_violinplot_path_1 = '../static/' + graph_degree_centrality_violinplot_name_1
+        else:
+            graph_degree_centrality_violinplot_path_1 = '../static/uploads/' + filename2 + '/' + graph_degree_centrality_violinplot_name_1
+
+        if graph_degree_centrality_violinplot_name_2 == 'no_graph.html':
+            graph_degree_centrality_violinplot_path_2 = '../static/' + graph_degree_centrality_violinplot_name_2
+        else:
+            graph_degree_centrality_violinplot_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_degree_centrality_violinplot_name_2
     else:
-        graph_path1 = '../static/no_graph.html'
-        graph_path2 = '../static/no_graph.html'
+        graph_path1 = '../static/no_graph.html' 
+        graph_path2 = '../static/no_graph.html' 
+        graph_degree_centrality_layout_path_1 = '../static/no_graph.html'
+        graph_degree_centrality_layout_path_2 = '../static/no_graph.html'
+        graph_degree_centrality_histogram_path_1 = '../static/no_graph.html'
+        graph_degree_centrality_histogram_path_2 = '../static/no_graph.html'
+        graph_degree_centrality_boxplot_path_1 = '../static/no_graph.html'
+        graph_degree_centrality_boxplot_path_2 = '../static/no_graph.html'
+        graph_degree_centrality_violinplot_path_1 = '../static/no_graph.html'
+        graph_degree_centrality_violinplot_path_2 = '../static/no_graph.html'
+        df_degree_centrality_before = pd.DataFrame(0, index=range(5), columns=range(5))
+        df_degree_centrality_after = pd.DataFrame(0, index=range(5), columns=range(5))
 
     return render_template(template_name_arg, tab_main=tab_main_arg, visualisation_layout=visualisation_layout,
-        number_of_nodes=number_of_nodes_arg, number_of_edges=number_of_edges_arg, graph1=graph_path1, graph2=graph_path2)
-
+        number_of_nodes=number_of_nodes_arg, number_of_edges=number_of_edges_arg, graph1=graph_path1, graph2=graph_path2, 
+        df_degree_centrality_before=df_degree_centrality_before, df_degree_centrality_after=df_degree_centrality_after, 
+        multi_toggle=multi_toggle,directed_toggle=directed_toggle,
+        graph_degree_centrality_layout_1=graph_degree_centrality_layout_path_1, graph_degree_centrality_layout_2=graph_degree_centrality_layout_path_2,
+        graph_degree_centrality_histogram_1=graph_degree_centrality_histogram_path_1, graph_degree_centrality_histogram_2=graph_degree_centrality_histogram_path_2,
+        graph_degree_centrality_boxplot_1=graph_degree_centrality_boxplot_path_1, graph_degree_centrality_boxplot_2=graph_degree_centrality_boxplot_path_2,
+        graph_degree_centrality_violinplot_1=graph_degree_centrality_violinplot_path_1, graph_degree_centrality_violinplot_2=graph_degree_centrality_violinplot_path_2)
 
 @resilience_routes.route('/resilience/random/upload', endpoint='resilience_random_upload', methods=['GET', 'POST'])
 def resilience_random_upload():
