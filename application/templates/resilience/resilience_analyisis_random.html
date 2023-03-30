@@ -2192,7 +2192,1603 @@
                                 <!-- centrality tabs section ends here -->
                             </div>
                             <div class="tab-pane fade" id="nav-Nodes" role="tabpanel" aria-labelledby="nav-Nodes-tab">
-                                Nodes</div>
+                                <!-- From here starts the Nodes tabs section -->
+                                <nav style="margin-top: 15px;">
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                        <button class="nav-link active" id="nav-kcorenode-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-kcorenode" type="button" role="tab"
+                                            aria-controls="nav-kcorenode" aria-selected="true">K Core</button>
+                                        <button class="nav-link" id="nav-degreenode-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-degreenode" type="button" role="tab"
+                                            aria-controls="nav-degreenode" aria-selected="false">Degree</button>
+                                        <button class="nav-link" id="nav-trianglenode-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-trianglenode" type="button" role="tab"
+                                            aria-controls="nav-trianglenode" aria-selected="false">Triangle</button>
+                                        <button class="nav-link" id="nav-pageranknode-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-pageranknode" type="button" role="tab"
+                                            aria-controls="nav-pageranknode" aria-selected="false">Page Rank</button>
+                                    </div>
+                                </nav>
+                                <div class="tab-content" id="nav-tabContent">
+                                    <div class="tab-pane fade show active" id="nav-kcorenode" role="tabpanel"
+                                        aria-labelledby="nav-kcorenode-tab">
+                                        <!-- kcore-node Tab starts here -->
+                                        <nav style="margin-top: 15px;">
+                                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                                <button class="nav-link active" id="nav-kcore-node-Layouts-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-kcore-node-Layouts"
+                                                    type="button" role="tab" aria-controls="nav-kcore-node-Layouts"
+                                                    aria-selected="true">Layouts</button>
+                                                <button class="nav-link" id="nav-kcore-node-Histogram-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-kcore-node-Histogram"
+                                                    type="button" role="tab" aria-controls="nav-kcore-node-Histogram"
+                                                    aria-selected="false">Histogram</button>
+                                                <button class="nav-link" id="nav-kcore-node-Boxplot-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-kcore-node-Boxplot"
+                                                    type="button" role="tab" aria-controls="nav-kcore-node-Boxplot"
+                                                    aria-selected="false">Boxplot</button>
+                                                <button class="nav-link" id="nav-kcore-node-Violinplot-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-kcore-node-Violinplot"
+                                                    type="button" role="tab" aria-controls="nav-kcore-node-Violinplot"
+                                                    aria-selected="false">Violinplot</button>
+                                            </div>
+                                        </nav>
+                                        <div class="tab-content" id="nav-tabContent">
+                                            <div class="tab-pane fade show active" id="nav-kcore-node-Layouts"
+                                                role="tabpanel" aria-labelledby="nav-kcore-node-Layouts-tab">
+                                                <!-- Layouts tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe src="{{ graph_kcore_node_layout_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe src="{{ graph_kcore_node_layout_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example50" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_kcore_node_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_kcore_node_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example51" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_kcore_node_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_kcore_node_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Layouts tab Before After content ends here -->
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-kcore-node-Histogram" role="tabpanel"
+                                                aria-labelledby="nav-kcore-node-Histogram-tab">
+                                                <!-- Histogram tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe src="{{ graph_kcore_node_histogram_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe src="{{ graph_kcore_node_histogram_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example52" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_kcore_node_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_kcore_node_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example53" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_kcore_node_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_kcore_node_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Histogram tab Before After content ends here -->
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-kcore-node-Boxplot" role="tabpanel"
+                                                aria-labelledby="nav-kcore-node-Boxplot-tab">
+                                                <!-- Boxplot tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe src="{{ graph_kcore_node_boxplot_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe src="{{ graph_kcore_node_boxplot_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example58" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_kcore_node_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_kcore_node_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example55" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_kcore_node_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_kcore_node_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Boxplot tab Before After content ends here -->
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-kcore-node-Violinplot" role="tabpanel"
+                                                aria-labelledby="nav-kcore-node-Violinplot-tab">
+                                                <!-- Violinplot tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe src="{{ graph_kcore_node_violinplot_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe src="{{ graph_kcore_node_violinplot_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example56" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_kcore_node_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_kcore_node_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example57" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_kcore_node_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_kcore_node_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Violinplot tab Before After content ends here -->
+                                            </div>
+                                        </div>
+                                        <!-- kcore-node Tab Ends here -->
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-degreenode" role="tabpanel"
+                                        aria-labelledby="nav-degreenode-tab">
+                                        <!-- Eigenvector Centrality Tab starts here -->
+                                        <nav style="margin-top: 15px;">
+                                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                                <button class="nav-link active" id="nav-Eigenvector-Layouts-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-Eigenvector-Layouts"
+                                                    type="button" role="tab" aria-controls="nav-Eigenvector-Layouts"
+                                                    aria-selected="true">Layouts</button>
+                                                <button class="nav-link" id="nav-Eigenvector-Histogram-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-Eigenvector-Histogram"
+                                                    type="button" role="tab" aria-controls="nav-Eigenvector-Histogram"
+                                                    aria-selected="false">Histogram</button>
+                                                <button class="nav-link" id="nav-Eigenvector-Boxplot-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-Eigenvector-Boxplot"
+                                                    type="button" role="tab" aria-controls="nav-Eigenvector-Boxplot"
+                                                    aria-selected="false">Boxplot</button>
+                                                <button class="nav-link" id="nav-Eigenvector-Violinplot-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-Eigenvector-Violinplot"
+                                                    type="button" role="tab" aria-controls="nav-Eigenvector-Violinplot"
+                                                    aria-selected="false">Violinplot</button>
+                                            </div>
+                                        </nav>
+                                        <div class="tab-content" id="nav-tabContent">
+                                            <div class="tab-pane fade show active" id="nav-Eigenvector-Layouts"
+                                                role="tabpanel" aria-labelledby="nav-Eigenvector-Layouts-tab">
+                                                <!-- Layouts tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_eigenvector_centrality_layout_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_eigenvector_centrality_layout_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example10" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_eigenvector_centrality_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_eigenvector_centrality_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example11" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_eigenvector_centrality_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_eigenvector_centrality_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Layouts tab Before After content ends here -->
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-Eigenvector-Histogram" role="tabpanel"
+                                                aria-labelledby="nav-Eigenvector-Histogram-tab">
+                                                <!-- Histogram tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_eigenvector_centrality_histogram_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_eigenvector_centrality_histogram_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example12" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_eigenvector_centrality_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_eigenvector_centrality_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example13" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_eigenvector_centrality_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_eigenvector_centrality_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Histogram tab Before After content ends here -->
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-Eigenvector-Boxplot" role="tabpanel"
+                                                aria-labelledby="nav-Eigenvector-Boxplot-tab">
+                                                <!-- Boxplot tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_eigenvector_centrality_boxplot_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_eigenvector_centrality_boxplot_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example19" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_eigenvector_centrality_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_eigenvector_centrality_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example20" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_eigenvector_centrality_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_eigenvector_centrality_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Boxplot tab Before After content ends here -->
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-Eigenvector-Violinplot" role="tabpanel"
+                                                aria-labelledby="nav-Eigenvector-Violinplot-tab">
+                                                <!-- Violinplot tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_eigenvector_centrality_violinplot_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_eigenvector_centrality_violinplot_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example16" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_eigenvector_centrality_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_eigenvector_centrality_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example17" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_eigenvector_centrality_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_eigenvector_centrality_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Violinplot tab Before After content ends here -->
+                                            </div>
+                                        </div>
+                                        <!-- Eigenvector Centrality Tab Ends here -->
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-trianglenode" role="tabpanel"
+                                        aria-labelledby="nav-trianglenode-tab">
+                                        <!-- Closeness Centrality Tab starts here -->
+                                        <nav style="margin-top: 15px;">
+                                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                                <button class="nav-link active" id="nav-Closeness-Layouts-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-Closeness-Layouts"
+                                                    type="button" role="tab" aria-controls="nav-Closeness-Layouts"
+                                                    aria-selected="true">Layouts</button>
+                                                <button class="nav-link" id="nav-Closeness-Histogram-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-Closeness-Histogram"
+                                                    type="button" role="tab" aria-controls="nav-Closeness-Histogram"
+                                                    aria-selected="false">Histogram</button>
+                                                <button class="nav-link" id="nav-Closeness-Boxplot-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-Closeness-Boxplot"
+                                                    type="button" role="tab" aria-controls="nav-Closeness-Boxplot"
+                                                    aria-selected="false">Boxplot</button>
+                                                <button class="nav-link" id="nav-Closeness-Violinplot-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-Closeness-Violinplot"
+                                                    type="button" role="tab" aria-controls="nav-Closeness-Violinplot"
+                                                    aria-selected="false">Violinplot</button>
+                                            </div>
+                                        </nav>
+                                        <div class="tab-content" id="nav-tabContent">
+                                            <div class="tab-pane fade show active" id="nav-Closeness-Layouts"
+                                                role="tabpanel" aria-labelledby="nav-Closeness-Layouts-tab">
+                                                <!-- Layouts tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_closeness_centrality_layout_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_closeness_centrality_layout_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example20" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_closeness_centrality_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_closeness_centrality_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example21" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_closeness_centrality_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_closeness_centrality_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Layouts tab Before After content ends here -->
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-Closeness-Histogram" role="tabpanel"
+                                                aria-labelledby="nav-Closeness-Histogram-tab">
+                                                <!-- Histogram tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_closeness_centrality_histogram_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_closeness_centrality_histogram_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example22" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_closeness_centrality_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_closeness_centrality_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example23" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_closeness_centrality_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_closeness_centrality_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Histogram tab Before After content ends here -->
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-Closeness-Boxplot" role="tabpanel"
+                                                aria-labelledby="nav-Closeness-Boxplot-tab">
+                                                <!-- Boxplot tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_closeness_centrality_boxplot_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_closeness_centrality_boxplot_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example29" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_closeness_centrality_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_closeness_centrality_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example30" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_closeness_centrality_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_closeness_centrality_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Boxplot tab Before After content ends here -->
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-Closeness-Violinplot" role="tabpanel"
+                                                aria-labelledby="nav-Closeness-Violinplot-tab">
+                                                <!-- Violinplot tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_closeness_centrality_violinplot_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_closeness_centrality_violinplot_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example26" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_closeness_centrality_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_closeness_centrality_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example27" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_closeness_centrality_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_closeness_centrality_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Violinplot tab Before After content ends here -->
+                                            </div>
+                                        </div>
+                                        <!-- Closeness Centrality Tab Ends here -->
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-pageranknode" role="tabpanel"
+                                        aria-labelledby="nav-pageranknode-tab">
+                                        <!-- Betwenness Centrality Tab starts here -->
+                                        <nav style="margin-top: 15px;">
+                                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                                <button class="nav-link active" id="nav-Betwenness-Layouts-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-Betwenness-Layouts"
+                                                    type="button" role="tab" aria-controls="nav-Betwenness-Layouts"
+                                                    aria-selected="true">Layouts</button>
+                                                <button class="nav-link" id="nav-Betwenness-Histogram-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-Betwenness-Histogram"
+                                                    type="button" role="tab" aria-controls="nav-Betwenness-Histogram"
+                                                    aria-selected="false">Histogram</button>
+                                                <button class="nav-link" id="nav-Betwenness-Boxplot-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-Betwenness-Boxplot"
+                                                    type="button" role="tab" aria-controls="nav-Betwenness-Boxplot"
+                                                    aria-selected="false">Boxplot</button>
+                                                <button class="nav-link" id="nav-Betwenness-Violinplot-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-Betwenness-Violinplot"
+                                                    type="button" role="tab" aria-controls="nav-Betwenness-Violinplot"
+                                                    aria-selected="false">Violinplot</button>
+                                            </div>
+                                        </nav>
+                                        <div class="tab-content" id="nav-tabContent">
+                                            <div class="tab-pane fade show active" id="nav-Betwenness-Layouts"
+                                                role="tabpanel" aria-labelledby="nav-Betwenness-Layouts-tab">
+                                                <!-- Layouts tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_betwenness_centrality_layout_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_betwenness_centrality_layout_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example30" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_betwenness_centrality_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_betwenness_centrality_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example31" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_betwenness_centrality_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_betwenness_centrality_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Layouts tab Before After content ends here -->
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-Betwenness-Histogram" role="tabpanel"
+                                                aria-labelledby="nav-Betwenness-Histogram-tab">
+                                                <!-- Histogram tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_betwenness_centrality_histogram_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_betwenness_centrality_histogram_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example32" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_betwenness_centrality_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_betwenness_centrality_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example33" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_betwenness_centrality_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_betwenness_centrality_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Histogram tab Before After content ends here -->
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-Betwenness-Boxplot" role="tabpanel"
+                                                aria-labelledby="nav-Betwenness-Boxplot-tab">
+                                                <!-- Boxplot tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_betwenness_centrality_boxplot_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_betwenness_centrality_boxplot_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example39" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_betwenness_centrality_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_betwenness_centrality_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example38" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_betwenness_centrality_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_betwenness_centrality_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Boxplot tab Before After content ends here -->
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-Betwenness-Violinplot" role="tabpanel"
+                                                aria-labelledby="nav-Betwenness-Violinplot-tab">
+                                                <!-- Violinplot tab Before After content starts here -->
+                                                <div class="container px-4 text-center">
+                                                    <div class="row gx-5"
+                                                        style="margin-bottom: 15px; margin-top: 25px;">
+                                                        <div class="col">
+                                                            <h4>Before</h4>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h4>After</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_betwenness_centrality_violinplot_1 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <iframe
+                                                                        src="{{ graph_betwenness_centrality_violinplot_2 }}"
+                                                                        width="100%" height="300"></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gx-5" style="margin-top: 15px;">
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example36" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_betwenness_centrality_before.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_betwenness_centrality_before.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card card-body">
+                                                                <table id="example37" class="display"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            {% for cell in
+                                                                            df_betwenness_centrality_after.columns
+                                                                            %}
+                                                                            <th>{{ cell }}</th>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for row in
+                                                                        df_betwenness_centrality_after.itertuples()
+                                                                        %}
+                                                                        <tr>
+                                                                            {% for cell in row[1:] %}
+                                                                            <td>{{ cell }}</td>
+                                                                            {% endfor %}
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Violinplot tab Before After content ends here -->
+                                            </div>
+                                        </div>
+                                        <!-- Betwenness Centrality Tab Ends here -->
+                                    </div>
+                                </div>
+                                <!-- Nodes tabs section ends here -->
+                            </div>
                             <div class="tab-pane fade" id="nav-Clusters" role="tabpanel"
                                 aria-labelledby="nav-Clusters-tab">Clusters</div>
                         </div>

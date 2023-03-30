@@ -161,7 +161,16 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
         df_load_centrality_after, graph_load_centrality_boxplot_name_2 = plot_boxplot(networkGraphs2, 'load_centrality', directed=directed_toggle, multi=multi_toggle)
         df_load_centrality_before, graph_load_centrality_violinplot_name_1 = plot_violin(networkGraphs, 'load_centrality', directed=directed_toggle, multi=multi_toggle)
         df_load_centrality_after, graph_load_centrality_violinplot_name_2 = plot_violin(networkGraphs2, 'load_centrality', directed=directed_toggle, multi=multi_toggle)
-        
+            # kcore
+        df_kcore_node_before, graph_kcore_node_layout_name_1 = plot_metric(networkGraphs, 'kcore', directed=directed_toggle, multi=multi_toggle, dynamic=False, layout=visualisation_layout)
+        df_kcore_node_after, graph_kcore_node_layout_name_2 = plot_metric(networkGraphs2, 'kcore', directed=directed_toggle, multi=multi_toggle, dynamic=False, layout=visualisation_layout)
+        df_kcore_node_before, graph_kcore_node_histogram_name_1 = plot_histogram(networkGraphs, 'kcore', directed=directed_toggle, multi=multi_toggle)
+        df_kcore_node_after, graph_kcore_node_histogram_name_2 = plot_histogram(networkGraphs2, 'kcore', directed=directed_toggle, multi=multi_toggle)
+        df_kcore_node_before, graph_kcore_node_boxplot_name_1 = plot_boxplot(networkGraphs, 'kcore', directed=directed_toggle, multi=multi_toggle)
+        df_kcore_node_after, graph_kcore_node_boxplot_name_2 = plot_boxplot(networkGraphs2, 'kcore', directed=directed_toggle, multi=multi_toggle)
+        df_kcore_node_before, graph_kcore_node_violinplot_name_1 = plot_violin(networkGraphs, 'kcore', directed=directed_toggle, multi=multi_toggle)
+        df_kcore_node_after, graph_kcore_node_violinplot_name_2 = plot_violin(networkGraphs2, 'kcore', directed=directed_toggle, multi=multi_toggle)
+
         # end POST condition
 
         print('visualisation layout',visualisation_layout)
@@ -381,6 +390,47 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
         else:
             graph_load_centrality_violinplot_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_load_centrality_violinplot_name_2
       
+        # kcore
+        if graph_kcore_node_layout_name_1 == 'no_graph.html':
+            graph_kcore_node_layout_path_1 = '../static/' + graph_kcore_node_layout_name_1
+        else:
+            graph_kcore_node_layout_path_1 = '../static/uploads/' + filename2 + '/' + graph_kcore_node_layout_name_1
+
+        if graph_kcore_node_layout_name_2 == 'no_graph.html':
+            graph_kcore_node_layout_path_2 = '../static/' + graph_kcore_node_layout_name_2
+        else:
+            graph_kcore_node_layout_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_kcore_node_layout_name_2
+    
+        if graph_kcore_node_histogram_name_1 == 'no_graph.html':
+            graph_kcore_node_histogram_path_1 = '../static/' + graph_kcore_node_histogram_name_1
+        else:
+            graph_kcore_node_histogram_path_1 = '../static/uploads/' + filename2 + '/' + graph_kcore_node_histogram_name_1
+
+        if graph_kcore_node_histogram_name_2 == 'no_graph.html':
+            graph_kcore_node_histogram_path_2 = '../static/' + graph_kcore_node_histogram_name_2
+        else:
+            graph_kcore_node_histogram_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_kcore_node_histogram_name_2
+        
+        if graph_kcore_node_boxplot_name_1 == 'no_graph.html':
+            graph_kcore_node_boxplot_path_1 = '../static/' + graph_kcore_node_boxplot_name_1
+        else:
+            graph_kcore_node_boxplot_path_1 = '../static/uploads/' + filename2 + '/' + graph_kcore_node_boxplot_name_1
+
+        if graph_kcore_node_boxplot_name_2 == 'no_graph.html':
+            graph_kcore_node_boxplot_path_2 = '../static/' + graph_kcore_node_boxplot_name_2
+        else:
+            graph_kcore_node_boxplot_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_kcore_node_boxplot_name_2
+        
+        if graph_kcore_node_violinplot_name_1 == 'no_graph.html':
+            graph_kcore_node_violinplot_path_1 = '../static/' + graph_kcore_node_violinplot_name_1
+        else:
+            graph_kcore_node_violinplot_path_1 = '../static/uploads/' + filename2 + '/' + graph_kcore_node_violinplot_name_1
+
+        if graph_kcore_node_violinplot_name_2 == 'no_graph.html':
+            graph_kcore_node_violinplot_path_2 = '../static/' + graph_kcore_node_violinplot_name_2
+        else:
+            graph_kcore_node_violinplot_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_kcore_node_violinplot_name_2
+    
     else:
         graph_path1 = '../static/no_graph.html' 
         graph_path2 = '../static/no_graph.html' 
@@ -438,6 +488,17 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
         graph_load_centrality_violinplot_path_2 = '../static/no_graph.html'
         df_load_centrality_before = pd.DataFrame(0, index=range(5), columns=range(5))
         df_load_centrality_after = pd.DataFrame(0, index=range(5), columns=range(5))
+
+        graph_kcore_node_layout_path_1 = '../static/no_graph.html'
+        graph_kcore_node_layout_path_2 = '../static/no_graph.html'
+        graph_kcore_node_histogram_path_1 = '../static/no_graph.html'
+        graph_kcore_node_histogram_path_2 = '../static/no_graph.html'
+        graph_kcore_node_boxplot_path_1 = '../static/no_graph.html'
+        graph_kcore_node_boxplot_path_2 = '../static/no_graph.html'
+        graph_kcore_node_violinplot_path_1 = '../static/no_graph.html'
+        graph_kcore_node_violinplot_path_2 = '../static/no_graph.html'
+        df_kcore_node_before = pd.DataFrame(0, index=range(5), columns=range(5))
+        df_kcore_node_after = pd.DataFrame(0, index=range(5), columns=range(5))
         
     return render_template(template_name_arg, tab_main=tab_main_arg, visualisation_layout=visualisation_layout,
         number_of_nodes=number_of_nodes_arg, number_of_edges=number_of_edges_arg, graph1=graph_path1, graph2=graph_path2,
@@ -470,7 +531,13 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
         graph_load_centrality_layout_1=graph_load_centrality_layout_path_1, graph_load_centrality_layout_2=graph_load_centrality_layout_path_2,
         graph_load_centrality_histogram_1=graph_load_centrality_histogram_path_1, graph_load_centrality_histogram_2=graph_load_centrality_histogram_path_2,
         graph_load_centrality_boxplot_1=graph_load_centrality_boxplot_path_1, graph_load_centrality_boxplot_2=graph_load_centrality_boxplot_path_2,
-        graph_load_centrality_violinplot_1=graph_load_centrality_violinplot_path_1, graph_load_centrality_violinplot_2=graph_load_centrality_violinplot_path_2)
+        graph_load_centrality_violinplot_1=graph_load_centrality_violinplot_path_1, graph_load_centrality_violinplot_2=graph_load_centrality_violinplot_path_2,
+        
+        df_kcore_node_before=df_kcore_node_before, df_kcore_node_after=df_kcore_node_after, 
+        graph_kcore_node_layout_1=graph_kcore_node_layout_path_1, graph_kcore_node_layout_2=graph_kcore_node_layout_path_2,
+        graph_kcore_node_histogram_1=graph_kcore_node_histogram_path_1, graph_kcore_node_histogram_2=graph_kcore_node_histogram_path_2,
+        graph_kcore_node_boxplot_1=graph_kcore_node_boxplot_path_1, graph_kcore_node_boxplot_2=graph_kcore_node_boxplot_path_2,
+        graph_kcore_node_violinplot_1=graph_kcore_node_violinplot_path_1, graph_kcore_node_violinplot_2=graph_kcore_node_violinplot_path_2)
 
 
 
