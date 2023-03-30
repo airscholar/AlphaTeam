@@ -8,6 +8,7 @@ Purpose: Machine Learning for the NetworkX graphs
 
 # Internal imports
 import src.utils as utils
+from src.utils import memoize
 
 # External imports
 import warnings
@@ -65,6 +66,8 @@ def create_comm_dataframe(communities, colors):
 
 
 # ----------------------------------------------------------------------------------------
+
+@memoize
 def louvain_clustering(networkGraphs, noOfClusters=0):
     """
     Detect communities based on Louvain clustering with a maximum of `totalCommunities`
@@ -85,6 +88,8 @@ def louvain_clustering(networkGraphs, noOfClusters=0):
 
 # ----------------------------------------------------------------------------------------
 
+
+@memoize
 def greedy_modularity_clustering(networkGraphs, noOfClusters=0):
     """
     :Function: Detect communities based on greedy modularity clustering with a maximum of `noOfClusters`
@@ -104,6 +109,8 @@ def greedy_modularity_clustering(networkGraphs, noOfClusters=0):
 
 # ----------------------------------------------------------------------------------------
 
+
+@memoize
 def label_propagation_clustering(networkGraphs, noOfClusters=0):
     """
     Detect communities based on label propagation
@@ -119,6 +126,8 @@ def label_propagation_clustering(networkGraphs, noOfClusters=0):
 
 # ----------------------------------------------------------------------------------------
 
+
+@memoize
 def asyn_lpa_clustering(networkGraphs, noOfClusters=0):
     """
     Detect communities based on asynchronous label propagation
@@ -133,6 +142,8 @@ def asyn_lpa_clustering(networkGraphs, noOfClusters=0):
 
 # ----------------------------------------------------------------------------------------
 
+
+@memoize
 def k_clique_clustering(networkGraphs, noOfClusters=0):
     """
     Detect communities based on k-clique
@@ -148,6 +159,7 @@ def k_clique_clustering(networkGraphs, noOfClusters=0):
 # ----------------------------------------------------------------------------------------
 
 
+@memoize
 def spectral_clustering(networkGraphs, noOfClusters=0):
     """
     :Function: Detect communities based on spectral
@@ -172,6 +184,7 @@ def spectral_clustering(networkGraphs, noOfClusters=0):
 # ----------------------------------------------------------------------------------------
 
 
+@memoize
 def compute_clustering(networkGraph, max_range=30):
     """
     :Function: Compute the optimal number of clusters
@@ -228,6 +241,7 @@ def clustering_response(networkGraph, clustering_alg, optimal_k):
 # ----------------------------------------------------------------------------------------
 
 
+@memoize
 def kmeans_clustering(networkGraphs, noOfClusters=0):
     """
     :Function: Detect communities based on k-means
@@ -253,6 +267,10 @@ def kmeans_clustering(networkGraphs, noOfClusters=0):
     return df
 
 
+# ----------------------------------------------------------------------------------------
+
+
+@memoize
 def agglomerative_clustering(networkGraphs, noOfClusters=0):
     """
     :Function: Detect communities based on agglomerative
@@ -275,6 +293,10 @@ def agglomerative_clustering(networkGraphs, noOfClusters=0):
     return df
 
 
+# ----------------------------------------------------------------------------------------
+
+
+@memoize
 def dbscan_clustering(networkGraphs, noOfClusters=0):
     """
     :Function: Detect communities based on dbscan
@@ -299,6 +321,7 @@ def dbscan_clustering(networkGraphs, noOfClusters=0):
 
 
 # ----------------------------------------------------------------------------------------
+
 
 
 def get_communities(networkGraphs, method, noOfClusters=0):
@@ -366,6 +389,7 @@ def get_hotspot(networkGraphs):
 # ----------------------------------------------------------------------------------------
 
 
+@memoize
 def binary_search(func, networkGraphs, noOfClusters=0):
     lower_bound, upper_bound = 0, None
     step = 0.1
