@@ -19,7 +19,9 @@ from src.resilience import *
 from flask import g
 
 resilience_routes = Blueprint('resilience_routes', __name__)
+
 networkGraphs2 = None
+
 #-------------------------------------------RESILIENCE_ANALYSIS-----------------------------
 
 @resilience_routes.route('/resilience/malicious', endpoint='resilience_malicious', methods=['GET', 'POST'])
@@ -72,7 +74,7 @@ def resilience_analyisis_cluster():
 
 @resilience_routes.route('/resilience/random', endpoint='resilience_random', methods=['GET', 'POST'])
 def resilience_analyisis_random():
-    tab_main = 'tab1'
+    tab_main =  session.get('tab_main', 'tab1')
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     number_of_nodes = session.get('number_of_nodes', None)
@@ -82,16 +84,19 @@ def resilience_analyisis_random():
     val2 = session.get('val2', None)
     
     # here we use number of nodes
+    global networkGraphs2
     if val1 != number_of_nodes:
         session['val1'] = number_of_nodes
         tab_main = 'tab1'
-        global networkGraphs2
-        networkGraphs2 = resilience(networkGraphs, attack='random', number_of_nodes=int(number_of_nodes))
+        session['tab_main'] = tab_main
+        networkGraphs2, df2 = resilience(networkGraphs, attack='random', number_of_nodes=int(number_of_nodes))
     
     # here we use number of edges
     if val2 != number_of_edges:
-        session['val2'] = number_of_edge
+        session['val2'] = number_of_edges
         tab_main = 'tab2'
+        session['tab_main'] = tab_main
+        networkGraphs2, df2 = resilience(networkGraphs, attack='random', number_of_edges=int(number_of_edges))
 
     print('number_of_nodes',number_of_nodes)
      
