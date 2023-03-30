@@ -6,11 +6,12 @@ Purpose: Resilience of the network
 
 # -------------------------------------- IMPORT ---------------------------------------------
 
+import random
+
 import src.machineLearning as ml
 from src.NetworkGraphs import NetworkGraphs
-from src.preprocessing import convert_to_DiGraph
 from src.metrics import *
-import random
+from src.preprocessing import convert_to_DiGraph
 
 # -------------------------------------- FUNCTIONS -------------------------------------------
 
@@ -53,6 +54,15 @@ def resilience(networkGraph, attack, **kwargs):
             - "cluster_algorithm": Algorithm to be used to compute the clusters
             - "total_clusters": Total number of clusters to be generated
             - "number_of_clusters": Number of clusters to be removed
+        - "cluster_custom":
+            - "cluster_algorithm": Algorithm to be used to compute the clusters
+            - "total_clusters": Total number of clusters to be generated
+            - "cluster_ids": List of cluster ids to be removed
+        - "custom":
+            - "list_of_nodes": List of nodes to be removed
+                If "cluster_algorithm" is specified, the list of nodes will be recomputed to delete the whole cluster that belong to each node
+            - "cluster_algorithm": Algorithm to be used to compute the clusters
+            - "total_clusters": Total number of clusters to be generated
     :param networkGraph: NetworkGraph
     :type networkGraph: NetworkGraph
     :param attack: Attack to be performed
@@ -81,9 +91,25 @@ def resilience(networkGraph, attack, **kwargs):
             if key not in ["cluster_algorithm", "total_clusters", "number_of_clusters"]:
                 print(f"Argument {key} not recognized")
                 return 0
+
         if "cluster_algorithm" not in kwargs.keys():
             raise ValueError("Cluster algorithm not specified")
         return resilience_cluster(networkGraph, **kwargs)
+
+    elif attack == "cluster_custom":
+        for key in kwargs.keys():
+            if key not in ["cluster_algorithm", "total_clusters", "cluster_ids"]:
+                print(f"Argument {key} not recognized")
+                return 0
+        if "cluster_algorithm" not in kwargs.keys():
+            raise ValueError("Cluster algorithm not specified")
+        return resilience_cluster_custom(networkGraph, **kwargs)
+
+    elif attack == "custom":
+        for key in kwargs.keys():
+            if key not in ["list_of_nodes"]:
+                raise ValueError(f"Argument {key} not recognized")
+        return resilience_custom(networkGraph, **kwargs)
 
     else:
         print("Attack not recognized")
@@ -109,7 +135,7 @@ def resilience_random(networkGraph, number_of_nodes=0, number_of_edges=0):
 
     if number_of_nodes > 0:
         nodes = G.MultiDiGraph.nodes()
-        nodes_to_remove = random.sample(nodes, number_of_nodes)
+        nodes_to_remove = random.sample(sorted(nodes), number_of_nodes)
         G = remove_nodes(G, nodes_to_remove)
 
     if number_of_edges > 0:
@@ -225,6 +251,25 @@ def resilience_cluster(networkGraph, cluster_algorithm=None, total_clusters=0, n
 # ------------------------------------------------------------------------------------------
 
 
+def resilience_custom(networkGraph, list_of_nodes=None):
+    """
+    :Function: Compute the resilience of the networkGraph using the custom attack
+    :param networkGraph: NetworkGraph
+    :type networkGraph: NetworkGraph
+    :param list_of_nodes: List of nodes to be removed
+    :type list_of_nodes: list
+    :return: NetworkGraph with the nodes removed
+    :rtype: NetworkGraph
+    """
+    G = copy_networkGraph(networkGraph)
+
+    G = remove_nodes(G, list_of_nodes)
+    return G
+
+
+# ------------------------------------------------------------------------------------------
+
+
 def copy_networkGraph(networkGraph):
     """
     :Function: Copy the networkGraph object
@@ -258,7 +303,8 @@ def remove_nodes(networkGraph, nodes):
         networkGraph.MultiDiGraph.remove_node(node)
 
     networkGraph.DiGraph = convert_to_DiGraph(networkGraph.MultiDiGraph)
-    networkGraph.Graph, networkGraph.MultiGraph = networkGraph.DiGraph.to_undirected(), networkGraph.MultiDiGraph.to_undirected()
+    networkGraph.Graph, networkGraph.MultiGraph = networkGraph.DiGraph.to_undirected(
+    ), networkGraph.MultiDiGraph.to_undirected()
     networkGraph.update_attributes()
     return networkGraph
 
@@ -280,7 +326,8 @@ def remove_edges(networkGraph, edges):
         networkGraph.MultiDiGraph.remove_edge(edge[0], edge[1])
 
     networkGraph.DiGraph = convert_to_DiGraph(networkGraph.MultiDiGraph)
-    networkGraph.Graph, networkGraph.MultiGraph = networkGraph.DiGraph.to_undirected(), networkGraph.MultiDiGraph.to_undirected()
+    networkGraph.Graph, networkGraph.MultiGraph = networkGraph.DiGraph.to_undirected(
+    ), networkGraph.MultiDiGraph.to_undirected()
     networkGraph.update_attributes()
     return networkGraph
 
@@ -312,3 +359,40 @@ def execute_threshold(df, metric, threshold, operator='>'):
         raise ValueError(f"Operator {operator} not supported")
 
     return nodes_to_remove
+
+
+# ------------------------------------------------------------------------------------------
+
+
+def resilience_cluster_custom(networkGraph, cluster_algorithm=None, total_clusters=None, cluster_ids=None):
+    """
+    :Function: Compute the clusters of the networkGraph
+    :param networkGraph: NetworkGraph
+    :type networkGraph: NetworkGraph
+    :param cluster_algorithm: Algorithm to be used to compute the clusters
+    :type cluster_algorithm: str
+    :param total_clusters: Total number of clusters
+    :type total_clusters: int
+    :param cluster_ids: Cluster ids to be removed
+    :type cluster_ids: list
+    """
+    if cluster_algorithm not in ['louvain', 'greedy_modularity', 'label_propagation', 'asyn_lpa',
+                                 'k_clique', 'spectral', 'kmeans', 'agglomerative', 'hierarchical', 'dbscan']:
+        print(ValueError("Invalid cluster type", "please choose from the following: 'louvain', 'greedy_modularity', "
+                                                 "'label_propagation', 'asyn_lpa',"
+                                                 "'k_clique', 'spectral', 'kmeans' "
+                                                 "'agglomerative', 'hierarchical', 'dbscan'"))
+        return 0
+
+    G = copy_networkGraph(networkGraph)
+    clusters = ml.get_communities(networkGraph, cluster_algorithm, total_clusters)
+
+    if cluster_ids is not None and len(cluster_ids) > 0:
+        nodes_to_remove = []
+        for cluster_id in cluster_ids:
+            nodes = clusters[clusters['Cluster_id'] == cluster_id]['Node'].values
+            nodes_to_remove.extend(nodes)
+
+        G = remove_nodes(G, nodes_to_remove)
+
+    return G
