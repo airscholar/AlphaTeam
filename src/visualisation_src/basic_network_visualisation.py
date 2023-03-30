@@ -42,10 +42,11 @@ def static_visualisation(networkGraphs, filepath, directed=True, multi=False, la
     y_list = []
     for idx, vals in enumerate(zip_longest(G.nodes(), G.edges())):
         node, edge = vals
-        x0, y0 = pos[edge[0]]
-        x1, y1 = pos[edge[1]]
-        x_list.extend([x0, x1, None])
-        y_list.extend([y0, y1, None])
+        if idx < len(G.edges()):
+            x0, y0 = pos[edge[0]]
+            x1, y1 = pos[edge[1]]
+            x_list.extend([x0, x1, None])
+            y_list.extend([y0, y1, None])
         if idx < len(G.nodes()):
             x, y = pos[node]
             x_.extend([x])
