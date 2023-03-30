@@ -6,14 +6,15 @@ Purpose: Resilience of the network
 
 # -------------------------------------- IMPORT ---------------------------------------------
 
-import random
-
-import pandas as pd
-
+# Internal imports
 import src.machineLearning as ml
 from src.NetworkGraphs import NetworkGraphs
 from src.metrics import *
 from src.preprocessing import convert_to_DiGraph
+
+# External imports
+import random
+import pandas as pd
 
 # -------------------------------------- FUNCTIONS -------------------------------------------
 
@@ -71,8 +72,22 @@ def resilience(networkGraph, attack, **kwargs):
     :type attack: str
     :param kwargs: Arguments of the attack to be performed
     :type kwargs: dict
-    :return: NetworkGraph with the nodes removed
-    :rtype: NetworkGraph
+    :return: NetworkGraph with the nodes removed, and a dataframe with the changed nodes/edges
+    :rtype: NetworkGraph, pd.DataFrame
+
+    Example:
+    >>> # Random attack
+    >>> graph, df = resilience(networkGraph, attack='random', number_of_nodes=10)
+    >>> graph, df = resilience(networkGraph, attack='random', number_of_edges=10)
+    >>> # Malicious attack
+    >>> graph, df = resilience(networkGraph, attack='malicious', metric='degree', number_of_nodes=10)
+    >>> graph, df = resilience(networkGraph, attack='malicious', metric='degree', threshold=10, operator='>')
+    >>> # Cluster attack
+    >>> graph, df = resilience(networkGraph, attack='cluster', cluster_algorithm='spectral', total_clusters=15, number_of_clusters=2)
+    >>> # Custom attack
+    >>> graph, df = resilience(networkGraph, attack='custom', list_of_nodes=[1, 2, 3])
+    >>> # Custom attack with cluster
+    >>> graph, df = resilience(networkGraph, attack='cluster_custom', cluster_ids=[1, 2, 3], cluster_algorithm='spectral', total_clusters=15)
     """
     if attack == "random":
         for key in kwargs.keys():

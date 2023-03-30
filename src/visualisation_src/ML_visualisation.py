@@ -1,10 +1,21 @@
+"""
+Author: Alpha Team Group Project
+Date: March 2023
+Purpose: ML_visualisation module contains functions for visualising machine learning
+"""
+
+# ----------------------------------------- Imports ----------------------------------------- #
+
+# Internal imports
+from src.visualisation_src.utils_visualisation import *
+
+# External imports
 from pyvis import network as net
 from tqdm import tqdm
 
-from src.visualisation_src.utils_visualisation import *
-
 
 # ----------------------------------------------------------------------------------------
+
 
 def generate_static_cluster(networkGraphs, df_, filename, algo, layout_='map', nbr=0):  # USING PLOTLY
 
@@ -49,6 +60,7 @@ def generate_static_cluster(networkGraphs, df_, filename, algo, layout_='map', n
 
 
 # ----------------------------------------------------------------------------------------
+
 
 def generate_hotspot(networkGraphs, hotspot_df, filename):
     """

@@ -1,8 +1,17 @@
-from itertools import zip_longest
+"""
+Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Basic network visualisation module contains functions for basic network visualisation
+"""
 
-from pyvis import network as net
+# ----------------------------------------- Imports ----------------------------------------- #
 
+# Internal imports
 from src.visualisation_src.utils_visualisation import *
+
+# External imports
+from itertools import zip_longest
+from pyvis import network as net
 
 
 # ----------------------------------------------------------------------------------------
@@ -42,10 +51,11 @@ def static_visualisation(networkGraphs, filepath, directed=True, multi=False, la
     y_list = []
     for idx, vals in enumerate(zip_longest(G.nodes(), G.edges())):
         node, edge = vals
-        x0, y0 = pos[edge[0]]
-        x1, y1 = pos[edge[1]]
-        x_list.extend([x0, x1, None])
-        y_list.extend([y0, y1, None])
+        if idx < len(G.edges()):
+            x0, y0 = pos[edge[0]]
+            x1, y1 = pos[edge[1]]
+            x_list.extend([x0, x1, None])
+            y_list.extend([y0, y1, None])
         if idx < len(G.nodes()):
             x, y = pos[node]
             x_.extend([x])

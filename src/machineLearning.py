@@ -4,6 +4,13 @@ Date: March 2023
 Purpose: Machine Learning for the NetworkX graphs
 """
 
+# ----------------------------------------- Imports ----------------------------------------- #
+
+# Internal imports
+import src.utils as utils
+from src.utils import memoize
+
+# External imports
 import warnings
 import networkx as nx
 import networkx.algorithms.community as nx_comm
@@ -12,7 +19,6 @@ import pandas as pd
 from distinctipy import distinctipy
 from kneed import KneeLocator
 from sklearn.cluster import SpectralClustering, KMeans, AgglomerativeClustering, DBSCAN
-import src.utils as utils
 
 warnings.filterwarnings("ignore")
 
@@ -60,6 +66,8 @@ def create_comm_dataframe(communities, colors):
 
 
 # ----------------------------------------------------------------------------------------
+
+@memoize
 def louvain_clustering(networkGraphs, noOfClusters=0):
     """
     Detect communities based on Louvain clustering with a maximum of `totalCommunities`
@@ -68,7 +76,7 @@ def louvain_clustering(networkGraphs, noOfClusters=0):
     :return: dataframe
     """
     if 0 < noOfClusters:
-        communities = binary_search('louvain_communities',networkGraphs, noOfClusters)
+        communities = binary_search('louvain_communities', networkGraphs, noOfClusters)
     else:
         communities = list(nx_comm.louvain_communities(networkGraphs.Graph))
 
@@ -80,6 +88,8 @@ def louvain_clustering(networkGraphs, noOfClusters=0):
 
 # ----------------------------------------------------------------------------------------
 
+
+@memoize
 def greedy_modularity_clustering(networkGraphs, noOfClusters=0):
     """
     :Function: Detect communities based on greedy modularity clustering with a maximum of `noOfClusters`
@@ -88,7 +98,7 @@ def greedy_modularity_clustering(networkGraphs, noOfClusters=0):
     :return: dataframe
     """
     if 0 < noOfClusters:
-        communities = binary_search('greedy_modularity_communities',networkGraphs, noOfClusters)
+        communities = binary_search('greedy_modularity_communities', networkGraphs, noOfClusters)
     else:
         communities = list(nx_comm.greedy_modularity_communities(networkGraphs.Graph))
 
@@ -99,6 +109,8 @@ def greedy_modularity_clustering(networkGraphs, noOfClusters=0):
 
 # ----------------------------------------------------------------------------------------
 
+
+@memoize
 def label_propagation_clustering(networkGraphs, noOfClusters=0):
     """
     Detect communities based on label propagation
@@ -114,6 +126,8 @@ def label_propagation_clustering(networkGraphs, noOfClusters=0):
 
 # ----------------------------------------------------------------------------------------
 
+
+@memoize
 def asyn_lpa_clustering(networkGraphs, noOfClusters=0):
     """
     Detect communities based on asynchronous label propagation
@@ -128,6 +142,8 @@ def asyn_lpa_clustering(networkGraphs, noOfClusters=0):
 
 # ----------------------------------------------------------------------------------------
 
+
+@memoize
 def k_clique_clustering(networkGraphs, noOfClusters=0):
     """
     Detect communities based on k-clique
@@ -143,6 +159,7 @@ def k_clique_clustering(networkGraphs, noOfClusters=0):
 # ----------------------------------------------------------------------------------------
 
 
+@memoize
 def spectral_clustering(networkGraphs, noOfClusters=0):
     """
     :Function: Detect communities based on spectral
@@ -167,6 +184,7 @@ def spectral_clustering(networkGraphs, noOfClusters=0):
 # ----------------------------------------------------------------------------------------
 
 
+@memoize
 def compute_clustering(networkGraph, max_range=30):
     """
     :Function: Compute the optimal number of clusters
@@ -180,8 +198,8 @@ def compute_clustering(networkGraph, max_range=30):
     adj_mat = nx.to_numpy_array(networkGraph)
 
     if max_range >= len(networkGraph.nodes()):
-        print('overriding max range', len(networkGraph.nodes())-1)
-        max_range = len(networkGraph.nodes())-1
+        print('overriding max range', len(networkGraph.nodes()) - 1)
+        max_range = len(networkGraph.nodes()) - 1
 
     # get optimal number of clusters
     wcss = []
@@ -223,6 +241,7 @@ def clustering_response(networkGraph, clustering_alg, optimal_k):
 # ----------------------------------------------------------------------------------------
 
 
+@memoize
 def kmeans_clustering(networkGraphs, noOfClusters=0):
     """
     :Function: Detect communities based on k-means
@@ -231,15 +250,12 @@ def kmeans_clustering(networkGraphs, noOfClusters=0):
     :return: dataframe
     """
     G = networkGraphs.Graph
-    if 0 < noOfClusters:
+    if 0 >= noOfClusters:
         adj_mat, optimal_k = compute_clustering(G)
-        clustering = KMeans(n_clusters=optimal_k, init='k-means++',
-                            random_state=4, max_iter=10).fit(adj_mat)
+
     else:
         optimal_k = noOfClusters
         adj_mat = nx.to_numpy_array(G)
-        clustering = KMeans(n_clusters=optimal_k, init='k-means++',
-                            random_state=4, max_iter=10).fit(adj_mat)
 
     clustering = KMeans(n_clusters=optimal_k, init='k-means++',
                         random_state=4, max_iter=10).fit(adj_mat)
@@ -248,6 +264,10 @@ def kmeans_clustering(networkGraphs, noOfClusters=0):
     return df
 
 
+# ----------------------------------------------------------------------------------------
+
+
+@memoize
 def agglomerative_clustering(networkGraphs, noOfClusters=0):
     """
     :Function: Detect communities based on agglomerative
@@ -270,6 +290,10 @@ def agglomerative_clustering(networkGraphs, noOfClusters=0):
     return df
 
 
+# ----------------------------------------------------------------------------------------
+
+
+@memoize
 def dbscan_clustering(networkGraphs, noOfClusters=0):
     """
     :Function: Detect communities based on dbscan
@@ -294,6 +318,7 @@ def dbscan_clustering(networkGraphs, noOfClusters=0):
 
 
 # ----------------------------------------------------------------------------------------
+
 
 
 def get_communities(networkGraphs, method, noOfClusters=0):
@@ -361,6 +386,7 @@ def get_hotspot(networkGraphs):
 # ----------------------------------------------------------------------------------------
 
 
+@memoize
 def binary_search(func, networkGraphs, noOfClusters=0):
     lower_bound, upper_bound = 0, None
     step = 0.1

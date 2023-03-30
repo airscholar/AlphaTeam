@@ -4,12 +4,14 @@ Date: March 2023
 Purpose: Compute the metrics for the NetworkX graphs
 """
 
-# ----------------------------------------------------------------------------------------
+# -------------------------------------- IMPORTS -------------------------------------------
 
+# Internal imports
+from src.utils import *
+
+# External imports
 import networkx as nx
 import pandas as pd
-
-from src.utils import *
 
 
 # ----------------------------------------------------------------------------------------

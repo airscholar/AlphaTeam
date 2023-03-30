@@ -6,12 +6,14 @@ Purpose: Deep learning module contains functions for deep learning
 
 # ----------------------------------------- Imports ----------------------------------------- #
 
+# External imports
 import networkx as nx
 import os as os
 
 # ----------------------------------------- CONSTANT ----------------------------------------- #
 
 DIR = 'lib/node2vec-master/src/main.py'
+
 
 # ----------------------------------------- Functions ----------------------------------------- #
 
@@ -33,4 +35,3 @@ def node_embedding(networkGraph, multi=False, directed=False):
               --input {'emb/graph.edgelist'}\
               --output {'emb/graph.emb'}\
               --weighted {'--directed' if directed else ''}")
-
