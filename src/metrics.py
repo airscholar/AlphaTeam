@@ -7,11 +7,9 @@ Purpose: Compute the metrics for the NetworkX graphs
 # ----------------------------------------------------------------------------------------
 
 import networkx as nx
-import numpy as np
 import pandas as pd
 
-from src.utils import memoize
-from src.utils import return_nan
+from src.utils import *
 
 
 # ----------------------------------------------------------------------------------------
