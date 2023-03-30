@@ -1717,3 +1717,849 @@ $(document).ready(function () {
         }]
     });
 });
+
+// 61
+
+$(document).ready(function () {
+    $('#example61').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example62').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example63').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example64').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example65').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example66').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example67').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example68').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example69').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example70').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+// 71
+
+$(document).ready(function () {
+    $('#example71').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example72').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example73').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example74').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example75').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example76').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example77').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example78').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example79').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example80').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+// 81
+
+$(document).ready(function () {
+    $('#example81').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example82').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example83').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example84').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example85').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example86').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example87').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example88').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example89').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});
+
+$(document).ready(function () {
+    $('#example90').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "pageLength": 10, // Show 10 rows per page
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "columnDefs": [{
+            "targets": "_all",
+            "render": function (data, type, row) {
+                if (typeof data === 'number') {
+                    return parseFloat(data.toFixed(6)); // Round to 6 decimal places for numbers
+                }
+                if (typeof data === 'string') {
+                    if (data.length > 15 && data.startsWith('0x')) {
+                        return data.slice(0, 6) + '...' + data.slice(-6);
+                    } else if (!data.startsWith('0x')) {
+                        return data.substring(0, 6); // Limit the length to 6 if the string doesn't start with '0x'
+                    }
+                    return data.substring(0, 12);
+                }
+                return data;
+            }
+        }]
+    });
+});

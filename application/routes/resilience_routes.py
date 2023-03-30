@@ -170,6 +170,33 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
         df_kcore_node_after, graph_kcore_node_boxplot_name_2 = plot_boxplot(networkGraphs2, 'kcore', directed=directed_toggle, multi=multi_toggle)
         df_kcore_node_before, graph_kcore_node_violinplot_name_1 = plot_violin(networkGraphs, 'kcore', directed=directed_toggle, multi=multi_toggle)
         df_kcore_node_after, graph_kcore_node_violinplot_name_2 = plot_violin(networkGraphs2, 'kcore', directed=directed_toggle, multi=multi_toggle)
+            # degree
+        df_degree_node_before, graph_degree_node_layout_name_1 = plot_metric(networkGraphs, 'degree', directed=directed_toggle, multi=multi_toggle, dynamic=False, layout=visualisation_layout)
+        df_degree_node_after, graph_degree_node_layout_name_2 = plot_metric(networkGraphs2, 'degree', directed=directed_toggle, multi=multi_toggle, dynamic=False, layout=visualisation_layout)
+        df_degree_node_before, graph_degree_node_histogram_name_1 = plot_histogram(networkGraphs, 'degree', directed=directed_toggle, multi=multi_toggle)
+        df_degree_node_after, graph_degree_node_histogram_name_2 = plot_histogram(networkGraphs2, 'degree', directed=directed_toggle, multi=multi_toggle)
+        df_degree_node_before, graph_degree_node_boxplot_name_1 = plot_boxplot(networkGraphs, 'degree', directed=directed_toggle, multi=multi_toggle)
+        df_degree_node_after, graph_degree_node_boxplot_name_2 = plot_boxplot(networkGraphs2, 'degree', directed=directed_toggle, multi=multi_toggle)
+        df_degree_node_before, graph_degree_node_violinplot_name_1 = plot_violin(networkGraphs, 'degree', directed=directed_toggle, multi=multi_toggle)
+        df_degree_node_after, graph_degree_node_violinplot_name_2 = plot_violin(networkGraphs2, 'degree', directed=directed_toggle, multi=multi_toggle)
+            # triangles
+        df_triangles_node_before, graph_triangles_node_layout_name_1 = plot_metric(networkGraphs, 'triangles', directed=directed_toggle, multi=multi_toggle, dynamic=False, layout=visualisation_layout)
+        df_triangles_node_after, graph_triangles_node_layout_name_2 = plot_metric(networkGraphs2, 'triangles', directed=directed_toggle, multi=multi_toggle, dynamic=False, layout=visualisation_layout)
+        df_triangles_node_before, graph_triangles_node_histogram_name_1 = plot_histogram(networkGraphs, 'triangles', directed=directed_toggle, multi=multi_toggle)
+        df_triangles_node_after, graph_triangles_node_histogram_name_2 = plot_histogram(networkGraphs2, 'triangles', directed=directed_toggle, multi=multi_toggle)
+        df_triangles_node_before, graph_triangles_node_boxplot_name_1 = plot_boxplot(networkGraphs, 'triangles', directed=directed_toggle, multi=multi_toggle)
+        df_triangles_node_after, graph_triangles_node_boxplot_name_2 = plot_boxplot(networkGraphs2, 'triangles', directed=directed_toggle, multi=multi_toggle)
+        df_triangles_node_before, graph_triangles_node_violinplot_name_1 = plot_violin(networkGraphs, 'triangles', directed=directed_toggle, multi=multi_toggle)
+        df_triangles_node_after, graph_triangles_node_violinplot_name_2 = plot_violin(networkGraphs2, 'triangles', directed=directed_toggle, multi=multi_toggle)
+            # pagerank
+        df_pagerank_node_before, graph_pagerank_node_layout_name_1 = plot_metric(networkGraphs, 'pagerank', directed=directed_toggle, multi=multi_toggle, dynamic=False, layout=visualisation_layout)
+        df_pagerank_node_after, graph_pagerank_node_layout_name_2 = plot_metric(networkGraphs2, 'pagerank', directed=directed_toggle, multi=multi_toggle, dynamic=False, layout=visualisation_layout)
+        df_pagerank_node_before, graph_pagerank_node_histogram_name_1 = plot_histogram(networkGraphs, 'pagerank', directed=directed_toggle, multi=multi_toggle)
+        df_pagerank_node_after, graph_pagerank_node_histogram_name_2 = plot_histogram(networkGraphs2, 'pagerank', directed=directed_toggle, multi=multi_toggle)
+        df_pagerank_node_before, graph_pagerank_node_boxplot_name_1 = plot_boxplot(networkGraphs, 'pagerank', directed=directed_toggle, multi=multi_toggle)
+        df_pagerank_node_after, graph_pagerank_node_boxplot_name_2 = plot_boxplot(networkGraphs2, 'pagerank', directed=directed_toggle, multi=multi_toggle)
+        df_pagerank_node_before, graph_pagerank_node_violinplot_name_1 = plot_violin(networkGraphs, 'pagerank', directed=directed_toggle, multi=multi_toggle)
+        df_pagerank_node_after, graph_pagerank_node_violinplot_name_2 = plot_violin(networkGraphs2, 'pagerank', directed=directed_toggle, multi=multi_toggle)
 
         # end POST condition
 
@@ -430,7 +457,130 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
             graph_kcore_node_violinplot_path_2 = '../static/' + graph_kcore_node_violinplot_name_2
         else:
             graph_kcore_node_violinplot_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_kcore_node_violinplot_name_2
+        
+        # degree
+        if graph_degree_node_layout_name_1 == 'no_graph.html':
+            graph_degree_node_layout_path_1 = '../static/' + graph_degree_node_layout_name_1
+        else:
+            graph_degree_node_layout_path_1 = '../static/uploads/' + filename2 + '/' + graph_degree_node_layout_name_1
+
+        if graph_degree_node_layout_name_2 == 'no_graph.html':
+            graph_degree_node_layout_path_2 = '../static/' + graph_degree_node_layout_name_2
+        else:
+            graph_degree_node_layout_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_degree_node_layout_name_2
     
+        if graph_degree_node_histogram_name_1 == 'no_graph.html':
+            graph_degree_node_histogram_path_1 = '../static/' + graph_degree_node_histogram_name_1
+        else:
+            graph_degree_node_histogram_path_1 = '../static/uploads/' + filename2 + '/' + graph_degree_node_histogram_name_1
+
+        if graph_degree_node_histogram_name_2 == 'no_graph.html':
+            graph_degree_node_histogram_path_2 = '../static/' + graph_degree_node_histogram_name_2
+        else:
+            graph_degree_node_histogram_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_degree_node_histogram_name_2
+        
+        if graph_degree_node_boxplot_name_1 == 'no_graph.html':
+            graph_degree_node_boxplot_path_1 = '../static/' + graph_degree_node_boxplot_name_1
+        else:
+            graph_degree_node_boxplot_path_1 = '../static/uploads/' + filename2 + '/' + graph_degree_node_boxplot_name_1
+
+        if graph_degree_node_boxplot_name_2 == 'no_graph.html':
+            graph_degree_node_boxplot_path_2 = '../static/' + graph_degree_node_boxplot_name_2
+        else:
+            graph_degree_node_boxplot_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_degree_node_boxplot_name_2
+        
+        if graph_degree_node_violinplot_name_1 == 'no_graph.html':
+            graph_degree_node_violinplot_path_1 = '../static/' + graph_degree_node_violinplot_name_1
+        else:
+            graph_degree_node_violinplot_path_1 = '../static/uploads/' + filename2 + '/' + graph_degree_node_violinplot_name_1
+
+        if graph_degree_node_violinplot_name_2 == 'no_graph.html':
+            graph_degree_node_violinplot_path_2 = '../static/' + graph_degree_node_violinplot_name_2
+        else:
+            graph_degree_node_violinplot_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_degree_node_violinplot_name_2
+        
+        # triangles
+        if graph_triangles_node_layout_name_1 == 'no_graph.html':
+            graph_triangles_node_layout_path_1 = '../static/' + graph_triangles_node_layout_name_1
+        else:
+            graph_triangles_node_layout_path_1 = '../static/uploads/' + filename2 + '/' + graph_triangles_node_layout_name_1
+
+        if graph_triangles_node_layout_name_2 == 'no_graph.html':
+            graph_triangles_node_layout_path_2 = '../static/' + graph_triangles_node_layout_name_2
+        else:
+            graph_triangles_node_layout_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_triangles_node_layout_name_2
+    
+        if graph_triangles_node_histogram_name_1 == 'no_graph.html':
+            graph_triangles_node_histogram_path_1 = '../static/' + graph_triangles_node_histogram_name_1
+        else:
+            graph_triangles_node_histogram_path_1 = '../static/uploads/' + filename2 + '/' + graph_triangles_node_histogram_name_1
+
+        if graph_triangles_node_histogram_name_2 == 'no_graph.html':
+            graph_triangles_node_histogram_path_2 = '../static/' + graph_triangles_node_histogram_name_2
+        else:
+            graph_triangles_node_histogram_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_triangles_node_histogram_name_2
+        
+        if graph_triangles_node_boxplot_name_1 == 'no_graph.html':
+            graph_triangles_node_boxplot_path_1 = '../static/' + graph_triangles_node_boxplot_name_1
+        else:
+            graph_triangles_node_boxplot_path_1 = '../static/uploads/' + filename2 + '/' + graph_triangles_node_boxplot_name_1
+
+        if graph_triangles_node_boxplot_name_2 == 'no_graph.html':
+            graph_triangles_node_boxplot_path_2 = '../static/' + graph_triangles_node_boxplot_name_2
+        else:
+            graph_triangles_node_boxplot_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_triangles_node_boxplot_name_2
+        
+        if graph_triangles_node_violinplot_name_1 == 'no_graph.html':
+            graph_triangles_node_violinplot_path_1 = '../static/' + graph_triangles_node_violinplot_name_1
+        else:
+            graph_triangles_node_violinplot_path_1 = '../static/uploads/' + filename2 + '/' + graph_triangles_node_violinplot_name_1
+
+        if graph_triangles_node_violinplot_name_2 == 'no_graph.html':
+            graph_triangles_node_violinplot_path_2 = '../static/' + graph_triangles_node_violinplot_name_2
+        else:
+            graph_triangles_node_violinplot_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_triangles_node_violinplot_name_2
+    
+        # pagerank
+        if graph_pagerank_node_layout_name_1 == 'no_graph.html':
+            graph_pagerank_node_layout_path_1 = '../static/' + graph_pagerank_node_layout_name_1
+        else:
+            graph_pagerank_node_layout_path_1 = '../static/uploads/' + filename2 + '/' + graph_pagerank_node_layout_name_1
+
+        if graph_pagerank_node_layout_name_2 == 'no_graph.html':
+            graph_pagerank_node_layout_path_2 = '../static/' + graph_pagerank_node_layout_name_2
+        else:
+            graph_pagerank_node_layout_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_pagerank_node_layout_name_2
+    
+        if graph_pagerank_node_histogram_name_1 == 'no_graph.html':
+            graph_pagerank_node_histogram_path_1 = '../static/' + graph_pagerank_node_histogram_name_1
+        else:
+            graph_pagerank_node_histogram_path_1 = '../static/uploads/' + filename2 + '/' + graph_pagerank_node_histogram_name_1
+
+        if graph_pagerank_node_histogram_name_2 == 'no_graph.html':
+            graph_pagerank_node_histogram_path_2 = '../static/' + graph_pagerank_node_histogram_name_2
+        else:
+            graph_pagerank_node_histogram_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_pagerank_node_histogram_name_2
+        
+        if graph_pagerank_node_boxplot_name_1 == 'no_graph.html':
+            graph_pagerank_node_boxplot_path_1 = '../static/' + graph_pagerank_node_boxplot_name_1
+        else:
+            graph_pagerank_node_boxplot_path_1 = '../static/uploads/' + filename2 + '/' + graph_pagerank_node_boxplot_name_1
+
+        if graph_pagerank_node_boxplot_name_2 == 'no_graph.html':
+            graph_pagerank_node_boxplot_path_2 = '../static/' + graph_pagerank_node_boxplot_name_2
+        else:
+            graph_pagerank_node_boxplot_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_pagerank_node_boxplot_name_2
+        
+        if graph_pagerank_node_violinplot_name_1 == 'no_graph.html':
+            graph_pagerank_node_violinplot_path_1 = '../static/' + graph_pagerank_node_violinplot_name_1
+        else:
+            graph_pagerank_node_violinplot_path_1 = '../static/uploads/' + filename2 + '/' + graph_pagerank_node_violinplot_name_1
+
+        if graph_pagerank_node_violinplot_name_2 == 'no_graph.html':
+            graph_pagerank_node_violinplot_path_2 = '../static/' + graph_pagerank_node_violinplot_name_2
+        else:
+            graph_pagerank_node_violinplot_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_pagerank_node_violinplot_name_2
+  
     else:
         graph_path1 = '../static/no_graph.html' 
         graph_path2 = '../static/no_graph.html' 
@@ -500,6 +650,39 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
         df_kcore_node_before = pd.DataFrame(0, index=range(5), columns=range(5))
         df_kcore_node_after = pd.DataFrame(0, index=range(5), columns=range(5))
         
+        graph_degree_node_layout_path_1 = '../static/no_graph.html'
+        graph_degree_node_layout_path_2 = '../static/no_graph.html'
+        graph_degree_node_histogram_path_1 = '../static/no_graph.html'
+        graph_degree_node_histogram_path_2 = '../static/no_graph.html'
+        graph_degree_node_boxplot_path_1 = '../static/no_graph.html'
+        graph_degree_node_boxplot_path_2 = '../static/no_graph.html'
+        graph_degree_node_violinplot_path_1 = '../static/no_graph.html'
+        graph_degree_node_violinplot_path_2 = '../static/no_graph.html'
+        df_degree_node_before = pd.DataFrame(0, index=range(5), columns=range(5))
+        df_degree_node_after = pd.DataFrame(0, index=range(5), columns=range(5))
+
+        graph_triangles_node_layout_path_1 = '../static/no_graph.html'  
+        graph_triangles_node_layout_path_2 = '../static/no_graph.html'
+        graph_triangles_node_histogram_path_1 = '../static/no_graph.html'
+        graph_triangles_node_histogram_path_2 = '../static/no_graph.html'
+        graph_triangles_node_boxplot_path_1 = '../static/no_graph.html'
+        graph_triangles_node_boxplot_path_2 = '../static/no_graph.html'
+        graph_triangles_node_violinplot_path_1 = '../static/no_graph.html'
+        graph_triangles_node_violinplot_path_2 = '../static/no_graph.html'
+        df_triangles_node_before = pd.DataFrame(0, index=range(5), columns=range(5))
+        df_triangles_node_after = pd.DataFrame(0, index=range(5), columns=range(5))
+
+        graph_pagerank_node_layout_path_1 = '../static/no_graph.html'  
+        graph_pagerank_node_layout_path_2 = '../static/no_graph.html'
+        graph_pagerank_node_histogram_path_1 = '../static/no_graph.html'
+        graph_pagerank_node_histogram_path_2 = '../static/no_graph.html'
+        graph_pagerank_node_boxplot_path_1 = '../static/no_graph.html'
+        graph_pagerank_node_boxplot_path_2 = '../static/no_graph.html'
+        graph_pagerank_node_violinplot_path_1 = '../static/no_graph.html'
+        graph_pagerank_node_violinplot_path_2 = '../static/no_graph.html'
+        df_pagerank_node_before = pd.DataFrame(0, index=range(5), columns=range(5))
+        df_pagerank_node_after = pd.DataFrame(0, index=range(5), columns=range(5))
+
     return render_template(template_name_arg, tab_main=tab_main_arg, visualisation_layout=visualisation_layout,
         number_of_nodes=number_of_nodes_arg, number_of_edges=number_of_edges_arg, graph1=graph_path1, graph2=graph_path2,
         multi_toggle=multi_toggle,directed_toggle=directed_toggle,
@@ -537,7 +720,28 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
         graph_kcore_node_layout_1=graph_kcore_node_layout_path_1, graph_kcore_node_layout_2=graph_kcore_node_layout_path_2,
         graph_kcore_node_histogram_1=graph_kcore_node_histogram_path_1, graph_kcore_node_histogram_2=graph_kcore_node_histogram_path_2,
         graph_kcore_node_boxplot_1=graph_kcore_node_boxplot_path_1, graph_kcore_node_boxplot_2=graph_kcore_node_boxplot_path_2,
-        graph_kcore_node_violinplot_1=graph_kcore_node_violinplot_path_1, graph_kcore_node_violinplot_2=graph_kcore_node_violinplot_path_2)
+        graph_kcore_node_violinplot_1=graph_kcore_node_violinplot_path_1, graph_kcore_node_violinplot_2=graph_kcore_node_violinplot_path_2,
+
+        df_degree_node_before=df_degree_node_before, df_degree_node_after=df_degree_node_after, 
+        graph_degree_node_layout_1=graph_degree_node_layout_path_1, graph_degree_node_layout_2=graph_degree_node_layout_path_2,
+        graph_degree_node_histogram_1=graph_degree_node_histogram_path_1, graph_degree_node_histogram_2=graph_degree_node_histogram_path_2,
+        graph_degree_node_boxplot_1=graph_degree_node_boxplot_path_1, graph_degree_node_boxplot_2=graph_degree_node_boxplot_path_2,
+        graph_degree_node_violinplot_1=graph_degree_node_violinplot_path_1, graph_degree_node_violinplot_2=graph_degree_node_violinplot_path_2,
+
+        df_triangles_node_before=df_triangles_node_before, df_triangles_node_after=df_triangles_node_after, 
+        graph_triangles_node_layout_1=graph_triangles_node_layout_path_1, graph_triangles_node_layout_2=graph_triangles_node_layout_path_2,
+        graph_triangles_node_histogram_1=graph_triangles_node_histogram_path_1, graph_triangles_node_histogram_2=graph_triangles_node_histogram_path_2,
+        graph_triangles_node_boxplot_1=graph_triangles_node_boxplot_path_1, graph_triangles_node_boxplot_2=graph_triangles_node_boxplot_path_2,
+        graph_triangles_node_violinplot_1=graph_triangles_node_violinplot_path_1, graph_triangles_node_violinplot_2=graph_triangles_node_violinplot_path_2,
+
+        df_pagerank_node_before=df_pagerank_node_before, df_pagerank_node_after=df_pagerank_node_after, 
+        graph_pagerank_node_layout_1=graph_pagerank_node_layout_path_1, graph_pagerank_node_layout_2=graph_pagerank_node_layout_path_2,
+        graph_pagerank_node_histogram_1=graph_pagerank_node_histogram_path_1, graph_pagerank_node_histogram_2=graph_pagerank_node_histogram_path_2,
+        graph_pagerank_node_boxplot_1=graph_pagerank_node_boxplot_path_1, graph_pagerank_node_boxplot_2=graph_pagerank_node_boxplot_path_2,
+        graph_pagerank_node_violinplot_1=graph_pagerank_node_violinplot_path_1, graph_pagerank_node_violinplot_2=graph_pagerank_node_violinplot_path_2)
+
+
+
 
 
 

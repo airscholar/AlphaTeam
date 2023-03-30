@@ -2600,30 +2600,30 @@
                                     </div>
                                     <div class="tab-pane fade" id="nav-degreenode" role="tabpanel"
                                         aria-labelledby="nav-degreenode-tab">
-                                        <!-- Eigenvector Centrality Tab starts here -->
+                                        <!-- degree-node Tab starts here -->
                                         <nav style="margin-top: 15px;">
                                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                                <button class="nav-link active" id="nav-Eigenvector-Layouts-tab"
-                                                    data-bs-toggle="tab" data-bs-target="#nav-Eigenvector-Layouts"
-                                                    type="button" role="tab" aria-controls="nav-Eigenvector-Layouts"
+                                                <button class="nav-link active" id="nav-degree-node-Layouts-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-degree-node-Layouts"
+                                                    type="button" role="tab" aria-controls="nav-degree-node-Layouts"
                                                     aria-selected="true">Layouts</button>
-                                                <button class="nav-link" id="nav-Eigenvector-Histogram-tab"
-                                                    data-bs-toggle="tab" data-bs-target="#nav-Eigenvector-Histogram"
-                                                    type="button" role="tab" aria-controls="nav-Eigenvector-Histogram"
+                                                <button class="nav-link" id="nav-degree-node-Histogram-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-degree-node-Histogram"
+                                                    type="button" role="tab" aria-controls="nav-degree-node-Histogram"
                                                     aria-selected="false">Histogram</button>
-                                                <button class="nav-link" id="nav-Eigenvector-Boxplot-tab"
-                                                    data-bs-toggle="tab" data-bs-target="#nav-Eigenvector-Boxplot"
-                                                    type="button" role="tab" aria-controls="nav-Eigenvector-Boxplot"
+                                                <button class="nav-link" id="nav-degree-node-Boxplot-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-degree-node-Boxplot"
+                                                    type="button" role="tab" aria-controls="nav-degree-node-Boxplot"
                                                     aria-selected="false">Boxplot</button>
-                                                <button class="nav-link" id="nav-Eigenvector-Violinplot-tab"
-                                                    data-bs-toggle="tab" data-bs-target="#nav-Eigenvector-Violinplot"
-                                                    type="button" role="tab" aria-controls="nav-Eigenvector-Violinplot"
+                                                <button class="nav-link" id="nav-degree-node-Violinplot-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-degree-node-Violinplot"
+                                                    type="button" role="tab" aria-controls="nav-degree-node-Violinplot"
                                                     aria-selected="false">Violinplot</button>
                                             </div>
                                         </nav>
                                         <div class="tab-content" id="nav-tabContent">
-                                            <div class="tab-pane fade show active" id="nav-Eigenvector-Layouts"
-                                                role="tabpanel" aria-labelledby="nav-Eigenvector-Layouts-tab">
+                                            <div class="tab-pane fade show active" id="nav-degree-node-Layouts"
+                                                role="tabpanel" aria-labelledby="nav-degree-node-Layouts-tab">
                                                 <!-- Layouts tab Before After content starts here -->
                                                 <div class="container px-4 text-center">
                                                     <div class="row gx-5"
@@ -2639,8 +2639,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_eigenvector_centrality_layout_1 }}"
+                                                                    <iframe src="{{ graph_degree_node_layout_1 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -2648,8 +2647,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_eigenvector_centrality_layout_2 }}"
+                                                                    <iframe src="{{ graph_degree_node_layout_2 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -2658,12 +2656,12 @@
                                                     <div class="row gx-5" style="margin-top: 15px;">
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example10" class="display"
+                                                                <table id="example60" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_eigenvector_centrality_before.columns
+                                                                            df_degree_node_before.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -2671,7 +2669,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_eigenvector_centrality_before.itertuples()
+                                                                        df_degree_node_before.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -2685,12 +2683,12 @@
                                                         </div>
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example11" class="display"
+                                                                <table id="example61" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_eigenvector_centrality_after.columns
+                                                                            df_degree_node_after.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -2698,7 +2696,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_eigenvector_centrality_after.itertuples()
+                                                                        df_degree_node_after.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -2714,8 +2712,8 @@
                                                 </div>
                                                 <!-- Layouts tab Before After content ends here -->
                                             </div>
-                                            <div class="tab-pane fade" id="nav-Eigenvector-Histogram" role="tabpanel"
-                                                aria-labelledby="nav-Eigenvector-Histogram-tab">
+                                            <div class="tab-pane fade" id="nav-degree-node-Histogram" role="tabpanel"
+                                                aria-labelledby="nav-degree-node-Histogram-tab">
                                                 <!-- Histogram tab Before After content starts here -->
                                                 <div class="container px-4 text-center">
                                                     <div class="row gx-5"
@@ -2731,8 +2729,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_eigenvector_centrality_histogram_1 }}"
+                                                                    <iframe src="{{ graph_degree_node_histogram_1 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -2741,8 +2738,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_eigenvector_centrality_histogram_2 }}"
+                                                                    <iframe src="{{ graph_degree_node_histogram_2 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -2751,12 +2747,12 @@
                                                     <div class="row gx-5" style="margin-top: 15px;">
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example12" class="display"
+                                                                <table id="example62" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_eigenvector_centrality_before.columns
+                                                                            df_degree_node_before.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -2764,7 +2760,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_eigenvector_centrality_before.itertuples()
+                                                                        df_degree_node_before.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -2778,12 +2774,12 @@
                                                         </div>
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example13" class="display"
+                                                                <table id="example63" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_eigenvector_centrality_after.columns
+                                                                            df_degree_node_after.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -2791,7 +2787,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_eigenvector_centrality_after.itertuples()
+                                                                        df_degree_node_after.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -2807,8 +2803,8 @@
                                                 </div>
                                                 <!-- Histogram tab Before After content ends here -->
                                             </div>
-                                            <div class="tab-pane fade" id="nav-Eigenvector-Boxplot" role="tabpanel"
-                                                aria-labelledby="nav-Eigenvector-Boxplot-tab">
+                                            <div class="tab-pane fade" id="nav-degree-node-Boxplot" role="tabpanel"
+                                                aria-labelledby="nav-degree-node-Boxplot-tab">
                                                 <!-- Boxplot tab Before After content starts here -->
                                                 <div class="container px-4 text-center">
                                                     <div class="row gx-5"
@@ -2824,8 +2820,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_eigenvector_centrality_boxplot_1 }}"
+                                                                    <iframe src="{{ graph_degree_node_boxplot_1 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -2833,8 +2828,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_eigenvector_centrality_boxplot_2 }}"
+                                                                    <iframe src="{{ graph_degree_node_boxplot_2 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -2843,12 +2837,12 @@
                                                     <div class="row gx-5" style="margin-top: 15px;">
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example19" class="display"
+                                                                <table id="example68" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_eigenvector_centrality_before.columns
+                                                                            df_degree_node_before.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -2856,7 +2850,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_eigenvector_centrality_before.itertuples()
+                                                                        df_degree_node_before.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -2870,12 +2864,12 @@
                                                         </div>
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example20" class="display"
+                                                                <table id="example65" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_eigenvector_centrality_after.columns
+                                                                            df_degree_node_after.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -2883,7 +2877,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_eigenvector_centrality_after.itertuples()
+                                                                        df_degree_node_after.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -2899,8 +2893,8 @@
                                                 </div>
                                                 <!-- Boxplot tab Before After content ends here -->
                                             </div>
-                                            <div class="tab-pane fade" id="nav-Eigenvector-Violinplot" role="tabpanel"
-                                                aria-labelledby="nav-Eigenvector-Violinplot-tab">
+                                            <div class="tab-pane fade" id="nav-degree-node-Violinplot" role="tabpanel"
+                                                aria-labelledby="nav-degree-node-Violinplot-tab">
                                                 <!-- Violinplot tab Before After content starts here -->
                                                 <div class="container px-4 text-center">
                                                     <div class="row gx-5"
@@ -2916,8 +2910,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_eigenvector_centrality_violinplot_1 }}"
+                                                                    <iframe src="{{ graph_degree_node_violinplot_1 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -2925,8 +2918,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_eigenvector_centrality_violinplot_2 }}"
+                                                                    <iframe src="{{ graph_degree_node_violinplot_2 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -2935,12 +2927,12 @@
                                                     <div class="row gx-5" style="margin-top: 15px;">
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example16" class="display"
+                                                                <table id="example66" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_eigenvector_centrality_before.columns
+                                                                            df_degree_node_before.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -2948,7 +2940,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_eigenvector_centrality_before.itertuples()
+                                                                        df_degree_node_before.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -2962,12 +2954,12 @@
                                                         </div>
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example17" class="display"
+                                                                <table id="example67" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_eigenvector_centrality_after.columns
+                                                                            df_degree_node_after.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -2975,7 +2967,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_eigenvector_centrality_after.itertuples()
+                                                                        df_degree_node_after.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -2992,34 +2984,36 @@
                                                 <!-- Violinplot tab Before After content ends here -->
                                             </div>
                                         </div>
-                                        <!-- Eigenvector Centrality Tab Ends here -->
+                                        <!-- degree-node Tab Ends here -->
                                     </div>
                                     <div class="tab-pane fade" id="nav-trianglenode" role="tabpanel"
                                         aria-labelledby="nav-trianglenode-tab">
-                                        <!-- Closeness Centrality Tab starts here -->
+                                        <!-- triangles-node Tab starts here -->
                                         <nav style="margin-top: 15px;">
                                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                                <button class="nav-link active" id="nav-Closeness-Layouts-tab"
-                                                    data-bs-toggle="tab" data-bs-target="#nav-Closeness-Layouts"
-                                                    type="button" role="tab" aria-controls="nav-Closeness-Layouts"
+                                                <button class="nav-link active" id="nav-triangles-node-Layouts-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-triangles-node-Layouts"
+                                                    type="button" role="tab" aria-controls="nav-triangles-node-Layouts"
                                                     aria-selected="true">Layouts</button>
-                                                <button class="nav-link" id="nav-Closeness-Histogram-tab"
-                                                    data-bs-toggle="tab" data-bs-target="#nav-Closeness-Histogram"
-                                                    type="button" role="tab" aria-controls="nav-Closeness-Histogram"
+                                                <button class="nav-link" id="nav-triangles-node-Histogram-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-triangles-node-Histogram"
+                                                    type="button" role="tab"
+                                                    aria-controls="nav-triangles-node-Histogram"
                                                     aria-selected="false">Histogram</button>
-                                                <button class="nav-link" id="nav-Closeness-Boxplot-tab"
-                                                    data-bs-toggle="tab" data-bs-target="#nav-Closeness-Boxplot"
-                                                    type="button" role="tab" aria-controls="nav-Closeness-Boxplot"
+                                                <button class="nav-link" id="nav-triangles-node-Boxplot-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-triangles-node-Boxplot"
+                                                    type="button" role="tab" aria-controls="nav-triangles-node-Boxplot"
                                                     aria-selected="false">Boxplot</button>
-                                                <button class="nav-link" id="nav-Closeness-Violinplot-tab"
-                                                    data-bs-toggle="tab" data-bs-target="#nav-Closeness-Violinplot"
-                                                    type="button" role="tab" aria-controls="nav-Closeness-Violinplot"
+                                                <button class="nav-link" id="nav-triangles-node-Violinplot-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-triangles-node-Violinplot"
+                                                    type="button" role="tab"
+                                                    aria-controls="nav-triangles-node-Violinplot"
                                                     aria-selected="false">Violinplot</button>
                                             </div>
                                         </nav>
                                         <div class="tab-content" id="nav-tabContent">
-                                            <div class="tab-pane fade show active" id="nav-Closeness-Layouts"
-                                                role="tabpanel" aria-labelledby="nav-Closeness-Layouts-tab">
+                                            <div class="tab-pane fade show active" id="nav-triangles-node-Layouts"
+                                                role="tabpanel" aria-labelledby="nav-triangles-node-Layouts-tab">
                                                 <!-- Layouts tab Before After content starts here -->
                                                 <div class="container px-4 text-center">
                                                     <div class="row gx-5"
@@ -3035,8 +3029,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_closeness_centrality_layout_1 }}"
+                                                                    <iframe src="{{ graph_triangles_node_layout_1 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -3044,8 +3037,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_closeness_centrality_layout_2 }}"
+                                                                    <iframe src="{{ graph_triangles_node_layout_2 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -3054,12 +3046,12 @@
                                                     <div class="row gx-5" style="margin-top: 15px;">
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example20" class="display"
+                                                                <table id="example70" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_closeness_centrality_before.columns
+                                                                            df_triangles_node_before.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -3067,7 +3059,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_closeness_centrality_before.itertuples()
+                                                                        df_triangles_node_before.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -3081,12 +3073,12 @@
                                                         </div>
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example21" class="display"
+                                                                <table id="example71" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_closeness_centrality_after.columns
+                                                                            df_triangles_node_after.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -3094,7 +3086,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_closeness_centrality_after.itertuples()
+                                                                        df_triangles_node_after.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -3110,8 +3102,8 @@
                                                 </div>
                                                 <!-- Layouts tab Before After content ends here -->
                                             </div>
-                                            <div class="tab-pane fade" id="nav-Closeness-Histogram" role="tabpanel"
-                                                aria-labelledby="nav-Closeness-Histogram-tab">
+                                            <div class="tab-pane fade" id="nav-triangles-node-Histogram" role="tabpanel"
+                                                aria-labelledby="nav-triangles-node-Histogram-tab">
                                                 <!-- Histogram tab Before After content starts here -->
                                                 <div class="container px-4 text-center">
                                                     <div class="row gx-5"
@@ -3127,8 +3119,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_closeness_centrality_histogram_1 }}"
+                                                                    <iframe src="{{ graph_triangles_node_histogram_1 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -3137,8 +3128,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_closeness_centrality_histogram_2 }}"
+                                                                    <iframe src="{{ graph_triangles_node_histogram_2 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -3147,12 +3137,12 @@
                                                     <div class="row gx-5" style="margin-top: 15px;">
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example22" class="display"
+                                                                <table id="example72" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_closeness_centrality_before.columns
+                                                                            df_triangles_node_before.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -3160,7 +3150,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_closeness_centrality_before.itertuples()
+                                                                        df_triangles_node_before.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -3174,12 +3164,12 @@
                                                         </div>
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example23" class="display"
+                                                                <table id="example73" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_closeness_centrality_after.columns
+                                                                            df_triangles_node_after.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -3187,7 +3177,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_closeness_centrality_after.itertuples()
+                                                                        df_triangles_node_after.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -3203,8 +3193,8 @@
                                                 </div>
                                                 <!-- Histogram tab Before After content ends here -->
                                             </div>
-                                            <div class="tab-pane fade" id="nav-Closeness-Boxplot" role="tabpanel"
-                                                aria-labelledby="nav-Closeness-Boxplot-tab">
+                                            <div class="tab-pane fade" id="nav-triangles-node-Boxplot" role="tabpanel"
+                                                aria-labelledby="nav-triangles-node-Boxplot-tab">
                                                 <!-- Boxplot tab Before After content starts here -->
                                                 <div class="container px-4 text-center">
                                                     <div class="row gx-5"
@@ -3220,8 +3210,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_closeness_centrality_boxplot_1 }}"
+                                                                    <iframe src="{{ graph_triangles_node_boxplot_1 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -3229,8 +3218,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_closeness_centrality_boxplot_2 }}"
+                                                                    <iframe src="{{ graph_triangles_node_boxplot_2 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -3239,12 +3227,12 @@
                                                     <div class="row gx-5" style="margin-top: 15px;">
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example29" class="display"
+                                                                <table id="example78" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_closeness_centrality_before.columns
+                                                                            df_triangles_node_before.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -3252,7 +3240,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_closeness_centrality_before.itertuples()
+                                                                        df_triangles_node_before.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -3266,12 +3254,12 @@
                                                         </div>
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example30" class="display"
+                                                                <table id="example75" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_closeness_centrality_after.columns
+                                                                            df_triangles_node_after.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -3279,7 +3267,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_closeness_centrality_after.itertuples()
+                                                                        df_triangles_node_after.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -3295,8 +3283,8 @@
                                                 </div>
                                                 <!-- Boxplot tab Before After content ends here -->
                                             </div>
-                                            <div class="tab-pane fade" id="nav-Closeness-Violinplot" role="tabpanel"
-                                                aria-labelledby="nav-Closeness-Violinplot-tab">
+                                            <div class="tab-pane fade" id="nav-triangles-node-Violinplot"
+                                                role="tabpanel" aria-labelledby="nav-triangles-node-Violinplot-tab">
                                                 <!-- Violinplot tab Before After content starts here -->
                                                 <div class="container px-4 text-center">
                                                     <div class="row gx-5"
@@ -3313,7 +3301,7 @@
                                                             <div class="card">
                                                                 <div class="card-body">
                                                                     <iframe
-                                                                        src="{{ graph_closeness_centrality_violinplot_1 }}"
+                                                                        src="{{ graph_triangles_node_violinplot_1 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -3322,7 +3310,7 @@
                                                             <div class="card">
                                                                 <div class="card-body">
                                                                     <iframe
-                                                                        src="{{ graph_closeness_centrality_violinplot_2 }}"
+                                                                        src="{{ graph_triangles_node_violinplot_2 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -3331,12 +3319,12 @@
                                                     <div class="row gx-5" style="margin-top: 15px;">
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example26" class="display"
+                                                                <table id="example76" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_closeness_centrality_before.columns
+                                                                            df_triangles_node_before.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -3344,7 +3332,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_closeness_centrality_before.itertuples()
+                                                                        df_triangles_node_before.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -3358,12 +3346,12 @@
                                                         </div>
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example27" class="display"
+                                                                <table id="example77" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_closeness_centrality_after.columns
+                                                                            df_triangles_node_after.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -3371,7 +3359,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_closeness_centrality_after.itertuples()
+                                                                        df_triangles_node_after.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -3388,34 +3376,35 @@
                                                 <!-- Violinplot tab Before After content ends here -->
                                             </div>
                                         </div>
-                                        <!-- Closeness Centrality Tab Ends here -->
+                                        <!-- triangles-node Tab Ends here -->
                                     </div>
                                     <div class="tab-pane fade" id="nav-pageranknode" role="tabpanel"
                                         aria-labelledby="nav-pageranknode-tab">
-                                        <!-- Betwenness Centrality Tab starts here -->
+                                        <!-- pagerank-node Tab starts here -->
                                         <nav style="margin-top: 15px;">
                                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                                <button class="nav-link active" id="nav-Betwenness-Layouts-tab"
-                                                    data-bs-toggle="tab" data-bs-target="#nav-Betwenness-Layouts"
-                                                    type="button" role="tab" aria-controls="nav-Betwenness-Layouts"
+                                                <button class="nav-link active" id="nav-pagerank-node-Layouts-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-pagerank-node-Layouts"
+                                                    type="button" role="tab" aria-controls="nav-pagerank-node-Layouts"
                                                     aria-selected="true">Layouts</button>
-                                                <button class="nav-link" id="nav-Betwenness-Histogram-tab"
-                                                    data-bs-toggle="tab" data-bs-target="#nav-Betwenness-Histogram"
-                                                    type="button" role="tab" aria-controls="nav-Betwenness-Histogram"
+                                                <button class="nav-link" id="nav-pagerank-node-Histogram-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-pagerank-node-Histogram"
+                                                    type="button" role="tab" aria-controls="nav-pagerank-node-Histogram"
                                                     aria-selected="false">Histogram</button>
-                                                <button class="nav-link" id="nav-Betwenness-Boxplot-tab"
-                                                    data-bs-toggle="tab" data-bs-target="#nav-Betwenness-Boxplot"
-                                                    type="button" role="tab" aria-controls="nav-Betwenness-Boxplot"
+                                                <button class="nav-link" id="nav-pagerank-node-Boxplot-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-pagerank-node-Boxplot"
+                                                    type="button" role="tab" aria-controls="nav-pagerank-node-Boxplot"
                                                     aria-selected="false">Boxplot</button>
-                                                <button class="nav-link" id="nav-Betwenness-Violinplot-tab"
-                                                    data-bs-toggle="tab" data-bs-target="#nav-Betwenness-Violinplot"
-                                                    type="button" role="tab" aria-controls="nav-Betwenness-Violinplot"
+                                                <button class="nav-link" id="nav-pagerank-node-Violinplot-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#nav-pagerank-node-Violinplot"
+                                                    type="button" role="tab"
+                                                    aria-controls="nav-pagerank-node-Violinplot"
                                                     aria-selected="false">Violinplot</button>
                                             </div>
                                         </nav>
                                         <div class="tab-content" id="nav-tabContent">
-                                            <div class="tab-pane fade show active" id="nav-Betwenness-Layouts"
-                                                role="tabpanel" aria-labelledby="nav-Betwenness-Layouts-tab">
+                                            <div class="tab-pane fade show active" id="nav-pagerank-node-Layouts"
+                                                role="tabpanel" aria-labelledby="nav-pagerank-node-Layouts-tab">
                                                 <!-- Layouts tab Before After content starts here -->
                                                 <div class="container px-4 text-center">
                                                     <div class="row gx-5"
@@ -3431,8 +3420,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_betwenness_centrality_layout_1 }}"
+                                                                    <iframe src="{{ graph_pagerank_node_layout_1 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -3440,8 +3428,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_betwenness_centrality_layout_2 }}"
+                                                                    <iframe src="{{ graph_pagerank_node_layout_2 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -3450,12 +3437,12 @@
                                                     <div class="row gx-5" style="margin-top: 15px;">
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example30" class="display"
+                                                                <table id="example80" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_betwenness_centrality_before.columns
+                                                                            df_pagerank_node_before.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -3463,7 +3450,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_betwenness_centrality_before.itertuples()
+                                                                        df_pagerank_node_before.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -3477,12 +3464,12 @@
                                                         </div>
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example31" class="display"
+                                                                <table id="example81" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_betwenness_centrality_after.columns
+                                                                            df_pagerank_node_after.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -3490,7 +3477,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_betwenness_centrality_after.itertuples()
+                                                                        df_pagerank_node_after.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -3506,8 +3493,8 @@
                                                 </div>
                                                 <!-- Layouts tab Before After content ends here -->
                                             </div>
-                                            <div class="tab-pane fade" id="nav-Betwenness-Histogram" role="tabpanel"
-                                                aria-labelledby="nav-Betwenness-Histogram-tab">
+                                            <div class="tab-pane fade" id="nav-pagerank-node-Histogram" role="tabpanel"
+                                                aria-labelledby="nav-pagerank-node-Histogram-tab">
                                                 <!-- Histogram tab Before After content starts here -->
                                                 <div class="container px-4 text-center">
                                                     <div class="row gx-5"
@@ -3523,8 +3510,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_betwenness_centrality_histogram_1 }}"
+                                                                    <iframe src="{{ graph_pagerank_node_histogram_1 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -3533,8 +3519,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_betwenness_centrality_histogram_2 }}"
+                                                                    <iframe src="{{ graph_pagerank_node_histogram_2 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -3543,12 +3528,12 @@
                                                     <div class="row gx-5" style="margin-top: 15px;">
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example32" class="display"
+                                                                <table id="example82" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_betwenness_centrality_before.columns
+                                                                            df_pagerank_node_before.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -3556,7 +3541,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_betwenness_centrality_before.itertuples()
+                                                                        df_pagerank_node_before.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -3570,12 +3555,12 @@
                                                         </div>
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example33" class="display"
+                                                                <table id="example83" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_betwenness_centrality_after.columns
+                                                                            df_pagerank_node_after.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -3583,7 +3568,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_betwenness_centrality_after.itertuples()
+                                                                        df_pagerank_node_after.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -3599,8 +3584,8 @@
                                                 </div>
                                                 <!-- Histogram tab Before After content ends here -->
                                             </div>
-                                            <div class="tab-pane fade" id="nav-Betwenness-Boxplot" role="tabpanel"
-                                                aria-labelledby="nav-Betwenness-Boxplot-tab">
+                                            <div class="tab-pane fade" id="nav-pagerank-node-Boxplot" role="tabpanel"
+                                                aria-labelledby="nav-pagerank-node-Boxplot-tab">
                                                 <!-- Boxplot tab Before After content starts here -->
                                                 <div class="container px-4 text-center">
                                                     <div class="row gx-5"
@@ -3616,8 +3601,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_betwenness_centrality_boxplot_1 }}"
+                                                                    <iframe src="{{ graph_pagerank_node_boxplot_1 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -3625,8 +3609,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_betwenness_centrality_boxplot_2 }}"
+                                                                    <iframe src="{{ graph_pagerank_node_boxplot_2 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -3635,12 +3618,12 @@
                                                     <div class="row gx-5" style="margin-top: 15px;">
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example39" class="display"
+                                                                <table id="example88" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_betwenness_centrality_before.columns
+                                                                            df_pagerank_node_before.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -3648,7 +3631,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_betwenness_centrality_before.itertuples()
+                                                                        df_pagerank_node_before.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -3662,12 +3645,12 @@
                                                         </div>
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example38" class="display"
+                                                                <table id="example85" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_betwenness_centrality_after.columns
+                                                                            df_pagerank_node_after.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -3675,7 +3658,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_betwenness_centrality_after.itertuples()
+                                                                        df_pagerank_node_after.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -3691,8 +3674,8 @@
                                                 </div>
                                                 <!-- Boxplot tab Before After content ends here -->
                                             </div>
-                                            <div class="tab-pane fade" id="nav-Betwenness-Violinplot" role="tabpanel"
-                                                aria-labelledby="nav-Betwenness-Violinplot-tab">
+                                            <div class="tab-pane fade" id="nav-pagerank-node-Violinplot" role="tabpanel"
+                                                aria-labelledby="nav-pagerank-node-Violinplot-tab">
                                                 <!-- Violinplot tab Before After content starts here -->
                                                 <div class="container px-4 text-center">
                                                     <div class="row gx-5"
@@ -3708,8 +3691,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_betwenness_centrality_violinplot_1 }}"
+                                                                    <iframe src="{{ graph_pagerank_node_violinplot_1 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -3717,8 +3699,7 @@
                                                         <div class="col">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <iframe
-                                                                        src="{{ graph_betwenness_centrality_violinplot_2 }}"
+                                                                    <iframe src="{{ graph_pagerank_node_violinplot_2 }}"
                                                                         width="100%" height="300"></iframe>
                                                                 </div>
                                                             </div>
@@ -3727,12 +3708,12 @@
                                                     <div class="row gx-5" style="margin-top: 15px;">
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example36" class="display"
+                                                                <table id="example86" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_betwenness_centrality_before.columns
+                                                                            df_pagerank_node_before.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -3740,7 +3721,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_betwenness_centrality_before.itertuples()
+                                                                        df_pagerank_node_before.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -3754,12 +3735,12 @@
                                                         </div>
                                                         <div class="col">
                                                             <div class="card card-body">
-                                                                <table id="example37" class="display"
+                                                                <table id="example87" class="display"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             {% for cell in
-                                                                            df_betwenness_centrality_after.columns
+                                                                            df_pagerank_node_after.columns
                                                                             %}
                                                                             <th>{{ cell }}</th>
                                                                             {% endfor %}
@@ -3767,7 +3748,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         {% for row in
-                                                                        df_betwenness_centrality_after.itertuples()
+                                                                        df_pagerank_node_after.itertuples()
                                                                         %}
                                                                         <tr>
                                                                             {% for cell in row[1:] %}
@@ -3784,7 +3765,7 @@
                                                 <!-- Violinplot tab Before After content ends here -->
                                             </div>
                                         </div>
-                                        <!-- Betwenness Centrality Tab Ends here -->
+                                        <!-- pagerank-node Tab Ends here -->
                                     </div>
                                 </div>
                                 <!-- Nodes tabs section ends here -->
