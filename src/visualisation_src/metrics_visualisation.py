@@ -59,7 +59,7 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
     return fig
 
 
@@ -110,7 +110,7 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
     return fig
 
 
@@ -181,7 +181,7 @@ def generate_histogram_metric(df_, filename):
                       bargap=0.1, )
     fig.update_traces(opacity=0.75)
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
 
     return fig
 
@@ -211,7 +211,7 @@ def generate_boxplot_metric(df_, filename):
                       yaxis_title="Values",
                       )
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
 
     return fig
 
@@ -241,7 +241,7 @@ def generate_violin_metric(df_, filename):
                       yaxis_title="Values",
                       )
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
 
     return fig
 
@@ -270,5 +270,5 @@ def generate_heatmap(networkGraph, filename):
     fig.update_xaxes(showticklabels=False)
     fig.update_yaxes(showticklabels=False)
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
     return fig

@@ -79,7 +79,7 @@ def static_visualisation(networkGraphs, filepath, directed=True, multi=False, la
     layout = get_layout(networkGraphs, title=f"Visualisation using {layout_} layout", layout_=layout_)
     fig.update_layout(layout)
 
-    fig.write_html(filepath)
+    fig.write_html(filepath, full_html=False, include_plotlyjs='cdn')
 
     return fig
 
