@@ -250,15 +250,12 @@ def kmeans_clustering(networkGraphs, noOfClusters=0):
     :return: dataframe
     """
     G = networkGraphs.Graph
-    if 0 < noOfClusters:
+    if 0 >= noOfClusters:
         adj_mat, optimal_k = compute_clustering(G)
-        clustering = KMeans(n_clusters=optimal_k, init='k-means++',
-                            random_state=4, max_iter=10).fit(adj_mat)
+
     else:
         optimal_k = noOfClusters
         adj_mat = nx.to_numpy_array(G)
-        clustering = KMeans(n_clusters=optimal_k, init='k-means++',
-                            random_state=4, max_iter=10).fit(adj_mat)
 
     clustering = KMeans(n_clusters=optimal_k, init='k-means++',
                         random_state=4, max_iter=10).fit(adj_mat)
