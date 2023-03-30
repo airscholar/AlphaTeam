@@ -103,6 +103,7 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
     networkGraphs = get_networkGraph(filename2)
     multi_toggle = True
     directed_toggle = True
+    number_of_clusters = None
     if networkGraphs.is_spatial():
         visualisation_layout = 'map'
     else:
@@ -114,6 +115,8 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
             visualisation_layout = request.form.get('visualisation_layout')
             multi_toggle = bool(request.form.get('multi_toggle'))
             directed_toggle = bool(request.form.get('directed_toggle'))
+            number_of_clusters = request.form.get('number_of_clusters', None)
+            number_of_clusters = int(number_of_clusters) if number_of_clusters else None
         graph_name1 = plot_network(networkGraphs, layout=visualisation_layout, dynamic=False)
         graph_name2 = plot_network(networkGraphs2, layout=visualisation_layout, dynamic=False)
             # degree
@@ -198,9 +201,48 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
         df_pagerank_node_before, graph_pagerank_node_violinplot_name_1 = plot_violin(networkGraphs, 'pagerank', directed=directed_toggle, multi=multi_toggle)
         df_pagerank_node_after, graph_pagerank_node_violinplot_name_2 = plot_violin(networkGraphs2, 'pagerank', directed=directed_toggle, multi=multi_toggle)
 
+        # clusters seperate condition
+        if number_of_clusters is not None:
+            df_louvain_before, graph_louvain_name_1 = plot_cluster(networkGraphs, 'louvain', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_louvain_after, graph_louvain_name_2 = plot_cluster(networkGraphs2, 'louvain', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_greedy_modularity_before, graph_greedy_modularity_name_1 = plot_cluster(networkGraphs, 'greedy_modularity', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_greedy_modularity_after, graph_greedy_modularity_name_2 = plot_cluster(networkGraphs2, 'greedy_modularity', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_label_propagation_before, graph_label_propagation_name_1 = plot_cluster(networkGraphs, 'label_propagation', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_label_propagation_after, graph_label_propagation_name_2 = plot_cluster(networkGraphs2, 'label_propagation', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_asyn_lpa_before, graph_asyn_lpa_name_1 = plot_cluster(networkGraphs, 'asyn_lpa', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_asyn_lpa_after, graph_asyn_lpa_name_2 = plot_cluster(networkGraphs2, 'asyn_lpa', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_k_clique_before, graph_k_clique_name_1 = plot_cluster(networkGraphs, 'k_clique', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_k_clique_after, graph_k_clique_name_2 = plot_cluster(networkGraphs2, 'k_clique', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_spectral_before, graph_spectral_name_1 = plot_cluster(networkGraphs, 'spectral', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_spectral_after, graph_spectral_name_2 = plot_cluster(networkGraphs2, 'spectral', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_kmeans_before, graph_kmeans_name_1 = plot_cluster(networkGraphs, 'kmeans', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_kmeans_after, graph_kmeans_name_2 = plot_cluster(networkGraphs2, 'kmeans', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_agglomerative_before, graph_agglomerative_name_1 = plot_cluster(networkGraphs, 'agglomerative', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_agglomerative_after, graph_agglomerative_name_2 = plot_cluster(networkGraphs2, 'agglomerative', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_dbscan_before, graph_dbscan_name_1 = plot_cluster(networkGraphs, 'dbscan', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_dbscan_after, graph_dbscan_name_2 = plot_cluster(networkGraphs2, 'dbscan', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+        else:
+            df_louvain_before, graph_louvain_name_1 = plot_cluster(networkGraphs, 'louvain', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
+            df_louvain_after, graph_louvain_name_2 = plot_cluster(networkGraphs2, 'louvain', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
+            df_greedy_modularity_before, graph_greedy_modularity_name_1 = plot_cluster(networkGraphs, 'greedy_modularity', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
+            df_greedy_modularity_after, graph_greedy_modularity_name_2 = plot_cluster(networkGraphs2, 'greedy_modularity', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
+            df_label_propagation_before, graph_label_propagation_name_1 = plot_cluster(networkGraphs, 'label_propagation', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
+            df_label_propagation_after, graph_label_propagation_name_2 = plot_cluster(networkGraphs2, 'label_propagation', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
+            df_asyn_lpa_before, graph_asyn_lpa_name_1 = plot_cluster(networkGraphs, 'asyn_lpa', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
+            df_asyn_lpa_after, graph_asyn_lpa_name_2 = plot_cluster(networkGraphs2, 'asyn_lpa', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
+            df_k_clique_before, graph_k_clique_name_1 = plot_cluster(networkGraphs, 'k_clique', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
+            df_k_clique_after, graph_k_clique_name_2 = plot_cluster(networkGraphs2, 'k_clique', noOfClusters=0,dynamic=False, layout=visualisation_layout)
+            df_spectral_before, graph_spectral_name_1 = plot_cluster(networkGraphs, 'spectral', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
+            df_spectral_after, graph_spectral_name_2 = plot_cluster(networkGraphs2, 'spectral', noOfClusters=0,dynamic=False, layout=visualisation_layout)
+            df_kmeans_before, graph_kmeans_name_1 = plot_cluster(networkGraphs, 'kmeans', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
+            df_kmeans_after, graph_kmeans_name_2 = plot_cluster(networkGraphs2, 'kmeans', noOfClusters=0,dynamic=False, layout=visualisation_layout)
+            df_agglomerative_before, graph_agglomerative_name_1 = plot_cluster(networkGraphs, 'agglomerative', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
+            df_agglomerative_after, graph_agglomerative_name_2 = plot_cluster(networkGraphs2, 'agglomerative', noOfClusters=0,dynamic=False, layout=visualisation_layout)
+            df_dbscan_before, graph_dbscan_name_1 = plot_cluster(networkGraphs, 'dbscan', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
+            df_dbscan_after, graph_dbscan_name_2 = plot_cluster(networkGraphs2, 'dbscan', noOfClusters=0,dynamic=False, layout=visualisation_layout)
         # end POST condition
 
-        print('visualisation layout',visualisation_layout)
+        print('no of clusters',number_of_clusters)
 
         # checking all graphs have graphs
         if graph_name1 == 'no_graph.html':
@@ -580,7 +622,106 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
             graph_pagerank_node_violinplot_path_2 = '../static/' + graph_pagerank_node_violinplot_name_2
         else:
             graph_pagerank_node_violinplot_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_pagerank_node_violinplot_name_2
-  
+        
+        # louvain
+        if graph_louvain_name_1 == 'no_graph.html':
+            graph_louvain_path_1 = '../static/' + graph_louvain_name_1
+        else:
+            graph_louvain_path_1 = '../static/uploads/' + filename2 + '/' + graph_louvain_name_1
+
+        if graph_louvain_name_2 == 'no_graph.html':
+            graph_louvain_path_2 = '../static/' + graph_louvain_name_2
+        else:
+            graph_louvain_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_louvain_name_2
+
+        # greedy_modularity
+        if graph_greedy_modularity_name_1 == 'no_graph.html':
+            graph_greedy_modularity_path_1 = '../static/' + graph_greedy_modularity_name_1
+        else:
+            graph_greedy_modularity_path_1 = '../static/uploads/' + filename2 + '/' + graph_greedy_modularity_name_1
+
+        if graph_greedy_modularity_name_2 == 'no_graph.html':
+            graph_greedy_modularity_path_2 = '../static/' + graph_greedy_modularity_name_2
+        else:
+            graph_greedy_modularity_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_greedy_modularity_name_2
+        
+        # label_propagation
+        if graph_label_propagation_name_1 == 'no_graph.html':
+            graph_label_propagation_path_1 = '../static/' + graph_label_propagation_name_1
+        else:
+            graph_label_propagation_path_1 = '../static/uploads/' + filename2 + '/' + graph_label_propagation_name_1
+
+        if graph_label_propagation_name_2 == 'no_graph.html':
+            graph_label_propagation_path_2 = '../static/' + graph_label_propagation_name_2
+        else:
+            graph_label_propagation_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_label_propagation_name_2
+
+        # asyn_lpa
+        if graph_asyn_lpa_name_1 == 'no_graph.html':
+            graph_asyn_lpa_path_1 = '../static/' + graph_asyn_lpa_name_1
+        else:
+            graph_asyn_lpa_path_1 = '../static/uploads/' + filename2 + '/' + graph_asyn_lpa_name_1
+
+        if graph_asyn_lpa_name_2 == 'no_graph.html':
+            graph_asyn_lpa_path_2 = '../static/' + graph_asyn_lpa_name_2
+        else:
+            graph_asyn_lpa_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_asyn_lpa_name_2
+
+        # k_clique
+        if graph_k_clique_name_1 == 'no_graph.html':
+            graph_k_clique_path_1 = '../static/' + graph_k_clique_name_1
+        else:
+            graph_k_clique_path_1 = '../static/uploads/' + filename2 + '/' + graph_k_clique_name_1
+
+        if graph_k_clique_name_2 == 'no_graph.html':
+            graph_k_clique_path_2 = '../static/' + graph_k_clique_name_2
+        else:
+            graph_k_clique_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_k_clique_name_2
+
+        # spectral
+        if graph_spectral_name_1 == 'no_graph.html':
+            graph_spectral_path_1 = '../static/' + graph_spectral_name_1
+        else:
+            graph_spectral_path_1 = '../static/uploads/' + filename2 + '/' + graph_spectral_name_1
+
+        if graph_spectral_name_2 == 'no_graph.html':
+            graph_spectral_path_2 = '../static/' + graph_spectral_name_2
+        else:
+            graph_spectral_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_spectral_name_2
+
+        # kmeans
+        if graph_kmeans_name_1 == 'no_graph.html':
+            graph_kmeans_path_1 = '../static/' + graph_kmeans_name_1
+        else:
+            graph_kmeans_path_1 = '../static/uploads/' + filename2 + '/' + graph_kmeans_name_1
+
+        if graph_kmeans_name_2 == 'no_graph.html':
+            graph_kmeans_path_2 = '../static/' + graph_kmeans_name_2
+        else:
+            graph_kmeans_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_kmeans_name_2
+
+        # agglomerative
+        if graph_agglomerative_name_1 == 'no_graph.html':
+            graph_agglomerative_path_1 = '../static/' + graph_agglomerative_name_1
+        else:
+            graph_agglomerative_path_1 = '../static/uploads/' + filename2 + '/' + graph_agglomerative_name_1
+
+        if graph_agglomerative_name_2 == 'no_graph.html':
+            graph_agglomerative_path_2 = '../static/' + graph_agglomerative_name_2
+        else:
+            graph_agglomerative_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_agglomerative_name_2
+
+        # dbscan
+        if graph_dbscan_name_1 == 'no_graph.html':
+            graph_dbscan_path_1 = '../static/' + graph_dbscan_name_1
+        else:
+            graph_dbscan_path_1 = '../static/uploads/' + filename2 + '/' + graph_dbscan_name_1
+
+        if graph_dbscan_name_2 == 'no_graph.html':
+            graph_dbscan_path_2 = '../static/' + graph_dbscan_name_2
+        else:
+            graph_dbscan_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_dbscan_name_2
+
     else:
         graph_path1 = '../static/no_graph.html' 
         graph_path2 = '../static/no_graph.html' 
@@ -683,9 +824,55 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
         df_pagerank_node_before = pd.DataFrame(0, index=range(5), columns=range(5))
         df_pagerank_node_after = pd.DataFrame(0, index=range(5), columns=range(5))
 
+        graph_louvain_path_1 = '../static/no_graph.html'  
+        graph_louvain_path_2 = '../static/no_graph.html'
+        df_louvain_before = pd.DataFrame(0, index=range(5), columns=range(5))
+        df_louvain_after = pd.DataFrame(0, index=range(5), columns=range(5))
+
+        graph_greedy_modularity_path_1 = '../static/no_graph.html'  
+        graph_greedy_modularity_path_2 = '../static/no_graph.html'
+        df_greedy_modularity_before = pd.DataFrame(0, index=range(5), columns=range(5))
+        df_greedy_modularity_after = pd.DataFrame(0, index=range(5), columns=range(5))
+
+        graph_label_propagation_path_1 = '../static/no_graph.html'  
+        graph_label_propagation_path_2 = '../static/no_graph.html'
+        df_label_propagation_before = pd.DataFrame(0, index=range(5), columns=range(5))
+        df_label_propagation_after = pd.DataFrame(0, index=range(5), columns=range(5))
+
+        graph_asyn_lpa_path_1 = '../static/no_graph.html'  
+        graph_asyn_lpa_path_2 = '../static/no_graph.html'
+        df_asyn_lpa_before = pd.DataFrame(0, index=range(5), columns=range(5))
+        df_asyn_lpa_after = pd.DataFrame(0, index=range(5), columns=range(5))
+
+        graph_k_clique_path_1 = '../static/no_graph.html'  
+        graph_k_clique_path_2 = '../static/no_graph.html'
+        df_k_clique_before = pd.DataFrame(0, index=range(5), columns=range(5))
+        df_k_clique_after = pd.DataFrame(0, index=range(5), columns=range(5))
+
+        graph_spectral_path_1 = '../static/no_graph.html'  
+        graph_spectral_path_2 = '../static/no_graph.html'
+        df_spectral_before = pd.DataFrame(0, index=range(5), columns=range(5))
+        df_spectral_after = pd.DataFrame(0, index=range(5), columns=range(5))
+
+        graph_kmeans_path_1 = '../static/no_graph.html'  
+        graph_kmeans_path_2 = '../static/no_graph.html'
+        df_kmeans_before = pd.DataFrame(0, index=range(5), columns=range(5))
+        df_kmeans_after = pd.DataFrame(0, index=range(5), columns=range(5))
+
+        graph_agglomerative_path_1 = '../static/no_graph.html'  
+        graph_agglomerative_path_2 = '../static/no_graph.html'
+        df_agglomerative_before = pd.DataFrame(0, index=range(5), columns=range(5))
+        df_agglomerative_after = pd.DataFrame(0, index=range(5), columns=range(5))
+
+        graph_dbscan_path_1 = '../static/no_graph.html'  
+        graph_dbscan_path_2 = '../static/no_graph.html'
+        df_dbscan_before = pd.DataFrame(0, index=range(5), columns=range(5))
+        df_dbscan_after = pd.DataFrame(0, index=range(5), columns=range(5))
+
+
     return render_template(template_name_arg, tab_main=tab_main_arg, visualisation_layout=visualisation_layout,
         number_of_nodes=number_of_nodes_arg, number_of_edges=number_of_edges_arg, graph1=graph_path1, graph2=graph_path2,
-        multi_toggle=multi_toggle,directed_toggle=directed_toggle,
+        multi_toggle=multi_toggle,directed_toggle=directed_toggle, number_of_clusters=number_of_clusters,
         df_degree_centrality_before=df_degree_centrality_before, df_degree_centrality_after=df_degree_centrality_after, 
         graph_degree_centrality_layout_1=graph_degree_centrality_layout_path_1, graph_degree_centrality_layout_2=graph_degree_centrality_layout_path_2,
         graph_degree_centrality_histogram_1=graph_degree_centrality_histogram_path_1, graph_degree_centrality_histogram_2=graph_degree_centrality_histogram_path_2,
@@ -738,7 +925,34 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
         graph_pagerank_node_layout_1=graph_pagerank_node_layout_path_1, graph_pagerank_node_layout_2=graph_pagerank_node_layout_path_2,
         graph_pagerank_node_histogram_1=graph_pagerank_node_histogram_path_1, graph_pagerank_node_histogram_2=graph_pagerank_node_histogram_path_2,
         graph_pagerank_node_boxplot_1=graph_pagerank_node_boxplot_path_1, graph_pagerank_node_boxplot_2=graph_pagerank_node_boxplot_path_2,
-        graph_pagerank_node_violinplot_1=graph_pagerank_node_violinplot_path_1, graph_pagerank_node_violinplot_2=graph_pagerank_node_violinplot_path_2)
+        graph_pagerank_node_violinplot_1=graph_pagerank_node_violinplot_path_1, graph_pagerank_node_violinplot_2=graph_pagerank_node_violinplot_path_2,
+        
+        df_louvain_before=df_louvain_before, df_louvain_after=df_louvain_after,
+        graph_louvain_1=graph_louvain_path_1, graph_louvain_2=graph_louvain_path_2,
+        
+        df_greedy_modularity_before=df_greedy_modularity_before, df_greedy_modularity_after=df_greedy_modularity_after,
+        graph_greedy_modularity_1=graph_greedy_modularity_path_1, graph_greedy_modularity_2=graph_greedy_modularity_path_2,
+
+        df_label_propagation_before=df_label_propagation_before, df_label_propagation_after=df_label_propagation_after,
+        graph_label_propagation_1=graph_label_propagation_path_1, graph_label_propagation_2=graph_label_propagation_path_2,
+
+        df_asyn_lpa_before=df_asyn_lpa_before, df_asyn_lpa_after=df_asyn_lpa_after,
+        graph_asyn_lpa_1=graph_asyn_lpa_path_1, graph_asyn_lpa_2=graph_asyn_lpa_path_2,
+
+        df_k_clique_before=df_k_clique_before, df_k_clique_after=df_k_clique_after,
+        graph_k_clique_1=graph_k_clique_path_1, graph_k_clique_2=graph_k_clique_path_2,
+
+        df_spectral_before=df_spectral_before, df_spectral_after=df_spectral_after,
+        graph_spectral_1=graph_spectral_path_1, graph_spectral_2=graph_spectral_path_2,
+
+        df_kmeans_before=df_kmeans_before, df_kmeans_after=df_kmeans_after,
+        graph_kmeans_1=graph_kmeans_path_1, graph_kmeans_2=graph_kmeans_path_2,
+
+        df_agglomerative_before=df_agglomerative_before, df_agglomerative_after=df_agglomerative_after,
+        graph_agglomerative_1=graph_agglomerative_path_1, graph_agglomerative_2=graph_agglomerative_path_2,
+
+        df_dbscan_before=df_dbscan_before, df_dbscan_after=df_dbscan_after,
+        graph_dbscan_1=graph_dbscan_path_1, graph_dbscan_2=graph_dbscan_path_2)
 
 
 

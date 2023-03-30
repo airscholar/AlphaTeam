@@ -140,6 +140,15 @@
                                     </div>
                                 </div>
                                 <div class="col-auto">
+                                    <label for="number_of_clusters" style="margin-top: 5px;">Number of Clusters:</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="number" id="number_of_clusters" style="margin: 5px;"
+                                        name="number_of_clusters" class="form-control" min="1" step="1"
+                                        placeholder="None" {% if number_of_clusters is not none
+                                        %}value="{{ number_of_clusters }}" {% endif %}>
+                                </div>
+                                <div class="col-auto">
                                     <button type="submit" class="btn btn-primary" style="margin:5px;">Submit</button>
                                 </div>
                             </div>
@@ -3771,7 +3780,832 @@
                                 <!-- Nodes tabs section ends here -->
                             </div>
                             <div class="tab-pane fade" id="nav-Clusters" role="tabpanel"
-                                aria-labelledby="nav-Clusters-tab">Clusters</div>
+                                aria-labelledby="nav-Clusters-tab">
+                                <!-- From here starts the Cluster tabs section -->
+                                <nav style="margin-top: 15px;">
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                        <button class="nav-link active" id="nav-Louvain-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-Louvain" type="button" role="tab"
+                                            aria-controls="nav-Louvain" aria-selected="true">
+                                            Louvain
+                                        </button>
+                                        <button class="nav-link" id="nav-greedy_modularity-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-greedy_modularity" type="button" role="tab"
+                                            aria-controls="nav-greedy_modularity" aria-selected="false">Greedy
+                                            Modularity</button>
+                                        <button class="nav-link" id="nav-label_propagation-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-label_propagation" type="button" role="tab"
+                                            aria-controls="nav-label_propagation" aria-selected="false">Label
+                                            Propagation</button>
+                                        <button class="nav-link" id="nav-asyn_lpa-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-asyn_lpa" type="button" role="tab"
+                                            aria-controls="nav-asyn_lpa" aria-selected="false">Asyn
+                                            Lpa</button>
+                                        <button class="nav-link" id="nav-k_clique-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-k_clique" type="button" role="tab"
+                                            aria-controls="nav-k_clique" aria-selected="false">K Clique</button>
+                                        <button class="nav-link" id="nav-spectral-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-spectral" type="button" role="tab"
+                                            aria-controls="nav-spectral" aria-selected="false">Spectral</button>
+                                        <button class="nav-link" id="nav-kmeans-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-kmeans" type="button" role="tab"
+                                            aria-controls="nav-kmeans" aria-selected="false">KMeans</button>
+                                        <button class="nav-link" id="nav-agglomerative-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-agglomerative" type="button" role="tab"
+                                            aria-controls="nav-agglomerative"
+                                            aria-selected="false">Agglomerative</button>
+                                        <button class="nav-link" id="nav-dbscan-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-dbscan" type="button" role="tab"
+                                            aria-controls="nav-dbscan" aria-selected="false">Dbscan</button>
+                                    </div>
+                                </nav>
+                                <div class="tab-content" id="nav-tabContent">
+                                    <div class="tab-pane fade show active" id="nav-Louvain" role="tabpanel"
+                                        aria-labelledby="nav-Louvain-tab">
+                                        <!-- louvain starts here -->
+                                        <div class="container px-4 text-center">
+                                            <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
+                                                <div class="col">
+                                                    <h4>Before</h4>
+                                                </div>
+                                                <div class="col">
+                                                    <h4>After</h4>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5">
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_louvain_1 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_louvain_2 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5" style="margin-top: 15px;">
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example90" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_louvain_before.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_louvain_before.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example91" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_louvain_after.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_louvain_after.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- louvain starts here -->
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-greedy_modularity" role="tabpanel"
+                                        aria-labelledby="nav-greedy_modularity-tab">
+                                        <!-- greedy_modularity starts here -->
+                                        <div class="container px-4 text-center">
+                                            <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
+                                                <div class="col">
+                                                    <h4>Before</h4>
+                                                </div>
+                                                <div class="col">
+                                                    <h4>After</h4>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5">
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_greedy_modularity_1 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_greedy_modularity_2 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5" style="margin-top: 15px;">
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example92" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_greedy_modularity_before.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_greedy_modularity_before.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example93" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_greedy_modularity_after.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_greedy_modularity_after.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- greedy_modularity starts here -->
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-label_propagation" role="tabpanel"
+                                        aria-labelledby="nav-label_propagation-tab">
+                                        <!-- label_propagation starts here -->
+                                        <div class="container px-4 text-center">
+                                            <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
+                                                <div class="col">
+                                                    <h4>Before</h4>
+                                                </div>
+                                                <div class="col">
+                                                    <h4>After</h4>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5">
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_label_propagation_1 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_label_propagation_2 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5" style="margin-top: 15px;">
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example94" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_label_propagation_before.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_label_propagation_before.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example95" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_label_propagation_after.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_label_propagation_after.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- label_propagation starts here -->
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-asyn_lpa" role="tabpanel"
+                                        aria-labelledby="nav-asyn_lpa-tab">
+                                        <!-- asyn_lpa starts here -->
+                                        <div class="container px-4 text-center">
+                                            <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
+                                                <div class="col">
+                                                    <h4>Before</h4>
+                                                </div>
+                                                <div class="col">
+                                                    <h4>After</h4>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5">
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_asyn_lpa_1 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_asyn_lpa_2 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5" style="margin-top: 15px;">
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example96" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_asyn_lpa_before.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_asyn_lpa_before.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example97" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_asyn_lpa_after.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_asyn_lpa_after.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- asyn_lpa starts here -->
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-k_clique" role="tabpanel"
+                                        aria-labelledby="nav-k_clique-tab">
+                                        <!-- k_clique starts here -->
+                                        <div class="container px-4 text-center">
+                                            <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
+                                                <div class="col">
+                                                    <h4>Before</h4>
+                                                </div>
+                                                <div class="col">
+                                                    <h4>After</h4>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5">
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_k_clique_1 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_k_clique_2 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5" style="margin-top: 15px;">
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example98" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_k_clique_before.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_k_clique_before.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example99" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_k_clique_after.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_k_clique_after.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- k_clique starts here -->
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-spectral" role="tabpanel"
+                                        aria-labelledby="nav-spectral-tab">
+                                        <!-- spectral starts here -->
+                                        <div class="container px-4 text-center">
+                                            <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
+                                                <div class="col">
+                                                    <h4>Before</h4>
+                                                </div>
+                                                <div class="col">
+                                                    <h4>After</h4>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5">
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_spectral_1 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_spectral_2 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5" style="margin-top: 15px;">
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example100" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_spectral_before.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_spectral_before.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example101" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_spectral_after.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_spectral_after.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- spectral starts here -->
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-kmeans" role="tabpanel"
+                                        aria-labelledby="nav-kmeans-tab">
+                                        <!-- kmeans starts here -->
+                                        <div class="container px-4 text-center">
+                                            <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
+                                                <div class="col">
+                                                    <h4>Before</h4>
+                                                </div>
+                                                <div class="col">
+                                                    <h4>After</h4>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5">
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_kmeans_1 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_kmeans_2 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5" style="margin-top: 15px;">
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example102" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_kmeans_before.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_kmeans_before.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example103" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_kmeans_after.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_kmeans_after.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- kmeans starts here -->
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-agglomerative" role="tabpanel"
+                                        aria-labelledby="nav-agglomerative-tab">
+                                        <!-- agglomerative starts here -->
+                                        <div class="container px-4 text-center">
+                                            <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
+                                                <div class="col">
+                                                    <h4>Before</h4>
+                                                </div>
+                                                <div class="col">
+                                                    <h4>After</h4>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5">
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_agglomerative_1 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_agglomerative_2 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5" style="margin-top: 15px;">
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example104" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_agglomerative_before.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_agglomerative_before.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example105" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_agglomerative_after.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_agglomerative_after.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- agglomerative starts here -->
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-dbscan" role="tabpanel"
+                                        aria-labelledby="nav-dbscan-tab">
+                                        <!-- dbscan starts here -->
+                                        <div class="container px-4 text-center">
+                                            <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
+                                                <div class="col">
+                                                    <h4>Before</h4>
+                                                </div>
+                                                <div class="col">
+                                                    <h4>After</h4>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5">
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_dbscan_1 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <iframe src="{{ graph_dbscan_2 }}" width="100%"
+                                                                height="300"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row gx-5" style="margin-top: 15px;">
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example107" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_dbscan_before.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_dbscan_before.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card card-body">
+                                                        <table id="example108" class="display" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    {% for cell in
+                                                                    df_dbscan_after.columns
+                                                                    %}
+                                                                    <th>{{ cell }}</th>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in
+                                                                df_dbscan_after.itertuples()
+                                                                %}
+                                                                <tr>
+                                                                    {% for cell in row[1:] %}
+                                                                    <td>{{ cell }}</td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- dbscan starts here -->
+                                    </div>
+                                </div>
+                                <!-- Cluster tabs section ends here -->
+                            </div>
                         </div>
                         <!-- End the Main content here -->
                     </div>
