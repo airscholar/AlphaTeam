@@ -87,13 +87,14 @@
                                                     class="container tab-pane {% if tab_main=='tab1' %}active{% else %}fade{% endif %}">
                                                     <br />
                                                     <div class="row">
-                                                        <label for="number_of_nodes" style="margin-top: 5px;">Number of
+                                                        <label for="number_of_nodes_malicious"
+                                                            style="margin-top: 5px;">Number of
                                                             Nodes</label>
-                                                        <input type="number" id="number_of_nodes_input"
+                                                        <input type="number" id="number_of_nodes_malicious_input"
                                                             placeholder="None" style="margin: 5px;"
-                                                            name="number_of_nodes" class="form-control" min="1" step="1"
-                                                            {% if number_of_nodes is not none
-                                                            %}value="{{ number_of_nodes }}" {% endif %}>
+                                                            name="number_of_nodes_malicious" class="form-control"
+                                                            min="1" step="1" {% if number_of_nodes_malicious is not none
+                                                            %}value="{{ number_of_nodes_malicious }}" {% endif %}>
                                                     </div>
                                                 </div>
                                                 <div id="form_tab2"
@@ -111,14 +112,16 @@
                                                                     name="layout2">
                                                                     <option value="greater_than" {% if
                                                                         layout2=='greater_than' %}selected{% endif %}>
-                                                                        &gt
-                                                                    </option>
+                                                                        &gt;</option>
                                                                     <option value="less_than" {% if layout2=='less_than'
-                                                                        %}selected{% endif %}>&lt
-                                                                    </option>
-                                                                    <option value="equal_to" {% if layout2=='equal_to'
-                                                                        %}selected{% endif %}>=
-                                                                    </option>
+                                                                        %}selected{% endif %}>&lt;</option>
+                                                                    <option value="greater_than_or_equal_to" {% if
+                                                                        layout2=='greater_than_or_equal_to' %}selected{%
+                                                                        endif %}>&ge;</option>
+                                                                    <option value="less_than_or_equal_to" {% if
+                                                                        layout2=='less_than_or_equal_to' %}selected{%
+                                                                        endif %}>&le;</option>
+
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -172,7 +175,7 @@
 <script type="text/javascript">
     function submitForm() {
         // Set the values of the hidden input fields in the form
-        document.getElementById('number_of_nodes_input').value = number_of_nodes;
+        document.getElementById('number_of_nodes_malicious_input').value = number_of_nodes_malicious;
         document.getElementById('number_of_threashold_input').value = number_of_threashold;
         document.getElementById('dropdown-menu-input').value = layout;
         document.getElementById('dropdown-menu2-input').value = layout2;
