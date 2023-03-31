@@ -149,6 +149,8 @@ def resilience_random(networkGraph, number_of_nodes=0, number_of_edges=0):
     :rtype: NetworkGraph
     """
     G = copy_networkGraph(networkGraph)
+    # print(G.__dict__)
+    G.set_attack_vector('random')
 
     if number_of_nodes > 0:
         nodes = G.MultiDiGraph.nodes()
@@ -203,6 +205,7 @@ def resilience_malicious(networkGraph, metric=None, number_of_nodes=None, thresh
     :rtype: NetworkGraph
     """
     G = copy_networkGraph(networkGraph)
+    G.set_attack_vector('malicious')
 
     df = get_metrics(G, metric, directed=directed, multi=multi)
     metric = df.columns[1]
@@ -236,6 +239,8 @@ def resilience_cluster(networkGraph, cluster_algorithm=None, total_clusters=0, n
     :rtype: NetworkGraph
     """
     G = copy_networkGraph(networkGraph)
+    G.set_attack_vector('cluster')
+
     if cluster_algorithm not in ['louvain', 'greedy_modularity', 'label_propagation', 'asyn_lpa',
                                  'k_clique', 'spectral', 'kmeans', 'agglomerative', 'hierarchical', 'dbscan']:
         print(ValueError("Invalid cluster type", "please choose from the following: 'louvain', 'greedy_modularity', "
@@ -277,6 +282,7 @@ def resilience_custom(networkGraph, list_of_nodes=None):
     :rtype: NetworkGraph
     """
     G = copy_networkGraph(networkGraph)
+    G.set_attack_vector('custom_node')
 
     G, df = remove_nodes(G, list_of_nodes)
     return G, df
@@ -411,6 +417,8 @@ def resilience_cluster_custom(networkGraph, cluster_algorithm=None, total_cluste
         return 0
 
     G = copy_networkGraph(networkGraph)
+    G.set_attack_vector('cluster_custom')
+
     clusters = ml.get_communities(networkGraph, cluster_algorithm, total_clusters)
 
     nodes_to_remove = []
