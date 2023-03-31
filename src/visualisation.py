@@ -103,10 +103,6 @@ def plot_cluster(networkGraphs, clusterType, noOfClusters=0, dynamic=False, layo
         return df, 'no_graph.html'
 
     cluster = ml.get_communities(networkGraphs, clusterType, noOfClusters=noOfClusters)
-    if len(cluster) == 0 or cluster.isnull().values.any() or len(cluster)!=len(networkGraphs.Graph.nodes):
-        print(ValueError("Issue with cluster or cluster not possible for this method or graph"))
-        return utils.return_nan(networkGraphs, 'Cluster'), 'no_graph.html'
-
     filename = f"{clusterType}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
     if dynamic:
         filename = filename.replace(f"_{layout}", "")
