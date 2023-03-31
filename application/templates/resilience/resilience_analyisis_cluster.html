@@ -25,39 +25,40 @@
                     <div class="accordion-body">
                         <div class="card mx-auto" style="width: 30rem;">
                             <div class="card-body">
-                                <form id="mainform-accordian" method="post">
+                                <form id="resilienceClusterForm" method="post" action="/resilience/cluster/upload">
                                     <label for="type_of_attack" style="margin-top: 5px;">Type of Cluster</label>
                                     <div class="dropdown" style="margin:5px">
-                                        <select id="dropdown-menu" class="mx-auto" name="layout">
-                                            <option value="louvain" {% if layout=='louvain' %}selected{% endif %}>
+                                        <select id="dropdown-menu-input" class="mx-auto" name="layout3">
+                                            <option value="louvain" {% if layout3=='louvain' %}selected{% endif %}>
                                                 Louvain</option>
-                                            <option value="greedy_modularity" {% if layout=='greedy_modularity'
+                                            <option value="greedy_modularity" {% if layout3=='greedy_modularity'
                                                 %}selected{% endif %}>
                                                 Greedy Modularity
                                             </option>
-                                            <option value="label_propagation" {% if layout=='label_propagation'
+                                            <option value="label_propagation" {% if layout3=='label_propagation'
                                                 %}selected{% endif %}>
                                                 Label Propagation
                                             </option>
-                                            <option value="asyn_lpa" {% if layout=='asyn_lpa' %}selected{% endif %}>Asyn
+                                            <option value="asyn_lpa" {% if layout3=='asyn_lpa' %}selected{% endif %}>
+                                                Asyn
                                                 Lpa
                                             </option>
-                                            <option value="k_clique" {% if layout=='k_clique' %}selected{% endif %}>K
+                                            <option value="k_clique" {% if layout3=='k_clique' %}selected{% endif %}>K
                                                 Clique
                                             </option>
-                                            <option value="spectral" {% if layout=='spectral' %}selected{% endif %}>
+                                            <option value="spectral" {% if layout3=='spectral' %}selected{% endif %}>
                                                 Spectral
                                             </option>
-                                            <option value="kmeans" {% if layout=='kmeans' %}selected{% endif %}>KMeans
+                                            <option value="kmeans" {% if layout3=='kmeans' %}selected{% endif %}>KMeans
                                             </option>
-                                            <option value="agglomerative" {% if layout=='agglomerative' %}selected{%
+                                            <option value="agglomerative" {% if layout3=='agglomerative' %}selected{%
                                                 endif %}>
                                                 Agglomerative
                                             </option>
-                                            <option value="dbscan" {% if layout=='dbscan' %}selected{% endif %}>Dbscan
+                                            <option value="dbscan" {% if layout3=='dbscan' %}selected{% endif %}>Dbscan
                                             </option>
-                                            <option value="hierarchical" {% if layout=='hierarchical' %}selected{% endif
-                                                %}>Hierarchical
+                                            <option value="hierarchical" {% if layout3=='hierarchical' %}selected{%
+                                                endif %}>Hierarchical
                                             </option>
                                         </select>
                                     </div>
@@ -65,13 +66,14 @@
                                         <label for="number_of_cluster_to_generate" style="margin-top: 5px;">Total number
                                             of cluster to
                                             generate</label>
-                                        <input type="number" id="number_of_cluster_to_generate" style="margin: 5px;"
-                                            name="number_of_cluster_to_generate" class="form-control" min="1" step="1"
-                                            placeholder="None" {% if number_of_cluster_to_generate is not none
+                                        <input type="number" id="number_of_cluster_to_generate-input"
+                                            style="margin: 5px;" name="number_of_cluster_to_generate"
+                                            class="form-control" min="1" step="1" placeholder="None" {% if
+                                            number_of_cluster_to_generate is not none
                                             %}value="{{ number_of_cluster_to_generate }}" {% endif %}>
                                         <label for="cluster_to_attack" style="margin-top: 5px;">Number of cluster to
                                             attack</label>
-                                        <input type="number" id="cluster_to_attack" style="margin: 5px;"
+                                        <input type="number" id="cluster_to_attack-input" style="margin: 5px;"
                                             name="cluster_to_attack" class="form-control" min="1" step="1"
                                             placeholder="None" {% if cluster_to_attack is not none
                                             %}value="{{ cluster_to_attack }}" {% endif %}>
@@ -98,35 +100,7 @@
                 <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
                     data-bs-parent="#accordionFlushExample1">
                     <div class="accordion-body">
-                        <!-- Start the Main content from here -->
-                        <nav>
-                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                <button class="nav-link active" id="nav-Visualisation-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-Visualisation" type="button" role="tab"
-                                    aria-controls="nav-Visualisation" aria-selected="true">Visualisation</button>
-                                <button class="nav-link" id="nav-Centrality-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-Centrality" type="button" role="tab"
-                                    aria-controls="nav-Centrality" aria-selected="false">Centrality</button>
-                                <button class="nav-link" id="nav-Nodes-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-Nodes" type="button" role="tab" aria-controls="nav-Nodes"
-                                    aria-selected="false">Nodes</button>
-                                <button class="nav-link" id="nav-Clusters-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-Clusters" type="button" role="tab" aria-controls="nav-Clusters"
-                                    aria-selected="false">Clusters</button>
-                            </div>
-                        </nav>
-
-                        <div class="tab-content" id="nav-tabContent">
-                            <div class="tab-pane fade show active" id="nav-Visualisation" role="tabpanel"
-                                aria-labelledby="nav-Visualisation-tab">Network</div>
-                            <div class="tab-pane fade" id="nav-Centrality" role="tabpanel"
-                                aria-labelledby="nav-Centrality-tab">Centrality</div>
-                            <div class="tab-pane fade" id="nav-Nodes" role="tabpanel" aria-labelledby="nav-Nodes-tab">
-                                Nodes</div>
-                            <div class="tab-pane fade" id="nav-Clusters" role="tabpanel"
-                                aria-labelledby="nav-Clusters-tab">Clusters</div>
-                        </div>
-                        <!-- End the Main content here -->
+                        {% include 'resilience/resilience_template.html' %}
                     </div>
                 </div>
             </div>
@@ -139,5 +113,14 @@
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
-
+<script type="text/javascript">
+    function submitForm() {
+        // Set the values of the hidden input fields in the form
+        document.getElementById('number_of_cluster_to_generate-input').value = number_of_cluster_to_generate;
+        document.getElementById('cluster_to_attack-input').value = cluster_to_attack;
+        document.getElementById('dropdown-menu-input').value = layout3;
+        // Submit the form
+        document.getElementById('resilienceClusterForm').submit();
+    }
+</script>
 {% endblock %}

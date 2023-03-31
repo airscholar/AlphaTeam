@@ -32,7 +32,7 @@ def resilience_analyisis_malicious():
     tab_main =  session.get('tab_main', 'tab1')
     layout = session.get('layout_malicious', 'degree_centrality')
     layout2 = session.get('layout2_malicious', 'equal_to')
-    
+    print('main tab', tab_main)
     if layout2 == "greater_than":
         operator = ">"
     elif layout2 == "less_than":
@@ -47,54 +47,89 @@ def resilience_analyisis_malicious():
     number_of_nodes = session.get('number_of_nodes', None)
     number_of_edges = session.get('number_of_edges', None)
     number_of_threashold = session.get('number_of_threashold', None)
+    number_of_cluster_to_generate = session.get('number_of_cluster_to_generate', None)
+    cluster_to_attack = session.get('cluster_to_attack', None)
+    layout3 = session.get('layout3_cluster', 'louvain')
 
-    val1 = session.get('val1', None)
-    val2 = session.get('val2', None)
-    val3 = session.get('val3', None)
-    val4 = session.get('val4', None)
+    val1 = session.get('val1_malicious', None)
+    val2 = session.get('val2_malicious', None)
+    val3 = session.get('val3_malicious', None)
+    val4 = session.get('val4_malicious', 'equal_to')
 
     # here we use number of nodes
     global networkGraphs2
     if val3 != layout:
-        session['val3'] = layout
+        session['val3_malicious'] = layout
     
     if val1 != number_of_nodes:
-        session['val1'] = number_of_nodes
+        session['val1_malicious'] = number_of_nodes
         tab_main = 'tab1'
         session['tab_main'] = tab_main
         networkGraphs2, df2 = resilience(networkGraphs, attack=attack, metric=layout, number_of_nodes=int(number_of_nodes))
     
     # here we use number of edges
     if val2 != number_of_threashold:
-        session['val2'] = number_of_threashold
+        session['val2_malicious'] = number_of_threashold
         tab_main = 'tab2'
         session['tab_main'] = tab_main
         networkGraphs2, df2 = resilience(networkGraphs, attack=attack, metric=layout, threshold=int(number_of_threashold), operator=operator)
  
     if val4 != layout2:
-        session['val4'] = layout2
+        session['val4_malicious'] = layout2
         tab_main = 'tab2'
         session['tab_main'] = tab_main
         if(number_of_threashold is not None):
             networkGraphs2, df2 = resilience(networkGraphs, attack=attack, metric=layout, threshold=int(number_of_threashold), operator=operator)
 
-    return template_resilience_tabs('resilience/resilience_analyisis_malicious.html', number_of_nodes, number_of_edges, number_of_threashold, layout, layout2, tab_main, attack)
+    print('main tab', tab_main)
+    return template_resilience_tabs('resilience/resilience_analyisis_malicious.html', number_of_nodes, number_of_edges, number_of_threashold, number_of_cluster_to_generate,
+    cluster_to_attack, layout, layout2, layout3, tab_main, attack)
 
 @resilience_routes.route('/resilience/cluster', endpoint='resilience_cluster', methods=['GET', 'POST'])
 def resilience_analyisis_cluster():
-    layout = 'louvain'
+    attack = 'cluster'
+    filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
+    tab_main =  session.get('tab_main', 'tab1')
+    layout = session.get('layout_malicious', 'degree_centrality')
+    layout2 = session.get('layout2_malicious', 'equal_to')
     
-    if request.method == 'POST':
-        number_of_cluster_to_generate = request.form.get('number_of_cluster_to_generate', None)
-        number_of_cluster_to_generate = int(number_of_cluster_to_generate) if number_of_cluster_to_generate else None
-        cluster_to_attack = request.form.get('cluster_to_attack', None)
-        cluster_to_attack = int(cluster_to_attack) if cluster_to_attack else None
-        layout = request.form.get('layout')
-    else:
-        number_of_cluster_to_generate = None
-        cluster_to_attack = None
+    filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
+    number_of_nodes = session.get('number_of_nodes', None)
+    number_of_edges = session.get('number_of_edges', None)
+    number_of_threashold = session.get('number_of_threashold', None)
+
+    number_of_cluster_to_generate = session.get('number_of_cluster_to_generate', None)
+    cluster_to_attack = session.get('cluster_to_attack', None)
+    layout3 = session.get('layout3_cluster', 'louvain')
+
+    val1 = session.get('val1_cluster', None)
+    val2 = session.get('val2_cluster', None)
+    val3 = session.get('val3_cluster', None)
+    val4 = session.get('val4_cluster', None)
+
+    # here we use number of nodes
+    global networkGraphs2
+    if val3 != layout3:
+        session['val3_cluster'] = layout3
+        if(number_of_cluster_to_generate is not None and cluster_to_attack is not None):
+            networkGraphs2, df2 = resilience(networkGraphs, attack=attack, cluster_algorithm=layout3, total_clusters=int(number_of_cluster_to_generate), number_of_clusters=int(cluster_to_attack))
+    
+    if val1 != number_of_cluster_to_generate:
+        session['val1_cluster'] = number_of_cluster_to_generate
+        if(number_of_cluster_to_generate is not None and cluster_to_attack is not None):
+            networkGraphs2, df2 = resilience(networkGraphs, attack=attack, cluster_algorithm=layout3, total_clusters=int(number_of_cluster_to_generate), number_of_clusters=int(cluster_to_attack))
+    
+    # here we use number of edges
+    if val2 != cluster_to_attack:
+        session['val2_cluster'] = cluster_to_attack
+        if(number_of_cluster_to_generate is not None and cluster_to_attack is not None):
+            networkGraphs2, df2 = resilience(networkGraphs, attack=attack, cluster_algorithm=layout3, total_clusters=int(number_of_cluster_to_generate), number_of_clusters=int(cluster_to_attack))
  
-    return render_template('resilience/resilience_analyisis_cluster.html', layout=layout, number_of_cluster_to_generate=number_of_cluster_to_generate, cluster_to_attack=cluster_to_attack)
+    
+    return template_resilience_tabs('resilience/resilience_analyisis_cluster.html', number_of_nodes, number_of_edges, number_of_threashold, number_of_cluster_to_generate,
+    cluster_to_attack, layout, layout2, layout3, tab_main, attack)
 
 @resilience_routes.route('/resilience/random', endpoint='resilience_random', methods=['GET', 'POST'])
 def resilience_analyisis_random():
@@ -107,28 +142,32 @@ def resilience_analyisis_random():
     number_of_threashold = session.get('number_of_threashold', None)
     layout = session.get('layout_malicious', 'degree_centrality')
     layout2 = session.get('layout2_malicious', 'equal_to')
+    number_of_cluster_to_generate = session.get('number_of_cluster_to_generate', None)
+    cluster_to_attack = session.get('cluster_to_attack', None)
+    layout3 = session.get('layout3_cluster', 'louvain')
     
-    val1 = session.get('val1', None)
-    val2 = session.get('val2', None)
+    val1 = session.get('val1_random', None)
+    val2 = session.get('val2_random', None)
     
     # here we use number of nodes
     global networkGraphs2
     if val1 != number_of_nodes:
-        session['val1'] = number_of_nodes
+        session['val1_random'] = number_of_nodes
         tab_main = 'tab1'
         session['tab_main'] = tab_main
         networkGraphs2, df2 = resilience(networkGraphs, attack=attack, number_of_nodes=int(number_of_nodes))
     
     # here we use number of edges
     if val2 != number_of_edges:
-        session['val2'] = number_of_edges
+        session['val2_random'] = number_of_edges
         tab_main = 'tab2'
         session['tab_main'] = tab_main
         networkGraphs2, df2 = resilience(networkGraphs, attack=attack, number_of_edges=int(number_of_edges))
 
     print('number_of_nodes',number_of_nodes)
      
-    return template_resilience_tabs('resilience/resilience_analyisis_random.html', number_of_nodes, number_of_edges, number_of_threashold, layout, layout2, tab_main, attack)
+    return template_resilience_tabs('resilience/resilience_analyisis_random.html', number_of_nodes, number_of_edges, number_of_threashold, number_of_cluster_to_generate,
+    cluster_to_attack, layout, layout2, layout3, tab_main, attack)
 
 @resilience_routes.route('/resilience/malicious/upload', endpoint='resilience_malicious_upload', methods=['GET', 'POST'])
 def resilience_malicious_upload():
@@ -150,6 +189,24 @@ def resilience_malicious_upload():
     
     return redirect(url_for('resilience_routes.resilience_malicious'))
 
+@resilience_routes.route('/resilience/cluster/upload', endpoint='resilience_cluster_upload', methods=['GET', 'POST'])
+def resilience_cluster_upload():
+    number_of_cluster_to_generate = request.form.get('number_of_cluster_to_generate')
+    cluster_to_attack = request.form.get('cluster_to_attack')
+    layout3 = request.form.get('layout3')
+
+    if number_of_cluster_to_generate == '':
+        number_of_cluster_to_generate = None
+    if cluster_to_attack == '':
+        cluster_to_attack = None
+    session['number_of_cluster_to_generate'] = number_of_cluster_to_generate
+    session['cluster_to_attack'] = cluster_to_attack
+    session['layout3_cluster'] = layout3
+    # do something with the form data
+    
+    return redirect(url_for('resilience_routes.resilience_cluster'))
+
+
 @resilience_routes.route('/resilience/random/upload', endpoint='resilience_random_upload', methods=['GET', 'POST'])
 def resilience_random_upload():
     number_of_nodes = request.form.get('number_of_nodes')
@@ -166,7 +223,8 @@ def resilience_random_upload():
     return redirect(url_for('resilience_routes.resilience_random'))
 
 
-def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_edges_arg, number_of_threashold_arg, layout_arg, layout2_arg, tab_main_arg, attack_arg):
+def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_edges_arg, number_of_threashold_arg, number_of_cluster_to_generate_arg, cluster_to_attack_arg,
+ layout_arg, layout2_arg, layout3_arg, tab_main_arg, attack_arg):
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     multi_toggle = True
@@ -285,8 +343,8 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
             df_label_propagation_after, graph_label_propagation_name_2 = plot_cluster(networkGraphs2, 'label_propagation', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
             df_asyn_lpa_before, graph_asyn_lpa_name_1 = plot_cluster(networkGraphs, 'asyn_lpa', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
             df_asyn_lpa_after, graph_asyn_lpa_name_2 = plot_cluster(networkGraphs2, 'asyn_lpa', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
-            df_k_clique_before, graph_k_clique_name_1 = plot_cluster(networkGraphs, 'spectral', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
-            df_k_clique_after, graph_k_clique_name_2 = plot_cluster(networkGraphs2, 'spectral', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_k_clique_before, graph_k_clique_name_1 = plot_cluster(networkGraphs, 'k_clique', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
+            df_k_clique_after, graph_k_clique_name_2 = plot_cluster(networkGraphs2, 'k_clique', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
             df_spectral_before, graph_spectral_name_1 = plot_cluster(networkGraphs, 'spectral', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
             df_spectral_after, graph_spectral_name_2 = plot_cluster(networkGraphs2, 'spectral', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
             df_kmeans_before, graph_kmeans_name_1 = plot_cluster(networkGraphs, 'kmeans', noOfClusters=number_of_clusters,dynamic=False, layout=visualisation_layout)
@@ -304,8 +362,8 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
             df_label_propagation_after, graph_label_propagation_name_2 = plot_cluster(networkGraphs2, 'label_propagation', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
             df_asyn_lpa_before, graph_asyn_lpa_name_1 = plot_cluster(networkGraphs, 'asyn_lpa', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
             df_asyn_lpa_after, graph_asyn_lpa_name_2 = plot_cluster(networkGraphs2, 'asyn_lpa', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
-            df_k_clique_before, graph_k_clique_name_1 = plot_cluster(networkGraphs, 'spectral', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
-            df_k_clique_after, graph_k_clique_name_2 = plot_cluster(networkGraphs2, 'spectral', noOfClusters=0,dynamic=False, layout=visualisation_layout)
+            df_k_clique_before, graph_k_clique_name_1 = plot_cluster(networkGraphs, 'k_clique', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
+            df_k_clique_after, graph_k_clique_name_2 = plot_cluster(networkGraphs2, 'k_clique', noOfClusters=0,dynamic=False, layout=visualisation_layout)
             df_spectral_before, graph_spectral_name_1 = plot_cluster(networkGraphs, 'spectral', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
             df_spectral_after, graph_spectral_name_2 = plot_cluster(networkGraphs2, 'spectral', noOfClusters=0,dynamic=False, layout=visualisation_layout)
             df_kmeans_before, graph_kmeans_name_1 = plot_cluster(networkGraphs, 'kmeans', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
@@ -946,7 +1004,8 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
    
     return render_template(template_name_arg, tab_main=tab_main_arg, visualisation_layout=visualisation_layout, number_of_threashold=number_of_threashold_arg,
         number_of_nodes=number_of_nodes_arg, number_of_edges=number_of_edges_arg, graph1=graph_path1, graph2=graph_path2, layout=layout_arg, layout2=layout2_arg,
-        multi_toggle=multi_toggle,directed_toggle=directed_toggle, number_of_clusters=number_of_clusters,
+        multi_toggle=multi_toggle,directed_toggle=directed_toggle, number_of_clusters=number_of_clusters, number_of_cluster_to_generate=number_of_cluster_to_generate_arg,
+        cluster_to_attack = cluster_to_attack_arg, layout3_arg=layout3_arg,
         df_degree_centrality_before=df_degree_centrality_before, df_degree_centrality_after=df_degree_centrality_after, 
         graph_degree_centrality_layout_1=graph_degree_centrality_layout_path_1, graph_degree_centrality_layout_2=graph_degree_centrality_layout_path_2,
         graph_degree_centrality_histogram_1=graph_degree_centrality_histogram_path_1, graph_degree_centrality_histogram_2=graph_degree_centrality_histogram_path_2,
