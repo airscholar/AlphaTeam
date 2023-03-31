@@ -60,7 +60,7 @@ class NetworkGraphs:
     # ---------------------------------------------- CONSTRUCTOR ------------------------------------------------------
     # -----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, filename, type, session_folder=None, temporal=False, spatial=False, weighted=False, attack_vector=None):
+    def __init__(self, filename, type, session_folder=None, temporal=False, spatial=False, weighted=False):
         """
         Constructor of the NetworkGraphs class. It creates the NetworkX graphs and store the attributes of the graphs.
 
@@ -113,14 +113,12 @@ class NetworkGraphs:
         self.mid_long = None
         self.session_folder = None
         self.filename = None
-        self.attack_vector = None
 
         self.set_filename(filename)
         name = filename.split('/')[-1].split('.')[0]
         self.set_name(name)
         self.set_type(type)
         self.set_session_folder(session_folder)
-        self.set_attack_vector(attack_vector)
 
         # ---------------------------------------------- RAILWAY -------------------------------------------------------
 
@@ -449,9 +447,6 @@ class NetworkGraphs:
         :return: None
         """
         self.filename = filename
-    
-    def set_attack_vector(self, attack_vector):
-        self.attack_vector = attack_vector
 
     # ---------------------------------------------- IS  -----------------------------------------------------------
 
@@ -614,9 +609,6 @@ class NetworkGraphs:
         :rtype: pandas.DataFrame
         """
         return self.df
-
-    def get_attack_vector(self):
-        return self.attack_vector
 
     # ---------------------------------------------- PRINT -----------------------------------------------------------
 

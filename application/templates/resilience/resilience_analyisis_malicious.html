@@ -26,10 +26,10 @@
                         <!-- Card Form starts here -->
                         <div class="card mx-auto" style="width: 30rem;">
                             <div class="card-body">
-                                <form id="resilienceMaliciousForm" method="post" action="/resilience/malicious/upload">
+                                <form id="mainform-accordian" method="post">
                                     <label for="type_of_attack" style="margin-top: 5px;">Type of Attack</label>
                                     <div class="dropdown" style="margin:5px">
-                                        <select id="dropdown-menu-input" class="mx-auto" name="layout">
+                                        <select id="dropdown-menu" class="mx-auto" name="layout">
                                             <option value="degree_centrality" {% if layout=='degree_centrality'
                                                 %}selected{% endif %}>
                                                 Degree Centrality</option>
@@ -70,7 +70,7 @@
                                                         class="nav-link {% if tab_main=='tab1' %}active{% else %}{% endif %}"
                                                         id="nav-level-tab" data-bs-toggle="tab"
                                                         data-bs-target="#form_tab1" type="button" role="tab"
-                                                        aria-controls="nav-level" aria-selected="true">Node</button>
+                                                        aria-controls="nav-level" aria-selected="true">Level</button>
                                                     <button
                                                         class="nav-link {% if tab_main=='tab2' %}active{% else %}{% endif %}"
                                                         id="nav-threshold-tab" data-bs-toggle="tab"
@@ -87,13 +87,12 @@
                                                     class="container tab-pane {% if tab_main=='tab1' %}active{% else %}fade{% endif %}">
                                                     <br />
                                                     <div class="row">
-                                                        <label for="number_of_nodes" style="margin-top: 5px;">Number of
-                                                            Nodes</label>
-                                                        <input type="number" id="number_of_nodes_input"
-                                                            placeholder="None" style="margin: 5px;"
-                                                            name="number_of_nodes" class="form-control" min="1" step="1"
-                                                            {% if number_of_nodes is not none
-                                                            %}value="{{ number_of_nodes }}" {% endif %}>
+                                                        <label for="number_of_levels" style="margin-top: 5px;">Number of
+                                                            Levels</label>
+                                                        <input type="number" id="number_of_levels" style="margin: 5px;"
+                                                            name="number_of_levels" class="form-control" min="1"
+                                                            step="1" placeholder="None" {% if number_of_levels is not
+                                                            none %}value="{{ number_of_levels }}" {% endif %}>
                                                     </div>
                                                 </div>
                                                 <div id="form_tab2"
@@ -107,7 +106,7 @@
                                                         </div>
                                                         <div class="col-auto">
                                                             <div class="dropdown" style="margin:5px">
-                                                                <select id="dropdown-menu2-input" class="mx-auto"
+                                                                <select id="dropdown-menu2" class="mx-auto"
                                                                     name="layout2">
                                                                     <option value="greater_than" {% if
                                                                         layout2=='greater_than' %}selected{% endif %}>
@@ -123,7 +122,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-auto">
-                                                            <input type="number" id="number_of_threashold_input"
+                                                            <input type="number" id="number_of_threashold"
                                                                 style="margin: 5px;" name="number_of_threashold"
                                                                 class="form-control" min="1" step="1" placeholder="None"
                                                                 {% if number_of_threashold is not none
@@ -156,7 +155,35 @@
                 <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
                     data-bs-parent="#accordionFlushExample1">
                     <div class="accordion-body">
-                        {% include 'resilience/resilience_template.html' %}
+                        <!-- Start the Main content from here -->
+                        <nav>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <button class="nav-link active" id="nav-Visualisation-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-Visualisation" type="button" role="tab"
+                                    aria-controls="nav-Visualisation" aria-selected="true">Visualisation</button>
+                                <button class="nav-link" id="nav-Centrality-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-Centrality" type="button" role="tab"
+                                    aria-controls="nav-Centrality" aria-selected="false">Centrality</button>
+                                <button class="nav-link" id="nav-Nodes-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-Nodes" type="button" role="tab" aria-controls="nav-Nodes"
+                                    aria-selected="false">Nodes</button>
+                                <button class="nav-link" id="nav-Clusters-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-Clusters" type="button" role="tab" aria-controls="nav-Clusters"
+                                    aria-selected="false">Clusters</button>
+                            </div>
+                        </nav>
+
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-Visualisation" role="tabpanel"
+                                aria-labelledby="nav-Visualisation-tab">Network</div>
+                            <div class="tab-pane fade" id="nav-Centrality" role="tabpanel"
+                                aria-labelledby="nav-Centrality-tab">Centrality</div>
+                            <div class="tab-pane fade" id="nav-Nodes" role="tabpanel" aria-labelledby="nav-Nodes-tab">
+                                Nodes</div>
+                            <div class="tab-pane fade" id="nav-Clusters" role="tabpanel"
+                                aria-labelledby="nav-Clusters-tab">Clusters</div>
+                        </div>
+                        <!-- End the Main content here -->
                     </div>
                 </div>
             </div>
@@ -165,19 +192,59 @@
     </div>
     <hr>
 
+    <div class="container px-4 text-center">
+        <div class="row gx-5">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        Image will be load here.
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        This is some text within a card body.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        Image will be load here.
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        This is some text within a card body.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        Image will be load here.
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        This is some text within a card body.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript">
-    function submitForm() {
-        // Set the values of the hidden input fields in the form
-        document.getElementById('number_of_nodes_input').value = number_of_nodes;
-        document.getElementById('number_of_threashold_input').value = number_of_threashold;
-        document.getElementById('dropdown-menu-input').value = layout;
-        document.getElementById('dropdown-menu2-input').value = layout2;
-        // Submit the form
-        document.getElementById('resilienceMaliciousForm').submit();
-    }
-</script>
+
 {% endblock %}
