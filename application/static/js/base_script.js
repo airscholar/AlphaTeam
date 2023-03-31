@@ -28,7 +28,7 @@ document.querySelectorAll('.fetch-spinner').forEach(function (element) {
 
 $(document).ready(function () {
     // Initialize DataTables
-    var table = $('#example').DataTable();
+    // var table = $('#example').DataTable();
     $('#download_csv').on('click', function () {
         var csv = '';
         var headers = [];
