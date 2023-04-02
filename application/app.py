@@ -31,7 +31,7 @@ app.register_blueprint(centrality_routes)
 app.register_blueprint(node_routes)
 app.register_blueprint(resilience_routes)
 
-BASE_URL = 'http://localhost:8000/api/v1/'
+BASE_URL = 'http://localhost:8000/api/v1'
 
 
 # Define a custom error page for 500 Internal Server Error
@@ -133,51 +133,44 @@ def globalmetrics():
 
 @app.route('/visualisation', methods=['GET', 'POST'], endpoint='visualisation')
 def visualisation():
-    filename = session['filename']
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     dynamic_toggle = False
     tab = 'tab1'
+    graph_path1 = '../static/' + 'no_graph.html'
+    graph_path2 = '../static/' + 'no_graph.html'
+
+    show_temporal = str(networkGraphs.is_temporal()).lower()
+
     if networkGraphs.is_spatial():
         layout = 'map'
         layout2 = 'map'
-        show_temporal = str(networkGraphs.is_temporal()).lower()
-        print('tab false spatial', show_temporal)
     else:
         layout = 'sfdp'
         layout2 = 'sfdp'
-        show_temporal = str(networkGraphs.is_temporal()).lower()
-        print('tab is temporal', show_temporal)
 
     if request.method == 'POST':
-        if (request.form.get('dynamic_toggle') is not None or request.form.get('layout') is not None):
-            dynamic_toggle = bool(request.form.get('dynamic_toggle'))
-            layout = request.form.get('layout')
-            graph_name1 = plot_network(networkGraphs, layout=layout, dynamic=dynamic_toggle)
-            session['graph_name1'] = graph_name1
-            tab = 'tab1'
-        if (request.form.get('layout2') is not None):
-            layout2 = request.form.get('layout2')
-            graph_name2 = plot_temporal(networkGraphs, layout=layout2)
-            session['graph_name2'] = graph_name2
-            tab = 'tab2'
-    else:
-        graph_name1 = plot_network(networkGraphs, layout=layout, dynamic=dynamic_toggle)
-        session['graph_name1'] = graph_name1
-        graph_name2 = plot_temporal(networkGraphs, layout=layout2)
-        session['graph_name2'] = graph_name2
-    graph1 = session['graph_name1']
-    graph2 = session['graph_name2']
+        dynamic_toggle = bool(request.form.get('dynamic_toggle', False))
+        layout = request.form.get('layout')
+        layout2 = request.form.get('layout2')
 
-    if graph1 == 'no_graph.html':
-        graph_path1 = '../static/' + graph1
+    if not networkGraphs.is_spatial() and layout == 'map':
+        graph_path1 = '../static/' + 'no_graph.html'
     else:
-        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+        json_data = requests.get(
+            f'{BASE_URL}/visualisation/{filename2}/plot_network/spatial?dynamic={dynamic_toggle}&layout={layout}').json()
+        graph_name1 = json_data['file']
 
-    if graph2 == 'no_graph.html':
-        graph_path2 = '../static/' + graph2
-    else:
-        graph_path2 = '../static/uploads/' + filename2 + '/' + graph2
+        graph_path1 = '../static/uploads/' + filename2 + '/' + graph_name1 \
+            if graph_name1 != 'no_graph.html' else '../static/' + graph_name1
+
+    if networkGraphs.is_temporal() and layout2 is not None:
+        json_data = requests.get(
+            f'{BASE_URL}/visualisation/{filename2}/plot_network/temporal?layout={layout2}').json()
+        graph_name2 = json_data['file']
+
+        graph_path2 = '../static/uploads/' + filename2 + '/' + graph_name2 \
+            if graph_name2 != 'no_graph.html' else '../static/' + graph_name2
 
     return render_template('visualisation.html', tab=tab, show_temporal=show_temporal,
                            dynamic_toggle=dynamic_toggle, layout=layout, graph1=graph_path1,
