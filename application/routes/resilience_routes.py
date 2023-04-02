@@ -26,84 +26,214 @@ networkGraphs2 = None
 
 @resilience_routes.route('/resilience/malicious', endpoint='resilience_malicious', methods=['GET', 'POST'])
 def resilience_analyisis_malicious():
-    layout = 'degree_centrality'
-    layout2 = 'equal_to'
-    tab_main = 'tab1'
-    
-    if request.method == 'POST':
-        number_of_levels = request.form.get('number_of_levels', None)
-        number_of_levels = int(number_of_levels) if number_of_levels else None
-        number_of_threashold = request.form.get('number_of_threashold', None)
-        layout2 = request.form.get('layout2')
-        number_of_threashold = int(number_of_threashold) if number_of_threashold else None
-        layout = request.form.get('layout')
+    attack = 'malicious'
+    filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
+    tab_main =  session.get('tab_main', 'tab1')
+    layout = session.get('layout_malicious', 'degree_centrality')
+    layout2 = session.get('layout2_malicious', 'greater_than')
+    print('main tab', tab_main)
+    if layout2 == "greater_than":
+        operator = ">"
+    elif layout2 == "less_than":
+        operator = "<"
+    elif layout2 == "greater_than_or_equal_to":
+        operator = ">="
+    elif layout2 == "less_than_or_equal_to":
+        operator = "<="
     else:
-        number_of_levels = None
-        number_of_threashold = None
-        session['val1'] = None
-        session['val2'] = None
+        operator = None
 
-    val1 = session.get('val1', None)
-    val2 = session.get('val2', None)
-    if val1 != number_of_levels:
-        session['val1'] = number_of_levels
+
+    print('operator', operator)
+    filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
+    number_of_nodes = session.get('number_of_nodes', None)
+    
+    number_of_nodes_malicious = session.get('number_of_nodes_malicious', None)
+
+    number_of_edges = session.get('number_of_edges', None)
+    number_of_threashold = session.get('number_of_threashold', None)
+    number_of_cluster_to_generate = session.get('number_of_cluster_to_generate', None)
+    cluster_to_attack = session.get('cluster_to_attack', None)
+    layout3 = session.get('layout3_cluster', 'louvain')
+
+    val1 = session.get('val1_malicious', None)
+    val2 = session.get('val2_malicious', None)
+    val3 = session.get('val3_malicious', None)
+    val4 = session.get('val4_malicious', 'greater_than')
+
+    # here we use number of nodes
+    global networkGraphs2
+    if val3 != layout:
+        session['val3_malicious'] = layout
+    
+    if val1 != number_of_nodes_malicious:
+        session['val1_malicious'] = number_of_nodes_malicious
         tab_main = 'tab1'
+        session['tab_main'] = tab_main
+        networkGraphs2, df2 = resilience(networkGraphs, attack=attack, metric=layout, number_of_nodes=int(number_of_nodes_malicious))
+    
+    # here we use number of edges
     if val2 != number_of_threashold:
-        session['val2'] = number_of_threashold
+        session['val2_malicious'] = number_of_threashold
         tab_main = 'tab2'
+        session['tab_main'] = tab_main
+        networkGraphs2, df2 = resilience(networkGraphs, attack=attack, metric=layout, threshold=int(number_of_threashold), operator=operator)
  
-    return render_template('resilience/resilience_analyisis_malicious.html', tab_main=tab_main, 
-    layout=layout, layout2=layout2, number_of_levels=number_of_levels, number_of_threashold=number_of_threashold)
+    if val4 != layout2:
+        session['val4_malicious'] = layout2
+        tab_main = 'tab2'
+        session['tab_main'] = tab_main
+        if(number_of_threashold is not None):
+            networkGraphs2, df2 = resilience(networkGraphs, attack=attack, metric=layout, threshold=int(number_of_threashold), operator=operator)
+
+    print('main tab', tab_main)
+    return template_resilience_tabs('resilience/resilience_analyisis_malicious.html', number_of_nodes, number_of_edges, number_of_threashold, number_of_cluster_to_generate,
+    cluster_to_attack, layout, layout2, layout3, tab_main, attack, number_of_nodes_malicious)
 
 @resilience_routes.route('/resilience/cluster', endpoint='resilience_cluster', methods=['GET', 'POST'])
 def resilience_analyisis_cluster():
-    layout = 'louvain'
+    attack = 'cluster'
+    filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
+    tab_main =  session.get('tab_main', 'tab1')
+    layout = session.get('layout_malicious', 'degree_centrality')
+    layout2 = session.get('layout2_malicious', 'equal_to')
     
-    if request.method == 'POST':
-        number_of_cluster_to_generate = request.form.get('number_of_cluster_to_generate', None)
-        number_of_cluster_to_generate = int(number_of_cluster_to_generate) if number_of_cluster_to_generate else None
-        cluster_to_attack = request.form.get('cluster_to_attack', None)
-        cluster_to_attack = int(cluster_to_attack) if cluster_to_attack else None
-        layout = request.form.get('layout')
-    else:
-        number_of_cluster_to_generate = None
-        cluster_to_attack = None
- 
-    return render_template('resilience/resilience_analyisis_cluster.html', layout=layout, number_of_cluster_to_generate=number_of_cluster_to_generate, cluster_to_attack=cluster_to_attack)
+    filename2 = session['filename2']
+    networkGraphs = get_networkGraph(filename2)
+    number_of_nodes = session.get('number_of_nodes', None)
+    number_of_edges = session.get('number_of_edges', None)
+    number_of_threashold = session.get('number_of_threashold', None)
 
+    number_of_nodes_malicious = session.get('number_of_nodes_malicious', None)
+
+    number_of_cluster_to_generate = session.get('number_of_cluster_to_generate', None)
+    cluster_to_attack = session.get('cluster_to_attack', None)
+    layout3 = session.get('layout3_cluster', 'louvain')
+
+    val1 = session.get('val1_cluster', None)
+    val2 = session.get('val2_cluster', None)
+    val3 = session.get('val3_cluster', None)
+    val4 = session.get('val4_cluster', None)
+
+    # here we use number of nodes
+    global networkGraphs2
+    if val3 != layout3:
+        session['val3_cluster'] = layout3
+        if(number_of_cluster_to_generate is not None and cluster_to_attack is not None):
+            networkGraphs2, df2 = resilience(networkGraphs, attack=attack, cluster_algorithm=layout3, total_clusters=int(number_of_cluster_to_generate), number_of_clusters=int(cluster_to_attack))
+    
+    if val1 != number_of_cluster_to_generate:
+        session['val1_cluster'] = number_of_cluster_to_generate
+        if(number_of_cluster_to_generate is not None and cluster_to_attack is not None):
+            networkGraphs2, df2 = resilience(networkGraphs, attack=attack, cluster_algorithm=layout3, total_clusters=int(number_of_cluster_to_generate), number_of_clusters=int(cluster_to_attack))
+    
+    # here we use number of edges
+    if val2 != cluster_to_attack:
+        session['val2_cluster'] = cluster_to_attack
+        if(number_of_cluster_to_generate is not None and cluster_to_attack is not None):
+            networkGraphs2, df2 = resilience(networkGraphs, attack=attack, cluster_algorithm=layout3, total_clusters=int(number_of_cluster_to_generate), number_of_clusters=int(cluster_to_attack))
+ 
+    
+    return template_resilience_tabs('resilience/resilience_analyisis_cluster.html', number_of_nodes, number_of_edges, number_of_threashold, number_of_cluster_to_generate,
+    cluster_to_attack, layout, layout2, layout3, tab_main, attack, number_of_nodes_malicious)
 
 @resilience_routes.route('/resilience/random', endpoint='resilience_random', methods=['GET', 'POST'])
 def resilience_analyisis_random():
+    attack = 'random'
     tab_main =  session.get('tab_main', 'tab1')
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     number_of_nodes = session.get('number_of_nodes', None)
     number_of_edges = session.get('number_of_edges', None)
+    number_of_threashold = session.get('number_of_threashold', None)
+    layout = session.get('layout_malicious', 'degree_centrality')
+    layout2 = session.get('layout2_malicious', 'equal_to')
+    number_of_cluster_to_generate = session.get('number_of_cluster_to_generate', None)
+    cluster_to_attack = session.get('cluster_to_attack', None)
+    layout3 = session.get('layout3_cluster', 'louvain')
+    number_of_nodes_malicious = session.get('number_of_nodes_malicious', None)
 
-    val1 = session.get('val1', None)
-    val2 = session.get('val2', None)
+    val1 = session.get('val1_random', None)
+    val2 = session.get('val2_random', None)
     
     # here we use number of nodes
     global networkGraphs2
     if val1 != number_of_nodes:
-        session['val1'] = number_of_nodes
+        session['val1_random'] = number_of_nodes
         tab_main = 'tab1'
         session['tab_main'] = tab_main
-        networkGraphs2, df2 = resilience(networkGraphs, attack='random', number_of_nodes=int(number_of_nodes))
+        networkGraphs2, df2 = resilience(networkGraphs, attack=attack, number_of_nodes=int(number_of_nodes))
     
     # here we use number of edges
     if val2 != number_of_edges:
-        session['val2'] = number_of_edges
+        session['val2_random'] = number_of_edges
         tab_main = 'tab2'
         session['tab_main'] = tab_main
-        networkGraphs2, df2 = resilience(networkGraphs, attack='random', number_of_edges=int(number_of_edges))
+        networkGraphs2, df2 = resilience(networkGraphs, attack=attack, number_of_edges=int(number_of_edges))
 
     print('number_of_nodes',number_of_nodes)
      
-    return template_resilience_tabs('resilience/resilience_analyisis_random.html', number_of_nodes, number_of_edges, tab_main)
-    #return render_template('resilience/resilience_analyisis_random.html', tab_main=tab_main, number_of_nodes=number_of_nodes, number_of_edges=number_of_edges)
+    return template_resilience_tabs('resilience/resilience_analyisis_random.html', number_of_nodes, number_of_edges, number_of_threashold, number_of_cluster_to_generate,
+    cluster_to_attack, layout, layout2, layout3, tab_main, attack, number_of_nodes_malicious)
 
-def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_edges_arg, tab_main_arg):
+@resilience_routes.route('/resilience/malicious/upload', endpoint='resilience_malicious_upload', methods=['GET', 'POST'])
+def resilience_malicious_upload():
+    number_of_nodes_malicious = request.form.get('number_of_nodes_malicious')
+    number_of_threashold = request.form.get('number_of_threashold')
+    layout2 = request.form.get('layout2')
+    layout = request.form.get('layout')
+
+    if number_of_nodes_malicious == '':
+        number_of_nodes_malicious = None
+    if number_of_threashold == '':
+        number_of_threashold = None
+    session['number_of_nodes_malicious'] = number_of_nodes_malicious
+    session['number_of_threashold'] = number_of_threashold
+    session['layout_malicious'] = layout
+    session['layout2_malicious'] = layout2
+    # do something with the form data
+    
+    return redirect(url_for('resilience_routes.resilience_malicious'))
+
+@resilience_routes.route('/resilience/cluster/upload', endpoint='resilience_cluster_upload', methods=['GET', 'POST'])
+def resilience_cluster_upload():
+    number_of_cluster_to_generate = request.form.get('number_of_cluster_to_generate')
+    cluster_to_attack = request.form.get('cluster_to_attack')
+    layout3 = request.form.get('layout3')
+
+    if number_of_cluster_to_generate == '':
+        number_of_cluster_to_generate = None
+    if cluster_to_attack == '':
+        cluster_to_attack = None
+    session['number_of_cluster_to_generate'] = number_of_cluster_to_generate
+    session['cluster_to_attack'] = cluster_to_attack
+    session['layout3_cluster'] = layout3
+    # do something with the form data
+    
+    return redirect(url_for('resilience_routes.resilience_cluster'))
+
+
+@resilience_routes.route('/resilience/random/upload', endpoint='resilience_random_upload', methods=['GET', 'POST'])
+def resilience_random_upload():
+    number_of_nodes = request.form.get('number_of_nodes')
+    number_of_edges = request.form.get('number_of_edges')
+    if number_of_nodes == '':
+        number_of_nodes = None
+    if number_of_edges == '':
+        number_of_edges = None
+    session['number_of_nodes'] = number_of_nodes
+    session['number_of_edges'] = number_of_edges
+
+    # do something with the form data
+    
+    return redirect(url_for('resilience_routes.resilience_random'))
+
+
+def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_edges_arg, number_of_threashold_arg, number_of_cluster_to_generate_arg, cluster_to_attack_arg,
+ layout_arg, layout2_arg, layout3_arg, tab_main_arg, attack_arg, number_of_nodes_malicious_arg):
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     multi_toggle = True
@@ -113,8 +243,17 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
         visualisation_layout = 'map'
     else:
         visualisation_layout = 'sfdp'
-    
+    attack = attack_arg
+    attack_name_from_nw = None
+
     if networkGraphs2 is not None:
+        attack_name_from_nw = networkGraphs2.get_attack_vector()
+    
+    print('local', attack)
+    print('global', attack_name_from_nw)
+
+    if attack == attack_name_from_nw:
+        #if networkGraphs2 is not None:
         # check POST condition
         if request.method == 'POST':
             visualisation_layout = request.form.get('visualisation_layout')
@@ -726,7 +865,6 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
             graph_dbscan_path_2 = '../static/' + graph_dbscan_name_2
         else:
             graph_dbscan_path_2 = '../'+ networkGraphs2.session_folder + '/' + graph_dbscan_name_2
-
     else:
         graph_path1 = '../static/no_graph.html' 
         graph_path2 = '../static/no_graph.html' 
@@ -875,9 +1013,11 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
         df_dbscan_after = pd.DataFrame(0, index=range(5), columns=range(5))
 
 
-    return render_template(template_name_arg, tab_main=tab_main_arg, visualisation_layout=visualisation_layout,
-        number_of_nodes=number_of_nodes_arg, number_of_edges=number_of_edges_arg, graph1=graph_path1, graph2=graph_path2,
-        multi_toggle=multi_toggle,directed_toggle=directed_toggle, number_of_clusters=number_of_clusters,
+   
+    return render_template(template_name_arg, tab_main=tab_main_arg, visualisation_layout=visualisation_layout, number_of_threashold=number_of_threashold_arg,
+        number_of_nodes=number_of_nodes_arg, number_of_edges=number_of_edges_arg, graph1=graph_path1, graph2=graph_path2, layout=layout_arg, layout2=layout2_arg,
+        multi_toggle=multi_toggle,directed_toggle=directed_toggle, number_of_clusters=number_of_clusters, number_of_cluster_to_generate=number_of_cluster_to_generate_arg,
+        cluster_to_attack = cluster_to_attack_arg, layout3_arg=layout3_arg, number_of_nodes_malicious= number_of_nodes_malicious_arg,
         df_degree_centrality_before=df_degree_centrality_before, df_degree_centrality_after=df_degree_centrality_after, 
         graph_degree_centrality_layout_1=graph_degree_centrality_layout_path_1, graph_degree_centrality_layout_2=graph_degree_centrality_layout_path_2,
         graph_degree_centrality_histogram_1=graph_degree_centrality_histogram_path_1, graph_degree_centrality_histogram_2=graph_degree_centrality_histogram_path_2,
@@ -958,24 +1098,3 @@ def template_resilience_tabs(template_name_arg, number_of_nodes_arg, number_of_e
 
         df_dbscan_before=df_dbscan_before, df_dbscan_after=df_dbscan_after,
         graph_dbscan_1=graph_dbscan_path_1, graph_dbscan_2=graph_dbscan_path_2)
-
-
-
-
-
-
-
-@resilience_routes.route('/resilience/random/upload', endpoint='resilience_random_upload', methods=['GET', 'POST'])
-def resilience_random_upload():
-    number_of_nodes = request.form.get('number_of_nodes')
-    number_of_edges = request.form.get('number_of_edges')
-    if number_of_nodes == '':
-        number_of_nodes = None
-    if number_of_edges == '':
-        number_of_edges = None
-    session['number_of_nodes'] = number_of_nodes
-    session['number_of_edges'] = number_of_edges
-
-    # do something with the form data
-    
-    return redirect(url_for('resilience_routes.resilience_random'))
