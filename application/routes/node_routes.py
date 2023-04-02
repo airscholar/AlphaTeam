@@ -4,6 +4,7 @@ from dictionary.information import *
 from flask import Blueprint, render_template, session
 from routes.template_metrics import *
 
+from application.routes.template_metrics import process_single_metric
 from backend.common.common import process_metric
 
 sys.path.insert(1, '../')

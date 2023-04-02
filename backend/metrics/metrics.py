@@ -1,22 +1,13 @@
 from flask import Blueprint, request
 from flask_jsonpify import jsonify
 
+from backend.common.common import extract_args
 from src.utils import get_networkGraph
 from src.visualisation import *
 
 metrics_bp = Blueprint('metrics', __name__, url_prefix="/api/v1/metrics")
 
 
-def extract_args(args):
-    directed_toggle = args.get('directed', 'false')
-    directed_toggle = True if directed_toggle in ['true', 'True'] else False
-    multi_toggle = args.get('multi', 'false')
-    multi_toggle = True if multi_toggle in ['true', 'True'] else False
-    dynamic_toggle = args.get('dynamic', 'false')
-    dynamic_toggle = True if dynamic_toggle in ['true', 'True'] else False
-    layout = args.get('layout', 'sfdp')
-
-    return directed_toggle, multi_toggle, dynamic_toggle, layout
 
 @metrics_bp.route('<session_id>/<metric>/all')
 def compute_all_metrics(session_id, metric):

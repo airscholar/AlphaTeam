@@ -1,8 +1,20 @@
+import pandas as pd
 import requests
 from flask import request
-import pandas as pd
 
 BASE_URL = 'http://localhost:8000/api/v1/metrics/'
+
+
+def extract_args(args):
+    directed_toggle = args.get('directed', 'false')
+    directed_toggle = True if directed_toggle in ['true', 'True'] else False
+    multi_toggle = args.get('multi', 'false')
+    multi_toggle = True if multi_toggle in ['true', 'True'] else False
+    dynamic_toggle = args.get('dynamic', 'false')
+    dynamic_toggle = True if dynamic_toggle in ['true', 'True'] else False
+    layout = args.get('layout', 'sfdp')
+
+    return directed_toggle, multi_toggle, dynamic_toggle, layout
 
 
 def process_metric(networkGraphs, filename2, metrics):
