@@ -8,6 +8,7 @@ Purpose: Basic network visualisation module contains functions for basic network
 
 # Internal imports
 from src.visualisation_src.utils_visualisation import *
+from src.JS_scripts import scripts
 
 # External imports
 from itertools import zip_longest
@@ -90,6 +91,12 @@ def static_visualisation(networkGraphs, filepath, directed=True, multi=False, la
     fig.update_layout(layout)
 
     fig.write_html(filepath, full_html=False, include_plotlyjs='cdn')
+    # open the file and append the JS scripts at the end
+    if layout_ == 'map':
+        with open(filepath, 'a') as f:
+            f.write(scripts['to_clipboard_map'])
+    with open(filepath, 'a') as f:
+        f.write(scripts['to_clipboard_no_map'])
 
     return fig
 

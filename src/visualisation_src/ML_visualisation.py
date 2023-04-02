@@ -125,6 +125,6 @@ def generate_dynamic_cluster(networkGraphs, df_, filename):  # USING PYVIS
     Net.options.physics.use_force_atlas_2based(
         params={'central_gravity': 0.01, 'gravity': -50, 'spring_length': 100, 'spring_strength': 0.08, 'damping': 0.4,
                 'overlap': 0})
-    Net.write_html(filename, full_html=False, include_plotlyjs='cdn')
+    Net.write_html(filename)
 
     return Net
