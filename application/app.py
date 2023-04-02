@@ -183,7 +183,7 @@ def visualisation():
 def hotspot_density():
     filename2 = session['filename2']
 
-    json_data = requests.get(BASE_URL + f'hotspot/{filename2}/density').json()
+    json_data = requests.get(BASE_URL + f'/hotspot/{filename2}/density').json()
     df = pd.read_json(json_data['data'], orient='split')
     graph_name = json_data['file']
 

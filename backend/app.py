@@ -10,6 +10,7 @@ from flask_cors import CORS
 from backend.clusters.clusters import cluster_bp
 from backend.hotspot.density import hotspot_bp
 from backend.metrics.metrics import metrics_bp
+from backend.resilience.resilience import resilience_bp
 from backend.visualisation.visualisation import visualisation_bp
 from src.NetworkGraphs import NetworkGraphs
 from src.utils import set_networkGraph, get_networkGraph
@@ -82,6 +83,7 @@ def upload():
         session['filename2'] = filename2
         session['filepath'] = filepath
         session['option'] = option
+        session['destination_dir'] = destination_dir
 
     networkGraphs = NetworkGraphs(filepath, session_folder=destination_dir, type=option)
     set_networkGraph(networkGraphs, filename2)
@@ -103,6 +105,7 @@ app.register_blueprint(cluster_bp)
 app.register_blueprint(metrics_bp)
 app.register_blueprint(hotspot_bp)
 app.register_blueprint(visualisation_bp)
+app.register_blueprint(resilience_bp)
 
 # add documentation
 # api = flask_restx.Api(app, version='1.0', title='AlphaTeam Backend API',

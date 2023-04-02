@@ -211,11 +211,13 @@ def resilience_malicious(networkGraph, metric=None, number_of_nodes=None, thresh
     metric = df.columns[1]
     df = df.sort_values(by=metric, ascending=False)
 
+    nodes_to_remove = []
     if threshold:
         nodes_to_remove = execute_threshold(df, metric, threshold, operator)
 
     if number_of_nodes:
-        nodes_to_remove = df['Node'][:number_of_nodes].values
+        number_of_nodes = int(number_of_nodes)
+        nodes_to_remove = df['Node'].values[:number_of_nodes]
 
     G, df = remove_nodes(G, nodes_to_remove)
     return G, df

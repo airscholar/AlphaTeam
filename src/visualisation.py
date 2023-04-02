@@ -23,7 +23,7 @@ from pandas.api.types import is_numeric_dtype
 # ----------------------------------------------------------------------------------------
 
 
-def plot_network(networkGraphs, layout='map', dynamic=False):
+def plot_network(networkGraphs, layout='map', dynamic=False, fullPath=False):
     """
     :Function: Plot the NetworkX graph on as map
     Layouts:
@@ -54,7 +54,7 @@ def plot_network(networkGraphs, layout='map', dynamic=False):
         else:
             static_visualisation(networkGraphs, filepath, layout_=layout)
 
-    return filename
+    return filepath if fullPath else filename
 
 
 # ----------------------------------------------------------------------------------------
@@ -123,7 +123,7 @@ def plot_cluster(networkGraphs, clusterType, noOfClusters=0, dynamic=False, layo
 
 # ----------------------------------------------------------------------------------------
 
-def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False, layout='map'):
+def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False, layout='map', fullPath=False):
     """
     :Function: Plot the metric for the given graph
     Metrics:
@@ -174,7 +174,7 @@ def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False
         else:
             generate_static_metric(networkGraphs, df, filepath, layout_=layout)
 
-    return df, filename
+    return df, filename if not fullPath else filepath
 
 
 # ----------------------------------------------------------------------------------------
@@ -231,7 +231,7 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
 # ----------------------------------------------------------------------------------------
 
 
-def plot_histogram(networkGraphs, metrics, directed=True, multi=True):
+def plot_histogram(networkGraphs, metrics, directed=True, multi=True, fullPath=False):
     """
     :Function: Plot the histogram distribution for a given metric
     Metrics:
@@ -269,13 +269,13 @@ def plot_histogram(networkGraphs, metrics, directed=True, multi=True):
     if not os.path.isfile(filepath):
         generate_histogram_metric(df, filepath)
 
-    return df, filename
+    return df, filename if not fullPath else filepath
 
 
 # ----------------------------------------------------------------------------------------
 
 
-def plot_hotspot(networkGraphs):
+def plot_hotspot(networkGraphs, fullPath=False):
     """
     :Function: Plot the hotspot and coldspot for the given graph
     :param networkGraphs: NetworkGraphs object
@@ -296,13 +296,13 @@ def plot_hotspot(networkGraphs):
     if not os.path.isfile(filepath):
         generate_hotspot(networkGraphs, df, filepath)
 
-    return df.iloc[:, :2], filename
+    return df.iloc[:, :2], filename if not fullPath else filepath
 
 
 # ----------------------------------------------------------------------------------------
 
 
-def plot_boxplot(networkGraphs, metrics, directed=True, multi=True):
+def plot_boxplot(networkGraphs, metrics, directed=True, multi=True, fullPath=False):
     """
     :Function: Plot the boxplot for a given metric
     Metrics:
@@ -341,13 +341,13 @@ def plot_boxplot(networkGraphs, metrics, directed=True, multi=True):
     if not os.path.isfile(filepath):
         generate_boxplot_metric(df, filepath)
 
-    return df.iloc[:, :2], filename
+    return df.iloc[:, :2], filename if not fullPath else filepath
 
 
 # ----------------------------------------------------------------------------------------
 
 
-def plot_violin(networkGraphs, metrics, directed=True, multi=True):
+def plot_violin(networkGraphs, metrics, directed=True, multi=True, fullPath=False):
     """
     :Function: Plot the violin plot for a metric
     Metrics:
@@ -386,7 +386,7 @@ def plot_violin(networkGraphs, metrics, directed=True, multi=True):
     if not os.path.isfile(filepath):
         generate_violin_metric(df, filepath)
 
-    return df.iloc[:, :2], filename
+    return df.iloc[:, :2], filename if not fullPath else filepath
 
 
 # ----------------------------------------------------------------------------------------

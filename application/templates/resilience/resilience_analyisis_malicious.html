@@ -16,129 +16,154 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="flush-headingOne">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                            data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                         Input Form
                     </button>
                 </h2>
                 <div id="flush-collapseOne" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne"
-                    data-bs-parent="#accordionFlushExample">
+                     data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body">
                         <!-- Card Form starts here -->
                         <div class="card mx-auto" style="width: 30rem;">
                             <div class="card-body">
-                                <form id="resilienceMaliciousForm" method="post" action="/resilience/malicious/upload">
-                                    <label for="type_of_attack" style="margin-top: 5px;">Type of Attack</label>
+                                <form method="post" class="mx-auto" style="margin: 25px;" id="resilienceTemplateForm">
+                                    <label for="type_of_attack" style="margin-top: 5px;">Type of Attack:</label>
                                     <div class="dropdown" style="margin:5px">
-                                        <select id="dropdown-menu-input" class="mx-auto" name="layout">
-                                            <option value="degree_centrality" {% if layout=='degree_centrality'
-                                                %}selected{% endif %}>
-                                                Degree Centrality</option>
-                                            <option value="eigenvector_centrality" {% if
-                                                layout=='eigenvector_centrality' %}selected{% endif %}>Eigenvector
-                                                Centrality
-                                            </option>
-                                            <option value="closeness_centrality" {% if layout=='closeness_centrality'
-                                                %}selected{% endif %}>Closeness Centrality
-                                            </option>
-                                            <option value="betweenness_centrality" {% if
-                                                layout=='betweenness_centrality' %}selected{% endif %}>Betwenness
-                                                Centrality
-                                            </option>
-                                            <option value="load_centrality" {% if layout=='load_centrality' %}selected{%
-                                                endif %}>Load
-                                                Centrality
-                                            </option>
-                                            <option value="kcore" {% if layout=='kcore' %}selected{% endif %}>K Core
-                                                Node
-                                            </option>
-                                            <option value="degree" {% if layout=='degree' %}selected{% endif %}>Degree
-                                                Node
-                                            </option>
-                                            <option value="triangles" {% if layout=='triangles' %}selected{% endif %}>
-                                                Triangle Node
-                                            </option>
-                                            <option value="pagerank" {% if layout=='pagerank' %}selected{% endif %}>Page
-                                                Rank Node
-                                            </option>
+                                        <select id="type_of_attack" class="mx-auto" name="attack_type">
+                                            {% for attack in attack_types %}
+                                            <option value="{{ attack }}">{{ attack.replace('_',' ').title() }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
+                                    <hr>
+                                    <div class="row justify-content-center align-items-center">
+                                        <div class="col-auto"><label for="visualisation_layout"
+                                                                     style="margin-top: 5px;">Multi:</label>
+                                            <div class="toggle-btn">
+                                                <input type="checkbox" id="multi-toggle" name="multi_toggle" {% if
+                                                       multi_toggle %}checked{% endif %}>
+                                                <label for="multi-toggle"></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto"><label for="visualisation_layout"
+                                                                     style="margin-top: 5px;">Directed:</label>
+                                            <div class="toggle-btn">
+                                                <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if
+                                                       directed_toggle %}checked{%
+                                                       endif %}>
+                                                <label for="directed-toggle"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row justify-content-center align-items-center">
+                                        <div class="col-auto">
+                                            <label for="layout_type" style="margin-top: 5px;">Layout:</label>
+                                            <div class="dropdown" style="margin:5px">
+                                                <select id="layout_type" name="layout_type">
+                                                    <option value="map" {% if visualisation_layout=='map' %}selected{%
+                                                            endif %}>
+                                                        Map
+                                                    </option>
+                                                    <option value="sfdp" {% if visualisation_layout=='sfdp' %}selected{%
+                                                            endif %}>Sfdp
+                                                    </option>
+                                                    <option value="twopi" {% if visualisation_layout=='twopi'
+                                                            %}selected{% endif %}>Twopi
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <label for="number_of_clusters" style="margin-top: 5px;">Number of
+                                                Clusters:</label>
+                                            <input type="number" id="number_of_clusters"
+                                                   name="number_of_clusters"
+                                                   class="form-control" min="1" step="1" placeholder="None" {% if
+                                                   number_of_clusters is not none
+                                                   %}value="{{ number_of_clusters }}" {% endif %}>
+                                        </div>
+                                    </div>
+                                    <hr>
                                     <div class="row">
                                         <div class="container mt-3">
-                                            <nav>
+                                            <nav style="padding-bottom: 10px">
                                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                                    <button
-                                                        class="nav-link {% if tab_main=='tab1' %}active{% else %}{% endif %}"
-                                                        id="nav-level-tab" data-bs-toggle="tab"
-                                                        data-bs-target="#form_tab1" type="button" role="tab"
-                                                        aria-controls="nav-level" aria-selected="true">Node</button>
-                                                    <button
-                                                        class="nav-link {% if tab_main=='tab2' %}active{% else %}{% endif %}"
-                                                        id="nav-threshold-tab" data-bs-toggle="tab"
-                                                        data-bs-target="#form_tab2" type="button" role="tab"
-                                                        aria-controls="nav-threshold"
-                                                        aria-selected="false">Threshold</button>
+                                                    <button class="nav-link active" id="nav-node-tab"
+                                                            data-bs-toggle="tab" data-bs-target="#nav-node"
+                                                            type="button" role="tab" aria-controls="nav-node"
+                                                            aria-selected="true">Node
+                                                    </button>
+                                                    <button class="nav-link" id="nav-threshold-tab" data-bs-toggle="tab"
+                                                            data-bs-target="#nav-threshold" type="button" role="tab"
+                                                            aria-controls="nav-threshold" aria-selected="false">
+                                                        Threshold
+                                                    </button>
                                                 </div>
                                             </nav>
-
-
-                                            <div class="tab-content"
-                                                style="background-color: white; padding-bottom: 25px;">
-                                                <div id="form_tab1"
-                                                    class="container tab-pane {% if tab_main=='tab1' %}active{% else %}fade{% endif %}">
-                                                    <br />
+                                            <div class="tab-content" id="nav-tabContent" style="margin-left: 10px">
+                                                <div class="tab-pane fade show active" id="nav-node" role="tabpanel"
+                                                     aria-labelledby="nav-node-tab">
                                                     <div class="row">
-                                                        <label for="number_of_nodes_malicious"
-                                                            style="margin-top: 5px;">Number of
+                                                        <label for="number_of_nodes_malicious_input"
+                                                               style="margin-top: 5px;">Number of
                                                             Nodes</label>
                                                         <input type="number" id="number_of_nodes_malicious_input"
-                                                            placeholder="None" style="margin: 5px;"
-                                                            name="number_of_nodes_malicious" class="form-control"
-                                                            min="1" step="1" {% if number_of_nodes_malicious is not none
-                                                            %}value="{{ number_of_nodes_malicious }}" {% endif %}>
+                                                               placeholder="None"
+                                                               name="number_of_nodes_malicious"
+                                                               class="mx-auto form-control"
+                                                               min="1" step="1" {% if number_of_nodes_malicious is not
+                                                               none %} value="{{ number_of_nodes_malicious }}" {% endif
+                                                               %}>
                                                     </div>
                                                 </div>
-                                                <div id="form_tab2"
-                                                    class="container tab-pane {% if tab_main=='tab2' %}active{% else %}fade{% endif %}">
-                                                    <br />
-
-                                                    <div class="row align-items-center">
+                                                <div class="tab-pane fade" id="nav-threshold" role="tabpanel"
+                                                     aria-labelledby="nav-threshold-tab">
+                                                    <div class="row">
                                                         <div class="col-auto">
-                                                            <label for="threashold"
-                                                                style="margin-top: 5px;">Threashold</label>
+                                                            <label for="dropdown-menu2-input"
+                                                                   style="margin-top: 5px;">Threshold</label>
                                                         </div>
                                                         <div class="col-auto">
                                                             <div class="dropdown" style="margin:5px">
                                                                 <select id="dropdown-menu2-input" class="mx-auto"
-                                                                    name="layout2">
+                                                                        name="threshold_operator">
                                                                     <option value="greater_than" {% if
-                                                                        layout2=='greater_than' %}selected{% endif %}>
-                                                                        &gt;</option>
-                                                                    <option value="less_than" {% if layout2=='less_than'
-                                                                        %}selected{% endif %}>&lt;</option>
+                                                                            threshold_operator=='greater_than' %}
+                                                                            selected {% endif %}> &gt;
+                                                                    </option>
+                                                                    <option value="less_than" {% if
+                                                                            threshold_operator=='less_than' %} selected
+                                                                            {% endif %}>&lt;
+                                                                    </option>
                                                                     <option value="greater_than_or_equal_to" {% if
-                                                                        layout2=='greater_than_or_equal_to' %}selected{%
-                                                                        endif %}>&ge;</option>
+                                                                            threshold_operator=='greater_than_or_equal_to'
+                                                                            %} selected {% endif %}>&ge;
+                                                                    </option>
                                                                     <option value="less_than_or_equal_to" {% if
-                                                                        layout2=='less_than_or_equal_to' %}selected{%
-                                                                        endif %}>&le;</option>
-
+                                                                            threshold_operator=='less_than_or_equal_to'
+                                                                            %} selected
+                                                                            {% endif %}>&le;
+                                                                    </option>
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="col-auto">
-                                                            <input type="number" id="number_of_threashold_input"
-                                                                style="margin: 5px;" name="number_of_threashold"
-                                                                class="form-control" min="1" step="1" placeholder="None"
-                                                                {% if number_of_threashold is not none
-                                                                %}value="{{ number_of_threashold }}" {% endif %}>
+                                                        <div class="col-auto" style="margin:5px">
+                                                            <input type="number" id="number_of_threshold_input"
+                                                                   name="number_of_threshold" class="form-control"
+                                                                   min="1" step="1" placeholder="None"
+                                                                   {% if number_of_threshold is not none
+                                                                   %}value="{{ number_of_threshold }}" {% endif %}>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary"
-                                        style="margin:5px; width: 100%;">Submit</button>
+                                    <br>
+                                    <button type="submit" class="btn btn-primary" style="margin:5px; width: 100%;"
+                                            id="resilience_btn">Submit
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -151,36 +176,129 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="flush-headingTwo">
                     <button id="accordion-button-two" class="accordion-button collapsed" type="button"
-                        data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false"
-                        aria-controls="flush-collapseTwo">
+                            data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                            aria-controls="flush-collapseTwo">
                         Output
                     </button>
                 </h2>
                 <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
-                    data-bs-parent="#accordionFlushExample1">
-                    <div class="accordion-body">
+                     data-bs-parent="#accordionFlushExample1">
+                    <div class="accordion-body" id="resilienceMaliciousIframe">
                         {% include 'resilience/resilience_template.html' %}
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-    <hr>
-
-
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script src="{{ url_for('static', filename='js/resilience_malicious.js') }}"></script>
+
 <script type="text/javascript">
-    function submitForm() {
-        // Set the values of the hidden input fields in the form
-        document.getElementById('number_of_nodes_malicious_input').value = number_of_nodes_malicious;
-        document.getElementById('number_of_threashold_input').value = number_of_threashold;
-        document.getElementById('dropdown-menu-input').value = layout;
-        document.getElementById('dropdown-menu2-input').value = layout2;
-        // Submit the form
-        document.getElementById('resilienceMaliciousForm').submit();
-    }
+    $(document).ready(function () {
+        const typeOfAttack = document.getElementById('type_of_attack');
+        const numberOfNodes = document.getElementById('number_of_nodes_malicious_input');
+        const thresholdOperator = document.getElementById('dropdown-menu2-input');
+        const numberOfThreshold = document.getElementById('number_of_threshold_input');
+        const multiToggle = document.getElementById('multi-toggle');
+        const directedToggle = document.getElementById('directed-toggle');
+        const layout = document.getElementById('layout_type');
+        const numberOfClusters = document.getElementById('number_of_clusters');
+
+        const res_btn = document.getElementById('resilience_btn');
+        const inputAccordion = document.getElementById('flush-collapseOne');
+        const outputAccordion = document.getElementById('flush-collapseTwo');
+
+        const degreeCentralityLayout = document.getElementById('nav-DCLayouts-tab');
+        const DCHistogram = document.getElementById('nav-DCHistogram-tab');
+        const DCBoxPlot = document.getElementById('nav-DCBoxPlot-tab');
+        const DCViolinPlot = document.getElementById('nav-DCViolinPlot-tab');
+
+        const betweennessCentralityLayout = document.getElementById('nav-BCLayouts-tab');
+        const BCHistogram = document.getElementById('nav-BCHistogram-tab');
+        const BCBoxPlot = document.getElementById('nav-BCBoxPlot-tab');
+        const BCViolinPlot = document.getElementById('nav-BCViolinPlot-tab');
+
+        const closenessCentralityLayout = document.getElementById('nav-CCLayouts-tab');
+        const CCHistogram = document.getElementById('nav-CCHistogram-tab');
+        const CCBoxPlot = document.getElementById('nav-CCBoxPlot-tab');
+        const CCViolinPlot = document.getElementById('nav-CCViolinPlot-tab');
+
+        const eigenvectorCentralityLayout = document.getElementById('nav-ECLayouts-tab');
+        const ECHistogram = document.getElementById('nav-ECHistogram-tab');
+        const ECBoxPlot = document.getElementById('nav-ECBoxPlot-tab');
+        const ECViolinPlot = document.getElementById('nav-ECViolinPlot-tab');
+
+        const loadCentralityLayout = document.getElementById('nav-LCLayouts-tab');
+        const LCHistogram = document.getElementById('nav-LCHistogram-tab');
+        const LCBoxPlot = document.getElementById('nav-LCBoxPlot-tab');
+        const LCViolinPlot = document.getElementById('nav-LCViolinPlot-tab');
+
+        $(res_btn).on('click', function (e) {
+            e.preventDefault();
+            if (inputAccordion.classList.contains('show')) {
+                inputAccordion.classList.remove('show');
+                outputAccordion.classList.add('show');
+            } else {
+                inputAccordion.classList.add('show');
+            }
+
+            data = {
+                type_of_attack: typeOfAttack.value,
+                number_of_nodes_malicious: numberOfNodes.value,
+                threshold_operator: thresholdOperator.value,
+                number_of_threshold: numberOfThreshold.value,
+                multi_toggle: multiToggle.checked,
+                directed_toggle: directedToggle.checked,
+                layout: layout.value,
+                number_of_clusters: numberOfClusters.value,
+                session_id: '{{ session_id }}'
+            };
+            performResilienceMalicious(data);
+        });
+
+        function handleClick(plotType, section, e) {
+            e.preventDefault();
+            const data = {
+                type_of_attack: typeOfAttack.value,
+                number_of_nodes_malicious: numberOfNodes.value,
+                threshold_operator: thresholdOperator.value,
+                number_of_threshold: numberOfThreshold.value,
+                multi_toggle: multiToggle.checked,
+                directed_toggle: directedToggle.checked,
+                layout: layout.value,
+                number_of_clusters: numberOfClusters.value,
+                session_id: '{{ session_id }}'
+            };
+            performResilienceMetrics(data, plotType, section);
+        }
+
+        $(degreeCentralityLayout).on('click', handleClick.bind(null, 'layout', 'DC'));
+        $(DCHistogram).on('click', handleClick.bind(null, 'histogram', 'DC'));
+        $(DCBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'DC'));
+        $(DCViolinPlot).on('click', handleClick.bind(null, 'violin', 'DC'));
+
+        $(betweennessCentralityLayout).on('click', handleClick.bind(null, 'layout', 'BC'));
+        $(BCHistogram).on('click', handleClick.bind(null, 'histogram', 'BC'));
+        $(BCBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'BC'));
+        $(BCViolinPlot).on('click', handleClick.bind(null, 'violin', 'BC'));
+
+        $(closenessCentralityLayout).on('click', handleClick.bind(null, 'layout', 'CC'));
+        $(CCHistogram).on('click', handleClick.bind(null, 'histogram', 'CC'));
+        $(CCBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'CC'));
+        $(CCViolinPlot).on('click', handleClick.bind(null, 'violin', 'CC'));
+
+        $(eigenvectorCentralityLayout).on('click', handleClick.bind(null, 'layout', 'EC'));
+        $(ECHistogram).on('click', handleClick.bind(null, 'histogram', 'EC'));
+        $(ECBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'EC'));
+        $(ECViolinPlot).on('click', handleClick.bind(null, 'violin', 'EC'));
+
+        $(loadCentralityLayout).on('click', handleClick.bind(null, 'layout', 'LC'));
+        $(LCHistogram).on('click', handleClick.bind(null, 'histogram', 'LC'));
+        $(LCBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'LC'));
+        $(LCViolinPlot).on('click', handleClick.bind(null, 'violin', 'LC'));
+
+    });
 </script>
 {% endblock %}
