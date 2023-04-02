@@ -8,6 +8,7 @@ from flask import request, session
 from flask_cors import CORS
 
 from backend.clusters.clusters import cluster_bp
+from backend.hotspot.density import hotspot_bp
 from backend.metrics.metrics import metrics_bp
 from src.NetworkGraphs import NetworkGraphs
 from src.utils import set_networkGraph, get_networkGraph
@@ -99,6 +100,7 @@ def retrieve_networkGraph(session_id):
 app.register_blueprint(api_bp)
 app.register_blueprint(cluster_bp)
 app.register_blueprint(metrics_bp)
+app.register_blueprint(hotspot_bp)
 
 # add documentation
 # api = flask_restx.Api(app, version='1.0', title='AlphaTeam Backend API',

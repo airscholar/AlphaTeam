@@ -1,5 +1,6 @@
 import sys
 
+import requests
 from flask import Flask, request, render_template, session
 from flask_cors import CORS
 
@@ -29,6 +30,8 @@ app.register_blueprint(cluster_routes)
 app.register_blueprint(centrality_routes)
 app.register_blueprint(node_routes)
 app.register_blueprint(resilience_routes)
+
+BASE_URL = 'http://localhost:8000/api/v1/'
 
 
 # Define a custom error page for 500 Internal Server Error
@@ -101,7 +104,6 @@ def home():
     session['full_path'] = full_path
     session['option'] = option
 
-    print('filename', filename, 'filename2', filename2, 'filepath', filepath, 'full_path', full_path, 'option', option)
     # networkGraphs = NetworkGraphs(filepath, session_folder=filepath.split('/'+filename)[0], type=option)
     networkGraphs = NetworkGraphs(full_path, session_folder=filepath.split('.')[0], type=option)
     set_networkGraph(networkGraphs, filename2)
@@ -187,23 +189,15 @@ def visualisation():
 @app.route('/hotspot/density', endpoint='hotspot_density', methods=['GET', 'POST'])
 def hotspot_density():
     filename2 = session['filename2']
-    networkGraphs = get_networkGraph(filename2)
 
-    df, graph_name1 = plot_hotspot(networkGraphs)
-    session['graph_name1'] = graph_name1
-    graph1 = session['graph_name1']
+    json_data = requests.get(BASE_URL + f'hotspot/{filename2}/density').json()
+    df = pd.read_json(json_data['data'], orient='split')
+    graph_name = json_data['file']
 
-    if graph1 == 'no_graph.html':
-        graph_path1 = '../static/' + graph1
-    else:
-        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
+    graph_path = '../static/' + graph_name if graph_name == 'no_graph.html' \
+        else '../static/uploads/' + filename2 + '/' + graph_name
 
-    if graph1 == 'no_graph.html':
-        graph_path1 = '../static/' + graph1
-    else:
-        graph_path1 = '../static/uploads/' + filename2 + '/' + graph1
-
-    return render_template('hotspot_density.html', example=df, graph1=graph_path1, method_name='Density')
+    return render_template('hotspot_density.html', example=df, graph1=graph_path, method_name='Density')
 
 
 # -------------------------------------------MAIN--------------------------------------------
