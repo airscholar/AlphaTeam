@@ -6,24 +6,25 @@ from src.utils import get_networkGraph, set_networkGraph
 from src.visualisation import *
 from backend.common.common import get_directed_toggle, get_multi_toggle, get_layout
 
-random_bp = Blueprint('resilience_random', __name__, url_prefix="/api/v1/resilience")
+clusters_bp = Blueprint('resilience_clusters', __name__, url_prefix="/api/v1/resilience")
 
 def extract_args():
     args = request.args
 
-    number_of_nodes = int(args.get('number_of_nodes'))
-    number_of_edges = int(args.get('number_of_edges'))
+    cluster_algorithm = args.get('cluster_algorithm')
+    total_clusters = int(args.get('total_clusters'))
+    number_of_clusters = int(args.get('number_of_clusters'))
 
-    return number_of_nodes, number_of_edges
+    return cluster_algorithm, total_clusters, number_of_clusters
 
-@random_bp.route('<session_id>/random')
-def compute_random(session_id):
-    number_of_nodes, number_of_edges = extract_args()
+@clusters_bp.route('<session_id>/clusters')
+def compute_clusters(session_id):
+    cluster_algorithm, total_clusters, number_of_clusters = extract_args()
 
     networkGraphs = get_networkGraph(session_id)
 
-    networkGraphs2, df = resilience(networkGraphs, attack='random', number_of_edges=number_of_edges,
-                                    number_of_nodes=number_of_nodes)
+    networkGraphs2, df = resilience(networkGraphs, attack='cluster', cluster_algorithm=cluster_algorithm,
+                                    total_clusters=total_clusters, number_of_clusters=number_of_clusters)
 
     session_id2 = session_id + '_resilience'
     set_networkGraph(networkGraphs2, session_id2)
