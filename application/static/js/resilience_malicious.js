@@ -62,3 +62,4 @@ function performResilienceMetrics(data, plot_type, section) {
         }
     });
 }
+
