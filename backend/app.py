@@ -13,6 +13,7 @@ from backend.hotspot.density import hotspot_bp
 from backend.metrics.metrics import metrics_bp
 from backend.resilience.resilience import resilience_bp
 from backend.visualisation.visualisation import visualisation_bp
+from backend.resilience.malicious import malicious_bp
 from src.NetworkGraphs import NetworkGraphs
 from src.utils import set_networkGraph, get_networkGraph
 
@@ -47,11 +48,12 @@ def upload():
             source_file = csv_file + option + '.mtx'
             filename = option + re.sub(r'\W+', '', timestamp) + '.mtx'
             filename2 = option + re.sub(r'\W+', '', timestamp)
-        # Create the directory if it doesn't exist
-        destination_dir = 'static/uploads/' + filename2
 
+        # Create the directory if it doesn't exist
+        destination_dir = '../application/static/uploads/' + filename2
         if not os.path.exists(destination_dir):
             os.makedirs(destination_dir)
+
         destination_file = filename
         print(source_file, destination_dir + '/' + destination_file)
         shutil.copy(source_file, destination_dir + '/' + destination_file)
@@ -73,7 +75,7 @@ def upload():
             filename2 = option + re.sub(r'\W+', '', timestamp)
 
         # Create the directory if it doesn't exist
-        destination_dir = 'static/uploads/' + filename2
+        destination_dir = '../application/static/uploads/' + filename2
         if not os.path.exists(destination_dir):
             os.makedirs(destination_dir)
 
@@ -108,8 +110,10 @@ app.register_blueprint(metrics_bp)
 app.register_blueprint(hotspot_bp)
 app.register_blueprint(visualisation_bp)
 app.register_blueprint(resilience_bp)
+app.register_blueprint(malicious_bp)
 
-# add documentation
+
+# # add documentation
 # api = flask_restx.Api(app, version='1.0', title='AlphaTeam Backend API',
 #                       description='Backend API for AlphaTeam',
 #                       doc='/api/v1/docs/')

@@ -1,3 +1,4 @@
+import pandas as pd
 from flask import Blueprint, request
 from flask_jsonpify import jsonify
 
@@ -6,7 +7,6 @@ from src.utils import get_networkGraph
 from src.visualisation import *
 
 metrics_bp = Blueprint('metrics', __name__, url_prefix="/api/v1/metrics")
-
 
 
 @metrics_bp.route('<session_id>/<metric>/all')

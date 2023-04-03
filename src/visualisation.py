@@ -59,7 +59,7 @@ def plot_network(networkGraphs, layout='map', dynamic=False, fullPath=False):
 
 # ----------------------------------------------------------------------------------------
 
-def plot_cluster(networkGraphs, clusterType, noOfClusters=0, dynamic=False, layout='map'):
+def plot_cluster(networkGraphs, clusterType, noOfClusters=0, dynamic=False, layout='map', fullPath=False):
     """
     :Function: Plot the cluster for the given graph
     Clusters:
@@ -118,7 +118,7 @@ def plot_cluster(networkGraphs, clusterType, noOfClusters=0, dynamic=False, layo
         else:
             generate_static_cluster(networkGraphs, cluster, filepath, clusterType, layout_=layout, nbr=noOfClusters)
 
-    return cluster, filename
+    return cluster, filename if not fullPath else filepath
 
 
 # ----------------------------------------------------------------------------------------
@@ -392,7 +392,7 @@ def plot_violin(networkGraphs, metrics, directed=True, multi=True, fullPath=Fals
 # ----------------------------------------------------------------------------------------
 
 
-def plot_heatmap(networkGraphs):
+def plot_heatmap(networkGraphs, fullPath=False):
     """
     :Function: Plot the heatmap for the given graph
     :param networkGraphs:
@@ -406,7 +406,7 @@ def plot_heatmap(networkGraphs):
     if not os.path.isfile(filepath):
         generate_heatmap(networkGraphs, filepath)
 
-    return filename
+    return filename if not fullPath else filepath
 
 
 # ----------------------------------------------------------------------------------------

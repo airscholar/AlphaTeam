@@ -22,3 +22,13 @@ def visualise_network(session_id, plot_type):
         file_name = plot_temporal(G, layout=layout)
 
     return jsonify({"message": "Success", "file": file_name})
+
+@visualisation_bp.route('<session_id>/heatmap')
+def visualise_heatmap(session_id):
+    _, _, dynamic_toggle, layout = extract_args(request.args)
+
+    G = get_networkGraph(session_id)
+
+    file_name = plot_heatmap(G)
+
+    return jsonify({"message": "Success", "file": file_name})
