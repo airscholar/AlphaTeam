@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from flask_jsonpify import jsonify
 
 from src.resilience import resilience
-from src.utils import get_networkGraph
+from src.utils import get_networkGraph, set_networkGraph
 from src.visualisation import *
 
 resilience_bp = Blueprint('resilience', __name__, url_prefix="/api/v1/resilience")
@@ -33,6 +33,9 @@ def compute_malicious(session_id):
                                     number_of_nodes=number_of_nodes_malicious, threshold=number_of_threshold,
                                     operator=operator)
 
+    session_id2 = session_id + '_resilience'
+    set_networkGraph(networkGraphs2, session_id2)
+
     before = plot_network(networkGraphs, layout=layout, dynamic=False, fullPath=True)
     after = plot_network(networkGraphs2, layout=layout, dynamic=False, fullPath=True)
     heatmap_before = plot_heatmap(networkGraphs, fullPath=True)
@@ -44,16 +47,14 @@ def compute_malicious(session_id):
                     "heatmap_before": heatmap_before, "heatmap_after": heatmap_after})
 
 
-@resilience_bp.route('<session_id>/<metric>/<plot_type>')
+@resilience_bp.route('<session_id>/<metric>/<plot_type>/')
 def compute_metrics(session_id, metric, plot_type):
     attack_type, number_of_nodes_malicious, number_of_threshold, \
         operator, directed_toggle, multi_toggle, layout = extract_args()
 
     networkGraphs = get_networkGraph(session_id)
 
-    networkGraphs2, _ = resilience(networkGraphs, attack='malicious', metric=metric,
-                                   number_of_nodes=number_of_nodes_malicious, threshold=number_of_threshold,
-                                   operator=operator)
+    networkGraphs2 = get_networkGraph(session_id + '_resilience')
     df = None
     df1 = None
     file_name = None
