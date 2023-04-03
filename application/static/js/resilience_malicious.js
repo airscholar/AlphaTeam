@@ -67,6 +67,7 @@ function retrieveGeneralMetrics(data) {
     $.ajax({
         url: `${BASE_URL}${data.session_id}/${data.type_of_attack}/global_metrics`,
         type: 'GET',
+        mode: 'no-cors',
         data: {
             multi_toggle: data.multi_toggle,
             directed_toggle: data.directed_toggle,
