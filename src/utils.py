@@ -56,7 +56,6 @@ def set_networkGraph(networkGraph, session_id):
 # ---------------------------------------------------------------------------------------- #
 
 
-@memoize
 def get_networkGraph(session_id):
     """
     Get the network graph

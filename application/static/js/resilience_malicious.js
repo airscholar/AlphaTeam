@@ -65,7 +65,7 @@ function performResilienceMetrics(data, plot_type, section) {
 
 function performResilienceCluster(data, plot_type, section) {
     $.ajax({
-        url: BASE_URL + data.session_id + '/' + data.type_of_attack + '/' + '&layout='
+        url: BASE_URL + data.session_id + '/' + data.type_of_attack + '?layout='
             + data.layout + '&noOfClusters=' + data.number_of_clusters,
         type: 'GET',
         mode: 'no-cors',
