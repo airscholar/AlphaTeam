@@ -9,7 +9,6 @@ from src.visualisation import *
 metrics_bp = Blueprint('metrics', __name__, url_prefix="/api/v1/metrics")
 
 
-
 @metrics_bp.route('<session_id>/<metric>/all')
 def compute_all_metrics(session_id, metric):
     directed_toggle, multi_toggle, dynamic_toggle, layout = extract_args(request.args)
