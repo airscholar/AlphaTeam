@@ -11,13 +11,17 @@ resilience_bp = Blueprint('resilience', __name__, url_prefix="/api/v1/resilience
 def extract_args():
     args = request.args
 
+    directed_toggle = args.get('directed', 'false')
+    directed_toggle = True if directed_toggle in ['true', 'True'] else False
+    multi_toggle = args.get('multi', 'false')
+    multi_toggle = True if multi_toggle in ['true', 'True'] else False
+    layout = args.get('layout', 'sfdp')
+
     attack_type = args.get('attack_type')
     number_of_nodes_malicious = args.get('number_of_nodes_malicious')
     number_of_threshold = args.get('number_of_threshold')
-    operator = args.get('operator')
-    directed_toggle = args.get('directed_toggle')
-    multi_toggle = args.get('multi_toggle')
-    layout = args.get('layout')
+    operator = args.get('operator')  
+    number_of_clusters = args.get('number_of_clusters')
 
     return attack_type, number_of_nodes_malicious, number_of_threshold, operator, directed_toggle, multi_toggle, layout
 
@@ -102,23 +106,3 @@ def compute_cluster(session_id, cluster_type):
     df_json1 = df1.to_json(orient='split')
     return jsonify({"message": "Success", "data_before": df_json, "data_after": df_json1, "network_before": file_name,
                     "network_after": file_name1})
-
-df_louvain_before, graph_louvain_name_1 = plot_cluster(networkGraphs, 'louvain', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
-            df_louvain_after, graph_louvain_name_2 = plot_cluster(networkGraphs2, 'louvain', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
-            df_greedy_modularity_before, graph_greedy_modularity_name_1 = plot_cluster(networkGraphs, 'greedy_modularity', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
-            df_greedy_modularity_after, graph_greedy_modularity_name_2 = plot_cluster(networkGraphs2, 'greedy_modularity', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
-            df_label_propagation_before, graph_label_propagation_name_1 = plot_cluster(networkGraphs, 'label_propagation', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
-            df_label_propagation_after, graph_label_propagation_name_2 = plot_cluster(networkGraphs2, 'label_propagation', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
-            df_asyn_lpa_before, graph_asyn_lpa_name_1 = plot_cluster(networkGraphs, 'asyn_lpa', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
-            df_asyn_lpa_after, graph_asyn_lpa_name_2 = plot_cluster(networkGraphs2, 'asyn_lpa', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
-            df_k_clique_before, graph_k_clique_name_1 = plot_cluster(networkGraphs, 'k_clique', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
-            df_k_clique_after, graph_k_clique_name_2 = plot_cluster(networkGraphs2, 'k_clique', noOfClusters=0,dynamic=False, layout=visualisation_layout)
-            df_spectral_before, graph_spectral_name_1 = plot_cluster(networkGraphs, 'spectral', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
-            df_spectral_after, graph_spectral_name_2 = plot_cluster(networkGraphs2, 'spectral', noOfClusters=0,dynamic=False, layout=visualisation_layout)
-            df_kmeans_before, graph_kmeans_name_1 = plot_cluster(networkGraphs, 'kmeans', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
-            df_kmeans_after, graph_kmeans_name_2 = plot_cluster(networkGraphs2, 'kmeans', noOfClusters=0,dynamic=False, layout=visualisation_layout)
-            df_agglomerative_before, graph_agglomerative_name_1 = plot_cluster(networkGraphs, 'agglomerative', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
-            df_agglomerative_after, graph_agglomerative_name_2 = plot_cluster(networkGraphs2, 'agglomerative', noOfClusters=0,dynamic=False, layout=visualisation_layout)
-            df_dbscan_before, graph_dbscan_name_1 = plot_cluster(networkGraphs, 'dbscan', noOfClusters=0,dynamic=False, layout=visualisation_layout)                   
-            df_dbscan_after, graph_dbscan_name_2 = plot_cluster(networkGraphs2, 'dbscan', noOfClusters=0,dynamic=False, layout=visualisation_layout)
-        

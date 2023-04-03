@@ -32,17 +32,20 @@ def resilience_analysis_malicious():
     attack_type = None
     number_of_nodes_malicious = None
     number_of_threshold = None
+    number_of_clusters = None
 
     if request.method == 'POST':
         attack_type = request.form.get('attack_type')
         number_of_threshold = request.form.get('number_of_threshold')
         number_of_nodes_malicious = request.form.get('number_of_nodes_malicious')
+        number_of_clusters = request.form.get('number_of_clusters')
         operator = res_operator[request.form.get('threshold_operator')]
 
         # visualise before and after
         json_data = requests.get(BASE_URL + f'/resilience/{filename2}/malicious',
                                  params={'attack_type': attack_type,
                                          'number_of_nodes_malicious': number_of_nodes_malicious,
+                                         'number_of_clusters':number_of_clusters,
                                          'operator': operator, 'layout': 'sfdp', 'multi_toggle': 'False',
                                          'directed_toggle': 'False'}).json()
 
@@ -85,7 +88,7 @@ def resilience_analysis_malicious():
     #                                          threshold=int(number_of_threshold), operator=operator)
 
     return render_template('resilience/resilience_analyisis_malicious.html', session_id=filename2, attack_types=attack_types,
-                           number_of_threshold=number_of_threshold,
+                           number_of_threshold=number_of_threshold, number_of_clusters=number_of_clusters,
                            number_of_nodes_malicious=number_of_nodes_malicious, graph_path1=graph_path1,
                            graph_path2=graph_path2)
     # return template_resilience_tabs('resilience/resilience_analyisis_malicious.html',attack_types, number_of_nodes, number_of_edges,
