@@ -35,56 +35,6 @@
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    <hr>
-                                    <div class="row justify-content-center align-items-center">
-                                        <div class="col-auto"><label for="visualisation_layout"
-                                                                     style="margin-top: 5px;">Multi:</label>
-                                            <div class="toggle-btn">
-                                                <input type="checkbox" id="multi-toggle" name="multi_toggle" {% if
-                                                       multi_toggle %}checked{% endif %}>
-                                                <label for="multi-toggle"></label>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto"><label for="visualisation_layout"
-                                                                     style="margin-top: 5px;">Directed:</label>
-                                            <div class="toggle-btn">
-                                                <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if
-                                                       directed_toggle %}checked{%
-                                                       endif %}>
-                                                <label for="directed-toggle"></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row justify-content-center align-items-center">
-                                        <div class="col-auto">
-                                            <label for="layout_type" style="margin-top: 5px;">Layout:</label>
-                                            <div class="dropdown" style="margin:5px">
-                                                <select id="layout_type" name="layout_type">
-                                                    <option value="map" {% if visualisation_layout=='map' %}selected{%
-                                                            endif %}>
-                                                        Map
-                                                    </option>
-                                                    <option value="sfdp" {% if visualisation_layout=='sfdp' %}selected{%
-                                                            endif %}>Sfdp
-                                                    </option>
-                                                    <option value="twopi" {% if visualisation_layout=='twopi'
-                                                            %}selected{% endif %}>Twopi
-                                                    </option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <label for="number_of_clusters" style="margin-top: 5px;">Number of
-                                                Clusters:</label>
-                                            <input type="number" id="number_of_clusters"
-                                                   name="number_of_clusters"
-                                                   class="form-control" min="1" step="1" placeholder="None" {% if
-                                                   number_of_clusters is not none
-                                                   %}value="{{ number_of_clusters }}" {% endif %}>
-                                        </div>
-                                    </div>
-                                    <hr>
                                     <div class="row">
                                         <div class="container mt-3">
                                             <nav style="padding-bottom: 10px">
@@ -183,6 +133,48 @@
                 </h2>
                 <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
                      data-bs-parent="#accordionFlushExample1">
+                    <div>
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-auto"><label style="margin-top: 5px;">Multi:</label>
+                                <div class="toggle-btn">
+                                    <input type="checkbox" id="multi-toggle" name="multi_toggle" {% if
+                                           multi_toggle %}checked{% endif %}>
+                                    <label for="multi-toggle"></label>
+                                </div>
+                            </div>
+                            <div class="col-auto"><label style="margin-top: 5px;">Directed:</label>
+                                <div class="toggle-btn">
+                                    <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if
+                                           directed_toggle %}checked{%
+                                           endif %}>
+                                    <label for="directed-toggle"></label>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <label for="layout_type" style="margin-top: 5px;">Layout:</label>
+                            </div>
+                            <div class="col-auto">
+                                <div class="dropdown" style="margin:5px">
+                                    <select id="layout_type" name="layout_type">
+                                        <option value="map"> Map</option>
+                                        <option value="sfdp" selected>Sfdp</option>
+                                        <option value="twopi">Twopi</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <label for="number_of_clusters" style="margin-top: 5px;">Number of
+                                    Clusters:</label>
+                            </div>
+                            <div class="col-auto">
+                                <input type="number" id="number_of_clusters"
+                                       name="number_of_clusters"
+                                       class="form-control" min="1" step="1" placeholder="None" {% if
+                                       number_of_clusters is not none
+                                       %}value="{{ number_of_clusters }}" {% endif %}>
+                            </div>
+                        </div>
+                    </div>
                     <div class="accordion-body" id="resilienceMaliciousIframe">
                         {% include 'resilience/resilience_template.html' %}
                     </div>
@@ -235,6 +227,24 @@
         const LCBoxPlot = document.getElementById('nav-LCBoxPlot-tab');
         const LCViolinPlot = document.getElementById('nav-LCViolinPlot-tab');
 
+        const GeneralMetrics = document.getElementById('nav-GlobalMetrics-tab');
+
+        $(GeneralMetrics).on('click', function () {
+            const data = {
+                type_of_attack: typeOfAttack.value,
+                number_of_nodes_malicious: numberOfNodes.value,
+                threshold_operator: thresholdOperator.value,
+                number_of_threshold: numberOfThreshold.value,
+                multi_toggle: multiToggle.checked,
+                directed_toggle: directedToggle.checked,
+                layout: layout.value,
+                number_of_clusters: numberOfClusters.value,
+                session_id: '{{ session_id }}'
+            };
+
+            retrieveGeneralMetrics(data);
+        })
+
         $(res_btn).on('click', function (e) {
             e.preventDefault();
             if (inputAccordion.classList.contains('show')) {
@@ -244,7 +254,7 @@
                 inputAccordion.classList.add('show');
             }
 
-            data = {
+            const data = {
                 type_of_attack: typeOfAttack.value,
                 number_of_nodes_malicious: numberOfNodes.value,
                 threshold_operator: thresholdOperator.value,
@@ -258,10 +268,19 @@
             performResilienceMalicious(data);
         });
 
+        const attack = {
+            'DC': 'degree_centrality',
+            'EC': 'eigenvector_centrality',
+            'BC': 'betweenness_centrality',
+            'CC': 'closeness_centrality',
+            'LC': 'load_centrality',
+            'KN': 'kcore'
+        };
+
         function handleClick(plotType, section, e) {
             e.preventDefault();
             const data = {
-                type_of_attack: typeOfAttack.value,
+                type_of_attack: attack[section],
                 number_of_nodes_malicious: numberOfNodes.value,
                 threshold_operator: thresholdOperator.value,
                 number_of_threshold: numberOfThreshold.value,

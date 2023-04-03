@@ -1,7 +1,11 @@
 <!-- Start the Main content from here -->
 <nav>
     <div class="nav nav-tabs" role="tablist">
-        <button class="nav-link active" id="nav-Visualisation-tab" data-bs-toggle="tab"
+        <button class="nav-link active" id="nav-GlobalMetrics-tab" data-bs-toggle="tab"
+                data-bs-target="#nav-GlobalMetrics" type="button" role="tab" aria-controls="nav-GlobalMetrics"
+                aria-selected="true">Global Metrics
+        </button>
+        <button class="nav-link" id="nav-Visualisation-tab" data-bs-toggle="tab"
                 data-bs-target="#nav-Visualisation" type="button" role="tab" aria-controls="nav-Visualisation"
                 aria-selected="true">Visualisation
         </button>
@@ -18,7 +22,30 @@
 </nav>
 
 <div class="tab-content">
-    <div class="tab-pane fade show active" id="nav-Visualisation" role="tabpanel"
+    <div class="tab-pane fade show active" id="nav-GlobalMetrics" role="tabpanel"
+         aria-labelledby="nav-GlobalMetrics-tab" style="margin-top: 25px;">
+        <!-- Visualisation Before After Starts from here -->
+        <!-- Start the Main content from here -->
+        <div class="row gx-5">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <table id="GM_Table_before">
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <table id="GM_Table_after"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- General Metrics Before After Ends here -->
+    </div>
+    <div class="tab-pane fade" id="nav-Visualisation" role="tabpanel"
          aria-labelledby="nav-Visualisation-tab" style="margin-top: 25px;">
         <!-- Visualisation Before After Starts from here -->
         <div class="container px-4 text-center">
