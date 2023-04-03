@@ -172,9 +172,13 @@ def visualisation():
         graph_path2 = '../static/uploads/' + filename2 + '/' + graph_name2 \
             if graph_name2 != 'no_graph.html' else '../static/' + graph_name2
 
+    json_data = requests.get(f'{BASE_URL}/visualisation/{filename2}/heatmap').json()
+    heatmap = json_data['file']
+    heatmap = '../static/uploads/' + filename2 + '/' + heatmap
+
     return render_template('visualisation.html', tab=tab, show_temporal=show_temporal,
                            dynamic_toggle=dynamic_toggle, layout=layout, graph1=graph_path1,
-                           layout2=layout2, graph2=graph_path2)
+                           layout2=layout2, graph2=graph_path2, graph3=heatmap)
 
 
 # -------------------------------------------HOTSPOT-----------------------------------------

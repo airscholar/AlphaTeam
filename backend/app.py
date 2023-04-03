@@ -45,11 +45,12 @@ def upload():
             source_file = csv_file + option + '.mtx'
             filename = option + re.sub(r'\W+', '', timestamp) + '.mtx'
             filename2 = option + re.sub(r'\W+', '', timestamp)
-        # Create the directory if it doesn't exist
-        destination_dir = 'static/uploads/' + filename2
 
+        # Create the directory if it doesn't exist
+        destination_dir = '../application/static/uploads/' + filename2
         if not os.path.exists(destination_dir):
             os.makedirs(destination_dir)
+
         destination_file = filename
         print(source_file, destination_dir + '/' + destination_file)
         shutil.copy(source_file, destination_dir + '/' + destination_file)
@@ -71,7 +72,7 @@ def upload():
             filename2 = option + re.sub(r'\W+', '', timestamp)
 
         # Create the directory if it doesn't exist
-        destination_dir = 'static/uploads/' + filename2
+        destination_dir = '../application/static/uploads/' + filename2
         if not os.path.exists(destination_dir):
             os.makedirs(destination_dir)
 

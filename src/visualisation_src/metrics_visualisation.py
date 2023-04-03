@@ -311,6 +311,7 @@ def generate_heatmap(networkGraph, filename):
 
     fig.update_xaxes(showticklabels=False)
     fig.update_yaxes(showticklabels=False)
+    fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
 
     fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
     return fig

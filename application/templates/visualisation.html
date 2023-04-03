@@ -31,6 +31,14 @@
                                 data-placement="bottom" title="{{tooltip_temporal_tab}}"></span></button>
                     {% endif %}
 
+                    <!-- Heatmap Tab UL -->
+                    <button class="nav-link {% if tab=='tab3' %} active {% else %}{% endif %}" id="nav-heatmap-tab"
+                        data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab"
+                        aria-controls="nav-heatmap" aria-selected="true">Heatmap <span
+                            style="display: inline-block; margin-left: 5px;"><img
+                                src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                data-placement="bottom" title="{{tooltip_heatmap_tab}}"></span></button>
                 </div>
             </nav>
 
@@ -131,6 +139,15 @@
                     </div>
                 </div>
                 {% endif %}
+                <div id="tab3" class="container tab-pane {% if tab=='tab3' %}active{% else %}fade{% endif %}">
+                    <br />
+                    <div class="row">
+                        <div class="card card-body" style="align-items: center;">
+                            <iframe src="{{ graph3 }}" width="100%" height="600"></iframe>
+                            <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

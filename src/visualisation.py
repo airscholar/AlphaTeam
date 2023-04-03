@@ -392,7 +392,7 @@ def plot_violin(networkGraphs, metrics, directed=True, multi=True, fullPath=Fals
 # ----------------------------------------------------------------------------------------
 
 
-def plot_heatmap(networkGraphs):
+def plot_heatmap(networkGraphs, fullPath=False):
     """
     :Function: Plot the heatmap for the given graph
     :param networkGraphs:
@@ -406,7 +406,7 @@ def plot_heatmap(networkGraphs):
     if not os.path.isfile(filepath):
         generate_heatmap(networkGraphs, filepath)
 
-    return filename
+    return filename if not fullPath else filepath
 
 
 # ----------------------------------------------------------------------------------------
