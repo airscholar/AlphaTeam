@@ -42,3 +42,27 @@ def compute_metrics(session_id, metric, plot_type):
     df_json1 = df1.to_json(orient='split')
     return jsonify({"message": "Success", "data_before": df_json, "data_after": df_json1, "network_before": file_name,
                     "network_after": file_name1})
+
+@resilience_bp.route('<session_id>/<cluster_type>')
+def compute_cluster(session_id, cluster_type):
+    directed_toggle = get_directed_toggle(request.args)
+    multi_toggle = get_multi_toggle(request.args)
+    layout = get_layout(request.args)
+
+    networkGraphs = get_networkGraph(session_id)
+
+    networkGraphs2 = get_networkGraph(session_id + '_resilience')
+
+    df = None
+    df1 = None
+    file_name = None
+    file_name1 = None
+
+    if cluster_type == 'louvain':
+        df, file_name = plot_cluster(networkGraphs, 'louvain', noOfClusters=0, dynamic=False, layout=layout, fullPath=True)
+        df1, file_name1 = plot_cluster(networkGraphs, 'louvain', noOfClusters=0, dynamic=False, layout=layout, fullPath=True)
+
+    df_json = df.to_json(orient='split')
+    df_json1 = df1.to_json(orient='split')
+    return jsonify({"message": "Success", "data_before": df_json, "data_after": df_json1, "network_before": file_name,
+                    "network_after": file_name1})
