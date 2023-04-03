@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from flask_jsonpify import jsonify
 
+from src.metrics import compute_global_metrics
 from src.resilience import resilience
 from src.utils import get_networkGraph, set_networkGraph
 from src.visualisation import *
@@ -63,3 +64,21 @@ def compute_cluster(session_id, cluster_type):
     df_json1 = df1.to_json(orient='split')
     return jsonify({"message": "Success", "data_before": df_json, "data_after": df_json1, "network_before": file_name,
                     "network_after": file_name1})
+
+@resilience_bp.route('<session_id>/<metric>/global_metrics')
+def global_metrics(session_id, metric):
+    attack_type, number_of_nodes_malicious, number_of_threshold, \
+        operator, directed_toggle, multi_toggle, layout = extract_args()
+
+    G = get_networkGraph(session_id)
+    networkGraphs2, _ = resilience(G, attack='malicious', metric=metric,
+                                   number_of_nodes=number_of_nodes_malicious, threshold=number_of_threshold,
+                                   operator=operator)
+
+    df1 = compute_global_metrics(G, directed=directed_toggle, multi=multi_toggle)
+    df2 = compute_global_metrics(networkGraphs2, directed=directed_toggle, multi=multi_toggle)
+
+    df_json = df1.to_json(orient='split')
+    df_json1 = df2.to_json(orient='split')
+
+    return jsonify({"message": "Success", "data_before": df_json, "data_after": df_json1})
