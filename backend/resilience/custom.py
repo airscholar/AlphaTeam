@@ -11,8 +11,10 @@ custom_bp = Blueprint('resilience_custom', __name__, url_prefix="/api/v1/resilie
 def extract_args():
     args = request.args
 
-    cluster_algorithm = args.get('cluster_algorithm') if args.get('cluster_algorithm') else None
-    total_clusters = int(args.get('total_clusters')) if args.get('total_clusters') else None
+    cluster_algorithm = args.get('cluster_algorithm') if (args.get('cluster_algorithm') or
+                                                          not args.get('cluster_algorithm')=='') else None
+    total_clusters = int(args.get('total_clusters')) if (args.get('total_clusters') or
+                                                        not args.get('total_clusters')=='') else None
     cluster_ids = args.get('cluster_ids') if args.get('cluster_ids') else None
     list_of_nodes = args.get('list_of_nodes') if args.get('list_of_nodes') else None
 
