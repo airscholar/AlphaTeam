@@ -131,7 +131,7 @@ def get_file_path(networkGraphs, file_name):
     :param file_name: Name of the file
     :return: Filepath
     """
-    folder = f"../application/{networkGraphs.session_folder}/"
+    folder = f"{networkGraphs.session_folder}/"
     if not os.path.isdir(folder):
         os.mkdir(folder)
 

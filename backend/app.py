@@ -12,6 +12,7 @@ from backend.hotspot.density import hotspot_bp
 from backend.metrics.metrics import metrics_bp
 from backend.resilience.resilience import resilience_bp
 from backend.visualisation.visualisation import visualisation_bp
+from backend.resilience.malicious import malicious_bp
 from src.NetworkGraphs import NetworkGraphs
 from src.utils import set_networkGraph, get_networkGraph
 
@@ -107,8 +108,10 @@ app.register_blueprint(metrics_bp)
 app.register_blueprint(hotspot_bp)
 app.register_blueprint(visualisation_bp)
 app.register_blueprint(resilience_bp)
+app.register_blueprint(malicious_bp)
 
-# add documentation
+
+# # add documentation
 # api = flask_restx.Api(app, version='1.0', title='AlphaTeam Backend API',
 #                       description='Backend API for AlphaTeam',
 #                       doc='/api/v1/docs/')
