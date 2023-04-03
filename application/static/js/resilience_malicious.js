@@ -94,4 +94,3 @@ function performResilienceCluster(data, plot_type, section) {
         }
     });
 }
-
