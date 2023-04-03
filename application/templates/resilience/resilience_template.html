@@ -1,7 +1,11 @@
 <!-- Start the Main content from here -->
 <nav>
     <div class="nav nav-tabs" role="tablist">
-        <button class="nav-link active" id="nav-Visualisation-tab" data-bs-toggle="tab"
+        <button class="nav-link active" id="nav-GlobalMetrics-tab" data-bs-toggle="tab"
+                data-bs-target="#nav-GlobalMetrics" type="button" role="tab" aria-controls="nav-GlobalMetrics"
+                aria-selected="true">Global Metrics
+        </button>
+        <button class="nav-link" id="nav-Visualisation-tab" data-bs-toggle="tab"
             data-bs-target="#nav-Visualisation" type="button" role="tab" aria-controls="nav-Visualisation"
             aria-selected="true">Visualisation
         </button>
@@ -18,7 +22,30 @@
 </nav>
 
 <div class="tab-content">
-    <div class="tab-pane fade show active" id="nav-Visualisation" role="tabpanel"
+    <div class="tab-pane fade show active" id="nav-GlobalMetrics" role="tabpanel"
+         aria-labelledby="nav-GlobalMetrics-tab" style="margin-top: 25px;">
+        <!-- Visualisation Before After Starts from here -->
+        <!-- Start the Main content from here -->
+        <div class="row gx-5">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <table id="GM_Table_before">
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <table id="GM_Table_after"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- General Metrics Before After Ends here -->
+    </div>
+    <div class="tab-pane fade" id="nav-Visualisation" role="tabpanel"
         aria-labelledby="nav-Visualisation-tab" style="margin-top: 25px;">
         <!-- Visualisation Before After Starts from here -->
         <div class="container px-4 text-center">
@@ -278,7 +305,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_centrality_violinplot_1 }}" width="100%"
-                                                id="DC_violin_before" height="300"></iframe>
+                                                    id="DC_violin_before"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -286,7 +314,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_centrality_violinplot_2 }}" width="100%"
-                                                id="DC_violin_after" height="300"></iframe>
+                                                    id="DC_violin_after"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -312,31 +341,31 @@
                 <!-- Degree Centrality Tab Ends here -->
             </div>
             <div class="tab-pane fade" id="nav-EigenvectorCentrality" role="tabpanel"
-                aria-labelledby="nav-EigenvectorCentrality-tab">
+                 aria-labelledby="nav-EigenvectorCentrality-tab">
                 <!-- Eigenvector Centrality Tab starts here -->
                 <nav style="margin-top: 15px;">
                     <div class="nav nav-tabs" role="tablist">
                         <button class="nav-link active" id="nav-ECLayouts-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Eigenvector-Layouts" type="button" role="tab"
-                            aria-controls="nav-Eigenvector-Layouts" aria-selected="true">Layouts
+                                data-bs-target="#nav-Eigenvector-Layouts" type="button" role="tab"
+                                aria-controls="nav-Eigenvector-Layouts" aria-selected="true">Layouts
                         </button>
                         <button class="nav-link" id="nav-ECHistogram-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Eigenvector-Histogram" type="button" role="tab"
-                            aria-controls="nav-Eigenvector-Histogram" aria-selected="false">Histogram
+                                data-bs-target="#nav-Eigenvector-Histogram" type="button" role="tab"
+                                aria-controls="nav-Eigenvector-Histogram" aria-selected="false">Histogram
                         </button>
                         <button class="nav-link" id="nav-ECBoxplot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Eigenvector-Boxplot" type="button" role="tab"
-                            aria-controls="nav-Eigenvector-Boxplot" aria-selected="false">Boxplot
+                                data-bs-target="#nav-Eigenvector-Boxplot" type="button" role="tab"
+                                aria-controls="nav-Eigenvector-Boxplot" aria-selected="false">Boxplot
                         </button>
                         <button class="nav-link" id="nav-ECViolinPlot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Eigenvector-Violinplot" type="button" role="tab"
-                            aria-controls="nav-Eigenvector-Violinplot" aria-selected="false">Violinplot
+                                data-bs-target="#nav-Eigenvector-Violinplot" type="button" role="tab"
+                                aria-controls="nav-Eigenvector-Violinplot" aria-selected="false">Violinplot
                         </button>
                     </div>
                 </nav>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="nav-Eigenvector-Layouts" role="tabpanel"
-                        aria-labelledby="nav-Eigenvector-Layouts-tab">
+                         aria-labelledby="nav-Eigenvector-Layouts-tab">
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -352,7 +381,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_eigenvector_centrality_layout_1 }}" width="100%"
-                                                id="EC_layout_before" height="300"></iframe>
+                                                    id="EC_layout_before"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -360,7 +390,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_eigenvector_centrality_layout_2 }}" width="100%"
-                                                id="EC_layout_after" height="300"></iframe>
+                                                    id="EC_layout_after"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -383,7 +414,7 @@
                         <!-- Layouts tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-Eigenvector-Histogram" role="tabpanel"
-                        aria-labelledby="nav-Eigenvector-Histogram-tab">
+                         aria-labelledby="nav-Eigenvector-Histogram-tab">
                         <!-- Histogram tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -399,7 +430,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_eigenvector_centrality_histogram_1 }}" width="100%"
-                                                id="EC_histogram_before" height="300"></iframe>
+                                                    id="EC_histogram_before"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -408,7 +440,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_eigenvector_centrality_histogram_2 }}" width="100%"
-                                                id="EC_histogram_after" height="300"></iframe>
+                                                    id="EC_histogram_after"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -431,7 +464,7 @@
                         <!-- Histogram tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-Eigenvector-Boxplot" role="tabpanel"
-                        aria-labelledby="nav-Eigenvector-Boxplot-tab">
+                         aria-labelledby="nav-Eigenvector-Boxplot-tab">
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -447,7 +480,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_eigenvector_centrality_boxplot_1 }}" width="100%"
-                                                id="EC_boxplot_before" height="300"></iframe>
+                                                    id="EC_boxplot_before"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -455,7 +489,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_eigenvector_centrality_boxplot_2 }}" width="100%"
-                                                id="EC_boxplot_after" height="300"></iframe>
+                                                    id="EC_boxplot_after"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -478,7 +513,7 @@
                         <!-- Boxplot tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-Eigenvector-Violinplot" role="tabpanel"
-                        aria-labelledby="nav-Eigenvector-Violinplot-tab">
+                         aria-labelledby="nav-Eigenvector-Violinplot-tab">
                         <!-- Violinplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -494,7 +529,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_eigenvector_centrality_violinplot_1 }}" width="100%"
-                                                id="EC_violin_before" height="300"></iframe>
+                                                    id="EC_violin_before"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -502,7 +538,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_eigenvector_centrality_violinplot_2 }}" width="100%"
-                                                id="EC_violin_after" height="300"></iframe>
+                                                    id="EC_violin_after"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -530,31 +567,31 @@
                 <!-- Eigenvector Centrality Tab Ends here -->
             </div>
             <div class="tab-pane fade" id="nav-ClosenessCentrality" role="tabpanel"
-                aria-labelledby="nav-ClosenessCentrality-tab">
+                 aria-labelledby="nav-ClosenessCentrality-tab">
                 <!-- Closeness Centrality Tab starts here -->
                 <nav style="margin-top: 15px;">
                     <div class="nav nav-tabs" role="tablist">
                         <button class="nav-link active" id="nav-CCLayouts-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Closeness-Layouts" type="button" role="tab"
-                            aria-controls="nav-Closeness-Layouts" aria-selected="true">Layouts
+                                data-bs-target="#nav-Closeness-Layouts" type="button" role="tab"
+                                aria-controls="nav-Closeness-Layouts" aria-selected="true">Layouts
                         </button>
                         <button class="nav-link" id="nav-CCHistogram-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Closeness-Histogram" type="button" role="tab"
-                            aria-controls="nav-Closeness-Histogram" aria-selected="false">Histogram
+                                data-bs-target="#nav-Closeness-Histogram" type="button" role="tab"
+                                aria-controls="nav-Closeness-Histogram" aria-selected="false">Histogram
                         </button>
                         <button class="nav-link" id="nav-CCBoxplot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Closeness-Boxplot" type="button" role="tab"
-                            aria-controls="nav-Closeness-Boxplot" aria-selected="false">Boxplot
+                                data-bs-target="#nav-Closeness-Boxplot" type="button" role="tab"
+                                aria-controls="nav-Closeness-Boxplot" aria-selected="false">Boxplot
                         </button>
                         <button class="nav-link" id="nav-CCViolinPlot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Closeness-Violinplot" type="button" role="tab"
-                            aria-controls="nav-Closeness-Violinplot" aria-selected="false">Violinplot
+                                data-bs-target="#nav-Closeness-Violinplot" type="button" role="tab"
+                                aria-controls="nav-Closeness-Violinplot" aria-selected="false">Violinplot
                         </button>
                     </div>
                 </nav>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="nav-Closeness-Layouts" role="tabpanel"
-                        aria-labelledby="nav-Closeness-Layouts-tab">
+                         aria-labelledby="nav-Closeness-Layouts-tab">
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -570,7 +607,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_closeness_centrality_layout_1 }}" width="100%"
-                                                id="CC_layout_before" height="300"></iframe>
+                                                    id="CC_layout_before"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -578,7 +616,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_closeness_centrality_layout_2 }}" width="100%"
-                                                id="CC_layout_after" height="300"></iframe>
+                                                    id="CC_layout_after"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -601,7 +640,7 @@
                         <!-- Layouts tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-Closeness-Histogram" role="tabpanel"
-                        aria-labelledby="nav-Closeness-Histogram-tab">
+                         aria-labelledby="nav-Closeness-Histogram-tab">
                         <!-- Histogram tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -617,7 +656,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_closeness_centrality_histogram_1 }}" width="100%"
-                                                id="CC_histogram_before" height="300"></iframe>
+                                                    id="CC_histogram_before"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -626,7 +666,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_closeness_centrality_histogram_2 }}" width="100%"
-                                                id="CC_histogram_after" height="300"></iframe>
+                                                    id="CC_histogram_after"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -649,7 +690,7 @@
                         <!-- Histogram tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-Closeness-Boxplot" role="tabpanel"
-                        aria-labelledby="nav-Closeness-Boxplot-tab">
+                         aria-labelledby="nav-Closeness-Boxplot-tab">
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -665,7 +706,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_closeness_centrality_boxplot_1 }}" width="100%"
-                                                id="CC_boxplot_before" height="300"></iframe>
+                                                    id="CC_boxplot_before"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -673,7 +715,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_closeness_centrality_boxplot_2 }}" width="100%"
-                                                id="CC_boxplot_after" height="300"></iframe>
+                                                    id="CC_boxplot_after"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -696,7 +739,7 @@
                         <!-- Boxplot tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-Closeness-Violinplot" role="tabpanel"
-                        aria-labelledby="nav-Closeness-Violinplot-tab">
+                         aria-labelledby="nav-Closeness-Violinplot-tab">
                         <!-- Violinplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -712,7 +755,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_closeness_centrality_violinplot_1 }}" width="100%"
-                                                id="CC_violin_before" height="300"></iframe>
+                                                    id="CC_violin_before"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -720,7 +764,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_closeness_centrality_violinplot_2 }}" width="100%"
-                                                id="CC_violin_after" height="300"></iframe>
+                                                    id="CC_violin_after"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -746,31 +791,31 @@
                 <!-- Closeness Centrality Tab Ends here -->
             </div>
             <div class="tab-pane fade" id="nav-BetwennessCentrality" role="tabpanel"
-                aria-labelledby="nav-BetwennessCentrality-tab">
+                 aria-labelledby="nav-BetwennessCentrality-tab">
                 <!-- Betwenness Centrality Tab starts here -->
                 <nav style="margin-top: 15px;">
                     <div class="nav nav-tabs" role="tablist">
                         <button class="nav-link active" id="nav-BCLayouts-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Betwenness-Layouts" type="button" role="tab"
-                            aria-controls="nav-Betwenness-Layouts" aria-selected="true">Layouts
+                                data-bs-target="#nav-Betwenness-Layouts" type="button" role="tab"
+                                aria-controls="nav-Betwenness-Layouts" aria-selected="true">Layouts
                         </button>
                         <button class="nav-link" id="nav-BCHistogram-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Betwenness-Histogram" type="button" role="tab"
-                            aria-controls="nav-Betwenness-Histogram" aria-selected="false">Histogram
+                                data-bs-target="#nav-Betwenness-Histogram" type="button" role="tab"
+                                aria-controls="nav-Betwenness-Histogram" aria-selected="false">Histogram
                         </button>
                         <button class="nav-link" id="nav-BCBoxplot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Betwenness-Boxplot" type="button" role="tab"
-                            aria-controls="nav-Betwenness-Boxplot" aria-selected="false">Boxplot
+                                data-bs-target="#nav-Betwenness-Boxplot" type="button" role="tab"
+                                aria-controls="nav-Betwenness-Boxplot" aria-selected="false">Boxplot
                         </button>
                         <button class="nav-link" id="nav-BCViolinplot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Betwenness-Violinplot" type="button" role="tab"
-                            aria-controls="nav-Betwenness-Violinplot" aria-selected="false">Violinplot
+                                data-bs-target="#nav-Betwenness-Violinplot" type="button" role="tab"
+                                aria-controls="nav-Betwenness-Violinplot" aria-selected="false">Violinplot
                         </button>
                     </div>
                 </nav>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="nav-Betwenness-Layouts" role="tabpanel"
-                        aria-labelledby="nav-Betwenness-Layouts-tab">
+                         aria-labelledby="nav-Betwenness-Layouts-tab">
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -786,7 +831,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_betwenness_centrality_layout_1 }}" width="100%"
-                                                id="BC_layout_before" height="300"></iframe>
+                                                    id="BC_layout_before"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -794,7 +840,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_betwenness_centrality_layout_2 }}" width="100%"
-                                                id="BC_layout_after" height="300"></iframe>
+                                                    id="BC_layout_after"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -817,7 +864,7 @@
                         <!-- Layouts tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-Betwenness-Histogram" role="tabpanel"
-                        aria-labelledby="nav-Betwenness-Histogram-tab">
+                         aria-labelledby="nav-Betwenness-Histogram-tab">
                         <!-- Histogram tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -833,7 +880,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_betwenness_centrality_histogram_1 }}" width="100%"
-                                                id="BC_histogram_before" height="300"></iframe>
+                                                    id="BC_histogram_before"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -842,7 +890,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_betwenness_centrality_histogram_2 }}" width="100%"
-                                                id="BC_histogram_after" height="300"></iframe>
+                                                    id="BC_histogram_after"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -865,7 +914,7 @@
                         <!-- Histogram tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-Betwenness-Boxplot" role="tabpanel"
-                        aria-labelledby="nav-Betwenness-Boxplot-tab">
+                         aria-labelledby="nav-Betwenness-Boxplot-tab">
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -881,7 +930,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_betwenness_centrality_boxplot_1 }}" width="100%"
-                                                id="BC_boxplot_before" height="300"></iframe>
+                                                    id="BC_boxplot_before"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -889,7 +939,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_betwenness_centrality_boxplot_2 }}" width="100%"
-                                                id="BC_boxplot_after" height="300"></iframe>
+                                                    id="BC_boxplot_after"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -912,7 +963,7 @@
                         <!-- Boxplot tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-Betwenness-Violinplot" role="tabpanel"
-                        aria-labelledby="nav-Betwenness-Violinplot-tab">
+                         aria-labelledby="nav-Betwenness-Violinplot-tab">
                         <!-- Violinplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -928,7 +979,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_betwenness_centrality_violinplot_1 }}" width="100%"
-                                                id="BC_violin_before" height="300"></iframe>
+                                                    id="BC_violin_before"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -936,7 +988,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_betwenness_centrality_violinplot_2 }}" width="100%"
-                                                id="BC_violin_after" height="300"></iframe>
+                                                    id="BC_violin_after"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -966,26 +1019,28 @@
                 <nav style="margin-top: 15px;">
                     <div class="nav nav-tabs" role="tablist">
                         <button class="nav-link active" id="nav-LCLayouts-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Load-Layouts" type="button" role="tab" aria-controls="nav-Load-Layouts"
-                            aria-selected="true">Layouts
+                                data-bs-target="#nav-Load-Layouts" type="button" role="tab"
+                                aria-controls="nav-Load-Layouts"
+                                aria-selected="true">Layouts
                         </button>
                         <button class="nav-link" id="nav-LCHistogram-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Load-Histogram" type="button" role="tab"
-                            aria-controls="nav-Load-Histogram" aria-selected="false">Histogram
+                                data-bs-target="#nav-Load-Histogram" type="button" role="tab"
+                                aria-controls="nav-Load-Histogram" aria-selected="false">Histogram
                         </button>
                         <button class="nav-link" id="nav-LCBoxplot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Load-Boxplot" type="button" role="tab" aria-controls="nav-Load-Boxplot"
-                            aria-selected="false">Boxplot
+                                data-bs-target="#nav-Load-Boxplot" type="button" role="tab"
+                                aria-controls="nav-Load-Boxplot"
+                                aria-selected="false">Boxplot
                         </button>
                         <button class="nav-link" id="nav-LCViolinplot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Load-Violinplot" type="button" role="tab"
-                            aria-controls="nav-Load-Violinplot" aria-selected="false">Violinplot
+                                data-bs-target="#nav-Load-Violinplot" type="button" role="tab"
+                                aria-controls="nav-Load-Violinplot" aria-selected="false">Violinplot
                         </button>
                     </div>
                 </nav>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="nav-Load-Layouts" role="tabpanel"
-                        aria-labelledby="nav-Load-Layouts-tab">
+                         aria-labelledby="nav-Load-Layouts-tab">
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -1001,7 +1056,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_load_centrality_layout_1 }}" width="100%"
-                                                id="LC_layout_before" height="300"></iframe>
+                                                    id="LC_layout_before"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1009,7 +1065,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_load_centrality_layout_2 }}" width="100%"
-                                                id="LC_layout_after" height="300"></iframe>
+                                                    id="LC_layout_after"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1032,7 +1089,7 @@
                         <!-- Layouts tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-Load-Histogram" role="tabpanel"
-                        aria-labelledby="nav-Load-Histogram-tab">
+                         aria-labelledby="nav-Load-Histogram-tab">
                         <!-- Histogram tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -1048,7 +1105,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_load_centrality_histogram_1 }}" width="100%"
-                                                id="LC_histogram_before" height="300"></iframe>
+                                                    id="LC_histogram_before"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1057,7 +1115,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_load_centrality_histogram_2 }}" width="100%"
-                                                id="LC_histogram_after" height="300"></iframe>
+                                                    id="LC_histogram_after"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1080,7 +1139,7 @@
                         <!-- Histogram tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-Load-Boxplot" role="tabpanel"
-                        aria-labelledby="nav-Load-Boxplot-tab">
+                         aria-labelledby="nav-Load-Boxplot-tab">
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -1096,7 +1155,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_load_centrality_boxplot_1 }}" width="100%"
-                                                id="LC_boxplot_before" height="300"></iframe>
+                                                    id="LC_boxplot_before"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1104,7 +1164,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_load_centrality_boxplot_2 }}" width="100%"
-                                                id="LC_boxplot_after" height="300"></iframe>
+                                                    id="LC_boxplot_after"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1127,7 +1188,7 @@
                         <!-- Boxplot tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-Load-Violinplot" role="tabpanel"
-                        aria-labelledby="nav-Load-Violinplot-tab">
+                         aria-labelledby="nav-Load-Violinplot-tab">
                         <!-- Violinplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -1143,7 +1204,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_load_centrality_violinplot_1 }}" width="100%"
-                                                id="LC_violin_before" height="300"></iframe>
+                                                    id="LC_violin_before"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1151,7 +1213,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_load_centrality_violinplot_2 }}" width="100%"
-                                                id="LC_violin_after" height="300"></iframe>
+                                                    id="LC_violin_after"
+                                                    height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
