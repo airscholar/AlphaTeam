@@ -35,10 +35,13 @@ def compute_malicious(session_id):
 
     before = plot_network(networkGraphs, layout=layout, dynamic=False, fullPath=True)
     after = plot_network(networkGraphs2, layout=layout, dynamic=False, fullPath=True)
+    heatmap_before = plot_heatmap(networkGraphs, fullPath=True)
+    heatmap_after = plot_heatmap(networkGraphs2, fullPath=True)
 
     df_json = df.to_json(orient='split')
 
-    return jsonify({"message": "Success", "data": df_json, "network_before": before, "network_after": after})
+    return jsonify({"message": "Success", "data": df_json, "network_before": before, "network_after": after,
+                    "heatmap_before": heatmap_before, "heatmap_after": heatmap_after})
 
 
 @resilience_bp.route('<session_id>/<metric>/<plot_type>')

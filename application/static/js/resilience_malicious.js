@@ -12,12 +12,18 @@ function performResilienceMalicious(data) {
         success: function (data) {
             var beforeFrame = document.getElementById('before_frame');
             var afterFrame = document.getElementById('after_frame');
+            var beforeHeatmap = document.getElementById('before_heatmap');
+            var afterHeatmap = document.getElementById('after_heatmap');
 
             beforePath = data.network_before.replace('application/', '');
             afterPath = data.network_after.replace('application/', '');
+            beforeHeatmapPath = data.heatmap_before.replace('application/', '');
+            afterHeatmapPath = data.heatmap_after.replace('application/', '');
 
             $(beforeFrame).attr("src", beforePath);
             $(afterFrame).attr("src", afterPath);
+            $(beforeHeatmap).attr("src", beforeHeatmapPath);
+            $(afterHeatmap).attr("src", afterHeatmapPath);
         },
         error: function (data) {
             console.log('ERROR', data);

@@ -1,3 +1,4 @@
+import pandas as pd
 from flask import Blueprint, request
 from flask_jsonpify import jsonify
 
