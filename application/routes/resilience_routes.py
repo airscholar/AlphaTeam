@@ -46,8 +46,7 @@ def resilience_analysis_malicious():
                                  params={'attack_type': attack_type,
                                          'number_of_nodes_malicious': number_of_nodes_malicious,
                                          'number_of_clusters':number_of_clusters,
-                                         'operator': operator, 'layout': 'sfdp', 'multi_toggle': 'False',
-                                         'directed_toggle': 'False'}).json()
+                                         'operator': operator}).json()
 
         graph_path1 = json_data['network_before'].replace('application/', '')
         graph_path2 = json_data['network_after'].replace('application/', '')
