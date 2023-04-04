@@ -3,10 +3,7 @@ const BASE_URL = 'http://localhost:8000/api/v1/resilience/';
 function performResilienceRandom(data) {
     console.log(data)
     $.ajax({
-        url: BASE_URL + data.session_id + '/random?multi_toggle='
-            + data.multi_toggle + '&directed_toggle=' + data.directed_toggle + '&layout='
-            + data.layout + '&number_of_clusters=' + data.number_of_clusters
-            + '&number_of_edges=' + data.number_of_edges + '&number_of_nodes=' + data.number_of_nodes_random,
+        url: `${BASE_URL}${data.session_id}/random?multi_toggle=${data.multi_toggle}&directed_toggle=${data.directed_toggle}&layout=${data.layout}&number_of_clusters=${data.number_of_clusters}&number_of_edges=${data.number_of_edges}&number_of_nodes=${data.number_of_nodes_random}`,
         type: 'GET',
         mode: 'no-cors',
         success: function (data) {
@@ -33,10 +30,7 @@ function performResilienceRandom(data) {
 
 function performResilienceMetrics(data, plot_type, section) {
     $.ajax({
-        url: BASE_URL + data.session_id + '/random?multi_toggle='
-            + data.multi_toggle + '&directed_toggle=' + data.directed_toggle + '&layout='
-            + data.layout + '&number_of_clusters=' + data.number_of_clusters
-            + '&number_of_edges=' + data.number_of_edges + '&number_of_nodes=' + data.number_of_nodes_random,
+        url: `${BASE_URL}${data.session_id}/random?multi_toggle=${data.multi_toggle}&directed_toggle=${data.directed_toggle}&layout=${data.layout}&number_of_clusters=${data.number_of_clusters}&number_of_edges=${data.number_of_edges}&number_of_nodes=${data.number_of_nodes_random}`,
         type: 'GET',
         mode: 'no-cors',
         success: function (data) {
@@ -65,8 +59,7 @@ function performResilienceMetrics(data, plot_type, section) {
 
 function performResilienceCluster(data, plot_type, section) {
     $.ajax({
-        url: BASE_URL + data.session_id + '/' + data.type_of_attack + '?layout='
-            + data.layout + '&noOfClusters=' + data.number_of_clusters,
+        url: `${BASE_URL}${data.session_id}/${plot_type}?layout=${data.layout}&noOfClusters=${data.number_of_clusters}`,
         type: 'GET',
         mode: 'no-cors',
         success: function (data) {
