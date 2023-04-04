@@ -4,7 +4,7 @@ from flask_jsonpify import jsonify
 from backend.common.common import *
 from src.metrics import compute_global_metrics
 from src.utils import get_networkGraph
-from src.visualisation import *
+from src.visualisation import plot_metric, plot_histogram, plot_boxplot, plot_violin, plot_cluster
 
 resilience_bp = Blueprint('resilience', __name__, url_prefix="/api/v1/resilience")
 
@@ -53,6 +53,7 @@ def compute_metrics(session_id, metric, plot_type):
 def visualise_cluster(session_id, cluster_type):
     layout = get_layout(request.args)
     noOfClusters = request.args.get('noOfClusters', 0, type=int)
+    print(noOfClusters)
     if noOfClusters == '':
         noOfClusters = 0
     noOfClusters = int(noOfClusters)
