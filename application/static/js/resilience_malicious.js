@@ -65,16 +65,12 @@ function performResilienceMetrics(data, plot_type, section) {
 
 function retrieveGeneralMetrics(data) {
     $.ajax({
-        url: `${BASE_URL}${data.session_id}/${data.type_of_attack}/global_metrics`,
+        url: `${BASE_URL}${data.session_id}/global_metrics`,
         type: 'GET',
         mode: 'no-cors',
         data: {
             multi_toggle: data.multi_toggle,
             directed_toggle: data.directed_toggle,
-            layout: data.layout,
-            number_of_clusters: data.number_of_clusters,
-            attack_type: data.type_of_attack,
-            number_of_nodes_malicious: data.number_of_nodes_malicious,
         },
         success: function (data) {
             const beforeTable = document.getElementById('GM_Table_before');

@@ -6,27 +6,25 @@ from src.utils import get_networkGraph, set_networkGraph
 from src.visualisation import *
 from backend.common.common import get_directed_toggle, get_multi_toggle, get_layout
 
-malicious_bp = Blueprint('resilience_malicious', __name__, url_prefix="/api/v1/resilience")
+clusters_bp = Blueprint('resilience_clusters', __name__, url_prefix="/api/v1/resilience")
 
 def extract_args():
     args = request.args
 
-    attack_type = args.get('attack_type')
-    number_of_nodes_malicious = args.get('number_of_nodes_malicious')
-    number_of_threshold = args.get('number_of_threshold')
-    operator = args.get('operator')
+    cluster_algorithm = args.get('cluster_algorithm')
+    total_clusters = int(args.get('total_clusters'))
+    number_of_clusters = int(args.get('number_of_clusters'))
 
-    return attack_type, number_of_nodes_malicious, number_of_threshold, operator
+    return cluster_algorithm, total_clusters, number_of_clusters
 
-@malicious_bp.route('<session_id>/malicious')
-def compute_malicious(session_id):
-    attack_type, number_of_nodes_malicious, number_of_threshold, operator = extract_args()
+@clusters_bp.route('<session_id>/clusters')
+def compute_clusters(session_id):
+    cluster_algorithm, total_clusters, number_of_clusters = extract_args()
 
     networkGraphs = get_networkGraph(session_id)
 
-    networkGraphs2, df = resilience(networkGraphs, attack='malicious', metric=attack_type,
-                                    number_of_nodes=number_of_nodes_malicious, threshold=number_of_threshold,
-                                    operator=operator)
+    networkGraphs2, df = resilience(networkGraphs, attack='cluster', cluster_algorithm=cluster_algorithm,
+                                    total_clusters=total_clusters, number_of_clusters=number_of_clusters)
 
     session_id2 = session_id + '_resilience'
     set_networkGraph(networkGraphs2, session_id2)

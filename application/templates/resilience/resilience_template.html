@@ -1,52 +1,29 @@
 <!-- Start the Main content from here -->
 <nav>
     <div class="nav nav-tabs" role="tablist">
-        <button class="nav-link active" id="nav-GlobalMetrics-tab" data-bs-toggle="tab"
+        <button class="nav-link active" id="nav-Visualisation-tab" data-bs-toggle="tab"
+                data-bs-target="#nav-Visualisation" type="button" role="tab" aria-controls="nav-Visualisation"
+                aria-selected="true">Visualisation
+        </button>
+        <button class="nav-link" id="nav-GlobalMetrics-tab" data-bs-toggle="tab"
                 data-bs-target="#nav-GlobalMetrics" type="button" role="tab" aria-controls="nav-GlobalMetrics"
                 aria-selected="true">Global Metrics
         </button>
-        <button class="nav-link" id="nav-Visualisation-tab" data-bs-toggle="tab"
-            data-bs-target="#nav-Visualisation" type="button" role="tab" aria-controls="nav-Visualisation"
-            aria-selected="true">Visualisation
-        </button>
         <button class="nav-link" id="nav-Centrality-tab" data-bs-toggle="tab" data-bs-target="#nav-Centrality"
-            type="button" role="tab" aria-controls="nav-Centrality" aria-selected="false">Centrality
+                type="button" role="tab" aria-controls="nav-Centrality" aria-selected="false">Centrality
         </button>
         <button class="nav-link" id="nav-Nodes-tab" data-bs-toggle="tab" data-bs-target="#nav-Nodes" type="button"
-            role="tab" aria-controls="nav-Nodes" aria-selected="false">Nodes
+                role="tab" aria-controls="nav-Nodes" aria-selected="false">Nodes
         </button>
         <button class="nav-link" id="nav-Clusters-tab" data-bs-toggle="tab" data-bs-target="#nav-Clusters" type="button"
-            role="tab" aria-controls="nav-Clusters" aria-selected="false">Clusters
+                role="tab" aria-controls="nav-Clusters" aria-selected="false">Clusters
         </button>
     </div>
 </nav>
 
 <div class="tab-content">
-    <div class="tab-pane fade show active" id="nav-GlobalMetrics" role="tabpanel"
-         aria-labelledby="nav-GlobalMetrics-tab" style="margin-top: 25px;">
-        <!-- Visualisation Before After Starts from here -->
-        <!-- Start the Main content from here -->
-        <div class="row gx-5">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <table id="GM_Table_before">
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <table id="GM_Table_after"></table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- General Metrics Before After Ends here -->
-    </div>
-    <div class="tab-pane fade" id="nav-Visualisation" role="tabpanel"
-        aria-labelledby="nav-Visualisation-tab" style="margin-top: 25px;">
+    <div class="tab-pane fade show active" id="nav-Visualisation" role="tabpanel"
+         aria-labelledby="nav-Visualisation-tab" style="margin-top: 25px;">
         <!-- Visualisation Before After Starts from here -->
         <div class="container px-4 text-center">
             <div class="row gx-5" style="margin-bottom: 15px;">
@@ -94,64 +71,87 @@
         </div>
         <!-- Visualisation Before After Ends here -->
     </div>
+    <div class="tab-pane fade" id="nav-GlobalMetrics" role="tabpanel"
+         aria-labelledby="nav-GlobalMetrics-tab" style="margin-top: 25px;">
+        <!-- Visualisation Before After Starts from here -->
+        <!-- Start the Main content from here -->
+        <div class="row gx-5">
+            <div class="col col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <table id="GM_Table_before" class="table table-striped table-bordered"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <table id="GM_Table_after" class="table table-striped table-bordered"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- General Metrics Before After Ends here -->
+    </div>
     <div class="tab-pane fade" id="nav-Centrality" role="tabpanel" aria-labelledby="nav-Centrality-tab">
         <!-- From here starts the centrality tabs section -->
         <nav style="margin-top: 15px;">
             <div class="nav nav-tabs" id="nav-all-tab" role="tablist">
                 <button class="nav-link active" id="nav-DegreeCentrality-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-DegreeCentrality" type="button" role="tab" aria-controls="nav-DegreeCentrality"
-                    aria-selected="true">Degree
+                        data-bs-target="#nav-DegreeCentrality" type="button" role="tab"
+                        aria-controls="nav-DegreeCentrality"
+                        aria-selected="true">Degree
                     Centrality
                 </button>
                 <button class="nav-link" id="nav-EigenvectorCentrality-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-EigenvectorCentrality" type="button" role="tab"
-                    aria-controls="nav-EigenvectorCentrality" aria-selected="false">Eigenvector
+                        data-bs-target="#nav-EigenvectorCentrality" type="button" role="tab"
+                        aria-controls="nav-EigenvectorCentrality" aria-selected="false">Eigenvector
                     Centrality
                 </button>
                 <button class="nav-link" id="nav-ClosenessCentrality-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-ClosenessCentrality" type="button" role="tab"
-                    aria-controls="nav-ClosenessCentrality" aria-selected="false">Closeness
+                        data-bs-target="#nav-ClosenessCentrality" type="button" role="tab"
+                        aria-controls="nav-ClosenessCentrality" aria-selected="false">Closeness
                     Centrality
                 </button>
                 <button class="nav-link" id="nav-BetwennessCentrality-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-BetwennessCentrality" type="button" role="tab"
-                    aria-controls="nav-BetwennessCentrality" aria-selected="false">Betwenness
+                        data-bs-target="#nav-BetwennessCentrality" type="button" role="tab"
+                        aria-controls="nav-BetwennessCentrality" aria-selected="false">Betwenness
                     Centrality
                 </button>
                 <button class="nav-link" id="nav-LoadCentrality-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-LoadCentrality" type="button" role="tab" aria-controls="nav-LoadCentrality"
-                    aria-selected="false">Load
+                        data-bs-target="#nav-LoadCentrality" type="button" role="tab" aria-controls="nav-LoadCentrality"
+                        aria-selected="false">Load
                     Centrality
                 </button>
             </div>
         </nav>
         <div class="tab-content">
             <div class="tab-pane fade show active" id="nav-DegreeCentrality" role="tabpanel"
-                aria-labelledby="nav-DegreeCentrality-tab">
+                 aria-labelledby="nav-DegreeCentrality-tab">
                 <!-- Degree Centrality Tab starts here -->
                 <nav style="margin-top: 15px;">
                     <div class="nav nav-tabs" role="tablist">
                         <button class="nav-link active" id="nav-DCLayouts-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Layouts" type="button" role="tab" aria-controls="nav-Layouts"
-                            aria-selected="true">Layouts
+                                data-bs-target="#nav-Layouts" type="button" role="tab" aria-controls="nav-Layouts"
+                                aria-selected="true">Layouts
                         </button>
                         <button class="nav-link" id="nav-DCHistogram-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Histogram" type="button" role="tab" aria-controls="nav-Histogram"
-                            aria-selected="false">Histogram
+                                data-bs-target="#nav-Histogram" type="button" role="tab" aria-controls="nav-Histogram"
+                                aria-selected="false">Histogram
                         </button>
                         <button class="nav-link" id="nav-DCBoxPlot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Boxplot" type="button" role="tab" aria-controls="nav-Boxplot"
-                            aria-selected="false">Boxplot
+                                data-bs-target="#nav-Boxplot" type="button" role="tab" aria-controls="nav-Boxplot"
+                                aria-selected="false">Boxplot
                         </button>
                         <button class="nav-link" id="nav-DCViolinPlot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-Violinplot" type="button" role="tab" aria-controls="nav-Violinplot"
-                            aria-selected="false">Violinplot
+                                data-bs-target="#nav-ViolinPlot" type="button" role="tab" aria-controls="nav-ViolinPlot"
+                                aria-selected="false">ViolinPlot
                         </button>
                     </div>
                 </nav>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="nav-Layouts" role="tabpanel"
-                        aria-labelledby="nav-Layouts-tab">
+                         aria-labelledby="nav-Layouts-tab">
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -167,7 +167,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_centrality_layout_1 }}" width="100%"
-                                                id="DC_layout_before" height="300"></iframe>
+                                                    id="DC_layout_before" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -175,7 +175,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_centrality_layout_2 }}" width="100%"
-                                                id="DC_layout_after" height="300"></iframe>
+                                                    id="DC_layout_after" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -212,7 +212,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_centrality_histogram_1 }}" width="100%"
-                                                id="DC_histogram_before" height="300"></iframe>
+                                                    id="DC_histogram_before" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -221,7 +221,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_centrality_histogram_2 }}" width="100%"
-                                                id="DC_histogram_after" height="300"></iframe>
+                                                    id="DC_histogram_after" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -243,7 +243,7 @@
                         </div>
                         <!-- Histogram tab Before After content ends here -->
                     </div>
-                    <div class="tab-pane fade" id="nav-Boxplot" role="tabpanel" aria-labelledby="nav-Boxplot-tab">
+                    <div class="tab-pane fade" id="nav-Boxplot" role="tabpanel" aria-labelledby="nav-BoxPlot-tab">
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -259,7 +259,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_centrality_boxplot_1 }}" width="100%"
-                                                id="DC_boxplot_before" height="300"></iframe>
+                                                    id="DC_boxplot_before" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -267,7 +267,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_centrality_boxplot_2 }}" width="100%"
-                                                id="DC_boxplot_after" height="300"></iframe>
+                                                    id="DC_boxplot_after" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -289,8 +289,8 @@
                         </div>
                         <!-- Boxplot tab Before After content ends here -->
                     </div>
-                    <div class="tab-pane fade" id="nav-Violinplot" role="tabpanel" aria-labelledby="nav-Violinplot-tab">
-                        <!-- Violinplot tab Before After content starts here -->
+                    <div class="tab-pane fade" id="nav-ViolinPlot" role="tabpanel" aria-labelledby="nav-ViolinPlot-tab">
+                        <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
                                 <div class="col">
@@ -304,7 +304,7 @@
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_degree_centrality_violinplot_1 }}" width="100%"
+                                            <iframe src="{{ graph_degree_centrality_ViolinPlot_1 }}" width="100%"
                                                     id="DC_violin_before"
                                                     height="300"></iframe>
                                         </div>
@@ -313,7 +313,7 @@
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_degree_centrality_violinplot_2 }}" width="100%"
+                                            <iframe src="{{ graph_degree_centrality_ViolinPlot_2 }}" width="100%"
                                                     id="DC_violin_after"
                                                     height="300"></iframe>
                                         </div>
@@ -335,7 +335,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Violinplot tab Before After content ends here -->
+                        <!-- ViolinPlot tab Before After content ends here -->
                     </div>
                 </div>
                 <!-- Degree Centrality Tab Ends here -->
@@ -353,13 +353,13 @@
                                 data-bs-target="#nav-Eigenvector-Histogram" type="button" role="tab"
                                 aria-controls="nav-Eigenvector-Histogram" aria-selected="false">Histogram
                         </button>
-                        <button class="nav-link" id="nav-ECBoxplot-tab" data-bs-toggle="tab"
+                        <button class="nav-link" id="nav-ECBoxPlot-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-Eigenvector-Boxplot" type="button" role="tab"
                                 aria-controls="nav-Eigenvector-Boxplot" aria-selected="false">Boxplot
                         </button>
                         <button class="nav-link" id="nav-ECViolinPlot-tab" data-bs-toggle="tab"
-                                data-bs-target="#nav-Eigenvector-Violinplot" type="button" role="tab"
-                                aria-controls="nav-Eigenvector-Violinplot" aria-selected="false">Violinplot
+                                data-bs-target="#nav-Eigenvector-ViolinPlot" type="button" role="tab"
+                                aria-controls="nav-Eigenvector-ViolinPlot" aria-selected="false">ViolinPlot
                         </button>
                     </div>
                 </nav>
@@ -464,7 +464,7 @@
                         <!-- Histogram tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-Eigenvector-Boxplot" role="tabpanel"
-                         aria-labelledby="nav-Eigenvector-Boxplot-tab">
+                         aria-labelledby="nav-Eigenvector-BoxPlot-tab">
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -512,9 +512,9 @@
                         </div>
                         <!-- Boxplot tab Before After content ends here -->
                     </div>
-                    <div class="tab-pane fade" id="nav-Eigenvector-Violinplot" role="tabpanel"
-                         aria-labelledby="nav-Eigenvector-Violinplot-tab">
-                        <!-- Violinplot tab Before After content starts here -->
+                    <div class="tab-pane fade" id="nav-Eigenvector-ViolinPlot" role="tabpanel"
+                         aria-labelledby="nav-Eigenvector-ViolinPlot-tab">
+                        <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
                                 <div class="col">
@@ -528,7 +528,7 @@
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_eigenvector_centrality_violinplot_1 }}" width="100%"
+                                            <iframe src="{{ graph_eigenvector_centrality_ViolinPlot_1 }}" width="100%"
                                                     id="EC_violin_before"
                                                     height="300"></iframe>
                                         </div>
@@ -537,7 +537,7 @@
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_eigenvector_centrality_violinplot_2 }}" width="100%"
+                                            <iframe src="{{ graph_eigenvector_centrality_ViolinPlot_2 }}" width="100%"
                                                     id="EC_violin_after"
                                                     height="300"></iframe>
                                         </div>
@@ -561,7 +561,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Violinplot tab Before After content ends here -->
+                        <!-- ViolinPlot tab Before After content ends here -->
                     </div>
                 </div>
                 <!-- Eigenvector Centrality Tab Ends here -->
@@ -579,13 +579,13 @@
                                 data-bs-target="#nav-Closeness-Histogram" type="button" role="tab"
                                 aria-controls="nav-Closeness-Histogram" aria-selected="false">Histogram
                         </button>
-                        <button class="nav-link" id="nav-CCBoxplot-tab" data-bs-toggle="tab"
+                        <button class="nav-link" id="nav-CCBoxPlot-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-Closeness-Boxplot" type="button" role="tab"
                                 aria-controls="nav-Closeness-Boxplot" aria-selected="false">Boxplot
                         </button>
                         <button class="nav-link" id="nav-CCViolinPlot-tab" data-bs-toggle="tab"
-                                data-bs-target="#nav-Closeness-Violinplot" type="button" role="tab"
-                                aria-controls="nav-Closeness-Violinplot" aria-selected="false">Violinplot
+                                data-bs-target="#nav-Closeness-ViolinPlot" type="button" role="tab"
+                                aria-controls="nav-Closeness-ViolinPlot" aria-selected="false">ViolinPlot
                         </button>
                     </div>
                 </nav>
@@ -690,7 +690,7 @@
                         <!-- Histogram tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-Closeness-Boxplot" role="tabpanel"
-                         aria-labelledby="nav-Closeness-Boxplot-tab">
+                         aria-labelledby="nav-Closeness-BoxPlot-tab">
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -738,9 +738,9 @@
                         </div>
                         <!-- Boxplot tab Before After content ends here -->
                     </div>
-                    <div class="tab-pane fade" id="nav-Closeness-Violinplot" role="tabpanel"
-                         aria-labelledby="nav-Closeness-Violinplot-tab">
-                        <!-- Violinplot tab Before After content starts here -->
+                    <div class="tab-pane fade" id="nav-Closeness-ViolinPlot" role="tabpanel"
+                         aria-labelledby="nav-Closeness-ViolinPlot-tab">
+                        <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
                                 <div class="col">
@@ -754,7 +754,7 @@
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_closeness_centrality_violinplot_1 }}" width="100%"
+                                            <iframe src="{{ graph_closeness_centrality_ViolinPlot_1 }}" width="100%"
                                                     id="CC_violin_before"
                                                     height="300"></iframe>
                                         </div>
@@ -763,7 +763,7 @@
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_closeness_centrality_violinplot_2 }}" width="100%"
+                                            <iframe src="{{ graph_closeness_centrality_ViolinPlot_2 }}" width="100%"
                                                     id="CC_violin_after"
                                                     height="300"></iframe>
                                         </div>
@@ -785,7 +785,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Violinplot tab Before After content ends here -->
+                        <!-- ViolinPlot tab Before After content ends here -->
                     </div>
                 </div>
                 <!-- Closeness Centrality Tab Ends here -->
@@ -803,13 +803,13 @@
                                 data-bs-target="#nav-Betwenness-Histogram" type="button" role="tab"
                                 aria-controls="nav-Betwenness-Histogram" aria-selected="false">Histogram
                         </button>
-                        <button class="nav-link" id="nav-BCBoxplot-tab" data-bs-toggle="tab"
+                        <button class="nav-link" id="nav-BCBoxPlot-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-Betwenness-Boxplot" type="button" role="tab"
                                 aria-controls="nav-Betwenness-Boxplot" aria-selected="false">Boxplot
                         </button>
-                        <button class="nav-link" id="nav-BCViolinplot-tab" data-bs-toggle="tab"
-                                data-bs-target="#nav-Betwenness-Violinplot" type="button" role="tab"
-                                aria-controls="nav-Betwenness-Violinplot" aria-selected="false">Violinplot
+                        <button class="nav-link" id="nav-BCViolinPlot-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-Betwenness-ViolinPlot" type="button" role="tab"
+                                aria-controls="nav-Betwenness-ViolinPlot" aria-selected="false">ViolinPlot
                         </button>
                     </div>
                 </nav>
@@ -914,7 +914,7 @@
                         <!-- Histogram tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-Betwenness-Boxplot" role="tabpanel"
-                         aria-labelledby="nav-Betwenness-Boxplot-tab">
+                         aria-labelledby="nav-Betwenness-BoxPlot-tab">
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -962,9 +962,9 @@
                         </div>
                         <!-- Boxplot tab Before After content ends here -->
                     </div>
-                    <div class="tab-pane fade" id="nav-Betwenness-Violinplot" role="tabpanel"
-                         aria-labelledby="nav-Betwenness-Violinplot-tab">
-                        <!-- Violinplot tab Before After content starts here -->
+                    <div class="tab-pane fade" id="nav-Betwenness-ViolinPlot" role="tabpanel"
+                         aria-labelledby="nav-Betwenness-ViolinPlot-tab">
+                        <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
                                 <div class="col">
@@ -978,7 +978,7 @@
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_betwenness_centrality_violinplot_1 }}" width="100%"
+                                            <iframe src="{{ graph_betwenness_centrality_ViolinPlot_1 }}" width="100%"
                                                     id="BC_violin_before"
                                                     height="300"></iframe>
                                         </div>
@@ -987,7 +987,7 @@
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_betwenness_centrality_violinplot_2 }}" width="100%"
+                                            <iframe src="{{ graph_betwenness_centrality_ViolinPlot_2 }}" width="100%"
                                                     id="BC_violin_after"
                                                     height="300"></iframe>
                                         </div>
@@ -1009,7 +1009,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Violinplot tab Before After content ends here -->
+                        <!-- ViolinPlot tab Before After content ends here -->
                     </div>
                 </div>
                 <!-- Betwenness Centrality Tab Ends here -->
@@ -1027,14 +1027,14 @@
                                 data-bs-target="#nav-Load-Histogram" type="button" role="tab"
                                 aria-controls="nav-Load-Histogram" aria-selected="false">Histogram
                         </button>
-                        <button class="nav-link" id="nav-LCBoxplot-tab" data-bs-toggle="tab"
+                        <button class="nav-link" id="nav-LCBoxPlot-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-Load-Boxplot" type="button" role="tab"
                                 aria-controls="nav-Load-Boxplot"
                                 aria-selected="false">Boxplot
                         </button>
-                        <button class="nav-link" id="nav-LCViolinplot-tab" data-bs-toggle="tab"
-                                data-bs-target="#nav-Load-Violinplot" type="button" role="tab"
-                                aria-controls="nav-Load-Violinplot" aria-selected="false">Violinplot
+                        <button class="nav-link" id="nav-LCViolinPlot-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-Load-ViolinPlot" type="button" role="tab"
+                                aria-controls="nav-Load-ViolinPlot" aria-selected="false">ViolinPlot
                         </button>
                     </div>
                 </nav>
@@ -1139,7 +1139,7 @@
                         <!-- Histogram tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-Load-Boxplot" role="tabpanel"
-                         aria-labelledby="nav-Load-Boxplot-tab">
+                         aria-labelledby="nav-Load-BoxPlot-tab">
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -1187,9 +1187,9 @@
                         </div>
                         <!-- Boxplot tab Before After content ends here -->
                     </div>
-                    <div class="tab-pane fade" id="nav-Load-Violinplot" role="tabpanel"
-                         aria-labelledby="nav-Load-Violinplot-tab">
-                        <!-- Violinplot tab Before After content starts here -->
+                    <div class="tab-pane fade" id="nav-Load-ViolinPlot" role="tabpanel"
+                         aria-labelledby="nav-Load-ViolinPlot-tab">
+                        <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
                                 <div class="col">
@@ -1203,7 +1203,7 @@
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_load_centrality_violinplot_1 }}" width="100%"
+                                            <iframe src="{{ graph_load_centrality_ViolinPlot_1 }}" width="100%"
                                                     id="LC_violin_before"
                                                     height="300"></iframe>
                                         </div>
@@ -1212,7 +1212,7 @@
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_load_centrality_violinplot_2 }}" width="100%"
+                                            <iframe src="{{ graph_load_centrality_ViolinPlot_2 }}" width="100%"
                                                     id="LC_violin_after"
                                                     height="300"></iframe>
                                         </div>
@@ -1234,7 +1234,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Violinplot tab Before After content ends here -->
+                        <!-- ViolinPlot tab Before After content ends here -->
                     </div>
                 </div>
                 <!-- Load Centrality Tab Ends here -->
@@ -1247,41 +1247,49 @@
         <nav style="margin-top: 15px;">
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <button class="nav-link active" id="nav-kcorenode-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-kcorenode" type="button" role="tab" aria-controls="nav-kcorenode"
-                    aria-selected="true">K Core</button>
+                        data-bs-target="#nav-kcorenode" type="button" role="tab" aria-controls="nav-kcorenode"
+                        aria-selected="true">K Core
+                </button>
                 <button class="nav-link" id="nav-degreenode-tab" data-bs-toggle="tab" data-bs-target="#nav-degreenode"
-                    type="button" role="tab" aria-controls="nav-degreenode" aria-selected="false">Degree</button>
+                        type="button" role="tab" aria-controls="nav-degreenode" aria-selected="false">Degree
+                </button>
                 <button class="nav-link" id="nav-trianglenode-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-trianglenode" type="button" role="tab" aria-controls="nav-trianglenode"
-                    aria-selected="false">Triangle</button>
+                        data-bs-target="#nav-trianglenode" type="button" role="tab" aria-controls="nav-trianglenode"
+                        aria-selected="false">Triangle
+                </button>
                 <button class="nav-link" id="nav-pageranknode-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-pageranknode" type="button" role="tab" aria-controls="nav-pageranknode"
-                    aria-selected="false">Page Rank</button>
+                        data-bs-target="#nav-pageranknode" type="button" role="tab" aria-controls="nav-pageranknode"
+                        aria-selected="false">Page Rank
+                </button>
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-kcorenode" role="tabpanel"
-                aria-labelledby="nav-kcorenode-tab">
+                 aria-labelledby="nav-kcorenode-tab">
                 <!-- kcore-node Tab starts here -->
                 <nav style="margin-top: 15px;">
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <button class="nav-link active" id="nav-kcore-node-Layouts-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-kcore-node-Layouts" type="button" role="tab"
-                            aria-controls="nav-kcore-node-Layouts" aria-selected="true">Layouts</button>
+                                data-bs-target="#nav-kcore-node-Layouts" type="button" role="tab"
+                                aria-controls="nav-kcore-node-Layouts" aria-selected="true">Layouts
+                        </button>
                         <button class="nav-link" id="nav-kcore-node-Histogram-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-kcore-node-Histogram" type="button" role="tab"
-                            aria-controls="nav-kcore-node-Histogram" aria-selected="false">Histogram</button>
-                        <button class="nav-link" id="nav-kcore-node-Boxplot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-kcore-node-Boxplot" type="button" role="tab"
-                            aria-controls="nav-kcore-node-Boxplot" aria-selected="false">Boxplot</button>
-                        <button class="nav-link" id="nav-kcore-node-Violinplot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-kcore-node-Violinplot" type="button" role="tab"
-                            aria-controls="nav-kcore-node-Violinplot" aria-selected="false">Violinplot</button>
+                                data-bs-target="#nav-kcore-node-Histogram" type="button" role="tab"
+                                aria-controls="nav-kcore-node-Histogram" aria-selected="false">Histogram
+                        </button>
+                        <button class="nav-link" id="nav-kcore-node-BoxPlot-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-kcore-node-Boxplot" type="button" role="tab"
+                                aria-controls="nav-kcore-node-Boxplot" aria-selected="false">Boxplot
+                        </button>
+                        <button class="nav-link" id="nav-kcore-node-ViolinPlot-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-kcore-node-ViolinPlot" type="button" role="tab"
+                                aria-controls="nav-kcore-node-ViolinPlot" aria-selected="false">ViolinPlot
+                        </button>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-kcore-node-Layouts" role="tabpanel"
-                        aria-labelledby="nav-kcore-node-Layouts-tab">
+                         aria-labelledby="nav-kcore-node-Layouts-tab">
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -1297,7 +1305,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_kcore_node_layout_1 }}" id="KN_layout_before"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1305,7 +1313,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_kcore_node_layout_2 }}" id="KN_layout_after"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1330,7 +1338,7 @@
                         <!-- Layouts tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-kcore-node-Histogram" role="tabpanel"
-                        aria-labelledby="nav-kcore-node-Histogram-tab">
+                         aria-labelledby="nav-kcore-node-Histogram-tab">
                         <!-- Histogram tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -1346,7 +1354,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_kcore_node_histogram_1 }}" id="KN_histogram_before"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1355,7 +1363,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_kcore_node_histogram_2 }}" id="KN_histogram_after"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1380,7 +1388,7 @@
                         <!-- Histogram tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-kcore-node-Boxplot" role="tabpanel"
-                        aria-labelledby="nav-kcore-node-Boxplot-tab">
+                         aria-labelledby="nav-kcore-node-BoxPlot-tab">
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -1396,7 +1404,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_kcore_node_boxplot_1 }}" id="KN_boxplot_before"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1404,7 +1412,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_kcore_node_boxplot_2 }}" id="KN_boxplot_after"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1428,9 +1436,9 @@
                         </div>
                         <!-- Boxplot tab Before After content ends here -->
                     </div>
-                    <div class="tab-pane fade" id="nav-kcore-node-Violinplot" role="tabpanel"
-                        aria-labelledby="nav-kcore-node-Violinplot-tab">
-                        <!-- Violinplot tab Before After content starts here -->
+                    <div class="tab-pane fade" id="nav-kcore-node-ViolinPlot" role="tabpanel"
+                         aria-labelledby="nav-kcore-node-ViolinPlot-tab">
+                        <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
                                 <div class="col">
@@ -1444,16 +1452,16 @@
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_kcore_node_violinplot_1 }}" id="KN_violinplot_before"
-                                                width="100%" height="300"></iframe>
+                                            <iframe src="{{ graph_kcore_node_ViolinPlot_1 }}" id="KN_violin_before"
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_kcore_node_violinplot_2 }}" id="KN_violinplot_after"
-                                                width="100%" height="300"></iframe>
+                                            <iframe src="{{ graph_kcore_node_ViolinPlot_2 }}" id="KN_violin_after"
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1475,7 +1483,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Violinplot tab Before After content ends here -->
+                        <!-- ViolinPlot tab Before After content ends here -->
                     </div>
                 </div>
                 <!-- kcore-node Tab Ends here -->
@@ -1485,22 +1493,26 @@
                 <nav style="margin-top: 15px;">
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <button class="nav-link active" id="nav-degree-node-Layouts-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-degree-node-Layouts" type="button" role="tab"
-                            aria-controls="nav-degree-node-Layouts" aria-selected="true">Layouts</button>
+                                data-bs-target="#nav-degree-node-Layouts" type="button" role="tab"
+                                aria-controls="nav-degree-node-Layouts" aria-selected="true">Layouts
+                        </button>
                         <button class="nav-link" id="nav-degree-node-Histogram-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-degree-node-Histogram" type="button" role="tab"
-                            aria-controls="nav-degree-node-Histogram" aria-selected="false">Histogram</button>
-                        <button class="nav-link" id="nav-degree-node-Boxplot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-degree-node-Boxplot" type="button" role="tab"
-                            aria-controls="nav-degree-node-Boxplot" aria-selected="false">Boxplot</button>
-                        <button class="nav-link" id="nav-degree-node-Violinplot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-degree-node-Violinplot" type="button" role="tab"
-                            aria-controls="nav-degree-node-Violinplot" aria-selected="false">Violinplot</button>
+                                data-bs-target="#nav-degree-node-Histogram" type="button" role="tab"
+                                aria-controls="nav-degree-node-Histogram" aria-selected="false">Histogram
+                        </button>
+                        <button class="nav-link" id="nav-degree-node-BoxPlot-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-degree-node-Boxplot" type="button" role="tab"
+                                aria-controls="nav-degree-node-Boxplot" aria-selected="false">Boxplot
+                        </button>
+                        <button class="nav-link" id="nav-degree-node-ViolinPlot-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-degree-node-ViolinPlot" type="button" role="tab"
+                                aria-controls="nav-degree-node-ViolinPlot" aria-selected="false">ViolinPlot
+                        </button>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-degree-node-Layouts" role="tabpanel"
-                        aria-labelledby="nav-degree-node-Layouts-tab">
+                         aria-labelledby="nav-degree-node-Layouts-tab">
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -1516,7 +1528,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_node_layout_1 }}" id="DN_layout_before"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1524,7 +1536,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_node_layout_2 }}" id="DN_layout_after"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1549,7 +1561,7 @@
                         <!-- Layouts tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-degree-node-Histogram" role="tabpanel"
-                        aria-labelledby="nav-degree-node-Histogram-tab">
+                         aria-labelledby="nav-degree-node-Histogram-tab">
                         <!-- Histogram tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -1565,7 +1577,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_node_histogram_1 }}" id="DN_histogram_before"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1574,7 +1586,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_node_histogram_2 }}" id="DN_histogram_after"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1599,7 +1611,7 @@
                         <!-- Histogram tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-degree-node-Boxplot" role="tabpanel"
-                        aria-labelledby="nav-degree-node-Boxplot-tab">
+                         aria-labelledby="nav-degree-node-BoxPlot-tab">
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -1615,7 +1627,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_node_boxplot_1 }}" id="DN_boxplot_before"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1623,7 +1635,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_node_boxplot_2 }}" id="DN_boxplot_after"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1647,9 +1659,9 @@
                         </div>
                         <!-- Boxplot tab Before After content ends here -->
                     </div>
-                    <div class="tab-pane fade" id="nav-degree-node-Violinplot" role="tabpanel"
-                        aria-labelledby="nav-degree-node-Violinplot-tab">
-                        <!-- Violinplot tab Before After content starts here -->
+                    <div class="tab-pane fade" id="nav-degree-node-ViolinPlot" role="tabpanel"
+                         aria-labelledby="nav-degree-node-ViolinPlot-tab">
+                        <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
                                 <div class="col">
@@ -1663,16 +1675,16 @@
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_degree_node_violinplot_1 }}" id="DN_violinplot_before"
-                                                width="100%" height="300"></iframe>
+                                            <iframe src="{{ graph_degree_node_ViolinPlot_1 }}" id="DN_violin_before"
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_degree_node_violinplot_2 }}" id="DN_violinplot_after"
-                                                width="100%" height="300"></iframe>
+                                            <iframe src="{{ graph_degree_node_ViolinPlot_2 }}" id="DN_violin_after"
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1694,7 +1706,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Violinplot tab Before After content ends here -->
+                        <!-- ViolinPlot tab Before After content ends here -->
                     </div>
                 </div>
                 <!-- degree-node Tab Ends here -->
@@ -1704,22 +1716,26 @@
                 <nav style="margin-top: 15px;">
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <button class="nav-link active" id="nav-triangles-node-Layouts-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-triangles-node-Layouts" type="button" role="tab"
-                            aria-controls="nav-triangles-node-Layouts" aria-selected="true">Layouts</button>
+                                data-bs-target="#nav-triangles-node-Layouts" type="button" role="tab"
+                                aria-controls="nav-triangles-node-Layouts" aria-selected="true">Layouts
+                        </button>
                         <button class="nav-link" id="nav-triangles-node-Histogram-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-triangles-node-Histogram" type="button" role="tab"
-                            aria-controls="nav-triangles-node-Histogram" aria-selected="false">Histogram</button>
-                        <button class="nav-link" id="nav-triangles-node-Boxplot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-triangles-node-Boxplot" type="button" role="tab"
-                            aria-controls="nav-triangles-node-Boxplot" aria-selected="false">Boxplot</button>
-                        <button class="nav-link" id="nav-triangles-node-Violinplot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-triangles-node-Violinplot" type="button" role="tab"
-                            aria-controls="nav-triangles-node-Violinplot" aria-selected="false">Violinplot</button>
+                                data-bs-target="#nav-triangles-node-Histogram" type="button" role="tab"
+                                aria-controls="nav-triangles-node-Histogram" aria-selected="false">Histogram
+                        </button>
+                        <button class="nav-link" id="nav-triangles-node-BoxPlot-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-triangles-node-Boxplot" type="button" role="tab"
+                                aria-controls="nav-triangles-node-Boxplot" aria-selected="false">Boxplot
+                        </button>
+                        <button class="nav-link" id="nav-triangles-node-ViolinPlot-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-triangles-node-ViolinPlot" type="button" role="tab"
+                                aria-controls="nav-triangles-node-ViolinPlot" aria-selected="false">ViolinPlot
+                        </button>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-triangles-node-Layouts" role="tabpanel"
-                        aria-labelledby="nav-triangles-node-Layouts-tab">
+                         aria-labelledby="nav-triangles-node-Layouts-tab">
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -1735,7 +1751,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_triangles_node_layout_1 }}" id="TN_layout_before"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1743,7 +1759,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_triangles_node_layout_2 }}" id="TN_layout_after"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1768,7 +1784,7 @@
                         <!-- Layouts tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-triangles-node-Histogram" role="tabpanel"
-                        aria-labelledby="nav-triangles-node-Histogram-tab">
+                         aria-labelledby="nav-triangles-node-Histogram-tab">
                         <!-- Histogram tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -1784,7 +1800,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_triangles_node_histogram_1 }}"
-                                                id="TN_histogram_before" width="100%" height="300"></iframe>
+                                                    id="TN_histogram_before" width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1793,7 +1809,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_triangles_node_histogram_2 }}" id="TN_histogram_after"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1818,7 +1834,7 @@
                         <!-- Histogram tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-triangles-node-Boxplot" role="tabpanel"
-                        aria-labelledby="nav-triangles-node-Boxplot-tab">
+                         aria-labelledby="nav-triangles-node-BoxPlot-tab">
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -1834,7 +1850,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_triangles_node_boxplot_1 }}" id="TN_boxplot_before"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1842,7 +1858,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_triangles_node_boxplot_2 }}" id="TN_boxplot_after"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1866,9 +1882,9 @@
                         </div>
                         <!-- Boxplot tab Before After content ends here -->
                     </div>
-                    <div class="tab-pane fade" id="nav-triangles-node-Violinplot" role="tabpanel"
-                        aria-labelledby="nav-triangles-node-Violinplot-tab">
-                        <!-- Violinplot tab Before After content starts here -->
+                    <div class="tab-pane fade" id="nav-triangles-node-ViolinPlot" role="tabpanel"
+                         aria-labelledby="nav-triangles-node-ViolinPlot-tab">
+                        <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
                                 <div class="col">
@@ -1882,16 +1898,16 @@
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_triangles_node_violinplot_1 }}"
-                                                id="TN_violinplot_before" width="100%" height="300"></iframe>
+                                            <iframe src="{{ graph_triangles_node_ViolinPlot_1 }}"
+                                                    id="TN_violin_before" width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_triangles_node_violinplot_2 }}"
-                                                id="TN_violinplot_after" width="100%" height="300"></iframe>
+                                            <iframe src="{{ graph_triangles_node_ViolinPlot_2 }}"
+                                                    id="TN_violin_after" width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1913,7 +1929,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Violinplot tab Before After content ends here -->
+                        <!-- ViolinPlot tab Before After content ends here -->
                     </div>
                 </div>
                 <!-- triangles-node Tab Ends here -->
@@ -1923,22 +1939,26 @@
                 <nav style="margin-top: 15px;">
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <button class="nav-link active" id="nav-pagerank-node-Layouts-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-pagerank-node-Layouts" type="button" role="tab"
-                            aria-controls="nav-pagerank-node-Layouts" aria-selected="true">Layouts</button>
+                                data-bs-target="#nav-pagerank-node-Layouts" type="button" role="tab"
+                                aria-controls="nav-pagerank-node-Layouts" aria-selected="true">Layouts
+                        </button>
                         <button class="nav-link" id="nav-pagerank-node-Histogram-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-pagerank-node-Histogram" type="button" role="tab"
-                            aria-controls="nav-pagerank-node-Histogram" aria-selected="false">Histogram</button>
-                        <button class="nav-link" id="nav-pagerank-node-Boxplot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-pagerank-node-Boxplot" type="button" role="tab"
-                            aria-controls="nav-pagerank-node-Boxplot" aria-selected="false">Boxplot</button>
-                        <button class="nav-link" id="nav-pagerank-node-Violinplot-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-pagerank-node-Violinplot" type="button" role="tab"
-                            aria-controls="nav-pagerank-node-Violinplot" aria-selected="false">Violinplot</button>
+                                data-bs-target="#nav-pagerank-node-Histogram" type="button" role="tab"
+                                aria-controls="nav-pagerank-node-Histogram" aria-selected="false">Histogram
+                        </button>
+                        <button class="nav-link" id="nav-pagerank-node-BoxPlot-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-pagerank-node-Boxplot" type="button" role="tab"
+                                aria-controls="nav-pagerank-node-Boxplot" aria-selected="false">Boxplot
+                        </button>
+                        <button class="nav-link" id="nav-pagerank-node-ViolinPlot-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-pagerank-node-ViolinPlot" type="button" role="tab"
+                                aria-controls="nav-pagerank-node-ViolinPlot" aria-selected="false">ViolinPlot
+                        </button>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-pagerank-node-Layouts" role="tabpanel"
-                        aria-labelledby="nav-pagerank-node-Layouts-tab">
+                         aria-labelledby="nav-pagerank-node-Layouts-tab">
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -1954,7 +1974,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_pagerank_node_layout_1 }}" id="PN_layout_before"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1962,7 +1982,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_pagerank_node_layout_2 }}" id="PN_layout_after"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -1987,7 +2007,7 @@
                         <!-- Layouts tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-pagerank-node-Histogram" role="tabpanel"
-                        aria-labelledby="nav-pagerank-node-Histogram-tab">
+                         aria-labelledby="nav-pagerank-node-Histogram-tab">
                         <!-- Histogram tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -2003,7 +2023,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_pagerank_node_histogram_1 }}" id="PN_histogram_before"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -2012,7 +2032,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_pagerank_node_histogram_2 }}" id="PN_histogram_after"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -2037,7 +2057,7 @@
                         <!-- Histogram tab Before After content ends here -->
                     </div>
                     <div class="tab-pane fade" id="nav-pagerank-node-Boxplot" role="tabpanel"
-                        aria-labelledby="nav-pagerank-node-Boxplot-tab">
+                         aria-labelledby="nav-pagerank-node-BoxPlot-tab">
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
@@ -2053,7 +2073,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_pagerank_node_boxplot_1 }}" id="PN_boxplot_before"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -2061,7 +2081,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_pagerank_node_boxplot_2 }}" id="PN_boxplot_after"
-                                                width="100%" height="300"></iframe>
+                                                    width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -2085,9 +2105,9 @@
                         </div>
                         <!-- Boxplot tab Before After content ends here -->
                     </div>
-                    <div class="tab-pane fade" id="nav-pagerank-node-Violinplot" role="tabpanel"
-                        aria-labelledby="nav-pagerank-node-Violinplot-tab">
-                        <!-- Violinplot tab Before After content starts here -->
+                    <div class="tab-pane fade" id="nav-pagerank-node-ViolinPlot" role="tabpanel"
+                         aria-labelledby="nav-pagerank-node-ViolinPlot-tab">
+                        <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
                                 <div class="col">
@@ -2101,16 +2121,16 @@
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_pagerank_node_violinplot_1 }}"
-                                                id="PN_violinplot_before" width="100%" height="300"></iframe>
+                                            <iframe src="{{ graph_pagerank_node_ViolinPlot_1 }}"
+                                                    id="PN_violin_before" width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-body">
-                                            <iframe src="{{ graph_pagerank_node_violinplot_2 }}"
-                                                id="PN_violinplot_after" width="100%" height="300"></iframe>
+                                            <iframe src="{{ graph_pagerank_node_ViolinPlot_2 }}"
+                                                    id="PN_violin_after" width="100%" height="300"></iframe>
                                         </div>
                                     </div>
                                 </div>
@@ -2132,7 +2152,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Violinplot tab Before After content ends here -->
+                        <!-- ViolinPlot tab Before After content ends here -->
                     </div>
                 </div>
                 <!-- pagerank-node Tab Ends here -->
