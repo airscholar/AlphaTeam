@@ -297,6 +297,9 @@
                 inputAccordion.classList.add('show');
             }
 
+            const nodeTab = document.getElementById('nav-node-tab');
+            const thresholdTab = document.getElementById('nav-threshold-tab');
+
             const data = {
                 type_of_attack: typeOfAttack.value,
                 number_of_nodes_malicious: numberOfNodes.value,
@@ -308,6 +311,14 @@
                 number_of_clusters: numberOfClusters.value,
                 session_id: '{{ session_id }}'
             };
+
+            if (nodeTab.classList.contains('active')) {
+                data.number_of_threshold = null;
+                data.threshold_operator = null;
+            } else if (thresholdTab.classList.contains('active')) {
+                data.number_of_nodes_malicious = null;
+            }
+
             performResilienceMalicious(data);
         });
 

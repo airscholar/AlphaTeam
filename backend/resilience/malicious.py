@@ -17,20 +17,17 @@ def extract_args():
         'less_than_or_equal_to': '<='
     }
     args = request.args
-
     attack_type = args.get('attack_type', None)
-    number_of_nodes_malicious = args.get('number_of_nodes_malicious', None)
-    number_of_threshold = args.get('number_of_threshold', None)
+    number_of_nodes_malicious = args.get('number_of_nodes_malicious', None, type=int)
+    number_of_threshold = args.get('number_of_thresholds', None, type=int)
     operator = args.get('operator', None)
 
-    if operator is not None:
+    if (operator is not None) and (operator is not ''):
         operator = res_operator[operator]
     if number_of_nodes_malicious == '':
         number_of_nodes_malicious = None
     if number_of_threshold == '':
         number_of_threshold = None
-
-    print(attack_type, number_of_nodes_malicious, number_of_threshold, operator)
 
     return attack_type, number_of_nodes_malicious, number_of_threshold, operator
 
