@@ -91,4 +91,4 @@ def visualisation(session_id):
     file_name1 = plot_network(networkGraphs, fullPath=True, layout=layout)
     file_name2 = plot_network(networkGraphs2, fullPath=True, layout=layout)
 
-    return jsonify({"message": "Success", "network_before": file_name1, "network_after": file_name2})
+    return jsonify({"message": "Success", "before_frame": file_name1, "after_frame": file_name2})
