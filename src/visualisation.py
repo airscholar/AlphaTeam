@@ -156,6 +156,7 @@ def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False
     :rtype: pd.DataFrame, str
     """
     df = m.get_metrics(networkGraphs, metrics, directed=directed, multi=multi)
+    print(df)
 
     if df.empty or df.isnull().values.any() or not is_numeric_dtype(df[df.columns.values[1]]) or (
             not networkGraphs.is_spatial() and layout == 'map'):
