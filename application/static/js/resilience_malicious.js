@@ -3,8 +3,13 @@ const BASE_URL = 'http://localhost:8000/api/v1/resilience/';
 function performResilienceMalicious(data) {
     console.log(data)
     $.ajax({
-        url: BASE_URL + data.session_id + '/malicious?number_of_clusters=' + data.number_of_clusters
-            + '&attack_type=' + data.type_of_attack + '&number_of_nodes_malicious=' + data.number_of_nodes_malicious,
+        url: BASE_URL + data.session_id + '/malicious',
+        data: {
+            attack_type: data.type_of_attack,
+            number_of_nodes_malicious: data.number_of_nodes_malicious,
+            operator: data.threshold_operator,
+            number_of_thresholds: data.number_of_threshold,
+        },
         type: 'GET',
         mode: 'no-cors',
         success: function (data) {
@@ -31,9 +36,12 @@ function performResilienceMalicious(data) {
 
 function performResilienceMetrics(data, plot_type, section) {
     $.ajax({
-        url: BASE_URL + data.session_id + '/' + data.type_of_attack + '/' + plot_type + '?multi_toggle='
-            + data.multi_toggle + '&directed_toggle=' + data.directed_toggle + '&layout='
-            + data.layout,
+        url: BASE_URL + data.session_id + '/' + data.type_of_attack + '/' + plot_type,
+        data: {
+            multi_toggle: data.multi_toggle,
+            directed_toggle: data.directed_toggle,
+            layout: data.layout,
+        },
         type: 'GET',
         mode: 'no-cors',
         success: function (data) {
@@ -103,7 +111,10 @@ function retrieveGeneralMetrics(data) {
 function performVisualisation(data) {
     console.log(data)
     $.ajax({
-        url: BASE_URL + data.session_id + '/visualisation?layout=' + data.layout,
+        url: BASE_URL + data.session_id + '/visualisation',
+        data: {
+            layout: data.layout,
+        },
         type: 'GET',
         mode: 'no-cors',
         success: function (data) {
