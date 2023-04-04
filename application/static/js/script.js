@@ -20,49 +20,39 @@ $(function () {
             return;
         }
 
-        // Create a FormData object to send the data
-        var formData = new FormData();
+        // Set the values of the hidden input fields in the form
+        const formData = new FormData();
         formData.append('csv_file', csvFile);
         formData.append('option', option);
-        setSpinnerVisibility(true);
 
-        // Send the data using AJAX
-        $.ajax({
-            url: '/upload',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            xhr: function () {
-                var xhr = new XMLHttpRequest();
-                xhr.upload.addEventListener('progress', function (event) {
-                    if (event.lengthComputable) {
-                        var percent = Math.round((event.loaded / event.total) * 100);
-                        progressBar.val(percent);
-                    }
-                }, false);
-                return xhr;
-            },
-            success: function () {
-                alert('File Uploaded!');
-            },
-            beforeSend: function () {
-                progressBar.show();
-                progressBar.val(0);
-            },
-            success: function (response) {
-                // Redirect the user to the success page
-                window.location.href = '/home';
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                // Handle errors
-                console.log('Error:', errorThrown);
-            },
-            complete: function () {
-                // Hide the progress bar
-                progressBar.hide();
-            }
-        });
+        // Submit the form
+        const myHeaders = new Headers();
+        const requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formData,
+            redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:8000/api/v1/upload", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                const filename = result['filename'];
+                const filename2 = result['filename2'];
+                option = result['option'];
+                const filepath = result['filepath'];
+                const full_path = result['full_path'];
+
+                //redirect to the home
+                window.location.href = '/home?filename=' + filename + '&filename2=' + filename2 + '&option='
+                    + option + '&filepath=' + filepath + '&full_path=' + full_path;
+            })
+            .catch(error => console.log('error', error));
+
+        let showSpinner = true; // Set this variable to true to display the spinner or false to hide it
+        setSpinnerVisibility(showSpinner);
+
+
     });
 
     // Update the selected file name in the file input field
