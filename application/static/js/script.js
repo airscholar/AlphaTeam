@@ -27,27 +27,28 @@ $(function () {
 
         // Submit the form
         const myHeaders = new Headers();
-        const requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: formData,
-            redirect: 'follow'
-        };
 
-        fetch("http://127.0.0.1:8000/api/v1/upload", requestOptions)
-            .then(response => response.json())
-            .then(result => {
+        $.ajax({
+            url: "http://127.0.0.1:8000/api/v1/upload",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (result) {
                 const filename = result['filename'];
                 const filename2 = result['filename2'];
-                option = result['option'];
+                const option = result['option'];
                 const filepath = result['filepath'];
                 const full_path = result['full_path'];
 
-                //redirect to the home
+                // Redirect to the home
                 window.location.href = '/home?filename=' + filename + '&filename2=' + filename2 + '&option='
                     + option + '&filepath=' + filepath + '&full_path=' + full_path;
-            })
-            .catch(error => console.log('error', error));
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('error', errorThrown);
+            }
+        });
 
         let showSpinner = true; // Set this variable to true to display the spinner or false to hide it
         setSpinnerVisibility(showSpinner);
