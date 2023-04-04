@@ -198,6 +198,8 @@
         const inputAccordion = document.getElementById('flush-collapseOne');
         const outputAccordion = document.getElementById('flush-collapseTwo');
 
+        const visualisation = document.getElementById('nav-Visualisation-tab');
+
         const degreeCentralityLayout = document.getElementById('nav-DCLayouts-tab');
         const DCHistogram = document.getElementById('nav-DCHistogram-tab');
         const DCBoxPlot = document.getElementById('nav-DCBoxPlot-tab');
@@ -275,6 +277,15 @@
             };
 
             retrieveGeneralMetrics(data);
+        })
+
+        $(visualisation).on('click', function () {
+            const data = {
+                layout: layout.value,
+                session_id: '{{ session_id }}'
+            };
+
+            performVisualisation(data);
         })
 
         $(res_btn).on('click', function (e) {

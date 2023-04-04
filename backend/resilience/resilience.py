@@ -79,3 +79,16 @@ def global_metrics(session_id):
     df_json1 = df2.to_json(orient='split')
 
     return jsonify({"message": "Success", "data_before": df_json, "data_after": df_json1})
+
+
+@resilience_bp.route('<session_id>/visualisation')
+def visualisation(session_id):
+    layout = get_layout(request.args)
+
+    networkGraphs = get_networkGraph(session_id)
+    networkGraphs2 = get_networkGraph(session_id + '_resilience')
+
+    file_name1 = plot_network(networkGraphs, fullPath=True, layout=layout)
+    file_name2 = plot_network(networkGraphs2, fullPath=True, layout=layout)
+
+    return jsonify({"message": "Success", "before_frame": file_name1, "after_frame": file_name2})

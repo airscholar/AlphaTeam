@@ -199,12 +199,14 @@ def generate_histogram_metric(df_, filename):
     :return: Plotly plot
     :rtype: plotly.graph_objects.Figure
     """
-    if 'std' in df_.columns:
-        df_ = df_.drop(columns=['std'])
+    if any('std' in s for s in df_.columns):
+        df_ = df_.drop(columns=[col for col in df_.columns if 'std' in col])
 
     metrics_names = df_.columns[1:]
     metrics = df_[metrics_names].values
-    title = f"Histogram distribution of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
+    title = f"Histogram: {'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
+    if len(title) > 80:  # if title too long write it in two lines
+        title = title[:80] + '-<br>-' + title[80:]
 
     fig = go.Figure()
     for i, metric in enumerate(metrics_names):
@@ -216,6 +218,7 @@ def generate_histogram_metric(df_, filename):
                       yaxis_title="Count",
                       bargap=0.1, )
     fig.update_traces(opacity=0.75)
+    fig.update_layout(margin=dict(l=0, r=40, t=40, b=0))
 
     fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
 
@@ -234,12 +237,14 @@ def generate_boxplot_metric(df_, filename):
     :return: Plotly plot
     :rtype: plotly.graph_objects.Figure
     """
-    if 'std' in df_.columns:
-        df_ = df_.drop(columns=['std'])
+    if any('std' in s for s in df_.columns):
+        df_ = df_.drop(columns=[col for col in df_.columns if 'std' in col])
 
     metrics_names = df_.columns[1:]
     metrics = df_[metrics_names].values
     title = f"Boxplot of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
+    if len(title) > 80:  # if title too long write it in two lines
+        title = title[:80] + '-<br>-' + title[80:]
 
     fig = go.Figure()
     for i, metric in enumerate(metrics_names):
@@ -249,6 +254,8 @@ def generate_boxplot_metric(df_, filename):
                       xaxis_title="Metrics",
                       yaxis_title="Values",
                       )
+
+    fig.update_layout(margin=dict(l=0, r=40, t=40, b=0))
 
     fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
 
@@ -267,12 +274,14 @@ def generate_violin_metric(df_, filename):
     :return: Plotly plot
     :rtype: plotly.graph_objects.Figure
     """
-    if 'std' in df_.columns:
-        df_ = df_.drop(columns=['std'])
+    if any('std' in s for s in df_.columns):
+        df_ = df_.drop(columns=[col for col in df_.columns if 'std' in col])
 
     metrics_names = df_.columns[1:]
     metrics = df_[metrics_names].values
     title = f"Violin plot of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
+    if len(title) > 80:  # if title too long write it in two lines
+        title = title[:80] + '-<br>-' + title[80:]
 
     fig = go.Figure()
     for i, metric in enumerate(metrics_names):
@@ -282,6 +291,7 @@ def generate_violin_metric(df_, filename):
                       xaxis_title="Metrics",
                       yaxis_title="Values",
                       )
+    fig.update_layout(margin=dict(l=0, r=40, t=40, b=0))
 
     fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
 
