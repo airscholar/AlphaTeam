@@ -211,6 +211,8 @@ def compute_clustering(networkGraph, max_range=30):
     # find the optimal number of clusters
     optimal_k = KneeLocator(range(1, max_range), wcss,
                             curve='convex', direction='decreasing').elbow
+    if optimal_k is None:
+        optimal_k = 8
     print('Optimal k is : ', optimal_k)
 
     return adj_mat, optimal_k

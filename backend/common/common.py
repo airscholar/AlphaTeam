@@ -20,7 +20,7 @@ def get_dynamic_toggle(args):
     return dynamic_toggle
 
 def get_layout(args):
-    layout = args.get('layout', type="str")
+    layout = args.get('layout', 'sfdp')
     return layout
 
 def extract_args(args):
