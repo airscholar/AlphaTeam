@@ -44,6 +44,8 @@ def internal_server_error(e):
         filepath = 'static/uploads/' + filename2
         if os.path.exists(filepath):
             shutil.rmtree(filepath)
+        if is_saved(filename2):
+            delete_networkGraph(filename2)
             # cache.clear()
         # Remove the keys from the session
         # session.pop('network_graphs', None)
@@ -73,6 +75,8 @@ def index():
             shutil.rmtree(filepath)
         # Clear the cache
         cache.clear()
+        if is_saved(filename2):
+            delete_networkGraph(filename2)
         # Remove the keys from the session
         session.pop('network_graphs', None)
         session.pop('filename', None)
@@ -81,6 +85,7 @@ def index():
         session.pop('full_path', None)
         session.pop('option', None)
         session.clear()
+
     return render_template('index.html')
 
 
