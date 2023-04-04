@@ -40,14 +40,12 @@
                                             <nav style="padding-bottom: 10px">
                                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                                     <button class="nav-link active" id="nav-node-tab"
-                                                            data-bs-toggle="tab" data-bs-target="#nav-node"
-                                                            type="button"
-                                                            role="tab" aria-controls="nav-node" aria-selected="true">
-                                                        Node
+                                                        data-bs-toggle="tab" data-bs-target="#nav-node" type="button"
+                                                        role="tab" aria-controls="nav-node" aria-selected="true">Node
                                                     </button>
                                                     <button class="nav-link" id="nav-threshold-tab" data-bs-toggle="tab"
-                                                            data-bs-target="#nav-threshold" type="button" role="tab"
-                                                            aria-controls="nav-threshold" aria-selected="false">
+                                                        data-bs-target="#nav-threshold" type="button" role="tab"
+                                                        aria-controls="nav-threshold" aria-selected="false">
                                                         Threshold
                                                     </button>
                                                 </div>
@@ -152,9 +150,8 @@
                                     Clusters:</label>
                             </div>
                             <div class="col-auto">
-                                <input type="number" id="number_of_clusters"
-                                       name="number_of_clusters"
-                                       class="form-control" min="1" step="1" placeholder="None" />
+                                <input type="number" id="number_of_clusters" name="number_of_clusters"
+                                    class="form-control" min="1" step="1" placeholder="None" />
                             </div>
                         </div>
                     </div>
@@ -233,6 +230,16 @@
         const pagerankNodeBoxPlot = document.getElementById('nav-pagerank-node-BoxPlot-tab');
         const pagerankNodeViolinPlot = document.getElementById('nav-pagerank-node-ViolinPlot-tab');
 
+        const louvainClustering = document.getElementById('nav-Louvain-tab');
+        const greedy_modularityClustering = document.getElementById('nav-greedy_modularity-tab');
+        const label_propagationClustering = document.getElementById('nav-label_propagation-tab');
+        const asyn_lpaClustering = document.getElementById('nav-asyn_lpa-tab');
+        const k_cliqueClustering = document.getElementById('nav-k_clique-tab');
+        const spectralClustering = document.getElementById('nav-spectral-tab');
+        const kmeansClustering = document.getElementById('nav-kmeans-tab');
+        const agglomerativeClustering = document.getElementById('nav-agglomerative-tab');
+        const dbscanClustering = document.getElementById('nav-dbscan-tab');
+
         const attack = {
             'DC': 'degree_centrality',
             'EC': 'eigenvector_centrality',
@@ -242,8 +249,17 @@
             'KN': 'kcore',
             'DN': 'degree',
             'TN': 'triangles',
-            'PN': 'pagerank'
-        };
+            'PN': 'pagerank',
+            'LOUC': 'louvain',
+            'GMC': 'greedy_modularity',
+            'LPC': 'label_propagation',
+            'ALC': 'asyn_lpa',
+            'KCC': 'k_clique',
+            'SC': 'spectral',
+            'KMC': 'kmeans',
+            'AGC': 'agglomerative',
+            'DBC': 'dbscan',
+        }
 
         function handleClick(plotType, section, e) {
             e.preventDefault();
@@ -322,7 +338,7 @@
 
         $(multiToggle).on('click', function () {
             const data = {
-                type_of_attack: typeOfAttack.value,
+                type_of_attack: attack[section],
                 number_of_nodes_malicious: numberOfNodes.value,
                 threshold_operator: thresholdOperator.value,
                 number_of_threshold: numberOfThreshold.value,
@@ -335,6 +351,22 @@
 
             performResilienceMalicious(data);
         });
+
+        function handleClick1(plotType, section, e) {
+            e.preventDefault();
+            const data = {
+                type_of_attack: attack[section],
+                number_of_nodes_malicious: numberOfNodes.value,
+                threshold_operator: thresholdOperator.value,
+                number_of_threshold: numberOfThreshold.value,
+                multi_toggle: multiToggle.checked,
+                directed_toggle: directedToggle.checked,
+                layout: layout.value,
+                number_of_clusters: numberOfClusters.value,
+                session_id: '{{ session_id }}'
+            };
+            performResilienceCluster(data, plotType, section);
+        }
 
         $(degreeCentralityLayout).on('click', handleClick.bind(null, 'layout', 'DC'));
         $(DCHistogram).on('click', handleClick.bind(null, 'histogram', 'DC'));
@@ -380,6 +412,17 @@
         $(pagerankNodeHistogram).on('click', handleClick.bind(null, 'histogram', 'PN'));
         $(pagerankNodeBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'PN'));
         $(pagerankNodeViolinPlot).on('click', handleClick.bind(null, 'violin', 'PN'));
+
+        $(louvainClustering).on('click', handleClick1.bind(null, 'louvain', 'LOUC'));
+        $(greedy_modularityClustering).on('click', handleClick1.bind(null, 'greedy_modularity', 'GMC'));
+        $(label_propagationClustering).on('click', handleClick1.bind(null, 'label_propagation', 'LPC'));
+        $(asyn_lpaClustering).on('click', handleClick1.bind(null, 'asyn_lpa', 'ALC'));
+        $(k_cliqueClustering).on('click', handleClick1.bind(null, 'k_clique', 'KCC'));
+        $(spectralClustering).on('click', handleClick1.bind(null, 'spectral', 'SC'));
+        $(kmeansClustering).on('click', handleClick1.bind(null, 'kmeans', 'KMC'));
+        $(agglomerativeClustering).on('click', handleClick1.bind(null, 'agglomerative', 'AGC'));
+        $(dbscanClustering).on('click', handleClick1.bind(null, 'dbscan', 'DBC'));
+
     });
 </script>
 {% endblock %}

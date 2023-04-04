@@ -11,8 +11,15 @@ random_bp = Blueprint('resilience_random', __name__, url_prefix="/api/v1/resilie
 def extract_args():
     args = request.args
 
-    number_of_nodes = int(args.get('number_of_nodes'))
-    number_of_edges = int(args.get('number_of_edges'))
+    number_of_nodes = args.get('number_of_nodes', None, type=int)
+    number_of_edges = args.get('number_of_edges', None, type=int)
+
+    if number_of_nodes is '':
+        number_of_nodes = None
+    if number_of_edges is '':
+        number_of_edges = None
+
+    print(number_of_nodes, number_of_edges)
 
     return number_of_nodes, number_of_edges
 
