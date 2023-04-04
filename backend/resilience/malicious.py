@@ -8,15 +8,17 @@ from backend.common.common import get_directed_toggle, get_multi_toggle, get_lay
 
 malicious_bp = Blueprint('resilience_malicious', __name__, url_prefix="/api/v1/resilience")
 
+
 def extract_args():
     args = request.args
 
-    attack_type = args.get('attack_type')
-    number_of_nodes_malicious = args.get('number_of_nodes_malicious')
-    number_of_threshold = args.get('number_of_threshold')
-    operator = args.get('operator')
+    attack_type = args.get('attack_type', None)
+    number_of_nodes_malicious = args.get('number_of_nodes_malicious', None)
+    number_of_threshold = args.get('number_of_threshold', None)
+    operator = args.get('operator', None)
 
     return attack_type, number_of_nodes_malicious, number_of_threshold, operator
+
 
 @malicious_bp.route('<session_id>/malicious')
 def compute_malicious(session_id):
@@ -42,4 +44,3 @@ def compute_malicious(session_id):
 
     return jsonify({"message": "Success", "data": df_json, "network_before": before, "network_after": after,
                     "heatmap_before": heatmap_before, "heatmap_after": heatmap_after})
-
