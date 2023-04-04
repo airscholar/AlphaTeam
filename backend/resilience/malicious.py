@@ -35,7 +35,7 @@ def extract_args():
 @malicious_bp.route('<session_id>/malicious')
 def compute_malicious(session_id):
     attack_type, number_of_nodes_malicious, number_of_threshold, operator = extract_args()
-    print(attack_type, number_of_nodes_malicious, number_of_threshold, operator)
+
     networkGraphs = get_networkGraph(session_id)
 
     networkGraphs2, df = resilience(networkGraphs, attack='malicious', metric=attack_type,
