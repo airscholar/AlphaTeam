@@ -242,21 +242,15 @@
         const pagerankNodeBoxPlot = document.getElementById('nav-pagerank-node-BoxPlot-tab');
         const pagerankNodeViolinPlot = document.getElementById('nav-pagerank-node-ViolinPlot-tab');
 
-        function handleClickClustering(clusterType, section, e) {
-            e.preventDefault();
-            const data = {
-                type_of_attack: typeOfAttack.value,
-                number_of_nodes_malicious: numberOfNodes.value,
-                threshold_operator: thresholdOperator.value,
-                number_of_threshold: numberOfThreshold.value,
-                multi_toggle: multiToggle.checked,
-                directed_toggle: directedToggle.checked,
-                layout: layout.value,
-                number_of_clusters: numberOfClusters.value,
-                session_id: '{{ session_id }}'
-            };
-            performClustering(data, clusterType, section);
-        }
+        const louvainClustering = document.getElementById('nav-Louvain-tab');
+        const greedy_modularityClustering = document.getElementById('nav-greedy_modularity-tab');
+        const label_propagationClustering = document.getElementById('nav-label_propagation-tab');
+        const asyn_lpaClustering = document.getElementById('nav-asyn_lpa-tab');
+        const k_cliqueClustering = document.getElementById('nav-k_clique-tab');
+        const spectralClustering = document.getElementById('nav-spectral-tab');
+        const kmeansClustering = document.getElementById('nav-kmeans-tab');
+        const agglomerativeClustering = document.getElementById('nav-agglomerative-tab');
+        const dbscanClustering = document.getElementById('nav-dbscan-tab');
 
         const GeneralMetrics = document.getElementById('nav-GlobalMetrics-tab');
 

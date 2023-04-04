@@ -163,6 +163,8 @@
         const inputAccordion = document.getElementById('flush-collapseOne');
         const outputAccordion = document.getElementById('flush-collapseTwo');
 
+        const visualisation = document.getElementById('nav-Visualisation-tab');
+
         const degreeCentralityLayout = document.getElementById('nav-DCLayouts-tab');
         const DCHistogram = document.getElementById('nav-DCHistogram-tab');
         const DCBoxPlot = document.getElementById('nav-DCBoxPlot-tab');
@@ -190,23 +192,23 @@
 
         const kCoreNodeLayout = document.getElementById('nav-kcore-node-Layouts-tab');
         const kCoreNodeHistogram = document.getElementById('nav-kcore-node-Histogram-tab');
-        const kCoreNodeBoxPlot = document.getElementById('nav-kcore-node-Boxplot-tab');
-        const kCoreNodeViolinPlot = document.getElementById('nav-kcore-node-Violinplot-tab');
+        const kCoreNodeBoxPlot = document.getElementById('nav-kcore-node-BoxPlot-tab');
+        const kCoreNodeViolinPlot = document.getElementById('nav-kcore-node-ViolinPlot-tab');
 
         const degreeNodeLayout = document.getElementById('nav-degree-node-Layouts-tab');
         const degreeNodeHistogram = document.getElementById('nav-degree-node-Histogram-tab');
-        const degreeNodeBoxPlot = document.getElementById('nav-degree-node-Boxplot-tab');
-        const degreeNodeViolinPlot = document.getElementById('nav-degree-node-Violinplot-tab');
+        const degreeNodeBoxPlot = document.getElementById('nav-degree-node-BoxPlot-tab');
+        const degreeNodeViolinPlot = document.getElementById('nav-degree-node-ViolinPlot-tab');
 
         const trianglesNodeLayout = document.getElementById('nav-triangles-node-Layouts-tab');
         const trianglesNodeHistogram = document.getElementById('nav-triangles-node-Histogram-tab');
-        const trianglesNodeBoxPlot = document.getElementById('nav-triangles-node-Boxplot-tab');
-        const trianglesNodeViolinPlot = document.getElementById('nav-triangles-node-Violinplot-tab');
+        const trianglesNodeBoxPlot = document.getElementById('nav-triangles-node-BoxPlot-tab');
+        const trianglesNodeViolinPlot = document.getElementById('nav-triangles-node-ViolinPlot-tab');
 
         const pagerankNodeLayout = document.getElementById('nav-pagerank-node-Layouts-tab');
         const pagerankNodeHistogram = document.getElementById('nav-pagerank-node-Histogram-tab');
-        const pagerankNodeBoxPlot = document.getElementById('nav-pagerank-node-Boxplot-tab');
-        const pagerankNodeViolinPlot = document.getElementById('nav-pagerank-node-Violinplot-tab');
+        const pagerankNodeBoxPlot = document.getElementById('nav-pagerank-node-BoxPlot-tab');
+        const pagerankNodeViolinPlot = document.getElementById('nav-pagerank-node-ViolinPlot-tab');
 
         const louvainClustering = document.getElementById('nav-Louvain-tab');
         const greedy_modularityClustering = document.getElementById('nav-greedy_modularity-tab');
@@ -217,6 +219,7 @@
         const kmeansClustering = document.getElementById('nav-kmeans-tab');
         const agglomerativeClustering = document.getElementById('nav-agglomerative-tab');
         const dbscanClustering = document.getElementById('nav-dbscan-tab');
+
         const GeneralMetrics = document.getElementById('nav-GlobalMetrics-tab');
 
         $(GeneralMetrics).on('click', function () {
