@@ -44,6 +44,7 @@ def compute_metrics(session_id, metric, plot_type):
     return jsonify({"message": "Success", "data_before": df_json, "data_after": df_json1, "network_before": file_name,
                     "network_after": file_name1})
 
+
 @resilience_bp.route('<session_id>/<cluster_type>')
 def compute_cluster(session_id, cluster_type):
     layout = get_layout(request.args)
@@ -52,18 +53,16 @@ def compute_cluster(session_id, cluster_type):
     networkGraphs = get_networkGraph(session_id)
     networkGraphs2 = get_networkGraph(session_id + '_resilience')
 
-    df = None
-    df1 = None
-    file_name = None
-    file_name1 = None
-
-    df, file_name = plot_cluster(networkGraphs, cluster_type, noOfClusters=noOfClusters, dynamic=False, layout=layout, fullPath=True)
-    df1, file_name1 = plot_cluster(networkGraphs2, cluster_type, noOfClusters=noOfClusters, dynamic=False, layout=layout, fullPath=True)
+    df, file_name = plot_cluster(networkGraphs, cluster_type, noOfClusters=noOfClusters, dynamic=False, layout=layout,
+                                 fullPath=True)
+    df1, file_name1 = plot_cluster(networkGraphs2, cluster_type, noOfClusters=noOfClusters, dynamic=False,
+                                   layout=layout, fullPath=True)
 
     df_json = df.to_json(orient='split')
     df_json1 = df1.to_json(orient='split')
     return jsonify({"message": "Success", "data_before": df_json, "data_after": df_json1, "network_before": file_name,
                     "network_after": file_name1})
+
 
 @resilience_bp.route('<session_id>/global_metrics')
 def global_metrics(session_id):

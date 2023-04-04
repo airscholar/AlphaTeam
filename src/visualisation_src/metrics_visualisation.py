@@ -32,7 +32,7 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
         print(ValueError('No spatial graph'))
-        return 'no_graph.html'
+        return '../application/static/no_graph.html'
 
     pos = networkGraphs.pos[layout_]
 
@@ -111,7 +111,7 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
         print(ValueError('No spatial graph'))
-        return 'no_graph.html'
+        return '../application/static/no_graph.html'
 
     pos = networkGraphs.pos[layout_]
 
