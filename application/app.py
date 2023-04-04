@@ -103,15 +103,21 @@ def home():
     full_path = args.get('full_path')
     option = args.get('option')
 
-    session['filename'] = filename
-    session['filename2'] = filename2
-    session['filepath'] = filepath
-    session['full_path'] = full_path
-    session['option'] = option
+    networkGraphs = None
+
+    if filename2 is None or filename2 == '':
+        filename2 = session['filename2']
+        networkGraphs = get_networkGraph(filename2)
+    else:
+        session['filename'] = filename
+        session['filename2'] = filename2
+        session['filepath'] = filepath
+        session['full_path'] = full_path
+        session['option'] = option
 
     # networkGraphs = NetworkGraphs(filepath, session_folder=filepath.split('/'+filename)[0], type=option)
-    networkGraphs = NetworkGraphs(full_path, session_folder=filepath.split('.')[0], type=option)
-    set_networkGraph(networkGraphs, filename2)
+        networkGraphs = NetworkGraphs(full_path, session_folder=filepath.split('.')[0], type=option)
+        set_networkGraph(networkGraphs, filename2)
     # Pass the data to the HTML template
     return render_template('home.html', data=networkGraphs.df.head(100))
 

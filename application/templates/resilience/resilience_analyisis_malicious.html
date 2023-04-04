@@ -133,16 +133,15 @@
                         <div class="row justify-content-center align-items-center">
                             <div class="col-auto"><label style="margin-top: 5px;">Multi:</label>
                                 <div class="toggle-btn">
-                                    <input type="checkbox" id="multi-toggle" name="multi_toggle" {% if
-                                           multi_toggle %}checked{% endif %}>
+                                    <input type="checkbox" id="multi-toggle" name="multi_toggle" {% if multi_toggle
+                                        %}checked{% endif %}>
                                     <label for="multi-toggle"></label>
                                 </div>
                             </div>
                             <div class="col-auto"><label style="margin-top: 5px;">Directed:</label>
                                 <div class="toggle-btn">
                                     <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if
-                                           directed_toggle %}checked{%
-                                           endif %}>
+                                        directed_toggle %}checked{% endif %}>
                                     <label for="directed-toggle"></label>
                                 </div>
                             </div>
@@ -163,11 +162,9 @@
                                     Clusters:</label>
                             </div>
                             <div class="col-auto">
-                                <input type="number" id="number_of_clusters"
-                                       name="number_of_clusters"
-                                       class="form-control" min="1" step="1" placeholder="None" {% if
-                                       number_of_clusters is not none
-                                       %}value="{{ number_of_clusters }}" {% endif %}>
+                                <input type="number" id="number_of_clusters" name="number_of_clusters"
+                                    class="form-control" min="1" step="1" placeholder="None" {% if number_of_clusters is
+                                    not none %}value="{{ number_of_clusters }}" {% endif %}>
                             </div>
                         </div>
                     </div>
@@ -245,21 +242,15 @@
         const pagerankNodeBoxPlot = document.getElementById('nav-pagerank-node-BoxPlot-tab');
         const pagerankNodeViolinPlot = document.getElementById('nav-pagerank-node-ViolinPlot-tab');
 
-        function handleClickClustering(clusterType, section, e) {
-            e.preventDefault();
-            const data = {
-                type_of_attack: typeOfAttack.value,
-                number_of_nodes_malicious: numberOfNodes.value,
-                threshold_operator: thresholdOperator.value,
-                number_of_threshold: numberOfThreshold.value,
-                multi_toggle: multiToggle.checked,
-                directed_toggle: directedToggle.checked,
-                layout: layout.value,
-                number_of_clusters: numberOfClusters.value,
-                session_id: '{{ session_id }}'
-            };
-            performClustering(data, clusterType, section);
-        }
+        const louvainClustering = document.getElementById('nav-Louvain-tab');
+        const greedy_modularityClustering = document.getElementById('nav-greedy_modularity-tab');
+        const label_propagationClustering = document.getElementById('nav-label_propagation-tab');
+        const asyn_lpaClustering = document.getElementById('nav-asyn_lpa-tab');
+        const k_cliqueClustering = document.getElementById('nav-k_clique-tab');
+        const spectralClustering = document.getElementById('nav-spectral-tab');
+        const kmeansClustering = document.getElementById('nav-kmeans-tab');
+        const agglomerativeClustering = document.getElementById('nav-agglomerative-tab');
+        const dbscanClustering = document.getElementById('nav-dbscan-tab');
 
         const GeneralMetrics = document.getElementById('nav-GlobalMetrics-tab');
 
@@ -331,7 +322,16 @@
             'KN': 'kcore',
             'DN': 'degree',
             'TN': 'triangles',
-            'PN': 'pagerank'
+            'PN': 'pagerank',
+            'LOUC': 'louvain',
+            'GMC': 'greedy_modularity',
+            'LPC': 'label_propagation',
+            'ALC': 'asyn_lpa',
+            'KCC': 'k_clique',
+            'SC': 'spectral',
+            'KMC': 'kmeans',
+            'AGC': 'agglomerative',
+            'DBC': 'dbscan',
         }
 
         function handleClick(plotType, section, e) {
@@ -348,6 +348,22 @@
                 session_id: '{{ session_id }}'
             };
             performResilienceMetrics(data, plotType, section);
+        }
+
+        function handleClick1(plotType, section, e) {
+            e.preventDefault();
+            const data = {
+                type_of_attack: attack[section],
+                number_of_nodes_malicious: numberOfNodes.value,
+                threshold_operator: thresholdOperator.value,
+                number_of_threshold: numberOfThreshold.value,
+                multi_toggle: multiToggle.checked,
+                directed_toggle: directedToggle.checked,
+                layout: layout.value,
+                number_of_clusters: numberOfClusters.value,
+                session_id: '{{ session_id }}'
+            };
+            performResilienceCluster(data, plotType, section);
         }
 
         $(degreeCentralityLayout).on('click', handleClick.bind(null, 'layout', 'DC'));
@@ -394,6 +410,17 @@
         $(pagerankNodeHistogram).on('click', handleClick.bind(null, 'histogram', 'PN'));
         $(pagerankNodeBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'PN'));
         $(pagerankNodeViolinPlot).on('click', handleClick.bind(null, 'violin', 'PN'));
+
+        $(louvainClustering).on('click', handleClick1.bind(null, 'louvain', 'LOUC'));
+        $(greedy_modularityClustering).on('click', handleClick1.bind(null, 'greedy_modularity', 'GMC'));
+        $(label_propagationClustering).on('click', handleClick1.bind(null, 'label_propagation', 'LPC'));
+        $(asyn_lpaClustering).on('click', handleClick1.bind(null, 'asyn_lpa', 'ALC'));
+        $(k_cliqueClustering).on('click', handleClick1.bind(null, 'k_clique', 'KCC'));
+        $(spectralClustering).on('click', handleClick1.bind(null, 'spectral', 'SC'));
+        $(kmeansClustering).on('click', handleClick1.bind(null, 'kmeans', 'KMC'));
+        $(agglomerativeClustering).on('click', handleClick1.bind(null, 'agglomerative', 'AGC'));
+        $(dbscanClustering).on('click', handleClick1.bind(null, 'dbscan', 'DBC'));
+
     });
 </script>
 {% endblock %}
