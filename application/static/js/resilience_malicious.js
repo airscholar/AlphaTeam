@@ -27,6 +27,12 @@ function performResilienceMalicious(data) {
             $(afterFrame).attr("src", afterPath);
             $(beforeHeatmap).attr("src", beforeHeatmapPath);
             $(afterHeatmap).attr("src", afterHeatmapPath);
+
+            let attackSummary = document.getElementById('AS_Table');
+            const resBefore = JSON.parse(data.data);
+            const columns = resBefore.columns;
+
+            createTable(attackSummary, resBefore.data, columns);
         },
         error: function (data) {
             console.log('ERROR', data);
@@ -45,12 +51,16 @@ function performResilienceMetrics(data, plot_type, section) {
         type: 'GET',
         mode: 'no-cors',
         success: function (data) {
-            let beforeFrame, afterFrame;
+            let beforeFrame, afterFrame, beforeTable, afterTable;
             const prefix = section + '_' + plot_type;
+            const tablePrefix = section + '_' + plot_type + '_table';
 
             if (plot_type === 'layout' || plot_type === 'histogram' || plot_type === 'boxplot' || plot_type === 'violin') {
                 beforeFrame = document.getElementById(prefix + '_before');
                 afterFrame = document.getElementById(prefix + '_after');
+
+                beforeTable = document.getElementById(tablePrefix + '_before');
+                afterTable = document.getElementById(tablePrefix + '_after');
             }
 
             const beforeLayoutPath = data.network_before.replace('application/', '');
@@ -59,7 +69,13 @@ function performResilienceMetrics(data, plot_type, section) {
             $(beforeFrame).attr("src", beforeLayoutPath);
             $(afterFrame).attr("src", afterLayoutPath);
 
+            const resBefore = JSON.parse(data.data_before);
+            const resAfter = JSON.parse(data.data_after);
 
+            const columns = resBefore.columns;
+
+            createTable(beforeTable, resBefore.data, columns);
+            createTable(afterTable, resAfter.data, columns);
         },
         error: function (data) {
             alert('An error occurred. Please try again.');
@@ -70,19 +86,26 @@ function performResilienceMetrics(data, plot_type, section) {
 
 function performResilienceCluster(data, plot_type, section) {
     $.ajax({
-        url: BASE_URL + data.session_id + '/' + data.type_of_attack + '?layout='
-            + data.layout + '&noOfClusters=' + data.number_of_clusters,
+        url: BASE_URL + data.session_id + '/' + data.type_of_attack,
+        data: {
+            layout: data.layout,
+            noOfClusters: data.number_of_clusters,
+        },
         type: 'GET',
         mode: 'no-cors',
         success: function (data) {
-            let beforeFrame, afterFrame;
+            let beforeFrame, afterFrame, beforeTable, afterTable;
             const prefix = section + '_' + plot_type;
+            const clusteringPrefix = section + '_table';
 
             if (plot_type === 'louvain' || plot_type === 'greedy_modularity' || plot_type === 'label_propagation' || plot_type === 'asyn_lpa'
                 || plot_type === 'k_clique' || plot_type === 'spectral' || plot_type === 'kmeans'
                 || plot_type === 'agglomerative' || plot_type === 'dbscan') {
                 beforeFrame = document.getElementById(prefix + '_before');
                 afterFrame = document.getElementById(prefix + '_after');
+
+                beforeTable = document.getElementById(clusteringPrefix + '_before');
+                afterTable = document.getElementById(clusteringPrefix + '_after');
             }
 
             const beforeLayoutPath = data.network_before.replace('application/', '');
@@ -91,7 +114,13 @@ function performResilienceCluster(data, plot_type, section) {
             $(beforeFrame).attr("src", beforeLayoutPath);
             $(afterFrame).attr("src", afterLayoutPath);
 
+            const resBefore = JSON.parse(data.data_before);
+            const resAfter = JSON.parse(data.data_after);
 
+            const columns = resBefore.columns;
+
+            createTable(beforeTable, resBefore.data, columns, true);
+            createTable(afterTable, resAfter.data, columns, true);
         },
         error: function (data) {
             alert('An error occurred. Please try again.');
@@ -110,35 +139,51 @@ function retrieveGeneralMetrics(data) {
             directed_toggle: data.directed_toggle,
         },
         success: function (data) {
-            const beforeTable = document.getElementById('GM_Table_before');
-            const afterTable = document.getElementById('GM_Table_after');
+            const beforeTable = document.getElementById('GM_table_before');
+            const afterTable = document.getElementById('GM_table_after');
             const resBefore = JSON.parse(data.data_before);
             const resAfter = JSON.parse(data.data_after);
             const columns = resBefore.columns;
 
-            const createTable = (tableElem, data) => {
-                const headerRow = tableElem.createTHead().insertRow(0);
-                for (let i = 0; i < columns.length; i++) {
-                    headerRow.insertCell(i).innerHTML = columns[i];
-                }
-                const body = tableElem.createTBody();
-                for (let i = 0; i < data.length; i++) {
-                    const row = body.insertRow(i);
-                    for (let j = 0; j < data[i].length; j++) {
-                        row.insertCell(j).innerHTML = data[i][j];
-                    }
-                }
-                $(tableElem).DataTable();
-            };
-
-            createTable(beforeTable, resBefore.data);
-            createTable(afterTable, resAfter.data);
+            createTable(beforeTable, resBefore.data, columns);
+            createTable(afterTable, resAfter.data, columns);
         },
         error: function (data) {
             console.log('ERROR', data);
         }
     });
 }
+
+const createTable = (tableElem, data, columns, isCluster=false) => {
+    tableElem.innerHTML = '';
+    tableElem.innerHTML = '';
+
+    if ($.fn.DataTable.isDataTable(tableElem)) {
+        $(tableElem).DataTable().destroy();
+    }
+
+    if (tableElem.tHead) {
+        tableElem.tHead.remove();
+    }
+
+
+    const headerRow = tableElem.createTHead().insertRow(0);
+    for (let i = 0; i < columns.length; i++) {
+        headerRow.insertCell(i).innerHTML = columns[i];
+    }
+    const body = tableElem.createTBody();
+    for (let i = 0; i < data.length; i++) {
+        const row = body.insertRow(i);
+        for (let j = 0; j < data[i].length; j++) {
+            row.insertCell(j).innerHTML = data[i][j];
+        }
+    }
+    if (!isCluster) $(tableElem).DataTable();
+    else
+        $(tableElem).DataTable({
+            "scrollX": true,
+        });
+};
 
 function performVisualisation(data) {
     console.log(data)

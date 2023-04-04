@@ -207,7 +207,7 @@ def resilience_malicious(networkGraph, metric=None, number_of_nodes=None, thresh
     G = copy_networkGraph(networkGraph)
     G.set_attack_vector('malicious')
 
-    df = get_metrics(G, metric, directed=directed, multi=multi)
+    df = get_metrics(networkGraph, metric, directed=directed, multi=multi)
     metric = df.columns[1]
     df = df.sort_values(by=metric, ascending=False)
 
@@ -257,7 +257,7 @@ def resilience_cluster(networkGraph, cluster_algorithm=None, total_clusters=0, n
                          "or a positive number"))
         return 0
 
-    clusters = ml.get_communities(G, cluster_algorithm, total_clusters)
+    clusters = ml.get_communities(networkGraph, cluster_algorithm, total_clusters)
 
     cluster_ids = clusters['Cluster_id'].unique()
     cluster_ids = random.sample(sorted(cluster_ids), number_of_clusters)
