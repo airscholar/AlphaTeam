@@ -5,13 +5,25 @@ from flask import request
 BASE_URL = 'http://localhost:8000/api/v1/metrics/'
 
 def get_arg_multi_toggle(args):
-    multi_toggle = args.get('multi_toggle', 'false')
-    multi_toggle = True if multi_toggle in ['true', 'True',True] else False
+    if 'multi_toggle' in args:
+        multi_toggle = args.get('multi_toggle', 'false')
+        multi_toggle = True if multi_toggle in ['true', 'True',True] else False
+    if 'multi' in args:
+        multi_toggle = args.get('multi', 'false')
+        multi_toggle = True if multi_toggle in ['true', 'True',True] else False
+    else:
+        raise ValueError('multi_toggle or multi not found in args')
     return multi_toggle
 
 def get_arg_directed_toggle(args):
-    directed_toggle = args.get('directed_toggle', 'false')
-    directed_toggle = True if directed_toggle in ['true', 'True',True] else False
+    if 'directed_toggle' in args:
+        directed_toggle = args.get('directed_toggle', 'false')
+        directed_toggle = True if directed_toggle in ['true', 'True',True] else False
+    if 'directed' in args:
+        directed_toggle = args.get('directed', 'false')
+        directed_toggle = True if directed_toggle in ['true', 'True',True] else False
+    else:
+        raise ValueError('directed_toggle or directed not found in args')
     return directed_toggle
 
 def get_arg_dynamic_toggle(args):

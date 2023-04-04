@@ -84,6 +84,7 @@ def global_metrics(session_id):
 
     df_json = df1.to_json(orient='split')
     df_json1 = df2.to_json(orient='split')
+    print(df2)
 
     return jsonify({"message": "Success", "data_before": df_json, "data_after": df_json1})
 
