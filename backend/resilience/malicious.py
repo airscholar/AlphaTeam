@@ -10,12 +10,27 @@ malicious_bp = Blueprint('resilience_malicious', __name__, url_prefix="/api/v1/r
 
 
 def extract_args():
+    res_operator = {
+        'greater_than': '>',
+        'less_than': '<',
+        'greater_than_or_equal_to': '>=',
+        'less_than_or_equal_to': '<='
+    }
     args = request.args
 
     attack_type = args.get('attack_type', None)
     number_of_nodes_malicious = args.get('number_of_nodes_malicious', None)
     number_of_threshold = args.get('number_of_threshold', None)
     operator = args.get('operator', None)
+
+    if operator is not None:
+        operator = res_operator[operator]
+    if number_of_nodes_malicious == '':
+        number_of_nodes_malicious = None
+    if number_of_threshold == '':
+        number_of_threshold = None
+
+    print(attack_type, number_of_nodes_malicious, number_of_threshold, operator)
 
     return attack_type, number_of_nodes_malicious, number_of_threshold, operator
 
