@@ -98,8 +98,9 @@ function retrieveGeneralMetrics(data) {
             console.log('ERROR', data);
         }
     });
+}
 
-    function performVisualisation(data) {
+function performVisualisation(data) {
     console.log(data)
     $.ajax({
         url: BASE_URL + data.session_id + '/visualisation?layout=' + data.layout,
@@ -109,8 +110,8 @@ function retrieveGeneralMetrics(data) {
             let beforeFrame = document.getElementById('before_frame');
             let afterFrame = document.getElementById('after_frame');
 
-            const beforePath = data.network_before.replace('application/', '');
-            const afterPath = data.network_after.replace('application/', '');
+            const beforePath = data.before_frame.replace('application/', '');
+            const afterPath = data.after_frame.replace('application/', '');
 
             $(beforeFrame).attr("src", beforePath);
             $(afterFrame).attr("src", afterPath);
@@ -119,8 +120,5 @@ function retrieveGeneralMetrics(data) {
             console.log('ERROR', data);
         }
     });
-}
-
-
 }
 
