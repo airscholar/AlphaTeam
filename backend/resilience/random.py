@@ -6,28 +6,24 @@ from src.utils import get_networkGraph, set_networkGraph
 from src.visualisation import *
 from backend.common.common import get_directed_toggle, get_multi_toggle, get_layout
 
-malicious_bp = Blueprint('resilience_malicious', __name__, url_prefix="/api/v1/resilience")
+random_bp = Blueprint('resilience_random', __name__, url_prefix="/api/v1/resilience")
 
 def extract_args():
     args = request.args
 
-    attack_type = args.get('attack_type')
-    number_of_nodes_malicious = args.get('number_of_nodes_malicious')
-    number_of_threshold = args.get('number_of_threshold')
-    operator = args.get('operator')
+    number_of_nodes = int(args.get('number_of_nodes'))
+    number_of_edges = int(args.get('number_of_edges'))
 
-    return attack_type, number_of_nodes_malicious, number_of_threshold, operator
+    return number_of_nodes, number_of_edges
 
-@malicious_bp.route('<session_id>/malicious')
-def compute_malicious(session_id):
-    attack_type, number_of_nodes_malicious, number_of_threshold, \
-        operator = extract_args()
+@random_bp.route('<session_id>/random')
+def compute_random(session_id):
+    number_of_nodes, number_of_edges = extract_args()
 
     networkGraphs = get_networkGraph(session_id)
 
-    networkGraphs2, df = resilience(networkGraphs, attack='malicious', metric=attack_type,
-                                    number_of_nodes=number_of_nodes_malicious, threshold=number_of_threshold,
-                                    operator=operator)
+    networkGraphs2, df = resilience(networkGraphs, attack='random', number_of_edges=number_of_edges,
+                                    number_of_nodes=number_of_nodes)
 
     session_id2 = session_id + '_resilience'
     set_networkGraph(networkGraphs2, session_id2)

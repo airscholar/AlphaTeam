@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from flask_jsonpify import jsonify
 
+from src.metrics import compute_global_metrics
 from src.resilience import resilience
 from src.utils import get_networkGraph, set_networkGraph
 from src.visualisation import *
@@ -66,3 +67,19 @@ def compute_cluster(session_id, cluster_type):
     df_json1 = df1.to_json(orient='split')
     return jsonify({"message": "Success", "data_before": df_json, "data_after": df_json1, "network_before": file_name,
                     "network_after": file_name1})
+
+@resilience_bp.route('<session_id>/global_metrics')
+def global_metrics(session_id):
+    directed_toggle = get_directed_toggle(request.args)
+    multi_toggle = get_multi_toggle(request.args)
+
+    networkGraphs = get_networkGraph(session_id)
+    networkGraphs2 = get_networkGraph(session_id + '_resilience')
+
+    df1 = compute_global_metrics(networkGraphs, directed=directed_toggle, multi=multi_toggle)
+    df2 = compute_global_metrics(networkGraphs2, directed=directed_toggle, multi=multi_toggle)
+
+    df_json = df1.to_json(orient='split')
+    df_json1 = df2.to_json(orient='split')
+
+    return jsonify({"message": "Success", "data_before": df_json, "data_after": df_json1})
