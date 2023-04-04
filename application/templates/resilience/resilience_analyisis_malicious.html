@@ -16,12 +16,12 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="flush-headingOne">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                            data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                         Input Form
                     </button>
                 </h2>
                 <div id="flush-collapseOne" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne"
-                    data-bs-parent="#accordionFlushExample">
+                     data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body">
                         <!-- Card Form starts here -->
                         <div class="card mx-auto" style="width: 30rem;">
@@ -40,66 +40,58 @@
                                             <nav style="padding-bottom: 10px">
                                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                                     <button class="nav-link active" id="nav-node-tab"
-                                                        data-bs-toggle="tab" data-bs-target="#nav-node" type="button"
-                                                        role="tab" aria-controls="nav-node" aria-selected="true">Node
+                                                            data-bs-toggle="tab" data-bs-target="#nav-node"
+                                                            type="button"
+                                                            role="tab" aria-controls="nav-node" aria-selected="true">
+                                                        Node
                                                     </button>
                                                     <button class="nav-link" id="nav-threshold-tab" data-bs-toggle="tab"
-                                                        data-bs-target="#nav-threshold" type="button" role="tab"
-                                                        aria-controls="nav-threshold" aria-selected="false">
+                                                            data-bs-target="#nav-threshold" type="button" role="tab"
+                                                            aria-controls="nav-threshold" aria-selected="false">
                                                         Threshold
                                                     </button>
                                                 </div>
                                             </nav>
                                             <div class="tab-content" id="nav-tabContent" style="margin-left: 10px">
                                                 <div class="tab-pane fade show active" id="nav-node" role="tabpanel"
-                                                    aria-labelledby="nav-node-tab">
+                                                     aria-labelledby="nav-node-tab">
                                                     <div class="row">
                                                         <label for="number_of_nodes_malicious_input"
-                                                            style="margin-top: 5px;">Number of
+                                                               style="margin-top: 5px;">Number of
                                                             Nodes</label>
                                                         <input type="number" id="number_of_nodes_malicious_input"
-                                                            placeholder="None" name="number_of_nodes_malicious"
-                                                            class="mx-auto form-control" min="1" step="1" {% if
-                                                            number_of_nodes_malicious is not none %}
-                                                            value="{{ number_of_nodes_malicious }}" {% endif %}>
+                                                               placeholder="None" name="number_of_nodes_malicious"
+                                                               class="mx-auto form-control" min="1" step="1" {% if
+                                                               number_of_nodes_malicious is not none %}
+                                                               value="{{ number_of_nodes_malicious }}" {% endif %}>
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane fade" id="nav-threshold" role="tabpanel"
-                                                    aria-labelledby="nav-threshold-tab">
+                                                     aria-labelledby="nav-threshold-tab">
                                                     <div class="row">
                                                         <div class="col-auto">
                                                             <label for="dropdown-menu2-input"
-                                                                style="margin-top: 5px;">Threshold</label>
+                                                                   style="margin-top: 5px;">Threshold</label>
                                                         </div>
                                                         <div class="col-auto">
                                                             <div class="dropdown" style="margin:5px">
                                                                 <select id="dropdown-menu2-input" class="mx-auto"
-                                                                    name="threshold_operator">
-                                                                    <option value="greater_than" {% if
-                                                                        threshold_operator=='greater_than' %} selected
-                                                                        {% endif %}> &gt;
-                                                                    </option>
-                                                                    <option value="less_than" {% if
-                                                                        threshold_operator=='less_than' %} selected {%
-                                                                        endif %}>&lt;
-                                                                    </option>
-                                                                    <option value="greater_than_or_equal_to" {% if
-                                                                        threshold_operator=='greater_than_or_equal_to'
-                                                                        %} selected {% endif %}>&ge;
-                                                                    </option>
-                                                                    <option value="less_than_or_equal_to" {% if
-                                                                        threshold_operator=='less_than_or_equal_to' %}
-                                                                        selected {% endif %}>&le;
-                                                                    </option>
+                                                                        name="threshold_operator">
+                                                                    <option value="greater_than"> &gt;</option>
+                                                                    <option value="less_than">&lt;</option>
+                                                                    <option value="greater_than_or_equal_to">&ge;</option>
+                                                                    <option value="less_than_or_equal_to">&le;</option>
                                                                 </select>
                                                             </div>
                                                         </div>
                                                         <div class="col-auto" style="margin:5px">
                                                             <input type="number" id="number_of_threshold_input"
-                                                                name="number_of_threshold" class="form-control" min="1"
-                                                                step="1" placeholder="None" {% if number_of_threshold is
-                                                                not none %}value="{{ number_of_threshold }}" {% endif
-                                                                %}>
+                                                                   name="number_of_threshold" class="form-control"
+                                                                   min="1"
+                                                                   step="1" placeholder="None" {% if number_of_threshold
+                                                                   is
+                                                                   not none %}value="{{ number_of_threshold }}" {% endif
+                                                                   %}>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -108,7 +100,7 @@
                                     </div>
                                     <br>
                                     <button type="submit" class="btn btn-primary" style="margin:5px; width: 100%;"
-                                        id="resilience_btn">Submit
+                                            id="resilience_btn">Submit
                                     </button>
                                 </form>
                             </div>
@@ -122,27 +114,24 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="flush-headingTwo">
                     <button id="accordion-button-two" class="accordion-button collapsed" type="button"
-                        data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false"
-                        aria-controls="flush-collapseTwo">
+                            data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                            aria-controls="flush-collapseTwo">
                         Output
                     </button>
                 </h2>
                 <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
-                    data-bs-parent="#accordionFlushExample1">
+                     data-bs-parent="#accordionFlushExample1">
                     <div>
                         <div class="row justify-content-center align-items-center">
                             <div class="col-auto"><label style="margin-top: 5px;">Multi:</label>
                                 <div class="toggle-btn">
-                                    <input type="checkbox" id="multi-toggle" name="multi_toggle" {% if
-                                           multi_toggle %}checked{% endif %}>
+                                    <input type="checkbox" id="multi-toggle" name="multi_toggle">
                                     <label for="multi-toggle"></label>
                                 </div>
                             </div>
                             <div class="col-auto"><label style="margin-top: 5px;">Directed:</label>
                                 <div class="toggle-btn">
-                                    <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if
-                                           directed_toggle %}checked{%
-                                           endif %}>
+                                    <input type="checkbox" id="directed-toggle" name="directed_toggle">
                                     <label for="directed-toggle"></label>
                                 </div>
                             </div>
@@ -165,9 +154,7 @@
                             <div class="col-auto">
                                 <input type="number" id="number_of_clusters"
                                        name="number_of_clusters"
-                                       class="form-control" min="1" step="1" placeholder="None" {% if
-                                       number_of_clusters is not none
-                                       %}value="{{ number_of_clusters }}" {% endif %}>
+                                       class="form-control" min="1" step="1" placeholder="None" />
                             </div>
                         </div>
                     </div>
@@ -193,6 +180,7 @@
         const directedToggle = document.getElementById('directed-toggle');
         const layout = document.getElementById('layout_type');
         const numberOfClusters = document.getElementById('number_of_clusters');
+        const GeneralMetrics = document.getElementById('nav-GlobalMetrics-tab');
 
         const res_btn = document.getElementById('resilience_btn');
         const inputAccordion = document.getElementById('flush-collapseOne');
@@ -245,10 +233,22 @@
         const pagerankNodeBoxPlot = document.getElementById('nav-pagerank-node-BoxPlot-tab');
         const pagerankNodeViolinPlot = document.getElementById('nav-pagerank-node-ViolinPlot-tab');
 
-        function handleClickClustering(clusterType, section, e) {
+        const attack = {
+            'DC': 'degree_centrality',
+            'EC': 'eigenvector_centrality',
+            'BC': 'betweenness_centrality',
+            'CC': 'closeness_centrality',
+            'LC': 'load_centrality',
+            'KN': 'kcore',
+            'DN': 'degree',
+            'TN': 'triangles',
+            'PN': 'pagerank'
+        };
+
+        function handleClick(plotType, section, e) {
             e.preventDefault();
             const data = {
-                type_of_attack: typeOfAttack.value,
+                type_of_attack: attack[section],
                 number_of_nodes_malicious: numberOfNodes.value,
                 threshold_operator: thresholdOperator.value,
                 number_of_threshold: numberOfThreshold.value,
@@ -258,10 +258,8 @@
                 number_of_clusters: numberOfClusters.value,
                 session_id: '{{ session_id }}'
             };
-            performClustering(data, clusterType, section);
+            performResilienceMetrics(data, plotType, section);
         }
-
-        const GeneralMetrics = document.getElementById('nav-GlobalMetrics-tab');
 
         $(GeneralMetrics).on('click', function () {
             const data = {
@@ -322,22 +320,9 @@
             performResilienceMalicious(data);
         });
 
-        const attack = {
-            'DC': 'degree_centrality',
-            'EC': 'eigenvector_centrality',
-            'BC': 'betweenness_centrality',
-            'CC': 'closeness_centrality',
-            'LC': 'load_centrality',
-            'KN': 'kcore',
-            'DN': 'degree',
-            'TN': 'triangles',
-            'PN': 'pagerank'
-        }
-
-        function handleClick(plotType, section, e) {
-            e.preventDefault();
+        $(multiToggle).on('click', function () {
             const data = {
-                type_of_attack: attack[section],
+                type_of_attack: typeOfAttack.value,
                 number_of_nodes_malicious: numberOfNodes.value,
                 threshold_operator: thresholdOperator.value,
                 number_of_threshold: numberOfThreshold.value,
@@ -347,8 +332,9 @@
                 number_of_clusters: numberOfClusters.value,
                 session_id: '{{ session_id }}'
             };
-            performResilienceMetrics(data, plotType, section);
-        }
+
+            performResilienceMalicious(data);
+        });
 
         $(degreeCentralityLayout).on('click', handleClick.bind(null, 'layout', 'DC'));
         $(DCHistogram).on('click', handleClick.bind(null, 'histogram', 'DC'));

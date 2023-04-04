@@ -27,6 +27,12 @@ function performResilienceMalicious(data) {
             $(afterFrame).attr("src", afterPath);
             $(beforeHeatmap).attr("src", beforeHeatmapPath);
             $(afterHeatmap).attr("src", afterHeatmapPath);
+
+            let attackSummary = document.getElementById('AS_Table');
+            const resBefore = JSON.parse(data.data);
+            const columns = resBefore.columns;
+
+            createTable(attackSummary, resBefore.data, columns);
         },
         error: function (data) {
             console.log('ERROR', data);
@@ -58,8 +64,6 @@ function performResilienceMetrics(data, plot_type, section) {
 
             $(beforeFrame).attr("src", beforeLayoutPath);
             $(afterFrame).attr("src", afterLayoutPath);
-
-
         },
         error: function (data) {
             alert('An error occurred. Please try again.');
@@ -84,29 +88,41 @@ function retrieveGeneralMetrics(data) {
             const resAfter = JSON.parse(data.data_after);
             const columns = resBefore.columns;
 
-            const createTable = (tableElem, data) => {
-                const headerRow = tableElem.createTHead().insertRow(0);
-                for (let i = 0; i < columns.length; i++) {
-                    headerRow.insertCell(i).innerHTML = columns[i];
-                }
-                const body = tableElem.createTBody();
-                for (let i = 0; i < data.length; i++) {
-                    const row = body.insertRow(i);
-                    for (let j = 0; j < data[i].length; j++) {
-                        row.insertCell(j).innerHTML = data[i][j];
-                    }
-                }
-                $(tableElem).DataTable();
-            };
-
-            createTable(beforeTable, resBefore.data);
-            createTable(afterTable, resAfter.data);
+            createTable(beforeTable, resBefore.data, columns);
+            createTable(afterTable, resAfter.data, columns);
         },
         error: function (data) {
             console.log('ERROR', data);
         }
     });
 }
+
+const createTable = (tableElem, data, columns) => {
+    tableElem.innerHTML = '';
+    tableElem.innerHTML = '';
+
+    if ($.fn.DataTable.isDataTable(tableElem)) {
+        $(tableElem).DataTable().destroy();
+    }
+
+    if (tableElem.tHead) {
+        tableElem.tHead.remove();
+    }
+
+
+    const headerRow = tableElem.createTHead().insertRow(0);
+    for (let i = 0; i < columns.length; i++) {
+        headerRow.insertCell(i).innerHTML = columns[i];
+    }
+    const body = tableElem.createTBody();
+    for (let i = 0; i < data.length; i++) {
+        const row = body.insertRow(i);
+        for (let j = 0; j < data[i].length; j++) {
+            row.insertCell(j).innerHTML = data[i][j];
+        }
+    }
+    $(tableElem).DataTable();
+};
 
 function performVisualisation(data) {
     console.log(data)
