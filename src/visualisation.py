@@ -41,7 +41,7 @@ def plot_network(networkGraphs, layout='map', dynamic=False, fullPath=False):
     """
     if not networkGraphs.is_spatial() and layout == 'map':
         print(ValueError("Graph is not spatial with coordinates"))
-        return 'no_graph.html'
+        return '../application/static/no_graph.html'
 
     filename = f"{'Dynamic' if dynamic else 'Static'}_{layout}.html"
     if dynamic:
@@ -161,7 +161,7 @@ def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False
             not networkGraphs.is_spatial() and layout == 'map'):
         print(ValueError(
             'Metric column is empty. Please select a different metric or select different layout because graphs is not spatial with coordinates '))
-        return df, "no_graph.html"
+        return df, '../application/static/no_graph.html'
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
     if dynamic:
@@ -208,7 +208,7 @@ def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='
             'Metric column is empty. Please select a different metric or select different layout because graphs is '
             'not spatial with coordinates '))
         df = utils.return_nan(networkGraphs, 'Metrics')
-        return df, "no_graph.html"
+        return df, '../application/static/no_graph.html'
 
     if metrics == 'centralities':
         df = m.compute_node_centralities(networkGraphs, directed=directed, multi=multi)
@@ -421,11 +421,11 @@ def plot_temporal(neworkGraphs, layout='map'):
     """
     if not neworkGraphs.is_temporal():
         print(ValueError('Graph is not temporal. Please select a temporal graph.'))
-        return 'no_graph.html'
+        return '../application/static/no_graph.html'
 
     if not neworkGraphs.is_spatial() and layout == 'map':
         print(ValueError('Graph is not spatial. Please select a spatial graph.'))
-        return 'no_graph.html'
+        return '../application/static/no_graph.html'
 
     filename = f"temporal_{layout}.html"
     filepath = get_file_path(neworkGraphs, filename)

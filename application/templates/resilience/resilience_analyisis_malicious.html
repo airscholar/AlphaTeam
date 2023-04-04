@@ -225,25 +225,25 @@
 
         const kCoreNodeLayout = document.getElementById('nav-kcore-node-Layouts-tab');
         const kCoreNodeHistogram = document.getElementById('nav-kcore-node-Histogram-tab');
-        const kCoreNodeBoxPlot = document.getElementById('nav-kcore-node-Boxplot-tab');
-        const kCoreNodeViolinPlot = document.getElementById('nav-kcore-node-Violinplot-tab');
+        const kCoreNodeBoxPlot = document.getElementById('nav-kcore-node-BoxPlot-tab');
+        const kCoreNodeViolinPlot = document.getElementById('nav-kcore-node-ViolinPlot-tab');
 
         const degreeNodeLayout = document.getElementById('nav-degree-node-Layouts-tab');
         const degreeNodeHistogram = document.getElementById('nav-degree-node-Histogram-tab');
-        const degreeNodeBoxPlot = document.getElementById('nav-degree-node-Boxplot-tab');
-        const degreeNodeViolinPlot = document.getElementById('nav-degree-node-Violinplot-tab');
+        const degreeNodeBoxPlot = document.getElementById('nav-degree-node-BoxPlot-tab');
+        const degreeNodeViolinPlot = document.getElementById('nav-degree-node-ViolinPlot-tab');
 
         const trianglesNodeLayout = document.getElementById('nav-triangles-node-Layouts-tab');
         const trianglesNodeHistogram = document.getElementById('nav-triangles-node-Histogram-tab');
-        const trianglesNodeBoxPlot = document.getElementById('nav-triangles-node-Boxplot-tab');
-        const trianglesNodeViolinPlot = document.getElementById('nav-triangles-node-Violinplot-tab');
+        const trianglesNodeBoxPlot = document.getElementById('nav-triangles-node-BoxPlot-tab');
+        const trianglesNodeViolinPlot = document.getElementById('nav-triangles-node-ViolinPlot-tab');
 
         const pagerankNodeLayout = document.getElementById('nav-pagerank-node-Layouts-tab');
         const pagerankNodeHistogram = document.getElementById('nav-pagerank-node-Histogram-tab');
-        const pagerankNodeBoxPlot = document.getElementById('nav-pagerank-node-Boxplot-tab');
-        const pagerankNodeViolinPlot = document.getElementById('nav-pagerank-node-Violinplot-tab');
+        const pagerankNodeBoxPlot = document.getElementById('nav-pagerank-node-BoxPlot-tab');
+        const pagerankNodeViolinPlot = document.getElementById('nav-pagerank-node-ViolinPlot-tab');
 
-        function handleClick(clusterType, section, e) {
+        function handleClickClustering(clusterType, section, e) {
             e.preventDefault();
             const data = {
                 type_of_attack: typeOfAttack.value,
