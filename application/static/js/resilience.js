@@ -1,4 +1,3 @@
-
 function performResilienceMetrics(data, plot_type, section) {
     $.ajax({
         url: BASE_URL + data.session_id + '/' + data.type_of_attack + '/' + plot_type,
@@ -104,27 +103,31 @@ function retrieveGeneralMetrics(data) {
             const resAfter = JSON.parse(data.data_after);
             const columns = resBefore.columns;
 
-            createTable(beforeTable, resBefore.data, columns);
             createTable(afterTable, resAfter.data, columns);
+            createTable(beforeTable, resBefore.data, columns);
         },
         error: function (data) {
+            alert('An error occurred. Please try again.');
+
             console.log('ERROR', data);
         }
     });
 }
 
-const createTable = (tableElem, data, columns, isCluster=false) => {
+const createTable = (tableElem, data, columns, isCluster = false) => {
     tableElem.innerHTML = '';
     tableElem.innerHTML = '';
 
     if ($.fn.DataTable.isDataTable(tableElem)) {
-        $(tableElem).DataTable().destroy();
+        let table = $(tableElem).DataTable();
+        if (table && table.table().node().parentNode) {
+            table.destroy();
+        }
     }
 
     if (tableElem.tHead) {
         tableElem.tHead.remove();
     }
-
 
     const headerRow = tableElem.createTHead().insertRow(0);
     for (let i = 0; i < columns.length; i++) {
@@ -164,6 +167,7 @@ function performVisualisation(data) {
             $(afterFrame).attr("src", afterPath);
         },
         error: function (data) {
+            alert('An error occurred. Please try again.');
             console.log('ERROR', data);
         }
     });

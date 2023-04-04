@@ -151,6 +151,7 @@ def resilience_random(networkGraph, number_of_nodes=None, number_of_edges=None):
     G = copy_networkGraph(networkGraph)
     # print(G.__dict__)
     G.set_attack_vector('random')
+    df = None
 
     if number_of_nodes is not None:
         nodes = G.MultiDiGraph.nodes()
