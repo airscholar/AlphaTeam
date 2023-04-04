@@ -22,7 +22,7 @@ from tqdm import tqdm
 def generate_temporal(networkGraphs, filename, layout_='map'):
     if not networkGraphs.is_spatial() and layout_ == 'map':
         print(ValueError('The graph is not spatial, please choose a different layout'))
-        return 'no_graph.html'
+        return '../application/static/no_graph.html'
 
     G = networkGraphs.MultiDiGraph
 

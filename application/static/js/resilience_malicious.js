@@ -3,9 +3,7 @@ const BASE_URL = 'http://localhost:8000/api/v1/resilience/';
 function performResilienceMalicious(data) {
     console.log(data)
     $.ajax({
-        url: BASE_URL + data.session_id + '/malicious?multi_toggle='
-            + data.multi_toggle + '&directed_toggle=' + data.directed_toggle + '&layout='
-            + data.layout + '&number_of_clusters=' + data.number_of_clusters
+        url: BASE_URL + data.session_id + '/malicious?number_of_clusters=' + data.number_of_clusters
             + '&attack_type=' + data.type_of_attack + '&number_of_nodes_malicious=' + data.number_of_nodes_malicious,
         type: 'GET',
         mode: 'no-cors',
@@ -35,8 +33,7 @@ function performResilienceMetrics(data, plot_type, section) {
     $.ajax({
         url: BASE_URL + data.session_id + '/' + data.type_of_attack + '/' + plot_type + '?multi_toggle='
             + data.multi_toggle + '&directed_toggle=' + data.directed_toggle + '&layout='
-            + data.layout + '&number_of_clusters=' + data.number_of_clusters
-            + '&attack_type=' + data.type_of_attack + '&number_of_nodes_malicious=' + data.number_of_nodes_malicious,
+            + data.layout,
         type: 'GET',
         mode: 'no-cors',
         success: function (data) {
@@ -99,6 +96,7 @@ function retrieveGeneralMetrics(data) {
     $.ajax({
         url: `${BASE_URL}${data.session_id}/global_metrics`,
         type: 'GET',
+        mode: 'no-cors',
         data: {
             multi_toggle: data.multi_toggle,
             directed_toggle: data.directed_toggle,
@@ -132,6 +130,26 @@ function retrieveGeneralMetrics(data) {
             console.log('ERROR', data);
         }
     });
+}
 
+function performVisualisation(data) {
+    console.log(data)
+    $.ajax({
+        url: BASE_URL + data.session_id + '/visualisation?layout=' + data.layout,
+        type: 'GET',
+        mode: 'no-cors',
+        success: function (data) {
+            let beforeFrame = document.getElementById('before_frame');
+            let afterFrame = document.getElementById('after_frame');
 
+            const beforePath = data.before_frame.replace('application/', '');
+            const afterPath = data.after_frame.replace('application/', '');
+
+            $(beforeFrame).attr("src", beforePath);
+            $(afterFrame).attr("src", afterPath);
+        },
+        error: function (data) {
+            console.log('ERROR', data);
+        }
+    });
 }

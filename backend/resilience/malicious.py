@@ -20,8 +20,7 @@ def extract_args():
 
 @malicious_bp.route('<session_id>/malicious')
 def compute_malicious(session_id):
-    attack_type, number_of_nodes_malicious, number_of_threshold, \
-        operator = extract_args()
+    attack_type, number_of_nodes_malicious, number_of_threshold, operator = extract_args()
 
     networkGraphs = get_networkGraph(session_id)
 

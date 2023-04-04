@@ -23,7 +23,7 @@ def generate_static_cluster(networkGraphs, df_, filename, algo, layout_='map', n
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
         print(ValueError('No spatial graph'))
-        return 'no_graph.html'
+        return '../application/static/no_graph.html'
 
     pos = networkGraphs.pos[layout_]
 
