@@ -33,19 +33,17 @@
                             <div class="col-2">
                                 <div class="card card-body" style="align-items: center;">
 
-                                    <form id="resilienceRandomForm" method="post">
+                                    <form id="resilienceCustomForm" method="post">
                                         <div class="row">
                                             <div class="container mt-3">
 
                                                 <div class="row">
-                                                    <label for="number_of_nodes_custom" style="margin-top: 5px;">Number
-                                                        of
-                                                        Nodes</label>
-                                                    <input type="number" id="number_of_nodes_custom_input"
-                                                        placeholder="None" style="margin-top: 5px;"
-                                                        name="number_of_nodes_custom" class="form-control" min="1"
-                                                        step="1" {% if number_of_nodes is not none
-                                                        %}value="{{ number_of_nodes_custom }}" {% endif %}>
+                                                    <label for="list_of_nodes_label" style="margin-top: 5px;">List of
+                                                        Nodes:</label>
+                                                    <textarea rows="4" cols="50" name="list_of_nodes" id="list_of_nodes"
+                                                        form="resilienceCustomForm"
+                                                        style="margin-top: 5px; margin-bottom: 5px;"
+                                                        placeholder="Enter List of Nodes...">{{ list_of_nodes }}</textarea>
                                                 </div>
 
                                             </div>
@@ -131,16 +129,12 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        const numberOfNodes = document.getElementById('number_of_nodes_random_input');
+        const listOfNodes = document.getElementById('list_of_nodes');
         const numberOfEdges = document.getElementById('number_of_edges_input');
 
         const res_btn = document.getElementById('resilience_btn');
         const inputAccordion = document.getElementById('flush-collapseOne');
         const outputAccordion = document.getElementById('flush-collapseTwo');
-
-        const nodeTab = document.getElementById('nav-Nodes-tab');
-        const edgesTab = document.getElementById('nav-Edges-tab');
-
 
         $(res_btn).on('click', function (e) {
             e.preventDefault();
@@ -152,16 +146,16 @@
             }
 
             const data = {
-                number_of_nodes: numberOfNodes.value,
-                number_of_edges: numberOfEdges.value,
+                listOfNodes: listOfNodes.value,
+                //number_of_edges: numberOfEdges.value,
                 session_id: '{{ session_id }}'
             };
 
-            if (nodeTab.classList.contains('active')) {
-                data.number_of_edges = null;
-            } else if (edgesTab.classList.contains('active')) {
-                data.number_of_nodes = null;
-            }
+            // if (nodeTab.classList.contains('active')) {
+            //     data.number_of_edges = null;
+            // } else if (edgesTab.classList.contains('active')) {
+            //     data.number_of_nodes = null;
+            // }
 
             performResilienceRandom(data);
         });
