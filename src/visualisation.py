@@ -258,11 +258,11 @@ def plot_histogram(networkGraphs, metrics, directed=True, multi=True, fullPath=F
     :rtype: pd.DataFrame, str
     """
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi)
+        df = m.compute_node_centralities(networkGraphs, directed=directed, multi=multi)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi)
+        df = m.compute_node_metrics(networkGraphs, directed=directed, multi=multi)
     else:
-        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi)
+        df = m.get_metrics(networkGraphs, metrics, directed=directed, multi=multi)
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Histogram.html"
     filepath = get_file_path(networkGraphs, filename)
@@ -329,11 +329,11 @@ def plot_boxplot(networkGraphs, metrics, directed=True, multi=True, fullPath=Fal
     :rtype: pd.DataFrame, str
     """
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi)
+        df = m.compute_node_centralities(networkGraphs, directed=directed, multi=multi)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi)
+        df = m.compute_node_metrics(networkGraphs, directed=directed, multi=multi)
     else:
-        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi)
+        df = m.get_metrics(networkGraphs, metrics, directed=directed, multi=multi)
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Boxplot.html"
     filepath = get_file_path(networkGraphs, filename)
@@ -374,11 +374,11 @@ def plot_violin(networkGraphs, metrics, directed=True, multi=True, fullPath=Fals
     :rtype: pd.DataFrame, str
     """
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi)
+        df = m.compute_node_centralities(networkGraphs, directed=directed, multi=multi)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi)
+        df = m.compute_node_metrics(networkGraphs, directed=directed, multi=multi)
     else:
-        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi)
+        df = m.get_metrics(networkGraphs, metrics, directed=directed, multi=multi)
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Violin.html"
     filepath = get_file_path(networkGraphs, filename)
