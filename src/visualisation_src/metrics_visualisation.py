@@ -188,7 +188,6 @@ def generate_dynamic_metric(networkGraphs, df_, filename):  # USING PYVIS
     Net.options.physics.use_force_atlas_2based(
         params={'central_gravity': 0.01, 'gravity': -50, 'spring_length': 100, 'spring_strength': 0.08, 'damping': 0.4,
                 'overlap': 0})
-    print(f"Saving {filename}...")
     Net.write_html(filename)
     df_.drop(columns=['std'], inplace=True)
     return Net

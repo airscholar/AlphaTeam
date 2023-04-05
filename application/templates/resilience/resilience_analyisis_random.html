@@ -73,7 +73,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary" style="margin:5px; width: 100%;"
+                                    <button type="button" class="btn btn-primary" style="margin:5px; width: 100%;"
                                         id="resilience_btn">Submit
                                     </button>
                                 </form>
@@ -154,87 +154,14 @@
     $(document).ready(function () {
         const numberOfNodes = document.getElementById('number_of_nodes_random_input');
         const numberOfEdges = document.getElementById('number_of_edges_input');
-        const multiToggle = document.getElementById('multi-toggle');
-        const directedToggle = document.getElementById('directed-toggle');
-        const layout = document.getElementById('layout_type');
-        const numberOfClusters = document.getElementById('number_of_clusters');
 
         const res_btn = document.getElementById('resilience_btn');
         const inputAccordion = document.getElementById('flush-collapseOne');
         const outputAccordion = document.getElementById('flush-collapseTwo');
 
-        const visualisation = document.getElementById('nav-Visualisation-tab');
+        const nodeTab = document.getElementById('nav-Nodes-tab');
+        const edgesTab = document.getElementById('nav-Edges-tab');
 
-        const degreeCentralityLayout = document.getElementById('nav-DCLayouts-tab');
-        const DCHistogram = document.getElementById('nav-DCHistogram-tab');
-        const DCBoxPlot = document.getElementById('nav-DCBoxPlot-tab');
-        const DCViolinPlot = document.getElementById('nav-DCViolinPlot-tab');
-
-        const betweennessCentralityLayout = document.getElementById('nav-BCLayouts-tab');
-        const BCHistogram = document.getElementById('nav-BCHistogram-tab');
-        const BCBoxPlot = document.getElementById('nav-BCBoxPlot-tab');
-        const BCViolinPlot = document.getElementById('nav-BCViolinPlot-tab');
-
-        const closenessCentralityLayout = document.getElementById('nav-CCLayouts-tab');
-        const CCHistogram = document.getElementById('nav-CCHistogram-tab');
-        const CCBoxPlot = document.getElementById('nav-CCBoxPlot-tab');
-        const CCViolinPlot = document.getElementById('nav-CCViolinPlot-tab');
-
-        const eigenvectorCentralityLayout = document.getElementById('nav-ECLayouts-tab');
-        const ECHistogram = document.getElementById('nav-ECHistogram-tab');
-        const ECBoxPlot = document.getElementById('nav-ECBoxPlot-tab');
-        const ECViolinPlot = document.getElementById('nav-ECViolinPlot-tab');
-
-        const loadCentralityLayout = document.getElementById('nav-LCLayouts-tab');
-        const LCHistogram = document.getElementById('nav-LCHistogram-tab');
-        const LCBoxPlot = document.getElementById('nav-LCBoxPlot-tab');
-        const LCViolinPlot = document.getElementById('nav-LCViolinPlot-tab');
-
-        const kCoreNodeLayout = document.getElementById('nav-kcore-node-Layouts-tab');
-        const kCoreNodeHistogram = document.getElementById('nav-kcore-node-Histogram-tab');
-        const kCoreNodeBoxPlot = document.getElementById('nav-kcore-node-BoxPlot-tab');
-        const kCoreNodeViolinPlot = document.getElementById('nav-kcore-node-ViolinPlot-tab');
-
-        const degreeNodeLayout = document.getElementById('nav-degree-node-Layouts-tab');
-        const degreeNodeHistogram = document.getElementById('nav-degree-node-Histogram-tab');
-        const degreeNodeBoxPlot = document.getElementById('nav-degree-node-BoxPlot-tab');
-        const degreeNodeViolinPlot = document.getElementById('nav-degree-node-ViolinPlot-tab');
-
-        const trianglesNodeLayout = document.getElementById('nav-triangles-node-Layouts-tab');
-        const trianglesNodeHistogram = document.getElementById('nav-triangles-node-Histogram-tab');
-        const trianglesNodeBoxPlot = document.getElementById('nav-triangles-node-BoxPlot-tab');
-        const trianglesNodeViolinPlot = document.getElementById('nav-triangles-node-ViolinPlot-tab');
-
-        const pagerankNodeLayout = document.getElementById('nav-pagerank-node-Layouts-tab');
-        const pagerankNodeHistogram = document.getElementById('nav-pagerank-node-Histogram-tab');
-        const pagerankNodeBoxPlot = document.getElementById('nav-pagerank-node-BoxPlot-tab');
-        const pagerankNodeViolinPlot = document.getElementById('nav-pagerank-node-ViolinPlot-tab');
-
-        const louvainClustering = document.getElementById('nav-Louvain-tab');
-        const greedy_modularityClustering = document.getElementById('nav-greedy_modularity-tab');
-        const label_propagationClustering = document.getElementById('nav-label_propagation-tab');
-        const asyn_lpaClustering = document.getElementById('nav-asyn_lpa-tab');
-        const k_cliqueClustering = document.getElementById('nav-k_clique-tab');
-        const spectralClustering = document.getElementById('nav-spectral-tab');
-        const kmeansClustering = document.getElementById('nav-kmeans-tab');
-        const agglomerativeClustering = document.getElementById('nav-agglomerative-tab');
-        const dbscanClustering = document.getElementById('nav-dbscan-tab');
-
-        const GeneralMetrics = document.getElementById('nav-GlobalMetrics-tab');
-
-        $(GeneralMetrics).on('click', function () {
-            const data = {
-                number_of_nodes_random: numberOfNodes.value,
-                number_of_edges: numberOfEdges.value,
-                multi_toggle: multiToggle.checked,
-                directed_toggle: directedToggle.checked,
-                layout: layout.value,
-                number_of_clusters: numberOfClusters.value,
-                session_id: '{{ session_id }}'
-            };
-
-            retrieveGeneralMetrics(data);
-        })
 
         $(res_btn).on('click', function (e) {
             e.preventDefault();
@@ -246,121 +173,19 @@
             }
 
             const data = {
-                number_of_nodes_random: numberOfNodes.value,
+                number_of_nodes: numberOfNodes.value,
                 number_of_edges: numberOfEdges.value,
-                multi_toggle: multiToggle.checked,
-                directed_toggle: directedToggle.checked,
-                layout: layout.value,
-                number_of_clusters: numberOfClusters.value,
                 session_id: '{{ session_id }}'
             };
+
+            if (nodeTab.classList.contains('active')) {
+                data.number_of_edges = null;
+            } else if (edgesTab.classList.contains('active')) {
+                data.number_of_nodes = null;
+            }
+
             performResilienceRandom(data);
         });
-
-        const attack = {
-            'DC': 'degree_centrality',
-            'EC': 'eigenvector_centrality',
-            'BC': 'betweenness_centrality',
-            'CC': 'closeness_centrality',
-            'LC': 'load_centrality',
-            'KN': 'kcore',
-            'DN': 'degree',
-            'TN': 'triangles',
-            'PN': 'pagerank',
-            'LOUC': 'louvain',
-            'GMC': 'greedy_modularity',
-            'LPC': 'label_propagation',
-            'ALC': 'asyn_lpa',
-            'KCC': 'k_clique',
-            'SC': 'spectral',
-            'KMC': 'kmeans',
-            'AGC': 'agglomerative',
-            'DBC': 'dbscan',
-        }
-
-        function handleClick(plotType, section, e) {
-            e.preventDefault();
-            const data = {
-                type_of_attack: attack[section],
-                number_of_nodes_random: numberOfNodes.value,
-                number_of_edges: numberOfEdges.value,
-                multi_toggle: multiToggle.checked,
-                directed_toggle: directedToggle.checked,
-                layout: layout.value,
-                number_of_clusters: numberOfClusters.value,
-                session_id: '{{ session_id }}'
-            };
-            performResilienceMetrics(data, plotType, section);
-        }
-
-        function handleClick1(plotType, section, e) {
-            e.preventDefault();
-            const data = {
-                number_of_nodes_random: numberOfNodes.value,
-                number_of_edges: numberOfEdges.value,
-                multi_toggle: multiToggle.checked,
-                directed_toggle: directedToggle.checked,
-                layout: layout.value,
-                number_of_clusters: numberOfClusters.value,
-                session_id: '{{ session_id }}'
-            };
-            performResilienceCluster(data, plotType, section);
-        }
-
-        $(degreeCentralityLayout).on('click', handleClick.bind(null, 'layout', 'DC'));
-        $(DCHistogram).on('click', handleClick.bind(null, 'histogram', 'DC'));
-        $(DCBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'DC'));
-        $(DCViolinPlot).on('click', handleClick.bind(null, 'violin', 'DC'));
-
-        $(betweennessCentralityLayout).on('click', handleClick.bind(null, 'layout', 'BC'));
-        $(BCHistogram).on('click', handleClick.bind(null, 'histogram', 'BC'));
-        $(BCBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'BC'));
-        $(BCViolinPlot).on('click', handleClick.bind(null, 'violin', 'BC'));
-
-        $(closenessCentralityLayout).on('click', handleClick.bind(null, 'layout', 'CC'));
-        $(CCHistogram).on('click', handleClick.bind(null, 'histogram', 'CC'));
-        $(CCBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'CC'));
-        $(CCViolinPlot).on('click', handleClick.bind(null, 'violin', 'CC'));
-
-        $(eigenvectorCentralityLayout).on('click', handleClick.bind(null, 'layout', 'EC'));
-        $(ECHistogram).on('click', handleClick.bind(null, 'histogram', 'EC'));
-        $(ECBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'EC'));
-        $(ECViolinPlot).on('click', handleClick.bind(null, 'violin', 'EC'));
-
-        $(loadCentralityLayout).on('click', handleClick.bind(null, 'layout', 'LC'));
-        $(LCHistogram).on('click', handleClick.bind(null, 'histogram', 'LC'));
-        $(LCBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'LC'));
-        $(LCViolinPlot).on('click', handleClick.bind(null, 'violin', 'LC'));
-
-        $(kCoreNodeLayout).on('click', handleClick.bind(null, 'layout', 'KN'));
-        $(kCoreNodeHistogram).on('click', handleClick.bind(null, 'histogram', 'KN'));
-        $(kCoreNodeBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'KN'));
-        $(kCoreNodeViolinPlot).on('click', handleClick.bind(null, 'violin', 'KN'));
-
-        $(degreeNodeLayout).on('click', handleClick.bind(null, 'layout', 'DN'));
-        $(degreeNodeHistogram).on('click', handleClick.bind(null, 'histogram', 'DN'));
-        $(degreeNodeBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'DN'));
-        $(degreeNodeViolinPlot).on('click', handleClick.bind(null, 'violin', 'DN'));
-
-        $(trianglesNodeLayout).on('click', handleClick.bind(null, 'layout', 'TN'));
-        $(trianglesNodeHistogram).on('click', handleClick.bind(null, 'histogram', 'TN'));
-        $(trianglesNodeBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'TN'));
-        $(trianglesNodeViolinPlot).on('click', handleClick.bind(null, 'violin', 'TN'));
-
-        $(pagerankNodeLayout).on('click', handleClick.bind(null, 'layout', 'PN'));
-        $(pagerankNodeHistogram).on('click', handleClick.bind(null, 'histogram', 'PN'));
-        $(pagerankNodeBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'PN'));
-        $(pagerankNodeViolinPlot).on('click', handleClick.bind(null, 'violin', 'PN'));
-
-        $(louvainClustering).on('click', handleClick1.bind(null, 'louvain', 'LOUC'));
-        $(greedy_modularityClustering).on('click', handleClick1.bind(null, 'greedy_modularity', 'GMC'));
-        $(label_propagationClustering).on('click', handleClick1.bind(null, 'label_propagation', 'LPC'));
-        $(asyn_lpaClustering).on('click', handleClick1.bind(null, 'asyn_lpa', 'ALC'));
-        $(k_cliqueClustering).on('click', handleClick1.bind(null, 'k_clique', 'KCC'));
-        $(spectralClustering).on('click', handleClick1.bind(null, 'spectral', 'SC'));
-        $(kmeansClustering).on('click', handleClick1.bind(null, 'kmeans', 'KMC'));
-        $(agglomerativeClustering).on('click', handleClick1.bind(null, 'agglomerative', 'AGC'));
-        $(dbscanClustering).on('click', handleClick1.bind(null, 'dbscan', 'DBC'));
 
     });
 </script>

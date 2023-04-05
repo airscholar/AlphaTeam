@@ -58,7 +58,6 @@ def upload():
             os.makedirs(destination_dir)
 
         destination_file = filename
-        print(source_file, destination_dir + '/' + destination_file)
         shutil.copy(source_file, destination_dir + '/' + destination_file)
         filepath = destination_dir + '/' + filename
         # Store the filename in a session variable

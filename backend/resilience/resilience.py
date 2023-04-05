@@ -4,16 +4,16 @@ from flask_jsonpify import jsonify
 from backend.common.common import *
 from src.metrics import compute_global_metrics
 from src.utils import get_networkGraph
-from src.visualisation import plot_cluster, plot_network, plot_metric, plot_histogram, plot_boxplot, plot_violin
+from src.visualisation import plot_metric, plot_histogram, plot_boxplot, plot_violin, plot_cluster, plot_network
 
 resilience_bp = Blueprint('resilience', __name__, url_prefix="/api/v1/resilience")
 
 
 @resilience_bp.route('<session_id>/<metric>/<plot_type>/')
 def compute_metrics(session_id, metric, plot_type):
-    directed_toggle = get_directed_toggle(request.args)
-    multi_toggle = get_multi_toggle(request.args)
-    layout = get_layout(request.args)
+    directed_toggle = get_arg_directed_toggle(request.args)
+    multi_toggle = get_arg_multi_toggle(request.args)
+    layout = get_arg_layout(request.args)
 
     networkGraphs = get_networkGraph(session_id)
     networkGraphs2 = get_networkGraph(session_id + '_resilience')
@@ -51,7 +51,7 @@ def compute_metrics(session_id, metric, plot_type):
 
 @resilience_bp.route('<session_id>/<cluster_type>')
 def visualise_cluster(session_id, cluster_type):
-    layout = get_layout(request.args)
+    layout = get_arg_layout(request.args)
     noOfClusters = request.args.get('noOfClusters', 0, type=int)
     if noOfClusters == '':
         noOfClusters = 0
@@ -73,8 +73,8 @@ def visualise_cluster(session_id, cluster_type):
 
 @resilience_bp.route('<session_id>/global_metrics')
 def global_metrics(session_id):
-    directed_toggle = get_directed_toggle(request.args)
-    multi_toggle = get_multi_toggle(request.args)
+    directed_toggle = get_arg_directed_toggle(request.args)
+    multi_toggle = get_arg_multi_toggle(request.args)
 
     networkGraphs = get_networkGraph(session_id)
     networkGraphs2 = get_networkGraph(session_id + '_resilience')
@@ -90,7 +90,7 @@ def global_metrics(session_id):
 
 @resilience_bp.route('<session_id>/visualisation')
 def visualisation(session_id):
-    layout = get_layout(request.args)
+    layout = get_arg_layout(request.args)
 
     networkGraphs = get_networkGraph(session_id)
     networkGraphs2 = get_networkGraph(session_id + '_resilience')
