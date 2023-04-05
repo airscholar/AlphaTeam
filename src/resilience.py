@@ -136,7 +136,7 @@ def resilience(networkGraph, attack, **kwargs):
 # ------------------------------------------------------------------------------------------
 
 
-def resilience_random(networkGraph, number_of_nodes=0, number_of_edges=0):
+def resilience_random(networkGraph, number_of_nodes=None, number_of_edges=None):
     """
     :Function: Compute the resilience of the networkGraph using the random attack
     :param networkGraph: NetworkGraph
@@ -151,13 +151,14 @@ def resilience_random(networkGraph, number_of_nodes=0, number_of_edges=0):
     G = copy_networkGraph(networkGraph)
     # print(G.__dict__)
     G.set_attack_vector('random')
+    df = None
 
-    if number_of_nodes > 0:
+    if number_of_nodes is not None:
         nodes = G.MultiDiGraph.nodes()
         nodes_to_remove = random.sample(sorted(nodes), number_of_nodes)
         G, df = remove_nodes(G, nodes_to_remove)
 
-    if number_of_edges > 0:
+    if number_of_edges is not None:
         edges = G.MultiDiGraph.edges()
         edges_to_remove = random.sample(sorted(edges), number_of_edges)
         G, df = remove_edges(G, edges_to_remove)
@@ -207,7 +208,7 @@ def resilience_malicious(networkGraph, metric=None, number_of_nodes=None, thresh
     G = copy_networkGraph(networkGraph)
     G.set_attack_vector('malicious')
 
-    df = get_metrics(G, metric, directed=directed, multi=multi)
+    df = get_metrics(networkGraph, metric, directed=directed, multi=multi)
     metric = df.columns[1]
     df = df.sort_values(by=metric, ascending=False)
 
@@ -257,7 +258,7 @@ def resilience_cluster(networkGraph, cluster_algorithm=None, total_clusters=0, n
                          "or a positive number"))
         return 0
 
-    clusters = ml.get_communities(G, cluster_algorithm, total_clusters)
+    clusters = ml.get_communities(networkGraph, cluster_algorithm, total_clusters)
 
     cluster_ids = clusters['Cluster_id'].unique()
     cluster_ids = random.sample(sorted(cluster_ids), number_of_clusters)

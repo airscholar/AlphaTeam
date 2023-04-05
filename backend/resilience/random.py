@@ -4,15 +4,21 @@ from flask_jsonpify import jsonify
 from src.resilience import resilience
 from src.utils import get_networkGraph, set_networkGraph
 from src.visualisation import *
-from backend.common.common import get_directed_toggle, get_multi_toggle, get_layout
 
 random_bp = Blueprint('resilience_random', __name__, url_prefix="/api/v1/resilience")
 
 def extract_args():
     args = request.args
 
-    number_of_nodes = int(args.get('number_of_nodes'))
-    number_of_edges = int(args.get('number_of_edges'))
+    number_of_nodes = args.get('number_of_nodes', None, type=int)
+    number_of_edges = args.get('number_of_edges', None, type=int)
+
+    if number_of_nodes is '':
+        number_of_nodes = None
+    if number_of_edges is '':
+        number_of_edges = None
+
+    print(number_of_nodes, number_of_edges)
 
     return number_of_nodes, number_of_edges
 

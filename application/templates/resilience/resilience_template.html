@@ -18,6 +18,10 @@
         <button class="nav-link" id="nav-Clusters-tab" data-bs-toggle="tab" data-bs-target="#nav-Clusters" type="button"
                 role="tab" aria-controls="nav-Clusters" aria-selected="false">Clusters
         </button>
+        <button class="nav-link" id="nav-AttackSummary-tab" data-bs-toggle="tab" data-bs-target="#nav-AttackSummary"
+                type="button"
+                role="tab" aria-controls="nav-AttackSummary" aria-selected="false">Attack Summary
+        </button>
     </div>
 </nav>
 
@@ -27,22 +31,22 @@
         <!-- Visualisation Before After Starts from here -->
         <div class="container px-4 text-center">
             <div class="row gx-5" style="margin-bottom: 15px;">
-                <div class="col">
+                <div class="col-6">
                     <h4>Before</h4>
                 </div>
-                <div class="col">
+                <div class="col-6">
                     <h4>After</h4>
                 </div>
             </div>
             <div class="row gx-5">
-                <div class="col">
+                <div class="col-6">
                     <div class="card">
                         <div class="card-body">
                             <iframe src="{{ graph_path1 }}" width="100%" height="300" id="before_frame"></iframe>
                         </div>
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-6">
                     <div class="card">
                         <div class="card-body">
                             <iframe src="{{ graph_path2 }}" width="100%" height="300" id="after_frame"></iframe>
@@ -53,14 +57,14 @@
         </div>
         <div class="container px-4 text-center" style="margin-top: 15px">
             <div class="row gx-5">
-                <div class="col">
+                <div class="col-6">
                     <div class="card">
                         <div class="card-body">
                             <iframe src="{{ graph_path3 }}" width="100%" height="300" id="before_heatmap"></iframe>
                         </div>
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-6">
                     <div class="card">
                         <div class="card-body">
                             <iframe src="{{ graph_path4 }}" width="100%" height="300" id="after_heatmap"></iframe>
@@ -79,14 +83,14 @@
             <div class="col col-6">
                 <div class="card">
                     <div class="card-body">
-                        <table id="GM_Table_before" class="table table-striped table-bordered"></table>
+                        <table id="GM_table_before" class="table table-striped table-bordered"></table>
                     </div>
                 </div>
             </div>
             <div class="col col-6">
                 <div class="card">
                     <div class="card-body">
-                        <table id="GM_Table_after" class="table table-striped table-bordered"></table>
+                        <table id="GM_table_after" class="table table-striped table-bordered"></table>
                     </div>
                 </div>
             </div>
@@ -155,15 +159,15 @@
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_centrality_layout_1 }}" width="100%"
@@ -171,7 +175,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_centrality_layout_2 }}" width="100%"
@@ -181,15 +185,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col col-6">
                                     <div class="card card-body">
-                                        <table id="example9" class="display" style="width:100%">
+                                        <table id="DC_layout_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col col-6">
                                     <div class="card card-body">
-                                        <table id="example1" class="display" style="width:100%"></table>
+                                        <table id="DC_layout_table_after" class="display" style="width:100%"></table>
                                     </div>
                                 </div>
                             </div>
@@ -200,15 +204,15 @@
                         <!-- Histogram tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_centrality_histogram_1 }}" width="100%"
@@ -217,7 +221,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_centrality_histogram_2 }}" width="100%"
@@ -227,15 +231,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example2" class="display" style="width:100%">
+                                        <table id="DC_histogram_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example3" class="display" style="width:100%">
+                                        <table id="DC_histogram_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -247,15 +251,15 @@
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_centrality_boxplot_1 }}" width="100%"
@@ -263,7 +267,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_centrality_boxplot_2 }}" width="100%"
@@ -273,15 +277,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example8" class="display" style="width:100%">
+                                        <table id="DC_boxplot_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example5" class="display" style="width:100%">
+                                        <table id="DC_boxplot_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -293,15 +297,15 @@
                         <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_centrality_ViolinPlot_1 }}" width="100%"
@@ -310,7 +314,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_centrality_ViolinPlot_2 }}" width="100%"
@@ -321,15 +325,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example6" class="display" style="width:100%">
+                                        <table id="DC_violin_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example7" class="display" style="width:100%">
+                                        <table id="DC_violin_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -369,15 +373,15 @@
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_eigenvector_centrality_layout_1 }}" width="100%"
@@ -386,7 +390,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_eigenvector_centrality_layout_2 }}" width="100%"
@@ -397,15 +401,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example10" class="display" style="width:100%">
+                                        <table id="EC_layout_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example11" class="display" style="width:100%">
+                                        <table id="EC_layout_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -418,15 +422,15 @@
                         <!-- Histogram tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_eigenvector_centrality_histogram_1 }}" width="100%"
@@ -436,7 +440,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_eigenvector_centrality_histogram_2 }}" width="100%"
@@ -447,15 +451,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example12" class="display" style="width:100%">
+                                        <table id="EC_histogram_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example13" class="display" style="width:100%">
+                                        <table id="EC_histogram_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -468,15 +472,15 @@
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_eigenvector_centrality_boxplot_1 }}" width="100%"
@@ -485,7 +489,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_eigenvector_centrality_boxplot_2 }}" width="100%"
@@ -496,15 +500,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example19" class="display" style="width:100%">
+                                        <table id="EC_boxplot_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example18" class="display" style="width:100%">
+                                        <table id="EC_boxplot_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -517,15 +521,15 @@
                         <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_eigenvector_centrality_ViolinPlot_1 }}" width="100%"
@@ -534,7 +538,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_eigenvector_centrality_ViolinPlot_2 }}" width="100%"
@@ -545,17 +549,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example16" class="display" style="width:100%">
-
+                                        <table id="EC_violin_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example17" class="display" style="width:100%">
-
+                                        <table id="EC_violin_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -595,15 +597,15 @@
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_closeness_centrality_layout_1 }}" width="100%"
@@ -612,7 +614,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_closeness_centrality_layout_2 }}" width="100%"
@@ -623,15 +625,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example20" class="display" style="width:100%">
+                                        <table id="CC_layout_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example21" class="display" style="width:100%">
+                                        <table id="CC_layout_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -644,15 +646,15 @@
                         <!-- Histogram tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_closeness_centrality_histogram_1 }}" width="100%"
@@ -662,7 +664,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_closeness_centrality_histogram_2 }}" width="100%"
@@ -673,15 +675,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example22" class="display" style="width:100%">
+                                        <table id="CC_histogram_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example23" class="display" style="width:100%">
+                                        <table id="CC_histogram_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -694,15 +696,15 @@
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_closeness_centrality_boxplot_1 }}" width="100%"
@@ -711,7 +713,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_closeness_centrality_boxplot_2 }}" width="100%"
@@ -722,15 +724,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example29" class="display" style="width:100%">
+                                        <table id="CC_boxplot_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example28" class="display" style="width:100%">
+                                        <table id="CC_boxplot_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -743,15 +745,15 @@
                         <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_closeness_centrality_ViolinPlot_1 }}" width="100%"
@@ -760,7 +762,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_closeness_centrality_ViolinPlot_2 }}" width="100%"
@@ -771,15 +773,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example26" class="display" style="width:100%">
+                                        <table id="CC_violin_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example27" class="display" style="width:100%">
+                                        <table id="CC_violin_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -819,15 +821,15 @@
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_betwenness_centrality_layout_1 }}" width="100%"
@@ -836,7 +838,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_betwenness_centrality_layout_2 }}" width="100%"
@@ -847,15 +849,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example30" class="display" style="width:100%">
+                                        <table id="BC_layout_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example31" class="display" style="width:100%">
+                                        <table id="BC_layout_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -868,15 +870,15 @@
                         <!-- Histogram tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_betwenness_centrality_histogram_1 }}" width="100%"
@@ -886,7 +888,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_betwenness_centrality_histogram_2 }}" width="100%"
@@ -897,15 +899,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example32" class="display" style="width:100%">
+                                        <table id="BC_histogram_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example33" class="display" style="width:100%">
+                                        <table id="BC_histogram_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -918,15 +920,15 @@
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_betwenness_centrality_boxplot_1 }}" width="100%"
@@ -935,7 +937,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_betwenness_centrality_boxplot_2 }}" width="100%"
@@ -946,15 +948,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example39" class="display" style="width:100%">
+                                        <table id="BC_boxplot_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example38" class="display" style="width:100%">
+                                        <table id="BC_boxplot_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -967,15 +969,15 @@
                         <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_betwenness_centrality_ViolinPlot_1 }}" width="100%"
@@ -984,7 +986,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_betwenness_centrality_ViolinPlot_2 }}" width="100%"
@@ -995,15 +997,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example36" class="display" style="width:100%">
+                                        <table id="BC_violin_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example37" class="display" style="width:100%">
+                                        <table id="BC_violin_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -1044,15 +1046,15 @@
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_load_centrality_layout_1 }}" width="100%"
@@ -1061,7 +1063,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_load_centrality_layout_2 }}" width="100%"
@@ -1072,15 +1074,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example40" class="display" style="width:100%">
+                                        <table id="LC_layout_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example41" class="display" style="width:100%">
+                                        <table id="LC_layout_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -1093,15 +1095,15 @@
                         <!-- Histogram tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_load_centrality_histogram_1 }}" width="100%"
@@ -1111,7 +1113,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_load_centrality_histogram_2 }}" width="100%"
@@ -1122,15 +1124,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example42" class="display" style="width:100%">
+                                        <table id="LC_histogram_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example43" class="display" style="width:100%">
+                                        <table id="LC_histogram_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -1143,15 +1145,15 @@
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_load_centrality_boxplot_1 }}" width="100%"
@@ -1160,7 +1162,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_load_centrality_boxplot_2 }}" width="100%"
@@ -1171,15 +1173,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example49" class="display" style="width:100%">
+                                        <table id="LC_boxplot_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example48" class="display" style="width:100%">
+                                        <table id="LC_boxplot_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -1192,15 +1194,15 @@
                         <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_load_centrality_ViolinPlot_1 }}" width="100%"
@@ -1209,7 +1211,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_load_centrality_ViolinPlot_2 }}" width="100%"
@@ -1220,15 +1222,15 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example46" class="display" style="width:100%">
+                                        <table id="LC_violin_table_before" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example47" class="display" style="width:100%">
+                                        <table id="LC_violin_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -1245,7 +1247,7 @@
     <div class="tab-pane fade" id="nav-Nodes" role="tabpanel" aria-labelledby="nav-Nodes-tab">
         <!-- From here starts the Nodes tabs section -->
         <nav style="margin-top: 15px;">
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <div class="nav nav-tabs" role="tablist">
                 <button class="nav-link active" id="nav-kcorenode-tab" data-bs-toggle="tab"
                         data-bs-target="#nav-kcorenode" type="button" role="tab" aria-controls="nav-kcorenode"
                         aria-selected="true">K Core
@@ -1293,15 +1295,15 @@
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_kcore_node_layout_1 }}" id="KN_layout_before"
@@ -1309,7 +1311,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_kcore_node_layout_2 }}" id="KN_layout_after"
@@ -1319,16 +1321,16 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example50" class="display" style="width:100%">
+                                        <table id="KN_layout_table_before" class="display" style="width:100%">
 
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example51" class="display" style="width:100%">
+                                        <table id="KN_layout_table_after" class="display" style="width:100%">
 
                                         </table>
                                     </div>
@@ -1342,15 +1344,15 @@
                         <!-- Histogram tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_kcore_node_histogram_1 }}" id="KN_histogram_before"
@@ -1359,7 +1361,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_kcore_node_histogram_2 }}" id="KN_histogram_after"
@@ -1369,16 +1371,16 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example52" class="display" style="width:100%">
+                                        <table id="KN_histogram_table_before" class="display" style="width:100%">
 
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example53" class="display" style="width:100%">
+                                        <table id="KN_histogram_table_after" class="display" style="width:100%">
 
                                         </table>
                                     </div>
@@ -1392,15 +1394,15 @@
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_kcore_node_boxplot_1 }}" id="KN_boxplot_before"
@@ -1408,7 +1410,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_kcore_node_boxplot_2 }}" id="KN_boxplot_after"
@@ -1418,16 +1420,16 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example58" class="display" style="width:100%">
+                                        <table id="KN_boxplot_table_before" class="display" style="width:100%">
 
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example55" class="display" style="width:100%">
+                                        <table id="KN_boxplot_table_after" class="display" style="width:100%">
 
                                         </table>
                                     </div>
@@ -1441,15 +1443,15 @@
                         <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_kcore_node_ViolinPlot_1 }}" id="KN_violin_before"
@@ -1457,7 +1459,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_kcore_node_ViolinPlot_2 }}" id="KN_violin_after"
@@ -1467,16 +1469,16 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example56" class="display" style="width:100%">
+                                        <table id="KN_violin_table_before" class="display" style="width:100%">
 
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example57" class="display" style="width:100%">
+                                        <table id="KN_violin_table_after" class="display" style="width:100%">
 
                                         </table>
                                     </div>
@@ -1516,15 +1518,15 @@
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_node_layout_1 }}" id="DN_layout_before"
@@ -1532,7 +1534,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_node_layout_2 }}" id="DN_layout_after"
@@ -1542,16 +1544,16 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example60" class="display" style="width:100%">
+                                        <table id="DN_layout_table_before" class="display" style="width:100%">
 
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example61" class="display" style="width:100%">
+                                        <table id="DN_layout_table_after" class="display" style="width:100%">
 
                                         </table>
                                     </div>
@@ -1565,15 +1567,15 @@
                         <!-- Histogram tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_node_histogram_1 }}" id="DN_histogram_before"
@@ -1582,7 +1584,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_node_histogram_2 }}" id="DN_histogram_after"
@@ -1592,16 +1594,16 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example62" class="display" style="width:100%">
+                                        <table id="DN_histogram_table_before" class="display" style="width:100%">
 
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example63" class="display" style="width:100%">
+                                        <table id="DN_histogram_table_after" class="display" style="width:100%">
 
                                         </table>
                                     </div>
@@ -1615,15 +1617,15 @@
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_node_boxplot_1 }}" id="DN_boxplot_before"
@@ -1631,7 +1633,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_node_boxplot_2 }}" id="DN_boxplot_after"
@@ -1641,16 +1643,16 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example68" class="display" style="width:100%">
+                                        <table id="DN_boxplot_table_before" class="display" style="width:100%">
 
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example65" class="display" style="width:100%">
+                                        <table id="DN_boxplot_table_after" class="display" style="width:100%">
 
                                         </table>
                                     </div>
@@ -1664,15 +1666,15 @@
                         <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_node_ViolinPlot_1 }}" id="DN_violin_before"
@@ -1680,7 +1682,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_degree_node_ViolinPlot_2 }}" id="DN_violin_after"
@@ -1690,16 +1692,16 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example66" class="display" style="width:100%">
+                                        <table id="DN_violin_table_before" class="display" style="width:100%">
 
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example67" class="display" style="width:100%">
+                                        <table id="DN_violin_table_after" class="display" style="width:100%">
 
                                         </table>
                                     </div>
@@ -1739,15 +1741,15 @@
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_triangles_node_layout_1 }}" id="TN_layout_before"
@@ -1755,7 +1757,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_triangles_node_layout_2 }}" id="TN_layout_after"
@@ -1765,16 +1767,16 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example70" class="display" style="width:100%">
+                                        <table id="TN_layout_table_before" class="display" style="width:100%">
 
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example71" class="display" style="width:100%">
+                                        <table id="TN_layout_table_after" class="display" style="width:100%">
 
                                         </table>
                                     </div>
@@ -1788,15 +1790,15 @@
                         <!-- Histogram tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_triangles_node_histogram_1 }}"
@@ -1805,7 +1807,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_triangles_node_histogram_2 }}" id="TN_histogram_after"
@@ -1815,16 +1817,16 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example72" class="display" style="width:100%">
+                                        <table id="TN_histogram_table_before" class="display" style="width:100%">
 
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example73" class="display" style="width:100%">
+                                        <table id="TN_histogram_table_after" class="display" style="width:100%">
 
                                         </table>
                                     </div>
@@ -1838,15 +1840,15 @@
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_triangles_node_boxplot_1 }}" id="TN_boxplot_before"
@@ -1854,7 +1856,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_triangles_node_boxplot_2 }}" id="TN_boxplot_after"
@@ -1864,16 +1866,16 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example78" class="display" style="width:100%">
+                                        <table id="TN_boxplot_table_before" class="display" style="width:100%">
 
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example75" class="display" style="width:100%">
+                                        <table id="TN_boxplot_table_after" class="display" style="width:100%">
 
                                         </table>
                                     </div>
@@ -1887,15 +1889,15 @@
                         <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_triangles_node_ViolinPlot_1 }}"
@@ -1903,7 +1905,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_triangles_node_ViolinPlot_2 }}"
@@ -1913,16 +1915,16 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example76" class="display" style="width:100%">
+                                        <table id="TN_violin_table_before" class="display" style="width:100%">
 
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example77" class="display" style="width:100%">
+                                        <table id="TN_violin_table_after" class="display" style="width:100%">
 
                                         </table>
                                     </div>
@@ -1962,15 +1964,15 @@
                         <!-- Layouts tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_pagerank_node_layout_1 }}" id="PN_layout_before"
@@ -1978,7 +1980,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_pagerank_node_layout_2 }}" id="PN_layout_after"
@@ -1988,16 +1990,16 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example80" class="display" style="width:100%">
+                                        <table id="PN_layout_table_before" class="display" style="width:100%">
 
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example81" class="display" style="width:100%">
+                                        <table id="PN_layout_table_after" class="display" style="width:100%">
 
                                         </table>
                                     </div>
@@ -2011,15 +2013,15 @@
                         <!-- Histogram tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_pagerank_node_histogram_1 }}" id="PN_histogram_before"
@@ -2028,7 +2030,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_pagerank_node_histogram_2 }}" id="PN_histogram_after"
@@ -2038,16 +2040,16 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example82" class="display" style="width:100%">
+                                        <table id="PN_histogram_table_before" class="display" style="width:100%">
 
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example83" class="display" style="width:100%">
+                                        <table id="PN_histogram_table_after" class="display" style="width:100%">
 
                                         </table>
                                     </div>
@@ -2061,15 +2063,15 @@
                         <!-- Boxplot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_pagerank_node_boxplot_1 }}" id="PN_boxplot_before"
@@ -2077,7 +2079,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_pagerank_node_boxplot_2 }}" id="PN_boxplot_after"
@@ -2087,16 +2089,16 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example88" class="display" style="width:100%">
+                                        <table id="PN_boxplot_table_before" class="display" style="width:100%">
 
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example85" class="display" style="width:100%">
+                                        <table id="PN_boxplot_table_after" class="display" style="width:100%">
 
                                         </table>
                                     </div>
@@ -2110,15 +2112,15 @@
                         <!-- ViolinPlot tab Before After content starts here -->
                         <div class="container px-4 text-center">
                             <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>Before</h4>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <h4>After</h4>
                                 </div>
                             </div>
                             <div class="row gx-5">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_pagerank_node_ViolinPlot_1 }}"
@@ -2126,7 +2128,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card">
                                         <div class="card-body">
                                             <iframe src="{{ graph_pagerank_node_ViolinPlot_2 }}"
@@ -2136,17 +2138,16 @@
                                 </div>
                             </div>
                             <div class="row gx-5" style="margin-top: 15px;">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example86" class="display" style="width:100%">
+                                        <table id="PN_violin_table_before" class="display" style="width:100%">
 
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="card card-body">
-                                        <table id="example87" class="display" style="width:100%">
-
+                                        <table id="PN_violin_table_after" class="display" style="width:100%">
                                         </table>
                                     </div>
                                 </div>
@@ -2165,31 +2166,39 @@
         <nav style="margin-top: 15px;">
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <button class="nav-link active" id="nav-Louvain-tab" data-bs-toggle="tab" data-bs-target="#nav-Louvain"
-                    type="button" role="tab" aria-controls="nav-Louvain" aria-selected="true">
+                        type="button" role="tab" aria-controls="nav-Louvain" aria-selected="true">
                     Louvain
                 </button>
                 <button class="nav-link" id="nav-greedy_modularity-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-greedy_modularity" type="button" role="tab"
-                    aria-controls="nav-greedy_modularity" aria-selected="false">Greedy
-                    Modularity</button>
+                        data-bs-target="#nav-greedy_modularity" type="button" role="tab"
+                        aria-controls="nav-greedy_modularity" aria-selected="false">Greedy
+                    Modularity
+                </button>
                 <button class="nav-link" id="nav-label_propagation-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-label_propagation" type="button" role="tab"
-                    aria-controls="nav-label_propagation" aria-selected="false">Label
-                    Propagation</button>
+                        data-bs-target="#nav-label_propagation" type="button" role="tab"
+                        aria-controls="nav-label_propagation" aria-selected="false">Label
+                    Propagation
+                </button>
                 <button class="nav-link" id="nav-asyn_lpa-tab" data-bs-toggle="tab" data-bs-target="#nav-asyn_lpa"
-                    type="button" role="tab" aria-controls="nav-asyn_lpa" aria-selected="false">Asyn
-                    Lpa</button>
+                        type="button" role="tab" aria-controls="nav-asyn_lpa" aria-selected="false">Asyn
+                    Lpa
+                </button>
                 <button class="nav-link" id="nav-k_clique-tab" data-bs-toggle="tab" data-bs-target="#nav-k_clique"
-                    type="button" role="tab" aria-controls="nav-k_clique" aria-selected="false">K Clique</button>
+                        type="button" role="tab" aria-controls="nav-k_clique" aria-selected="false">K Clique
+                </button>
                 <button class="nav-link" id="nav-spectral-tab" data-bs-toggle="tab" data-bs-target="#nav-spectral"
-                    type="button" role="tab" aria-controls="nav-spectral" aria-selected="false">Spectral</button>
+                        type="button" role="tab" aria-controls="nav-spectral" aria-selected="false">Spectral
+                </button>
                 <button class="nav-link" id="nav-kmeans-tab" data-bs-toggle="tab" data-bs-target="#nav-kmeans"
-                    type="button" role="tab" aria-controls="nav-kmeans" aria-selected="false">KMeans</button>
+                        type="button" role="tab" aria-controls="nav-kmeans" aria-selected="false">KMeans
+                </button>
                 <button class="nav-link" id="nav-agglomerative-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-agglomerative" type="button" role="tab" aria-controls="nav-agglomerative"
-                    aria-selected="false">Agglomerative</button>
+                        data-bs-target="#nav-agglomerative" type="button" role="tab" aria-controls="nav-agglomerative"
+                        aria-selected="false">Agglomerative
+                </button>
                 <button class="nav-link" id="nav-dbscan-tab" data-bs-toggle="tab" data-bs-target="#nav-dbscan"
-                    type="button" role="tab" aria-controls="nav-dbscan" aria-selected="false">Dbscan</button>
+                        type="button" role="tab" aria-controls="nav-dbscan" aria-selected="false">Dbscan
+                </button>
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
@@ -2197,42 +2206,42 @@
                 <!-- louvain starts here -->
                 <div class="container px-4 text-center">
                     <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                        <div class="col">
+                        <div class="col-6">
                             <h4>Before</h4>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <h4>After</h4>
                         </div>
                     </div>
                     <div class="row gx-5">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_louvain_1 }}" id="LOUC_louvain_before" width="100%"
-                                        height="300"></iframe>
+                                            height="300"></iframe>
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_louvain_2 }}" id="LOUC_louvain_after" width="100%"
-                                        height="300"></iframe>
+                                            height="300"></iframe>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row gx-5" style="margin-top: 15px;">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example90" class="display" style="width:100%">
+                                <table id="LOUC_table_before" class="display" style="width:100%">
 
                                 </table>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example91" class="display" style="width:100%">
+                                <table id="LOUC_table_after" class="display" style="width:100%">
 
                                 </table>
                             </div>
@@ -2242,46 +2251,46 @@
                 <!-- louvain starts here -->
             </div>
             <div class="tab-pane fade" id="nav-greedy_modularity" role="tabpanel"
-                aria-labelledby="nav-greedy_modularity-tab">
+                 aria-labelledby="nav-greedy_modularity-tab">
                 <!-- greedy_modularity starts here -->
                 <div class="container px-4 text-center">
                     <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                        <div class="col">
+                        <div class="col-6">
                             <h4>Before</h4>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <h4>After</h4>
                         </div>
                     </div>
                     <div class="row gx-5">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_greedy_modularity_1 }}" id="GMC_greedy_modularity_before"
-                                        width="100%" height="300"></iframe>
+                                            width="100%" height="300"></iframe>
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_greedy_modularity_2 }}" id="GMC_greedy_modularity_after"
-                                        width="100%" height="300"></iframe>
+                                            width="100%" height="300"></iframe>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row gx-5" style="margin-top: 15px;">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example92" class="display" style="width:100%">
+                                <table id="GMC_table_before" class="display" style="width:100%">
 
                                 </table>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example93" class="display" style="width:100%">
+                                <table id="GMC_table_after" class="display" style="width:100%">
 
                                 </table>
                             </div>
@@ -2291,46 +2300,46 @@
                 <!-- greedy_modularity starts here -->
             </div>
             <div class="tab-pane fade" id="nav-label_propagation" role="tabpanel"
-                aria-labelledby="nav-label_propagation-tab">
+                 aria-labelledby="nav-label_propagation-tab">
                 <!-- label_propagation starts here -->
                 <div class="container px-4 text-center">
                     <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                        <div class="col">
+                        <div class="col-6">
                             <h4>Before</h4>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <h4>After</h4>
                         </div>
                     </div>
                     <div class="row gx-5">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_label_propagation_1 }}" id="LPC_label_propagation_before"
-                                        width="100%" height="300"></iframe>
+                                            width="100%" height="300"></iframe>
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_label_propagation_2 }}" id="LPC_label_propagation_after"
-                                        width="100%" height="300"></iframe>
+                                            width="100%" height="300"></iframe>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row gx-5" style="margin-top: 15px;">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example94" class="display" style="width:100%">
+                                <table id="LPC_table_before" class="display" style="width:100%">
 
                                 </table>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example95" class="display" style="width:100%">
+                                <table id="LPC_table_after" class="display" style="width:100%">
 
                                 </table>
                             </div>
@@ -2343,42 +2352,42 @@
                 <!-- asyn_lpa starts here -->
                 <div class="container px-4 text-center">
                     <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                        <div class="col">
+                        <div class="col-6">
                             <h4>Before</h4>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <h4>After</h4>
                         </div>
                     </div>
                     <div class="row gx-5">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_asyn_lpa_1 }}" id="ALC_asyn_lpa_before" width="100%"
-                                        height="300"></iframe>
+                                            height="300"></iframe>
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_asyn_lpa_2 }}" id="ALC_asyn_lpa_after" width="100%"
-                                        height="300"></iframe>
+                                            height="300"></iframe>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row gx-5" style="margin-top: 15px;">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example96" class="display" style="width:100%">
+                                <table id="ALC_table_before" class="display" style="width:100%">
 
                                 </table>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example97" class="display" style="width:100%">
+                                <table id="ALC_table_after" class="display" style="width:100%">
 
                                 </table>
                             </div>
@@ -2391,42 +2400,42 @@
                 <!-- k_clique starts here -->
                 <div class="container px-4 text-center">
                     <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                        <div class="col">
+                        <div class="col-6">
                             <h4>Before</h4>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <h4>After</h4>
                         </div>
                     </div>
                     <div class="row gx-5">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_k_clique_1 }}" id="KCC_k_clique_before" width="100%"
-                                        height="300"></iframe>
+                                            height="300"></iframe>
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_k_clique_2 }}" id="KCC_k_clique_after" width="100%"
-                                        height="300"></iframe>
+                                            height="300"></iframe>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row gx-5" style="margin-top: 15px;">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example98" class="display" style="width:100%">
+                                <table id="KCC_table_before" class="display" style="width:100%">
 
                                 </table>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example99" class="display" style="width:100%">
+                                <table id="KCC_table_after" class="display" style="width:100%">
 
                                 </table>
                             </div>
@@ -2439,42 +2448,42 @@
                 <!-- spectral starts here -->
                 <div class="container px-4 text-center">
                     <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                        <div class="col">
+                        <div class="col-6">
                             <h4>Before</h4>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <h4>After</h4>
                         </div>
                     </div>
                     <div class="row gx-5">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_spectral_1 }}" id="SC_spectral_before" width="100%"
-                                        height="300"></iframe>
+                                            height="300"></iframe>
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_spectral_2 }}" id="SC_spectral_after" width="100%"
-                                        height="300"></iframe>
+                                            height="300"></iframe>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row gx-5" style="margin-top: 15px;">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example100" class="display" style="width:100%">
+                                <table id="SC_table_before" class="display" style="width:100%">
 
                                 </table>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example101" class="display" style="width:100%">
+                                <table id="SC_table_after" class="display" style="width:100%">
 
                                 </table>
                             </div>
@@ -2487,42 +2496,42 @@
                 <!-- kmeans starts here -->
                 <div class="container px-4 text-center">
                     <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                        <div class="col">
+                        <div class="col-6">
                             <h4>Before</h4>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <h4>After</h4>
                         </div>
                     </div>
                     <div class="row gx-5">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_kmeans_1 }}" id="KMC_kmeans_before" width="100%"
-                                        height="300"></iframe>
+                                            height="300"></iframe>
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_kmeans_2 }}" id="KMC_kmeans_after" width="100%"
-                                        height="300"></iframe>
+                                            height="300"></iframe>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row gx-5" style="margin-top: 15px;">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example102" class="display" style="width:100%">
+                                <table id="KMC_table_before" class="display" style="width:100%">
 
                                 </table>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example103" class="display" style="width:100%">
+                                <table id="KMC_table_after" class="display" style="width:100%">
 
                                 </table>
                             </div>
@@ -2535,42 +2544,42 @@
                 <!-- agglomerative starts here -->
                 <div class="container px-4 text-center">
                     <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                        <div class="col">
+                        <div class="col-6">
                             <h4>Before</h4>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <h4>After</h4>
                         </div>
                     </div>
                     <div class="row gx-5">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_agglomerative_1 }}" id="AGC_agglomerative_before" width="100%"
-                                        height="300"></iframe>
+                                            height="300"></iframe>
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_agglomerative_2 }}" id="AGC_agglomerative_after" width="100%"
-                                        height="300"></iframe>
+                                            height="300"></iframe>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row gx-5" style="margin-top: 15px;">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example104" class="display" style="width:100%">
+                                <table id="AGC_table_before" class="display" style="width:100%">
 
                                 </table>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example105" class="display" style="width:100%">
+                                <table id="AGC_table_after" class="display" style="width:100%">
 
                                 </table>
                             </div>
@@ -2583,42 +2592,42 @@
                 <!-- dbscan starts here -->
                 <div class="container px-4 text-center">
                     <div class="row gx-5" style="margin-bottom: 15px; margin-top: 25px;">
-                        <div class="col">
+                        <div class="col-6">
                             <h4>Before</h4>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <h4>After</h4>
                         </div>
                     </div>
                     <div class="row gx-5">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_dbscan_1 }}" id="DBC_dbscan_before" width="100%"
-                                        height="300"></iframe>
+                                            height="300"></iframe>
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
                                     <iframe src="{{ graph_dbscan_2 }}" id="DBC_dbscan_after" width="100%"
-                                        height="300"></iframe>
+                                            height="300"></iframe>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row gx-5" style="margin-top: 15px;">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example107" class="display" style="width:100%">
+                                <table id="DBC_table_before" class="display" style="width:100%">
 
                                 </table>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="card card-body">
-                                <table id="example108" class="display" style="width:100%">
+                                <table id="DBC_table_after" class="display" style="width:100%">
 
                                 </table>
                             </div>
@@ -2630,5 +2639,213 @@
         </div>
         <!-- Cluster tabs section ends here -->
     </div>
+
+    <div class="tab-pane fade" id="nav-AttackSummary" role="tabpanel"
+         aria-labelledby="nav-AttackSummary-tab" style="margin-top: 25px;">
+        <!-- Visualisation Before After Starts from here -->
+        <!-- Start the Main content from here -->
+        <div class="row gx-5">
+            <div class="col col-8">
+                <div class="card">
+                    <div class="card-body">
+                        <table id="AS_Table" class="table table-striped table-bordered"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- General Metrics Before After Ends here -->
+    </div>
 </div>
 <!-- End the Main content here -->
+<script src="{{ url_for('static', filename='js/resilience.js') }}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        const multiToggle = document.getElementById('multi-toggle');
+        const directedToggle = document.getElementById('directed-toggle');
+        const layout = document.getElementById('layout_type');
+        const numberOfClusters = document.getElementById('number_of_clusters');
+        const GeneralMetrics = document.getElementById('nav-GlobalMetrics-tab');
+
+        const visualisation = document.getElementById('nav-Visualisation-tab');
+
+        const degreeCentralityLayout = document.getElementById('nav-DCLayouts-tab');
+        const DCHistogram = document.getElementById('nav-DCHistogram-tab');
+        const DCBoxPlot = document.getElementById('nav-DCBoxPlot-tab');
+        const DCViolinPlot = document.getElementById('nav-DCViolinPlot-tab');
+
+        const betweennessCentralityLayout = document.getElementById('nav-BCLayouts-tab');
+        const BCHistogram = document.getElementById('nav-BCHistogram-tab');
+        const BCBoxPlot = document.getElementById('nav-BCBoxPlot-tab');
+        const BCViolinPlot = document.getElementById('nav-BCViolinPlot-tab');
+
+        const closenessCentralityLayout = document.getElementById('nav-CCLayouts-tab');
+        const CCHistogram = document.getElementById('nav-CCHistogram-tab');
+        const CCBoxPlot = document.getElementById('nav-CCBoxPlot-tab');
+        const CCViolinPlot = document.getElementById('nav-CCViolinPlot-tab');
+
+        const eigenvectorCentralityLayout = document.getElementById('nav-ECLayouts-tab');
+        const ECHistogram = document.getElementById('nav-ECHistogram-tab');
+        const ECBoxPlot = document.getElementById('nav-ECBoxPlot-tab');
+        const ECViolinPlot = document.getElementById('nav-ECViolinPlot-tab');
+
+        const loadCentralityLayout = document.getElementById('nav-LCLayouts-tab');
+        const LCHistogram = document.getElementById('nav-LCHistogram-tab');
+        const LCBoxPlot = document.getElementById('nav-LCBoxPlot-tab');
+        const LCViolinPlot = document.getElementById('nav-LCViolinPlot-tab');
+
+        const kCoreNodeLayout = document.getElementById('nav-kcore-node-Layouts-tab');
+        const kCoreNodeHistogram = document.getElementById('nav-kcore-node-Histogram-tab');
+        const kCoreNodeBoxPlot = document.getElementById('nav-kcore-node-BoxPlot-tab');
+        const kCoreNodeViolinPlot = document.getElementById('nav-kcore-node-ViolinPlot-tab');
+
+        const degreeNodeLayout = document.getElementById('nav-degree-node-Layouts-tab');
+        const degreeNodeHistogram = document.getElementById('nav-degree-node-Histogram-tab');
+        const degreeNodeBoxPlot = document.getElementById('nav-degree-node-BoxPlot-tab');
+        const degreeNodeViolinPlot = document.getElementById('nav-degree-node-ViolinPlot-tab');
+
+        const trianglesNodeLayout = document.getElementById('nav-triangles-node-Layouts-tab');
+        const trianglesNodeHistogram = document.getElementById('nav-triangles-node-Histogram-tab');
+        const trianglesNodeBoxPlot = document.getElementById('nav-triangles-node-BoxPlot-tab');
+        const trianglesNodeViolinPlot = document.getElementById('nav-triangles-node-ViolinPlot-tab');
+
+        const pagerankNodeLayout = document.getElementById('nav-pagerank-node-Layouts-tab');
+        const pagerankNodeHistogram = document.getElementById('nav-pagerank-node-Histogram-tab');
+        const pagerankNodeBoxPlot = document.getElementById('nav-pagerank-node-BoxPlot-tab');
+        const pagerankNodeViolinPlot = document.getElementById('nav-pagerank-node-ViolinPlot-tab');
+
+        const louvainClustering = document.getElementById('nav-Louvain-tab');
+        const greedy_modularityClustering = document.getElementById('nav-greedy_modularity-tab');
+        const label_propagationClustering = document.getElementById('nav-label_propagation-tab');
+        const asyn_lpaClustering = document.getElementById('nav-asyn_lpa-tab');
+        const k_cliqueClustering = document.getElementById('nav-k_clique-tab');
+        const spectralClustering = document.getElementById('nav-spectral-tab');
+        const kmeansClustering = document.getElementById('nav-kmeans-tab');
+        const agglomerativeClustering = document.getElementById('nav-agglomerative-tab');
+        const dbscanClustering = document.getElementById('nav-dbscan-tab');
+
+        const attack = {
+            'DC': 'degree_centrality',
+            'EC': 'eigenvector_centrality',
+            'BC': 'betweenness_centrality',
+            'CC': 'closeness_centrality',
+            'LC': 'load_centrality',
+            'KN': 'kcore',
+            'DN': 'degree',
+            'TN': 'triangles',
+            'PN': 'pagerank',
+            'LOUC': 'louvain',
+            'GMC': 'greedy_modularity',
+            'LPC': 'label_propagation',
+            'ALC': 'asyn_lpa',
+            'KCC': 'k_clique',
+            'SC': 'spectral',
+            'KMC': 'kmeans',
+            'AGC': 'agglomerative',
+            'DBC': 'dbscan',
+        }
+
+        function handleClick(plotType, section, e) {
+            e.preventDefault();
+            const data = {
+                type_of_attack: attack[section],
+                multi_toggle: multiToggle.checked,
+                directed_toggle: directedToggle.checked,
+                layout: layout.value,
+                number_of_clusters: numberOfClusters.value,
+                session_id: '{{ session_id }}'
+            };
+            performResilienceMetrics(data, plotType, section);
+        }
+
+        $(GeneralMetrics).on('click', function () {
+            const data = {
+                multi_toggle: multiToggle.checked,
+                directed_toggle: directedToggle.checked,
+                layout: layout.value,
+                number_of_clusters: numberOfClusters.value,
+                session_id: '{{ session_id }}'
+            };
+
+            retrieveGeneralMetrics(data);
+        })
+
+        $(visualisation).on('click', function () {
+            const data = {
+                layout: layout.value,
+                session_id: '{{ session_id }}'
+            };
+
+            performVisualisation(data);
+        })
+
+        function handleClick1(plotType, section, e) {
+            e.preventDefault();
+            const data = {
+                type_of_attack: attack[section],
+                multi_toggle: multiToggle.checked,
+                directed_toggle: directedToggle.checked,
+                layout: layout.value,
+                number_of_clusters: numberOfClusters.value,
+                session_id: '{{ session_id }}'
+            };
+            performResilienceCluster(data, plotType, section);
+        }
+
+        $(degreeCentralityLayout).on('click', handleClick.bind(null, 'layout', 'DC'));
+        $(DCHistogram).on('click', handleClick.bind(null, 'histogram', 'DC'));
+        $(DCBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'DC'));
+        $(DCViolinPlot).on('click', handleClick.bind(null, 'violin', 'DC'));
+
+        $(betweennessCentralityLayout).on('click', handleClick.bind(null, 'layout', 'BC'));
+        $(BCHistogram).on('click', handleClick.bind(null, 'histogram', 'BC'));
+        $(BCBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'BC'));
+        $(BCViolinPlot).on('click', handleClick.bind(null, 'violin', 'BC'));
+
+        $(closenessCentralityLayout).on('click', handleClick.bind(null, 'layout', 'CC'));
+        $(CCHistogram).on('click', handleClick.bind(null, 'histogram', 'CC'));
+        $(CCBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'CC'));
+        $(CCViolinPlot).on('click', handleClick.bind(null, 'violin', 'CC'));
+
+        $(eigenvectorCentralityLayout).on('click', handleClick.bind(null, 'layout', 'EC'));
+        $(ECHistogram).on('click', handleClick.bind(null, 'histogram', 'EC'));
+        $(ECBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'EC'));
+        $(ECViolinPlot).on('click', handleClick.bind(null, 'violin', 'EC'));
+
+        $(loadCentralityLayout).on('click', handleClick.bind(null, 'layout', 'LC'));
+        $(LCHistogram).on('click', handleClick.bind(null, 'histogram', 'LC'));
+        $(LCBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'LC'));
+        $(LCViolinPlot).on('click', handleClick.bind(null, 'violin', 'LC'));
+
+        $(kCoreNodeLayout).on('click', handleClick.bind(null, 'layout', 'KN'));
+        $(kCoreNodeHistogram).on('click', handleClick.bind(null, 'histogram', 'KN'));
+        $(kCoreNodeBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'KN'));
+        $(kCoreNodeViolinPlot).on('click', handleClick.bind(null, 'violin', 'KN'));
+
+        $(degreeNodeLayout).on('click', handleClick.bind(null, 'layout', 'DN'));
+        $(degreeNodeHistogram).on('click', handleClick.bind(null, 'histogram', 'DN'));
+        $(degreeNodeBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'DN'));
+        $(degreeNodeViolinPlot).on('click', handleClick.bind(null, 'violin', 'DN'));
+
+        $(trianglesNodeLayout).on('click', handleClick.bind(null, 'layout', 'TN'));
+        $(trianglesNodeHistogram).on('click', handleClick.bind(null, 'histogram', 'TN'));
+        $(trianglesNodeBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'TN'));
+        $(trianglesNodeViolinPlot).on('click', handleClick.bind(null, 'violin', 'TN'));
+
+        $(pagerankNodeLayout).on('click', handleClick.bind(null, 'layout', 'PN'));
+        $(pagerankNodeHistogram).on('click', handleClick.bind(null, 'histogram', 'PN'));
+        $(pagerankNodeBoxPlot).on('click', handleClick.bind(null, 'boxplot', 'PN'));
+        $(pagerankNodeViolinPlot).on('click', handleClick.bind(null, 'violin', 'PN'));
+
+        $(louvainClustering).on('click', handleClick1.bind(null, 'louvain', 'LOUC'));
+        $(greedy_modularityClustering).on('click', handleClick1.bind(null, 'greedy_modularity', 'GMC'));
+        $(label_propagationClustering).on('click', handleClick1.bind(null, 'label_propagation', 'LPC'));
+        $(asyn_lpaClustering).on('click', handleClick1.bind(null, 'asyn_lpa', 'ALC'));
+        $(k_cliqueClustering).on('click', handleClick1.bind(null, 'k_clique', 'KCC'));
+        $(spectralClustering).on('click', handleClick1.bind(null, 'spectral', 'SC'));
+        $(kmeansClustering).on('click', handleClick1.bind(null, 'kmeans', 'KMC'));
+        $(agglomerativeClustering).on('click', handleClick1.bind(null, 'agglomerative', 'AGC'));
+        $(dbscanClustering).on('click', handleClick1.bind(null, 'dbscan', 'DBC'));
+
+    });
+</script>

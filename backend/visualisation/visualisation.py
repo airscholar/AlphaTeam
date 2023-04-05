@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from flask_jsonpify import jsonify
 
-from backend.common.common import extract_args
+from backend.common.common import get_arg_dynamic_toggle, get_arg_layout
 from src.utils import get_networkGraph
 from src.visualisation import *
 
@@ -10,7 +10,8 @@ visualisation_bp = Blueprint('visualisation', __name__, url_prefix="/api/v1/visu
 
 @visualisation_bp.route('<session_id>/plot_network/<plot_type>')
 def visualise_network(session_id, plot_type):
-    _, _, dynamic_toggle, layout = extract_args(request.args)
+    dynamic_toggle = get_arg_dynamic_toggle(request.args)
+    layout = get_arg_layout(request.args)
 
     G = get_networkGraph(session_id)
 
@@ -25,7 +26,6 @@ def visualise_network(session_id, plot_type):
 
 @visualisation_bp.route('<session_id>/heatmap')
 def visualise_heatmap(session_id):
-    _, _, dynamic_toggle, layout = extract_args(request.args)
 
     G = get_networkGraph(session_id)
 
