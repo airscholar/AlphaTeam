@@ -7,24 +7,20 @@ BASE_URL = 'http://localhost:8000/api/v1/metrics/'
 def get_arg_multi_toggle(args):
     if 'multi_toggle' in args:
         multi_toggle = args.get('multi_toggle', 'false')
-        multi_toggle = True if multi_toggle in ['true', 'True',True] else False
-    if 'multi' in args:
+    elif 'multi' in args:
         multi_toggle = args.get('multi', 'false')
-        multi_toggle = True if multi_toggle in ['true', 'True',True] else False
     else:
         raise ValueError('multi_toggle or multi not found in args')
-    return multi_toggle
+    return True if multi_toggle in ['true', 'True',True] else False
 
 def get_arg_directed_toggle(args):
     if 'directed_toggle' in args:
         directed_toggle = args.get('directed_toggle', 'false')
-        directed_toggle = True if directed_toggle in ['true', 'True',True] else False
-    if 'directed' in args:
+    elif 'directed' in args:
         directed_toggle = args.get('directed', 'false')
-        directed_toggle = True if directed_toggle in ['true', 'True',True] else False
     else:
         raise ValueError('directed_toggle or directed not found in args')
-    return directed_toggle
+    return True if directed_toggle in ['true', 'True',True] else False
 
 def get_arg_dynamic_toggle(args):
     dynamic_toggle = args.get('dynamic', 'false')
