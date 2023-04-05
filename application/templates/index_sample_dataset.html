@@ -57,6 +57,13 @@
                          class="img-fluid mx-auto d-block" alt="Image" style="width: 500px; padding: 80px;">
                 </div>
             </div>
+            <div class="col-sm-3">
+                <div class="card" onclick="submitForm('../application/static/uploads/sample/', 'GTFS', 'sample')"
+                     data-toggle="tooltip" title="GTFS Dataset">
+                    <img src="{{ url_for('static', filename='app_images/gtfs.png') }}"
+                         class="img-fluid mx-auto d-block" alt="Image" style="width: 500px; padding: 80px;">
+                </div>
+            </div>
         </div>
     </div>
     <!-- Hidden form for submitting the selected option and CSV file path -->
