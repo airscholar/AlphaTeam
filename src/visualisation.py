@@ -9,12 +9,14 @@ Purpose: Visualisation for the NetworkX graphs
 # Internal Imports
 import src.machineLearning as ml
 import src.metrics as m
+import src.deepLearning as dl
 from src import utils
 from src.visualisation_src.ML_visualisation import *
 from src.visualisation_src.metrics_visualisation import *
 from src.visualisation_src.basic_network_visualisation import *
 from src.visualisation_src.temporal_visualisation import *
 from src.visualisation_src.utils_visualisation import *
+from src.visualisation_src.DL_visualisation import *
 
 # External Imports
 from pandas.api.types import is_numeric_dtype
@@ -103,10 +105,10 @@ def plot_cluster(networkGraphs, clusterType, noOfClusters=0, dynamic=False, layo
         return df, 'no_graph.html'
 
     cluster = ml.get_communities(networkGraphs, clusterType, noOfClusters=noOfClusters)
-    if len(cluster) == 0 or cluster.isnull().values.any() or len(cluster)!=len(networkGraphs.Graph.nodes):
+    if len(cluster) == 0 or cluster.isnull().values.any() or len(cluster) != len(networkGraphs.Graph.nodes):
         print(ValueError("Issue with cluster or cluster not possible for this method or graph"))
         return utils.return_nan(networkGraphs, 'Cluster'), 'no_graph.html'
-        
+
     filename = f"{clusterType}_{'Dynamic' if dynamic else 'Static'}_{layout}.html"
     if dynamic:
         filename = filename.replace(f"_{layout}", "")
@@ -258,11 +260,11 @@ def plot_histogram(networkGraphs, metrics, directed=True, multi=True, fullPath=F
     :rtype: pd.DataFrame, str
     """
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi)
+        df = m.compute_node_centralities(networkGraphs, directed=directed, multi=multi)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi)
+        df = m.compute_node_metrics(networkGraphs, directed=directed, multi=multi)
     else:
-        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi)
+        df = m.get_metrics(networkGraphs, metrics, directed=directed, multi=multi)
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Histogram.html"
     filepath = get_file_path(networkGraphs, filename)
@@ -329,11 +331,11 @@ def plot_boxplot(networkGraphs, metrics, directed=True, multi=True, fullPath=Fal
     :rtype: pd.DataFrame, str
     """
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi)
+        df = m.compute_node_centralities(networkGraphs, directed=directed, multi=multi)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi)
+        df = m.compute_node_metrics(networkGraphs, directed=directed, multi=multi)
     else:
-        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi)
+        df = m.get_metrics(networkGraphs, metrics, directed=directed, multi=multi)
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Boxplot.html"
     filepath = get_file_path(networkGraphs, filename)
@@ -374,11 +376,11 @@ def plot_violin(networkGraphs, metrics, directed=True, multi=True, fullPath=Fals
     :rtype: pd.DataFrame, str
     """
     if metrics == 'centralities':
-        df = m.compute_node_centralities(networkGraphs, directed=False, multi=multi)
+        df = m.compute_node_centralities(networkGraphs, directed=directed, multi=multi)
     elif metrics == 'nodes':
-        df = m.compute_node_metrics(networkGraphs, directed=False, multi=multi)
+        df = m.compute_node_metrics(networkGraphs, directed=directed, multi=multi)
     else:
-        df = m.get_metrics(networkGraphs, metrics, directed=False, multi=multi)
+        df = m.get_metrics(networkGraphs, metrics, directed=directed, multi=multi)
 
     filename = f"{metrics}_{'Directed' if directed else 'Undirected'}_{'Mutli' if multi else ''}_Violin.html"
     filepath = get_file_path(networkGraphs, filename)
@@ -434,3 +436,44 @@ def plot_temporal(neworkGraphs, layout='map'):
         generate_temporal(neworkGraphs, filepath, layout_=layout)
 
     return filename
+
+
+# ----------------------------------------------------------------------------------------
+
+def plot_node2vec(networkGraphs, p=1, q=1, visualisation='TSNE', fullPath=False):
+    """
+    :Function: Plot the node2vec for the given graph
+    Visualisation:
+        - 'TSNE'
+        - 'UMAP'
+        - 'PCA'
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: NetworkGraphs
+    :param p: p parameter for node2vec
+    :type p: float
+    :param q: q parameter for node2vec
+    :type q: float
+    :param visualisation: Visualisation method
+    :type visualisation: str
+    :param fullPath: Boolean to indicate if the full path is required
+    :type fullPath: bool
+    :return: filename
+
+    """
+    if visualisation not in ['TSNE', 'UMAP', 'PCA']:
+        print(ValueError('Please select a valid visualisation method.'))
+        return '../application/static/no_graph.html'
+
+    _, emb = dl.node2vec_embedding(networkGraphs, p=p, q=q)
+
+    filename = f"node2vec.html"
+    filepath = get_file_path(networkGraphs, filename)
+
+    if visualisation == 'TSNE':
+        TSNE_visualisation(networkGraphs, emb, filepath)
+    elif visualisation == 'UMAP':
+        umap_visualisation(networkGraphs, emb, filepath)
+    elif visualisation == 'PCA':
+        PCA_visualisation(networkGraphs, emb, filepath)
+
+    return filename if not fullPath else filepath
