@@ -160,7 +160,7 @@ def k_clique_clustering(networkGraphs, noOfClusters=0):
 
 
 @memoize
-def spectral_clustering(networkGraphs, noOfClusters=0):
+def spectral_clustering(networkGraphs, noOfClusters=0, embedding=None):
     """
     :Function: Detect communities based on spectral
     :param networkGraphs: NetworkGraphs
@@ -169,13 +169,19 @@ def spectral_clustering(networkGraphs, noOfClusters=0):
     """
     G = networkGraphs.Graph
 
-    if 0 < noOfClusters:
-        adj_mat = nx.to_numpy_array(G)
+    if embedding is None:
+        if 0 < noOfClusters:
+            adj_mat = nx.to_numpy_array(G)
+            optimal_k = noOfClusters
+        else:
+            adj_mat, optimal_k = compute_clustering(G)
+    elif noOfClusters > 0:
+        adj_mat = embedding
         optimal_k = noOfClusters
     else:
-        adj_mat, optimal_k = compute_clustering(G)
+        raise ValueError('If embedding is provided, noOfClusters must be > 0')
 
-    clustering = SpectralClustering(optimal_k, affinity='precomputed', eigen_solver='arpack', n_init=100).fit(adj_mat)
+    clustering = SpectralClustering(n_clusters=optimal_k).fit(adj_mat,)
     df = clustering_response(G, clustering, optimal_k)
 
     return df
@@ -244,7 +250,7 @@ def clustering_response(networkGraph, clustering_alg, optimal_k):
 
 
 @memoize
-def kmeans_clustering(networkGraphs, noOfClusters=0):
+def kmeans_clustering(networkGraphs, noOfClusters=0, embedding=None):
     """
     :Function: Detect communities based on k-means
     :param networkGraphs: NetworkGraphs
@@ -252,12 +258,19 @@ def kmeans_clustering(networkGraphs, noOfClusters=0):
     :return: dataframe
     """
     G = networkGraphs.Graph
-    if 0 >= noOfClusters:
-        adj_mat, optimal_k = compute_clustering(G)
 
-    else:
+    if embedding is None:
+        if 0 >= noOfClusters:
+            adj_mat, optimal_k = compute_clustering(G)
+
+        else:
+            optimal_k = noOfClusters
+            adj_mat = nx.to_numpy_array(G)
+    elif 0 < noOfClusters:
+        adj_mat = embedding
         optimal_k = noOfClusters
-        adj_mat = nx.to_numpy_array(G)
+    else:
+        raise ValueError('If embedding is provide, noOfClusters must be greater than 0')
 
     clustering = KMeans(n_clusters=optimal_k, init='k-means++',
                         random_state=4, max_iter=10).fit(adj_mat)
@@ -270,7 +283,7 @@ def kmeans_clustering(networkGraphs, noOfClusters=0):
 
 
 @memoize
-def agglomerative_clustering(networkGraphs, noOfClusters=0):
+def agglomerative_clustering(networkGraphs, noOfClusters=0, embedding=None):
     """
     :Function: Detect communities based on agglomerative
     :param networkGraphs: NetworkGraphs
@@ -278,11 +291,18 @@ def agglomerative_clustering(networkGraphs, noOfClusters=0):
     :return: dataframe
     """
     G = networkGraphs.Graph
-    if 0 < noOfClusters:
+
+    if embedding is None:
+        if 0 < noOfClusters:
+            optimal_k = noOfClusters
+            adj_mat = nx.to_numpy_array(G)
+        else:
+            adj_mat, optimal_k = compute_clustering(G)
+    elif 0 < noOfClusters:
+        adj_mat = embedding
         optimal_k = noOfClusters
-        adj_mat = nx.to_numpy_array(G)
     else:
-        adj_mat, optimal_k = compute_clustering(G)
+        raise ValueError('If embedding is provided, noOfClusters must be > 0')
 
     clustering = AgglomerativeClustering(
         n_clusters=optimal_k, affinity='euclidean', linkage='ward').fit(adj_mat)
@@ -296,18 +316,26 @@ def agglomerative_clustering(networkGraphs, noOfClusters=0):
 
 
 @memoize
-def dbscan_clustering(networkGraphs, noOfClusters=0):
+def dbscan_clustering(networkGraphs, noOfClusters=0, embedding=None):
     """
     :Function: Detect communities based on dbscan
     :param networkGraphs: NetworkGraphs
     :return: dataframe
     """
     G = networkGraphs.Graph
-    if 0 < noOfClusters:
+
+    if embedding is None:
+        if 0 < noOfClusters:
+            optimal_k = noOfClusters
+            adj_mat = nx.to_numpy_array(G)
+        else:
+            adj_mat, optimal_k = compute_clustering(G)
+    elif 0 < noOfClusters:
+        adj_mat = embedding
         optimal_k = noOfClusters
-        adj_mat = nx.to_numpy_array(G)
     else:
-        adj_mat, optimal_k = compute_clustering(G)
+        raise ValueError('If embedding is provided, noOfClusters must be > 0')
+
     # compute DBSCAN clustering algorithm on Graph
     db = DBSCAN(eps=0.3, min_samples=optimal_k).fit(adj_mat)
     labels = db.labels_
@@ -323,7 +351,7 @@ def dbscan_clustering(networkGraphs, noOfClusters=0):
 
 
 
-def get_communities(networkGraphs, method, noOfClusters=0):
+def get_communities(networkGraphs, method, noOfClusters=0, embedding=None):
     """
     :Function: Get communities based on the method
     :param networkGraphs: NetworkGraphs
@@ -354,13 +382,13 @@ def get_communities(networkGraphs, method, noOfClusters=0):
     elif method == 'k_clique':
         return k_clique_clustering(networkGraphs, noOfClusters=noOfClusters)
     elif method == 'kmeans':
-        return kmeans_clustering(networkGraphs, noOfClusters=noOfClusters)
+        return kmeans_clustering(networkGraphs, noOfClusters=noOfClusters, embedding=embedding)
     elif method == 'spectral':
-        return spectral_clustering(networkGraphs, noOfClusters=noOfClusters)
+        return spectral_clustering(networkGraphs, noOfClusters=noOfClusters, embedding=embedding)
     elif method == 'agglomerative':
-        return agglomerative_clustering(networkGraphs, noOfClusters=noOfClusters)
+        return agglomerative_clustering(networkGraphs, noOfClusters=noOfClusters, embedding=embedding)
     elif method == 'dbscan':
-        return dbscan_clustering(networkGraphs, noOfClusters=noOfClusters)
+        return dbscan_clustering(networkGraphs, noOfClusters=noOfClusters, embedding=embedding)
     else:
         return None
 

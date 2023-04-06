@@ -16,7 +16,7 @@ from sklearn.decomposition import PCA
 # ----------------------------------- Functions -----------------------------------
 
 
-def umap_visualisation(networkGraphs, embeddings, filename):
+def umap_visualisation(networkGraphs, embeddings, filename, clusters=None):
     nodes = list(networkGraphs.Graph.nodes())
 
     umap_model = umap.UMAP(n_neighbors=30, min_dist=0.3, metric='euclidean', random_state=42)
@@ -24,6 +24,13 @@ def umap_visualisation(networkGraphs, embeddings, filename):
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=embeddings_2d[:, 0], y=embeddings_2d[:, 1], hovertext=nodes, mode='markers'))
+
+    if clusters is not None:
+        color_list = []
+        for node in networkGraphs.Graph.nodes():
+            metric_df = clusters[clusters['Node'] == node]
+            color_list.extend([metric_df['Color'].values[0]])
+        fig.update_traces(marker=dict(color=color_list, colorscale='Viridis', line_width=2))
 
     fig.update_layout(
         title='UMAP visualisation of node embeddings',
@@ -42,7 +49,7 @@ def umap_visualisation(networkGraphs, embeddings, filename):
 # ----------------------------------------------------------------------------------
 
 
-def TSNE_visualisation(networkGraphs, embeddings, filename):
+def TSNE_visualisation(networkGraphs, embeddings, filename, clusters=None):
     nodes = list(networkGraphs.Graph.nodes())
 
     tsne_model = TSNE(n_components=2, random_state=42)
@@ -50,6 +57,13 @@ def TSNE_visualisation(networkGraphs, embeddings, filename):
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=embeddings_2d[:, 0], y=embeddings_2d[:, 1], hovertext=nodes, mode='markers'))
+
+    if clusters is not None:
+        color_list = []
+        for node in networkGraphs.Graph.nodes():
+            metric_df = clusters[clusters['Node'] == node]
+            color_list.extend([metric_df['Color'].values[0]])
+        fig.update_traces(marker=dict(color=color_list, colorscale='Viridis', line_width=2))
 
     fig.update_layout(
         title='TSNE visualisation of node embeddings',
@@ -68,7 +82,7 @@ def TSNE_visualisation(networkGraphs, embeddings, filename):
 # ----------------------------------------------------------------------------------
 
 
-def PCA_visualisation(networkGraphs, embeddings, filename):
+def PCA_visualisation(networkGraphs, embeddings, filename, clusters=None):
     nodes = list(networkGraphs.Graph.nodes())
 
     pca_model = PCA(n_components=2, random_state=42)
@@ -76,6 +90,13 @@ def PCA_visualisation(networkGraphs, embeddings, filename):
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=embeddings_2d[:, 0], y=embeddings_2d[:, 1], hovertext=nodes, mode='markers'))
+
+    if clusters is not None:
+        color_list = []
+        for node in networkGraphs.Graph.nodes():
+            metric_df = clusters[clusters['Node'] == node]
+            color_list.extend([metric_df['Color'].values[0]])
+        fig.update_traces(marker=dict(color=color_list, colorscale='Viridis', line_width=2))
 
     fig.update_layout(
         title='PCA visualisation of node embeddings',
@@ -89,3 +110,7 @@ def PCA_visualisation(networkGraphs, embeddings, filename):
     fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
 
     return filename
+
+# ----------------------------------------------------------------------------------
+
+
