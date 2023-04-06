@@ -16,6 +16,19 @@ from sklearn.manifold import TSNE
 
 
 def umap_visualisation(networkGraphs, embeddings, filename, clusters=None):
+    """
+    :Function: UMAP visualisation
+    :param networkGraphs: networkGraphs
+    :type networkGraphs: src.networkGraphs_src.networkGraphs
+    :param embeddings: Embeddings
+    :type embeddings: numpy.ndarray
+    :param filename: filename
+    :type filename: str
+    :param clusters: number of clusters
+    :type clusters: pandas.DataFrame
+    :return: filename
+    :rtype: str
+    """
     nodes = list(networkGraphs.Graph.nodes())
 
     umap_model = umap.UMAP(n_neighbors=30, min_dist=0.3, metric='euclidean', random_state=42)
@@ -32,6 +45,19 @@ def umap_visualisation(networkGraphs, embeddings, filename, clusters=None):
 
 
 def TSNE_visualisation(networkGraphs, embeddings, filename, clusters=None):
+    """
+    :Function: TSNE visualisation
+    :param networkGraphs: networkGraphs
+    :type networkGraphs: src.networkGraphs_src.networkGraphs
+    :param embeddings: Embeddings
+    :type embeddings: numpy.ndarray
+    :param filename: filename
+    :type filename: str
+    :param clusters: number of clusters
+    :type clusters: pandas.DataFrame
+    :return: filename
+    :rtype: str
+    """
     nodes = list(networkGraphs.Graph.nodes())
 
     tsne_model = TSNE(n_components=2, random_state=42)
@@ -48,6 +74,19 @@ def TSNE_visualisation(networkGraphs, embeddings, filename, clusters=None):
 
 
 def PCA_visualisation(networkGraphs, embeddings, filename, clusters=None):
+    """
+    :Function: PCA visualisation
+    :param networkGraphs: networkGraphs
+    :type networkGraphs: src.networkGraphs_src.networkGraphs
+    :param embeddings: Embeddings
+    :type embeddings: numpy.ndarray
+    :param filename:
+    :type filename: str
+    :param clusters:
+    :type clusters: pandas.DataFrame
+    :return: filename
+    :rtype: str
+    """
     nodes = list(networkGraphs.Graph.nodes())
 
     pca_model = PCA(n_components=2, random_state=42)
@@ -64,9 +103,15 @@ def get_dl_layout_update(fig, embeddings_2d, nodes, title=None, clusters=None):
     """
     :Function: Get the DL layout update for the plotly plot
     :param fig: Figure
+    :type fig: plotly.graph_objects.Figure
     :param embeddings_2d: 2D embeddings
+    :type embeddings_2d: numpy.ndarray
     :param nodes: Nodes
+    :type nodes: list
     :param title: Title of the plot
+    :type title: str
+    :param clusters: Clusters
+    :type clusters: pandas.DataFrame
     :return: Figure
     """
     fig.add_trace(go.Scatter(x=embeddings_2d[:, 0], y=embeddings_2d[:, 1], hovertext=nodes, mode='markers'))

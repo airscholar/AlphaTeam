@@ -24,6 +24,7 @@ def dropStd(df_):
 
     return df_
 
+
 def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USING PLOTLY
     """
     :Function: Plot the metrics on the graph
