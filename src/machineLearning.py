@@ -286,8 +286,13 @@ def kmeans_clustering(networkGraphs, noOfClusters=0, embedding=None):
     """
     :Function: Detect communities based on k-means
     :param networkGraphs: NetworkGraphs
+    :type networkGraphs: NetworkGraphs
     :param noOfClusters: number of clusters
+    :type noOfClusters: int
+    :param embedding: embedding
+    :type embedding: np.array
     :return: dataframe
+    :rtype: pd.DataFrame
     """
     G = networkGraphs.Graph
 
@@ -319,8 +324,13 @@ def agglomerative_clustering(networkGraphs, noOfClusters=0, embedding=None):
     """
     :Function: Detect communities based on agglomerative
     :param networkGraphs: NetworkGraphs
+    :type networkGraphs: NetworkGraphs
     :param noOfClusters: number of clusters
+    :type noOfClusters: int
+    :param embedding: embedding
+    :type embedding: np.array
     :return: dataframe
+    :rtype: pd.DataFrame
     """
     G = networkGraphs.Graph
 
@@ -352,9 +362,13 @@ def dbscan_clustering(networkGraphs, noOfClusters=0, embedding=None):
     """
     :Function: Detect communities based on dbscan
     :param networkGraphs: NetworkGraphs
+    :type networkGraphs: NetworkGraphs
     :param noOfClusters: number of clusters
+    :type noOfClusters: int
     :param embedding: embedding
+    :type embedding: np.array
     :return: dataframe
+    :rtype: pd.DataFrame
     """
     G = networkGraphs.Graph
 
@@ -431,6 +445,13 @@ def get_communities(networkGraphs, method, noOfClusters=0, embedding=None):
 
 
 def get_hotspot(networkGraphs):
+    """
+    :Function: Get hotspot
+    :param networkGraphs:
+    :type networkGraphs: NetworkGraphs
+    :return: dataframe
+    :rtype: pd.DataFrame
+    """
     data = []
     for node in networkGraphs.Graph.nodes():
         temp = {'Degree': networkGraphs.Graph.degree(node),
@@ -452,10 +473,24 @@ def get_hotspot(networkGraphs):
 
 @memoize
 def binary_search(func, networkGraphs, noOfClusters=0):
+    """
+    :Function: Perform binary search for optimal resolution parameter
+    :param func: the function to use
+    :type func: str
+    :param networkGraphs: NetworkGraphs
+    :type networkGraphs: NetworkGraphs
+    :param noOfClusters: number of clusters
+    :type noOfClusters: int
+    :return: dataframe
+    :rtype: pd.DataFrame
+    """
     lower_bound, upper_bound = 0, None
     step = 0.1
     tolerance = 0.0001
     function = getattr(nx_comm, func)
+    prev_resolution = None
+    communities = None
+
     # Perform binary search for optimal resolution parameter
     for i in range(500):
         if upper_bound is None:
