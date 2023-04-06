@@ -443,7 +443,7 @@ def plot_temporal(neworkGraphs, layout='map'):
 def plot_node2vec(networkGraphs, p=1, q=1, layout='TSNE', fullPath=False):
     """
     :Function: Plot the node2vec for the given graph
-    Visualisation:
+    layout:
         - 'TSNE'
         - 'UMAP'
         - 'PCA'
@@ -466,7 +466,7 @@ def plot_node2vec(networkGraphs, p=1, q=1, layout='TSNE', fullPath=False):
 
     _, emb = dl.node2vec_embedding(networkGraphs, p=p, q=q)
 
-    filename = f"node2vec.html"
+    filename = f"node2vec_{layout}.html"
     filepath = get_file_path(networkGraphs, filename)
 
     if layout == 'TSNE':
@@ -484,10 +484,18 @@ def plot_node2vec(networkGraphs, p=1, q=1, layout='TSNE', fullPath=False):
 def plot_embedding_cluster(networkGraphs, method, noOfCluster=8, p=1, q=1, layout='TSNE', fullPath=False):
     """
     :Function: Plot the embedding cluster for the given graph
-    Visualisation:
+    method:
+        - 'kmeans'
+        - 'spectral'
+        - 'agglomerative'
+        - 'dbscan'
+    layout:
         - 'TSNE'
         - 'UMAP'
         - 'PCA'
+        - 'sfdp'
+        - 'twopi'
+        - 'map'
     :param networkGraphs: NetworkGraphs object
     :type networkGraphs: NetworkGraphs
     :param p: p parameter for node2vec
