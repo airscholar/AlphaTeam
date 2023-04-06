@@ -6,14 +6,15 @@ Purpose: Visualisation utilities module contains functions for visualising the n
 
 # ----------------------------------------- Imports ----------------------------------------- #
 
-# Internal imports
-from src.utils import memoize
-
 # External imports
 import os
+
 import geopandas as gpd
 import matplotlib.pyplot as plt
 from plotly import graph_objects as go
+
+# Internal imports
+from src.utils import memoize
 
 
 # ----------------------------------------------------------------------------------------
