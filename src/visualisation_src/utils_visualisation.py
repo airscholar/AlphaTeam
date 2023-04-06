@@ -24,9 +24,13 @@ def plot_map(networkGraphs, background=True, edges=True):  # FOR MATPLOTLIB
     """
     :Function: Plot the map of the location of the graphs
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
     :param background: Boolean to indicate if the background is to be plotted or not
+    :type background: bool
     :param edges: Boolean to indicate if the edges are to be plotted or not
+    :type edges: bool
     :return: Matplotlib plot
+    :rtype: matplotlib.pyplot
     """
     if not networkGraphs.is_spatial():
         return 0
@@ -45,7 +49,17 @@ def plot_map(networkGraphs, background=True, edges=True):  # FOR MATPLOTLIB
 
 @memoize
 def get_layout(networkGraphs, title=None, layout_='map'):  # FOR PLOTLY
-
+    """
+    :Function: Get the layout of the graph
+    :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
+    :param title: Title of the graph
+    :type title: str
+    :param layout_: layout of the graph
+    :type layout_: str
+    :return: Plotly layout
+    :rtype: plotly.graph_objects
+    """
     if layout_ == 'map':
         layout = go.Layout(
             title=f'<br>{title}',
@@ -104,9 +118,13 @@ def generate_edge_trace(Graph, pos, layout):
     """
     :Function: Generate the edge trace for the plotly plot, leveraging the memoize decorator for cache optimization
     :param Graph: Network graph
+    :type Graph: NetworkGraph
     :param pos: Position of the nodes
+    :type pos: dict
     :param layout: Layout of the plot
+    :type layout: str
     :return: Edge trace
+    :rtype: plotly.graph_objects
     """
     x_list = []
     y_list = []
@@ -129,8 +147,11 @@ def get_file_path(networkGraphs, file_name):
     """
     :Function: Get the file path for the plotly plot
     :param networkGraphs: Network graph
+    :type networkGraphs: NetworkGraph
     :param file_name: Name of the file
+    :type file_name: str
     :return: Filepath
+    :rtype: str
     """
     folder = f"{networkGraphs.session_folder}/"
     if not os.path.isdir(folder):
