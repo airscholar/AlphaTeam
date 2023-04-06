@@ -137,27 +137,3 @@ def get_file_path(networkGraphs, file_name):
         os.mkdir(folder)
 
     return f"{folder}{file_name}"
-
-
-def get_dl_layout_update(fig, embeddings_2d, nodes, title=None):
-    """
-    :Function: Get the DL layout update for the plotly plot
-    :param fig: Figure
-    :param embeddings_2d: 2D embeddings
-    :param nodes: Nodes
-    :param title: Title of the plot
-    :return: Figure
-    """
-    fig.add_trace(go.Scatter(x=embeddings_2d[:, 0], y=embeddings_2d[:, 1], hovertext=nodes, mode='markers'))
-
-    fig.update_layout(
-        title=f'{title} visualisation of node embeddings',
-        xaxis_title=f'{title} x',
-        yaxis_title=f'{title} y',
-        hovermode='closest',
-        showlegend=False,
-        paper_bgcolor='rgba(0,0,0,0)',
-    )
-    fig.update_layout(margin=dict(l=0, r=0, t=40, b=0))
-
-    return fig
