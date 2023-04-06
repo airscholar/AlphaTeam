@@ -6,12 +6,9 @@ Purpose: Machine Learning for the NetworkX graphs
 
 # ----------------------------------------- Imports ----------------------------------------- #
 
-# Internal imports
-import src.utils as utils
-from src.utils import memoize
-
 # External imports
 import warnings
+
 import networkx as nx
 import networkx.algorithms.community as nx_comm
 import numpy as np
@@ -19,6 +16,10 @@ import pandas as pd
 from distinctipy import distinctipy
 from kneed import KneeLocator
 from sklearn.cluster import SpectralClustering, KMeans, AgglomerativeClustering, DBSCAN
+
+# Internal imports
+import src.utils as utils
+from src.utils import memoize
 
 warnings.filterwarnings("ignore")
 
@@ -396,7 +397,6 @@ def dbscan_clustering(networkGraphs, noOfClusters=0, embedding=None):
 
 
 # ----------------------------------------------------------------------------------------
-
 
 
 def get_communities(networkGraphs, method, noOfClusters=0, embedding=None):
