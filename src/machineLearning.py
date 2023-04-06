@@ -175,13 +175,15 @@ def spectral_clustering(networkGraphs, noOfClusters=0, embedding=None):
             optimal_k = noOfClusters
         else:
             adj_mat, optimal_k = compute_clustering(G)
+        clustering = SpectralClustering(optimal_k, affinity='precomputed', eigen_solver='arpack', n_init=100).fit(
+            adj_mat)
     elif noOfClusters > 0:
         adj_mat = embedding
         optimal_k = noOfClusters
+        clustering = SpectralClustering(n_clusters=optimal_k).fit(adj_mat)
     else:
         raise ValueError('If embedding is provided, noOfClusters must be > 0')
 
-    clustering = SpectralClustering(n_clusters=optimal_k).fit(adj_mat)
     df = clustering_response(G, clustering, optimal_k)
 
     return df
