@@ -440,10 +440,10 @@ def plot_temporal(neworkGraphs, layout='map'):
 
 # ----------------------------------------------------------------------------------------
 
-def plot_node2vec(networkGraphs, p=1, q=1, visualisation='TSNE', fullPath=False):
+def plot_node2vec(networkGraphs, p=1, q=1, layout='TSNE', fullPath=False):
     """
     :Function: Plot the node2vec for the given graph
-    Visualisation:
+    layout:
         - 'TSNE'
         - 'UMAP'
         - 'PCA'
@@ -453,27 +453,87 @@ def plot_node2vec(networkGraphs, p=1, q=1, visualisation='TSNE', fullPath=False)
     :type p: float
     :param q: q parameter for node2vec
     :type q: float
-    :param visualisation: Visualisation method
-    :type visualisation: str
+    :param layout: Visualisation method
+    :type layout: str
     :param fullPath: Boolean to indicate if the full path is required
     :type fullPath: bool
     :return: filename
 
     """
-    if visualisation not in ['TSNE', 'UMAP', 'PCA']:
+    if layout not in ['TSNE', 'UMAP', 'PCA']:
         print(ValueError('Please select a valid visualisation method.'))
         return '../application/static/no_graph.html'
 
     _, emb = dl.node2vec_embedding(networkGraphs, p=p, q=q)
 
-    filename = f"node2vec.html"
+    filename = f"node2vec_{layout}.html"
     filepath = get_file_path(networkGraphs, filename)
 
-    if visualisation == 'TSNE':
+    if layout == 'TSNE':
         TSNE_visualisation(networkGraphs, emb, filepath)
-    elif visualisation == 'UMAP':
+    elif layout == 'UMAP':
         umap_visualisation(networkGraphs, emb, filepath)
-    elif visualisation == 'PCA':
+    elif layout == 'PCA':
         PCA_visualisation(networkGraphs, emb, filepath)
+
+    return filename if not fullPath else filepath
+
+
+# ----------------------------------------------------------------------------------------
+
+def plot_embedding_cluster(networkGraphs, method, noOfCluster=8, p=1, q=1, layout='TSNE', fullPath=False):
+    """
+    :Function: Plot the embedding cluster for the given graph
+    method:
+        - 'kmeans'
+        - 'spectral'
+        - 'agglomerative'
+        - 'dbscan'
+    layout:
+        - 'TSNE'
+        - 'UMAP'
+        - 'PCA'
+        - 'sfdp'
+        - 'twopi'
+        - 'map'
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: NetworkGraphs
+    :param p: p parameter for node2vec
+    :type p: float
+    :param q: q parameter for node2vec
+    :type q: float
+    :param layout: Visualisation method
+    :type layout: str
+    :param fullPath: Boolean to indicate if the full path is required
+    :type fullPath: bool
+    :return: filename
+    """
+    if layout not in ['TSNE', 'UMAP', 'PCA', 'sfdp', 'twopi', 'map']:
+        print(ValueError('Please select a valid visualisation method.'))
+        return '../application/static/no_graph.html'
+
+    if layout == 'map' and not networkGraphs.is_spatial():
+        print(ValueError('Please select a valid visualisation method.'))
+        return '../application/static/no_graph.html'
+
+    if method not in ['kmeans', 'spectral', 'agglomerative', 'dbscan']:
+        print(ValueError('Please select a valid clustering method.'))
+        return '../application/static/no_graph.html'
+
+    _, emb = dl.node2vec_embedding(networkGraphs, p=p, q=q)
+    clusters = ml.get_communities(networkGraphs, method=method, noOfClusters=noOfCluster, embedding=emb)
+
+    filename = f"embedding_{method}_{layout}.html"
+    filepath = get_file_path(networkGraphs, filename)
+
+    if layout == 'TSNE':
+        TSNE_visualisation(networkGraphs, emb, filepath, clusters=clusters)
+    elif layout == 'UMAP':
+        umap_visualisation(networkGraphs, emb, filepath, clusters=clusters)
+    elif layout == 'PCA':
+        PCA_visualisation(networkGraphs, emb, filepath, clusters=clusters)
+    elif layout in ['sfdp', 'twopi', 'map']:
+        generate_static_cluster(networkGraphs, clusters, filepath, method, layout_=layout, nbr=noOfCluster)
+
 
     return filename if not fullPath else filepath

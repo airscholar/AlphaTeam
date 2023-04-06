@@ -10,12 +10,14 @@ Purpose: Deep learning module contains functions for deep learning
 from node2vec import Node2Vec
 import numpy as np
 import plotly.graph_objects as go
+from src.utils import memoize
 
 # ----------------------------------------- CONSTANT ----------------------------------------- #
 
 
 # ----------------------------------------- Functions ----------------------------------------- #
 
+@memoize
 def node2vec_embedding(networkGraph, p=1, q=1, dimensions=64, walk_length=80, num_walks=10, workers=4):
     node2vec = Node2Vec(networkGraph.DiGraph,
                         dimensions=dimensions,
