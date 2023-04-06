@@ -408,6 +408,8 @@ def get_communities(networkGraphs, method, noOfClusters=0, embedding=None):
     :type method: str
     :param noOfClusters: size of the cluster
     :type noOfClusters: int
+    :param embedding: embedding
+    :type embedding: np.array
     :return: dataframe
     """
     if method not in ['louvain', 'greedy_modularity', 'label_propagation', 'asyn_lpa',
