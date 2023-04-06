@@ -19,6 +19,18 @@ from src.utils import memoize
 
 @memoize
 def node2vec_embedding(networkGraph, p=1, q=1, dimensions=64, walk_length=80, num_walks=10, workers=4):
+    """
+    :Function: Node2Vec embedding
+    :param networkGraph: Network graph
+    :param p: Return hyper parameter (default: 1)
+    :param q: Inout parameter (default: 1)
+    :param dimensions: Dimension of the embedding (default: 64)
+    :param walk_length: Length of the random walk (default: 80)
+    :param num_walks: Number of random walks (default: 10)
+    :param workers: Number of workers (default: 4)
+    :return: model_node2vec, embeddings
+    :rtype: node2vec.Node2Vec, numpy.ndarray
+    """
     node2vec = Node2Vec(networkGraph.DiGraph,
                         dimensions=dimensions,
                         walk_length=walk_length,
