@@ -42,7 +42,8 @@ def create_comm_colors(communities):
     :rtype: list
     """
     colors = distinctipy.get_colors(len(communities))
-    colors = [tuple([i * 255 for i in c]) for c in colors]
+    np.random.shuffle(colors)
+    colors = [tuple([i * np.random.randint(200, 255) for i in c]) for c in colors]
     # convert rgb tuple to hex
     colors = [f'#{int(c[0]):02x}{int(c[1]):02x}{int(c[2]):02x}' for c in colors]
 
@@ -385,13 +386,13 @@ def dbscan_clustering(networkGraphs, noOfClusters=0, embedding=None):
     else:
         raise ValueError('If embedding is provided, noOfClusters must be > 0')
 
-    # compute DBSCAN clustering algorithm on Graph
-    db = DBSCAN(eps=0.3, min_samples=optimal_k).fit(adj_mat)
-    labels = db.labels_
+    dbscan = DBSCAN(eps=42, min_samples=2)
+    dbscan.fit(adj_mat)
+
+    dbscan.labels_ = dbscan.labels_ + 1
+
     # Number of clusters in labels, ignoring noise if present.
-    n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
-    n_noise_ = list(labels).count(-1)
-    df = clustering_response(G, db, n_clusters_)
+    df = clustering_response(G, dbscan, len(set(dbscan.labels_)))
 
     return df
 
