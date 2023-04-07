@@ -4,6 +4,7 @@ from flask import request
 
 BASE_URL = 'http://localhost:8000/api/v1/metrics/'
 
+
 def get_arg_multi_toggle(args):
     if 'multi_toggle' in args:
         multi_toggle = args.get('multi_toggle', 'false')
@@ -11,7 +12,8 @@ def get_arg_multi_toggle(args):
         multi_toggle = args.get('multi', 'false')
     else:
         raise ValueError('multi_toggle or multi not found in args')
-    return True if multi_toggle in ['true', 'True',True] else False
+    return True if multi_toggle in ['true', 'True', True] else False
+
 
 def get_arg_directed_toggle(args):
     if 'directed_toggle' in args:
@@ -20,16 +22,19 @@ def get_arg_directed_toggle(args):
         directed_toggle = args.get('directed', 'false')
     else:
         raise ValueError('directed_toggle or directed not found in args')
-    return True if directed_toggle in ['true', 'True',True] else False
+    return True if directed_toggle in ['true', 'True', True] else False
+
 
 def get_arg_dynamic_toggle(args):
     dynamic_toggle = args.get('dynamic', 'false')
-    dynamic_toggle = True if dynamic_toggle in ['true', 'True',True] else False
+    dynamic_toggle = True if dynamic_toggle in ['true', 'True', True] else False
     return dynamic_toggle
+
 
 def get_arg_layout(args):
     layout = args.get('layout', 'sfdp')
     return layout
+
 
 def extract_args(args):
     multi_toggle = get_arg_multi_toggle(args)
