@@ -9,7 +9,6 @@ sys.path.insert(1, '../')
 resilience_routes = Blueprint('resilience_routes', __name__)
 BASE_URL = 'http://localhost:8000/api/v1'
 
-
 # -------------------------------------------RESILIENCE_ANALYSIS-----------------------------
 
 @resilience_routes.route('/resilience/malicious', endpoint='resilience_malicious', methods=['GET'])
@@ -68,20 +67,6 @@ def resilience_analyisis_custom():
     cluster_algorithm = None
     total_clusters = None
     number_of_clusters = None
-
-    # if request.method == 'POST':
-    #     cluster_algorithm = request.form.get('layout3')
-    #     total_clusters = request.form.get('number_of_cluster_to_generate')
-    #     number_of_clusters = request.form.get('cluster_to_attack')
-
-    #     # visualise before and after
-    #     json_data = requests.get(BASE_URL + f'/resilience/{filename2}/random',
-    #                              params={'cluster_algorithm': cluster_algorithm,
-    #                                      'total_clusters': total_clusters,
-    #                                      'number_of_clusters': number_of_clusters}).json()
-
-    #     graph_path1 = json_data['network_before'].replace('application/', '')
-    #     graph_path2 = json_data['network_after'].replace('application/', '')
 
     return render_template('resilience/resilience_analyisis_custom.html', session_id=filename2,
                            layout3=cluster_algorithm, cluster_to_attack=number_of_clusters,
