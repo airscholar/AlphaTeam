@@ -8,6 +8,7 @@ Purpose: Visualisation for the NetworkX graphs
 
 # External Imports
 from pandas.api.types import is_numeric_dtype
+import pandas as pd
 
 import src.deepLearning as dl
 # Internal Imports
@@ -475,8 +476,8 @@ def plot_node2vec(networkGraphs, p=1, q=1, layout='TSNE', fullPath=False):
     :type layout: str
     :param fullPath: Boolean to indicate if the full path is required
     :type fullPath: bool
-    :return: filename
-
+    :return: df and filename
+    :rtype: pd.DataFrame, str
     """
     if layout not in ['TSNE', 'UMAP', 'PCA']:
         print(ValueError('Please select a valid visualisation method.'))
@@ -494,7 +495,9 @@ def plot_node2vec(networkGraphs, p=1, q=1, layout='TSNE', fullPath=False):
     elif layout == 'PCA':
         PCA_visualisation(networkGraphs, emb, filepath)
 
-    return filename if not fullPath else filepath
+    df = pd.DataFrame(emb)
+
+    return df, filename if not fullPath else filepath
 
 
 # ----------------------------------------------------------------------------------------
@@ -528,7 +531,8 @@ def plot_embedding_cluster(networkGraphs, method, noOfCluster=8, p=1, q=1, layou
     :type layout: str
     :param fullPath: Boolean to indicate if the full path is required
     :type fullPath: bool
-    :return: filename
+    :return: DataFrame, filename
+    :rtype: pd.DataFrame, str
     """
     if layout not in ['TSNE', 'UMAP', 'PCA', 'sfdp', 'twopi', 'map']:
         print(ValueError('Please select a valid visualisation method.'))
@@ -557,4 +561,6 @@ def plot_embedding_cluster(networkGraphs, method, noOfCluster=8, p=1, q=1, layou
     elif layout in ['sfdp', 'twopi', 'map']:
         generate_static_cluster(networkGraphs, clusters, filepath, method, layout_=layout, nbr=noOfCluster)
 
-    return filename if not fullPath else filepath
+    df = pd.DataFrame(emb)
+
+    return df, filename if not fullPath else filepath

@@ -121,7 +121,7 @@ def get_dl_layout_update(fig, embeddings_2d, nodes, title=None, clusters=None):
         for node in nodes:
             metric_df = clusters[clusters['Node'] == node]
             color_list.extend([metric_df['Color'].values[0]])
-        fig.update_traces(marker=dict(color=color_list, colorscale='Viridis', line_width=2))
+        fig.update_traces(marker=dict(color=color_list))
 
     fig.update_layout(
         title=f'{title} visualisation of node embeddings',

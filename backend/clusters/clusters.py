@@ -7,12 +7,17 @@ from src.visualisation import plot_cluster
 cluster_bp = Blueprint('clusters', __name__, url_prefix="/api/v1/clusters")
 
 
+def get_arg_no_of_clusters(args):
+    no_of_clusters = args.get('no_of_clusters', 0, type=int)
+    return no_of_clusters
+
+
 @cluster_bp.route('/<session_id>/<clustering_alg>')
 def compute_clustering(session_id, clustering_alg):
     dynamic_toggle = get_arg_dynamic_toggle(request.args)
     layout = get_arg_layout(request.args)
 
-    no_of_clusters = request.args.get('no_of_clusters', default=0, type=int)
+    no_of_clusters = get_arg_no_of_clusters(request.args)
 
     G = get_networkGraph(session_id)
 
