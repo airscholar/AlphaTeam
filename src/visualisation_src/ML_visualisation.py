@@ -18,7 +18,23 @@ from src.visualisation_src.utils_visualisation import *
 
 
 def generate_static_cluster(networkGraphs, df_, filename, algo, layout_='map', nbr=0):  # USING PLOTLY
-
+    """
+    :Function: Generate static cluster
+    :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
+    :param df_: Dataframe
+    :type df_: pd.DataFrame
+    :param filename: File name
+    :type filename: str
+    :param algo: Algorithm
+    :type algo: str
+    :param layout_: Layout
+    :type layout_: str
+    :param nbr: Number of clusters
+    :type nbr: int
+    :return: Plotly plot
+    :rtype: plotly.graph_objects
+    """
     G = networkGraphs.Graph
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
@@ -66,9 +82,13 @@ def generate_hotspot(networkGraphs, hotspot_df, filename):
     """
     :Function: Plot the hotspot for the given graph
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
     :param hotspot_df: Hotspot dataframe
+    :type hotspot_df: pd.DataFrame
     :param filename: Filename
-    :return:
+    :type filename: str
+    :return: Plotly plot
+    :rtype: plotly.graph_objects
     """
     latitude = hotspot_df['Latitude']
     longitude = hotspot_df['Longitude']
@@ -105,9 +125,13 @@ def generate_dynamic_cluster(networkGraphs, df_, filename):  # USING PYVIS
     """
     :Function: Plot the metrics on the graph
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
     :param df_: Dataframe with the metrics
+    :type df_: pd.DataFrame
     :param filename: Name of the file to be saved
+    :type filename: str
     :return: Pyvis plot
+    :rtype: pyvis.network.Network
     """
     G = networkGraphs.Graph
 

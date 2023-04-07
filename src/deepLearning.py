@@ -7,31 +7,43 @@ Purpose: Deep learning module contains functions for deep learning
 # ----------------------------------------- Imports ----------------------------------------- #
 
 # External imports
-import networkx as nx
-import os as os
+from node2vec import Node2Vec
+import numpy as np
+import plotly.graph_objects as go
+from src.utils import memoize
 
 # ----------------------------------------- CONSTANT ----------------------------------------- #
-
-DIR = 'lib/node2vec-master/src/main.py'
 
 
 # ----------------------------------------- Functions ----------------------------------------- #
 
-def node_embedding(networkGraph, multi=False, directed=False):
+@memoize
+def node2vec_embedding(networkGraph, p=1, q=1, dimensions=64, walk_length=80, num_walks=10, workers=4):
     """
-    Generate a node embedding for the network graph
+    :Function: Node2Vec embedding
     :param networkGraph: Network graph
-    :return: None
+    :param p: Return hyper parameter (default: 1)
+    :param q: Inout parameter (default: 1)
+    :param dimensions: Dimension of the embedding (default: 64)
+    :param walk_length: Length of the random walk (default: 80)
+    :param num_walks: Number of random walks (default: 10)
+    :param workers: Number of workers (default: 4)
+    :return: model_node2vec, embeddings
+    :rtype: node2vec.Node2Vec, numpy.ndarray
     """
-    if multi:
-        G = networkGraph.MultiGraph if directed else networkGraph.MultiDiGraph
-    else:
-        G = networkGraph.Graph if directed else networkGraph.DiGraph
-    edge_list = nx.generate_edgelist(G, data=['weight'])
-    nx.write_edgelist(G, 'emb/graph.edgelist', data=['weight'])
+    node2vec = Node2Vec(networkGraph.DiGraph,
+                        dimensions=dimensions,
+                        walk_length=walk_length,
+                        num_walks=num_walks,
+                        workers=workers,
+                        p=p,
+                        q=q,
+                        seed=42)
+    model_node2vec = node2vec.fit(window=10, min_count=1, batch_words=4)
+    nodes = list(networkGraph.Graph.nodes())
+    embeddings = np.array([model_node2vec.wv[str(node)] for node in nodes])
 
-    # Precompute probabilities and generate walks
-    os.system(f"python {DIR}\
-              --input {'emb/graph.edgelist'}\
-              --output {'emb/graph.emb'}\
-              --weighted {'--directed' if directed else ''}")
+    return model_node2vec, embeddings
+
+
+# --------------------------------------------------------------------------------------------- #

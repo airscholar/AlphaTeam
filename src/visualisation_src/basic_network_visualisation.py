@@ -18,13 +18,17 @@ from pyvis import network as net
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def static_visualisation(networkGraphs, filepath, directed=True, multi=False, layout_='map'):
+def static_visualisation(networkGraphs, filepath, layout_='map'):
     """
     :Function: Plot the NetworkX graph on as map
     :param networkGraphs: Network graphs
-    :param directed: Boolean to indicate if the graph is directed or not
-    :param multi: for multi graphs
+    :type networkGraphs: NetworkGraphs
+    :param filepath: File path to save the plot
+    :type filepath: str
+    :param layout_: layout of the graph
+    :type layout_: str
     :return: Matplotlib plot
+    :rtype: matplotlib.pyplot
     """
     G = networkGraphs.Graph
 
@@ -108,8 +112,13 @@ def dynamic_visualisation(networkGraphs, filepath, directed=True, multi=False):
     """
     :Function: Plot the NetworkX graph on a dynamic map using pyvis
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
+    :param filepath: Path to save the plot
+    :type filepath: str
     :param directed: Boolean to indicate if the graph is directed or not
+    :type directed: bool
     :param multi: for multi graphs
+    :type multi: bool
     :return: Plotly plot
     """
     if multi:

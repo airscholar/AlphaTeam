@@ -16,12 +16,12 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="flush-headingOne">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                            data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                         Input Form
                     </button>
                 </h2>
                 <div id="flush-collapseOne" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne"
-                    data-bs-parent="#accordionFlushExample">
+                     data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body">
                         <div class="card mx-auto" style="width: 30rem;">
                             <div class="card-body">
@@ -30,13 +30,14 @@
                                     <div class="dropdown" style="margin:5px">
                                         <select id="dropdown-menu-input" class="mx-auto" name="layout3">
                                             <option value="louvain" {% if layout3=='louvain' %}selected{% endif %}>
-                                                Louvain</option>
+                                                Louvain
+                                            </option>
                                             <option value="greedy_modularity" {% if layout3=='greedy_modularity'
-                                                %}selected{% endif %}>
+                                                    %}selected{% endif %}>
                                                 Greedy Modularity
                                             </option>
                                             <option value="label_propagation" {% if layout3=='label_propagation'
-                                                %}selected{% endif %}>
+                                                    %}selected{% endif %}>
                                                 Label Propagation
                                             </option>
                                             <option value="asyn_lpa" {% if layout3=='asyn_lpa' %}selected{% endif %}>
@@ -52,13 +53,13 @@
                                             <option value="kmeans" {% if layout3=='kmeans' %}selected{% endif %}>KMeans
                                             </option>
                                             <option value="agglomerative" {% if layout3=='agglomerative' %}selected{%
-                                                endif %}>
+                                                    endif %}>
                                                 Agglomerative
                                             </option>
                                             <option value="dbscan" {% if layout3=='dbscan' %}selected{% endif %}>Dbscan
                                             </option>
                                             <option value="hierarchical" {% if layout3=='hierarchical' %}selected{%
-                                                endif %}>Hierarchical
+                                                    endif %}>Hierarchical
                                             </option>
                                         </select>
                                     </div>
@@ -67,19 +68,19 @@
                                             of cluster to
                                             generate</label>
                                         <input type="number" id="number_of_cluster_to_generate-input"
-                                            style="margin: 5px;" name="number_of_cluster_to_generate"
-                                            class="form-control" min="1" step="1" placeholder="None" {% if
-                                            number_of_cluster_to_generate is not none
-                                            %}value="{{ number_of_cluster_to_generate }}" {% endif %}>
+                                               style="margin: 5px;" name="number_of_cluster_to_generate"
+                                               class="form-control" min="1" step="1" placeholder="None" {% if
+                                               number_of_cluster_to_generate is not none
+                                               %}value="{{ number_of_cluster_to_generate }}" {% endif %}>
                                         <label for="cluster_to_attack" style="margin-top: 5px;">Number of cluster to
                                             attack</label>
                                         <input type="number" id="cluster_to_attack-input" style="margin: 5px;"
-                                            name="cluster_to_attack" class="form-control" min="1" step="1"
-                                            placeholder="None" {% if cluster_to_attack is not none
-                                            %}value="{{ cluster_to_attack }}" {% endif %}>
+                                               name="cluster_to_attack" class="form-control" min="1" step="1"
+                                               placeholder="None" {% if cluster_to_attack is not none
+                                               %}value="{{ cluster_to_attack }}" {% endif %}>
                                     </div>
                                     <button type="submit" class="btn btn-primary" style="margin:5px; width: 100%;"
-                                        id="resilience_btn">Submit
+                                            id="resilience_btn">Submit
                                     </button>
                                 </form>
                             </div>
@@ -93,26 +94,26 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="flush-headingTwo">
                     <button id="accordion-button-two" class="accordion-button collapsed" type="button"
-                        data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false"
-                        aria-controls="flush-collapseTwo">
+                            data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                            aria-controls="flush-collapseTwo">
                         Output
                     </button>
                 </h2>
                 <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
-                    data-bs-parent="#accordionFlushExample1">
+                     data-bs-parent="#accordionFlushExample1">
                     <div>
                         <div class="row justify-content-center align-items-center">
                             <div class="col-auto"><label style="margin-top: 5px;">Multi:</label>
                                 <div class="toggle-btn">
                                     <input type="checkbox" id="multi-toggle" name="multi_toggle" {% if multi_toggle
-                                        %}checked{% endif %}>
+                                           %}checked{% endif %}>
                                     <label for="multi-toggle"></label>
                                 </div>
                             </div>
                             <div class="col-auto"><label style="margin-top: 5px;">Directed:</label>
                                 <div class="toggle-btn">
                                     <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if
-                                        directed_toggle %}checked{% endif %}>
+                                           directed_toggle %}checked{% endif %}>
                                     <label for="directed-toggle"></label>
                                 </div>
                             </div>
@@ -134,8 +135,9 @@
                             </div>
                             <div class="col-auto">
                                 <input type="number" id="number_of_clusters" name="number_of_clusters"
-                                    class="form-control" min="1" step="1" placeholder="None" {% if number_of_clusters is
-                                    not none %}value="{{ number_of_clusters }}" {% endif %}>
+                                       class="form-control" min="1" step="1" placeholder="None" {% if number_of_clusters
+                                       is
+                                       not none %}value="{{ number_of_clusters }}" {% endif %}>
                             </div>
                         </div>
                     </div>
@@ -147,7 +149,6 @@
         </div>
     </div>
     <hr>
-
 
 
 </div>
@@ -184,6 +185,16 @@
 
             performResilienceClusterForm(data,)
         });
+
+        $(cluster_algorithm).on('change', function (e) {
+            if (cluster_algorithm.value === 'dbscan') {
+                $(numberOfClustersToGenerate).val(0); // set the value to 0
+                $(numberOfClustersToGenerate).prop('disabled', true); // disable the input
+            } else {
+                $(numberOfClustersToGenerate).prop('disabled', false); // enable the input
+            }
+        });
+
     });
 </script>
 {% endblock %}
