@@ -549,7 +549,7 @@ def plot_embedding_cluster(networkGraphs, method, noOfCluster=8, p=1, q=1, layou
     _, emb = dl.node2vec_embedding(networkGraphs, p=p, q=q)
     clusters = ml.get_communities(networkGraphs, method=method, noOfClusters=noOfCluster, embedding=emb)
 
-    filename = f"embedding_{method}_{layout}.html"
+    filename = f"node2vec_{method}_{layout}.html"
     filepath = get_file_path(networkGraphs, filename)
 
     if layout == 'TSNE':
