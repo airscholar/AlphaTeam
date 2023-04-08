@@ -9,6 +9,8 @@ from routes.centrality_routes import centrality_routes
 from routes.cluster_routes import cluster_routes
 from routes.node_routes import node_routes
 from routes.resilience_routes import resilience_routes
+from routes.cluster_embedding_routes import cluster_embedding_routes
+from routes.embedding_routes import embedding_routes
 
 sys.path.insert(1, '../')
 from src.NetworkGraphs import *
@@ -30,6 +32,8 @@ app.register_blueprint(cluster_routes)
 app.register_blueprint(centrality_routes)
 app.register_blueprint(node_routes)
 app.register_blueprint(resilience_routes)
+app.register_blueprint(cluster_embedding_routes)
+app.register_blueprint(embedding_routes)
 
 BASE_URL = 'http://localhost:8000/api/v1'
 

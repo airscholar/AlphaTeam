@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block title %}Resilience{% endblock %}
+{% block span %}Resilience Analysis{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="styledh3">Random Resilience Analysis</h3>
+            <hr> <!-- Add a horizontal rule for visual separation -->
+        </div>
+    </div>
+
+    <div class="col">
+        <!-- Input Accordion Starts -->
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        Input Form
+                    </button>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne"
+                    data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <div class="row">
+                            <div class="col-10">
+                                <div class="card card-body" style="align-items: center;">
+                                    <iframe src="{{ graph_input_custom }}" width="100%" height="500"></iframe>
+                                    <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="card card-body" style="align-items: center;">
+
+                                    <form id="resilienceCustomForm" method="post">
+                                        <div class="row">
+                                            <div class="container mt-3">
+
+                                                <div class="row">
+                                                    <label for="list_of_nodes_label" style="margin-top: 5px;">List of
+                                                        Nodes:</label>
+                                                    <textarea rows="4" cols="50" name="list_of_nodes" id="list_of_nodes"
+                                                        form="resilienceCustomForm"
+                                                        style="margin-top: 5px; margin-bottom: 5px;"
+                                                        placeholder="Enter List of Nodes...">{{ list_of_nodes }}</textarea>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-primary" style="margin:5px; width: 100%;"
+                                            id="resilience_btn">Submit
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Output Accordion Starts -->
+        <div class="accordion accordion-flush" id="accordionFlushExample1">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingTwo">
+                    <button id="accordion-button-two" class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                        aria-controls="flush-collapseTwo">
+                        Output
+                    </button>
+                </h2>
+                <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
+                    data-bs-parent="#accordionFlushExample1">
+                    <div>
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-auto"><label style="margin-top: 5px;">Multi:</label>
+                                <div class="toggle-btn">
+                                    <input type="checkbox" id="multi-toggle" name="multi_toggle" {% if multi_toggle
+                                        %}checked{% endif %}>
+                                    <label for="multi-toggle"></label>
+                                </div>
+                            </div>
+                            <div class="col-auto"><label style="margin-top: 5px;">Directed:</label>
+                                <div class="toggle-btn">
+                                    <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if
+                                        directed_toggle %}checked{% endif %}>
+                                    <label for="directed-toggle"></label>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <label for="layout_type" style="margin-top: 5px;">Layout:</label>
+                            </div>
+                            <div class="col-auto">
+                                <div class="dropdown" style="margin:5px">
+                                    <select id="layout_type" name="layout_type">
+                                        <option value="map"> Map</option>
+                                        <option value="sfdp" selected>Sfdp</option>
+                                        <option value="twopi">Twopi</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <label for="number_of_clusters" style="margin-top: 5px;">Number of
+                                    Clusters:</label>
+                            </div>
+                            <div class="col-auto">
+                                <input type="number" id="number_of_clusters" name="number_of_clusters"
+                                    class="form-control" min="1" step="1" placeholder="None" {% if number_of_clusters is
+                                    not none %}value="{{ number_of_clusters }}" {% endif %}>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-body" id="resilienceMaliciousIframe">
+                        {% include 'resilience/resilience_template.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+
+</div>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script src="{{ url_for('static', filename='js/resilience_random.js') }}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        const listOfNodes = document.getElementById('list_of_nodes');
+        const numberOfEdges = document.getElementById('number_of_edges_input');
+
+        const res_btn = document.getElementById('resilience_btn');
+        const inputAccordion = document.getElementById('flush-collapseOne');
+        const outputAccordion = document.getElementById('flush-collapseTwo');
+
+        $(res_btn).on('click', function (e) {
+            e.preventDefault();
+            if (inputAccordion.classList.contains('show')) {
+                inputAccordion.classList.remove('show');
+                outputAccordion.classList.add('show');
+            } else {
+                inputAccordion.classList.add('show');
+            }
+
+            const data = {
+                listOfNodes: listOfNodes.value,
+                //number_of_edges: numberOfEdges.value,
+                session_id: '{{ session_id }}'
+            };
+
+            // if (nodeTab.classList.contains('active')) {
+            //     data.number_of_edges = null;
+            // } else if (edgesTab.classList.contains('active')) {
+            //     data.number_of_nodes = null;
+            // }
+
+            performResilienceRandom(data);
+        });
+
+    });
+</script>
+{% endblock %}
