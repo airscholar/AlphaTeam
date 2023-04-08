@@ -115,7 +115,6 @@ def clustering_k_clique():
                            multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle,
                            layout=layout, graph1=graph_path1, method_name='K Clique')
 
-
 @cluster_routes.route('/clustering/spectral', endpoint='clustering_spectral', methods=['GET', 'POST'])
 def clustering_spectral():
     filename2 = session['filename2']
