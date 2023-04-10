@@ -40,6 +40,8 @@ def node_embedding(session_id):
         raise ValueError('Layout not supported, please choose between TSNE, PCA and UMAP')
 
     df_json = df.to_json(orient='split')
+    filename = filename.replace('../application/', '')
+    print(filename)
     return jsonify({'message': 'Success', 'data': df_json, 'filename': filename})
 
 
@@ -68,5 +70,7 @@ def embedding_clustering(session_id):
     else:
         raise ValueError('Layout not supported, please choose between TSNE, PCA and UMAP, map, sfdp, twopi')
     df_json = df.to_json(orient='split')
+    filename = filename.replace('../application/', '')
+    print(filename)
     return jsonify({'message': 'Success', 'data': df_json, 'filename': filename})
 
