@@ -179,6 +179,21 @@ def compute_metrics(networkx_):
     except:
         density = None
 
+    try:
+        efficiency_global = nx.global_efficiency(networkx_)
+    except:
+        efficiency_global = None
+
+    try:
+        efficiency_local = nx.local_efficiency(networkx_)
+    except:
+        efficiency_local = None
+
+    try:
+        nbr_of_isolates = nx.number_of_isolates(networkx_)
+    except:
+        nbr_of_isolates = None
+
     records = [
         {"Metrics": "Clustering Coefficient", "Values": clustering_coefficient},
         {"Metrics": "Avg. Shortest Path Length", "Values": avg_shortest_path_length},
@@ -186,6 +201,9 @@ def compute_metrics(networkx_):
         {"Metrics": "Radius", "Values": radius},
         {"Metrics": "Number of Nodes", "Values": networkx_.number_of_nodes()},
         {"Metrics": "Number of Edges", "Values": networkx_.number_of_edges()},
+        {"Metrics": "Global Efficiency", "Values": efficiency_global},
+        {"Metrics": "Local Efficiency", "Values": efficiency_local},
+        {"Metrics": "Number of Isolates", "Values": nbr_of_isolates},
         {"Metrics": "Density", "Values": density},
         {"Metrics": "Transitivity", "Values": transitivity},
         {"Metrics": "Avg. Degree", "Values": avg_degree},
