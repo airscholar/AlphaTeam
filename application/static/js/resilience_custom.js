@@ -17,8 +17,8 @@ function performResilienceCustom(data) {
 
             const beforePath = data.network_before.replace('application/', '');
             const afterPath = data.network_after.replace('application/', '');
-            beforeHeatmapPath = data.heatmap_before.replace('application/', '');
-            afterHeatmapPath = data.heatmap_after.replace('application/', '');
+            const beforeHeatmapPath = data.heatmap_before.replace('application/', '');
+            const afterHeatmapPath = data.heatmap_after.replace('application/', '');
 
             $(beforeFrame).attr("src", beforePath);
             $(afterFrame).attr("src", afterPath);
