@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <h3 class="styledh3">Random Resilience Analysis</h3>
+            <h3 class="styledh3">Custom Resilience Analysis</h3>
             <hr> <!-- Add a horizontal rule for visual separation -->
         </div>
     </div>
@@ -24,13 +24,13 @@
                     data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body">
                         <div class="row">
-                            <div class="col-10">
+                            <div class="col-9">
                                 <div class="card card-body" style="align-items: center;">
                                     <iframe src="{{ graph_input_custom }}" width="100%" height="500"></iframe>
                                     <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-3">
                                 <div class="card card-body" style="align-items: center;">
 
                                     <form id="resilienceCustomForm" method="post">
@@ -40,7 +40,7 @@
                                                 <div class="row">
                                                     <label for="list_of_nodes_label" style="margin-top: 5px;">List of
                                                         Nodes:</label>
-                                                    <textarea rows="4" cols="50" name="list_of_nodes" id="list_of_nodes"
+                                                    <textarea rows="16" cols="50" name="list_of_nodes" id="list_of_nodes"
                                                         form="resilienceCustomForm"
                                                         style="margin-top: 5px; margin-bottom: 5px;"
                                                         placeholder="Enter List of Nodes...">{{ list_of_nodes }}</textarea>

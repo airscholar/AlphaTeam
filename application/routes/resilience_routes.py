@@ -68,8 +68,13 @@ def resilience_analyisis_custom():
     total_clusters = None
     number_of_clusters = None
 
+    json_data = requests.get(
+        f'{BASE_URL}/visualisation/{filename2}/plot_network/spatial?dynamic=False&layout={"sfdp"}').json()
+    graph_input_custom = json_data['file']
+    graph_input_custom = f"../static/uploads/{filename2}/"+graph_input_custom
+
     return render_template('resilience/resilience_analyisis_custom.html', session_id=filename2,
                            layout3=cluster_algorithm, cluster_to_attack=number_of_clusters,
                            number_of_cluster_to_generate=total_clusters, graph_path1=graph_path1,
-                           graph_path2=graph_path2)
+                           graph_path2=graph_path2, graph_input_custom=graph_input_custom)
 
