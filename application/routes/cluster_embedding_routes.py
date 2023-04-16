@@ -18,7 +18,7 @@ BASE_URL = 'http://localhost:8000/api/v1/deeplearning/'
 def get_embedding_cluster_details(filename2, layout, p_value, q_value, clustering_alg, number_of_clusters):
     url_query = f'?p={p_value}&q={q_value}&layout={layout}&cluster_algorithm={clustering_alg}&number_of_clusters={number_of_clusters}'
 
-    json_data = requests.get(f'{BASE_URL}{filename2}/embedding_clustering' + url_query).json()
+    json_data = requests.get(f'{BASE_URL}{filename2}/node2vec_clusters' + url_query).json()
 
     df = pd.read_json(json_data['data'], orient='split')
     graph_name = json_data['filename']

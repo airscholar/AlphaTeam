@@ -1,13 +1,11 @@
 const BASE_URL = 'http://localhost:8000/api/v1/resilience/';
 
-function performResilienceClusterForm(data) {
+function performResilienceCustom(data) {
     console.log(data)
     $.ajax({
-        url: `${BASE_URL}${data.session_id}/clusters`,
-        data: {
-            cluster_algorithm: data.cluster_algorithm,
-            total_clusters: data.total_clusters,
-            number_of_clusters: data.number_of_clusters,
+        url: `${BASE_URL}${data.session_id}/custom`,
+        data:{
+            list_of_nodes: data.listOfNodes,
         },
         type: 'GET',
         mode: 'no-cors',

@@ -30,8 +30,7 @@
                         </div>
                         <div class="col mx-1">
                             <input type="number" id="parameter_q" style="margin: 5px;" name="q_value"
-                                   class="form-control" min="1" step="1" placeholder="None" {% if q_value is not none
-                                   %}value="{{ q_value }}" {% endif %} style="size: 1rem;">
+                                   class="form-control" min="1" step="1" placeholder="None" value="1" style="size: 1rem;">
                         </div>
                     </div>
                     <div class="row align-items-center">
@@ -40,8 +39,7 @@
                         </div>
                         <div class="col mx-1">
                             <input type="number" id="parameter_p" style="margin: 5px;" name="p_value"
-                                   class="form-control" min="1" step="1" placeholder="None" {% if p_value is not none
-                                   %}value="{{ p_value }}" {% endif %} style="size: 1rem;">
+                                   class="form-control" min="1" step="1" placeholder="None" value="1" style="size: 1rem;">
                         </div>
                     </div>
 
@@ -74,8 +72,7 @@
                              data-placement="bottom" title="{{tooltip_number_of_clusters}}">
                     </div>
                     <input type="number" id="number_of_clusters" style="margin: 5px;" name="number_of_clusters"
-                           class="form-control" min="1" step="1" placeholder="None" {% if number_of_clusters is not none
-                           %}value="{{ number_of_clusters }}" {% endif %}>
+                           class="form-control" min="1" step="1" placeholder="None" value="8">
                     <button type="button" class="btn btn-primary" style="margin:5px; width: 100%;">Submit</button>
                 </form>
             </div>
@@ -112,7 +109,8 @@
             'p_value': parameter_p.value,
             'layout': dropdownMenu.value,
             'number_of_clusters': number_of_clusters.value,
-            'session_id': '{{ session_id }}'
+            'session_id': '{{ session_id }}',
+            'clustering_alg': '{{ clustering_alg }}'
         };
 
         performEmbClusteringVisualisation(data)
@@ -123,7 +121,8 @@
                 'p_value': parameter_p.value,
                 'layout': dropdownMenu.value,
                 'number_of_clusters': number_of_clusters.value,
-                'session_id': '{{ session_id }}'
+                'session_id': '{{ session_id }}',
+                'clustering_alg': '{{ clustering_alg }}'
             };
             performEmbClusteringVisualisation(data)
         });

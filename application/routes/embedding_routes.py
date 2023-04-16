@@ -1,9 +1,13 @@
 import sys
 
+from flask import Blueprint, render_template, session
 import requests
 from application.dictionary.information import *
 from flask import Blueprint, render_template, session, request
 from application.routes.template_metrics import *
+
+
+from backend.common.common import process_metric
 
 sys.path.insert(1, '../')
 from src.metrics import *

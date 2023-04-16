@@ -21,6 +21,7 @@ from src.visualisation_src.basic_network_visualisation import *
 from src.visualisation_src.metrics_visualisation import *
 from src.visualisation_src.temporal_visualisation import *
 from src.visualisation_src.utils_visualisation import *
+from src.deepLearning import *
 
 
 # ----------------------------------------------------------------------------------------
@@ -502,7 +503,7 @@ def plot_node2vec(networkGraphs, p=1, q=1, layout='TSNE', fullPath=False):
 
 # ----------------------------------------------------------------------------------------
 
-def plot_embedding_cluster(networkGraphs, method, noOfCluster=8, p=1, q=1, layout='TSNE', fullPath=False):
+def plot_node2vec_cluster(networkGraphs, method, noOfCluster=8, p=1, q=1, layout='TSNE', fullPath=False):
     """
     :Function: Plot the embedding cluster for the given graph
     method:
@@ -550,6 +551,147 @@ def plot_embedding_cluster(networkGraphs, method, noOfCluster=8, p=1, q=1, layou
     clusters = ml.get_communities(networkGraphs, method=method, noOfClusters=noOfCluster, embedding=emb)
 
     filename = f"node2vec_{method}_{layout}.html"
+    filepath = get_file_path(networkGraphs, filename)
+
+    if layout == 'TSNE':
+        TSNE_visualisation(networkGraphs, emb, filepath, clusters=clusters)
+    elif layout == 'UMAP':
+        umap_visualisation(networkGraphs, emb, filepath, clusters=clusters)
+    elif layout == 'PCA':
+        PCA_visualisation(networkGraphs, emb, filepath, clusters=clusters)
+    elif layout in ['sfdp', 'twopi', 'map']:
+        generate_static_cluster(networkGraphs, clusters, filepath, method, layout_=layout, nbr=noOfCluster)
+
+    df = pd.DataFrame(emb)
+
+    return df, filename if not fullPath else filepath
+
+
+# ----------------------------------------------------------------------------------------
+
+
+def plot_DL_embedding(networkGraphs, features=['proximity'], dimension=128, model='SAGE', layout='TSNE',
+                      fullPath=False):
+    """
+    :Function: Plot the embedding for the given graph
+    features:
+        Format: ['feature1', 'feature2', ...]
+        If choose proximity just put ['proximity'] without any other features
+        - 'proximity'
+        - 'kcore'
+        - 'triangles'
+        - 'degree'
+        - 'pagerank'
+    layout:
+        - 'TSNE'
+        - 'UMAP'
+        - 'PCA'
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: NetworkGraphs
+    :param features: Feature list
+    :type features: list
+    :param dimension: Dimension of the embedding
+    :type dimension: int
+    :param model: GNN model
+    :type model: str
+    :param layout: Visualisation method
+    :type layout: str
+    :param fullPath: Boolean to indicate if the full path is required
+    :type fullPath: bool
+    :return: DataFrame, filename
+    :rtype: pd.DataFrame, str
+    """
+    if layout not in ['TSNE', 'UMAP', 'PCA']:
+        print(ValueError('Please select a valid visualisation method.'))
+        return '../application/static/no_graph.html'
+
+    if model not in ['SAGE', 'GAT', 'GCN']:
+        print(ValueError('Please select a valid GNN.'))
+        return '../application/static/no_graph.html'
+
+    emb = get_DL_embedding(networkGraphs, model=model, features=features, dimension=dimension)
+
+    filename = f"DLEmbedding_{layout}.html"
+    filepath = get_file_path(networkGraphs, filename)
+
+    if layout == 'TSNE':
+        TSNE_visualisation(networkGraphs, emb, filepath)
+    elif layout == 'UMAP':
+        umap_visualisation(networkGraphs, emb, filepath)
+    elif layout == 'PCA':
+        PCA_visualisation(networkGraphs, emb, filepath)
+
+    df = pd.DataFrame(emb)
+
+    return df, filename if not fullPath else filepath
+
+
+# ----------------------------------------------------------------------------------------
+
+
+def plot_DL_embedding_cluster(networkGraphs, method, noOfCluster=8, features=['proximity'], dimension=128, model='SAGE',
+                              layout='TSNE', fullPath=False):
+    """
+    :Function: Plot the embedding cluster
+    method:
+        - 'kmeans'
+        - 'spectral'
+        - 'agglomerative'
+        - 'dbscan'
+    features:
+        Format: ['feature1', 'feature2', ...]
+        If choose proximity just put ['proximity'] without any other features
+        - 'proximity'
+        - 'kcore'
+        - 'triangles'
+        - 'degree'
+        - 'pagerank'
+    layout:
+        - 'TSNE'
+        - 'UMAP'
+        - 'PCA'
+        - 'sfdp'
+        - 'twopi'
+        - 'map'
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: NetworkGraphs
+    :param method: Clustering method
+    :type method: str
+    :param noOfCluster: Number of clusters
+    :type noOfCluster: int
+    :param features: Feature list
+    :type features: list
+    :param dimension: Dimension of the embedding
+    :type dimension: int
+    :param model: GNN model
+    :type model: str
+    :param layout: Visualisation method
+    :type layout: str
+    :param fullPath: Boolean to indicate if the full path is required
+    :type fullPath: bool
+    :return: DataFrame, filename
+    :rtype: pd.DataFrame, str
+    """
+    if layout not in ['TSNE', 'UMAP', 'PCA', 'sfdp', 'twopi', 'map']:
+        print(ValueError('Please select a valid visualisation method.'))
+        return '../application/static/no_graph.html'
+
+    if layout == 'map' and not networkGraphs.is_spatial():
+        print(ValueError('Please select a valid visualisation method.'))
+        return '../application/static/no_graph.html'
+
+    if model not in ['SAGE', 'GAT', 'GCN']:
+        print(ValueError('Please select a valid GNN.'))
+        return '../application/static/no_graph.html'
+
+    if method not in ['kmeans', 'spectral', 'agglomerative', 'dbscan']:
+        print(ValueError('Please select a valid clustering method.'))
+        return '../application/static/no_graph.html'
+
+    emb = get_DL_embedding(networkGraphs, model=model, features=features, dimension=dimension)
+    clusters = ml.get_communities(networkGraphs, method=method, noOfClusters=noOfCluster, embedding=emb)
+
+    filename = f"DLEmbedding_{method}_{layout}.html"
     filepath = get_file_path(networkGraphs, filename)
 
     if layout == 'TSNE':

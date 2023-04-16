@@ -129,9 +129,10 @@ const performResilienceMetrics = (data, plot_type, section) => {
 }
 
 const performEmbeddingVisualisation = (data) => {
+    const BASE_URL = 'http://localhost:8000/api/v1/deeplearning/'
     const graphEmbedding = document.getElementById('graph_embedding_frame');
     $.ajax({
-        url: BASE_URL + data.session_id + '/node_embedding_visualisation',
+        url: BASE_URL + data.session_id + '/node2vec',
         data: {
             layout: data.layout,
             p: data.p_value,
@@ -160,8 +161,10 @@ const performEmbClusteringVisualisation = (data) => {
     const graphEmbedding = document.getElementById('graph_embedding_cluster_frame');
     const BASE_URL = 'http://localhost:8000/api/v1/deeplearning/'
     $.ajax({
-        url: BASE_URL + data.session_id + '/node_embedding_visualisation',
+        url: BASE_URL + data.session_id + '/node2vec_clusters',
         data: {
+            cluster_algorithm: data.cluster_alg,
+            number_of_clusters: data.number_of_clusters,
             layout: data.layout,
             p: data.p_value,
             q: data.q_value,
@@ -175,7 +178,7 @@ const performEmbClusteringVisualisation = (data) => {
 
             createTable(datasetTable, df_data.data, df_data.columns, true);
 
-            $(graphEmbedding).attr('src', res.filename);
+            $(graphEmbedding).attr('src', '../'+res.filename);
         },
         error: function (data) {
             alert('An error occurred. Please try again.');
