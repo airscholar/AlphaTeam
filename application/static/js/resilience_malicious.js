@@ -15,13 +15,13 @@ function performResilienceMalicious(data) {
         success: function (data) {
             let beforeFrame = document.getElementById('before_frame');
             let afterFrame = document.getElementById('after_frame');
-            var beforeHeatmap = document.getElementById('before_heatmap');
-            var afterHeatmap = document.getElementById('after_heatmap');
+            let beforeHeatmap = document.getElementById('before_heatmap');
+            let afterHeatmap = document.getElementById('after_heatmap');
 
             const beforePath = data.network_before.replace('application/', '');
             const afterPath = data.network_after.replace('application/', '');
-            beforeHeatmapPath = data.heatmap_before.replace('application/', '');
-            afterHeatmapPath = data.heatmap_after.replace('application/', '');
+            let beforeHeatmapPath = data.heatmap_before.replace('application/', '');
+            let afterHeatmapPath = data.heatmap_after.replace('application/', '');
 
             $(beforeFrame).attr("src", beforePath);
             $(afterFrame).attr("src", afterPath);

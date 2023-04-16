@@ -1,8 +1,8 @@
 import sys
 
-from dictionary.information import *
+from application.dictionary.information import *
 from flask import Blueprint, render_template, session
-from routes.template_metrics import *
+from application.routes.template_metrics import *
 
 from backend.common.common import process_metric
 
@@ -53,20 +53,14 @@ def clustering_embedding_kmeans():
     filename2 = session['filename2']
     clustering_alg = 'kmeans'
 
-    df, graph_embedding_cluster_path, p_value, q_value, number_of_clusters, layout = compute_embedding_cluster(filename2, clustering_alg)
-
-    return render_template('deep_learning/cluster/kmeans.html', session_id=filename2, example=df, number_of_clusters=number_of_clusters,
-                            graph_embedding_cluster=graph_embedding_cluster_path, p_value=p_value, q_value=q_value, layout=layout, method_name=clustering_alg)
+    return render_template('deep_learning/cluster/kmeans.html', session_id=filename2, clustering_alg=clustering_alg)
 
 @cluster_embedding_routes.route('/clustering/embedding/spectral', endpoint='clustering_embedding_spectral',  methods=['GET', 'POST'])
 def clustering_embedding_spectral():
     filename2 = session['filename2']
     clustering_alg = 'spectral'
 
-    df, graph_embedding_cluster_path, p_value, q_value, number_of_clusters, layout = compute_embedding_cluster(filename2, clustering_alg)
-
-    return render_template('deep_learning/cluster/spectral.html', session_id=filename2, example=df, number_of_clusters=number_of_clusters,
-                            graph_embedding_cluster=graph_embedding_cluster_path, p_value=p_value, q_value=q_value, layout=layout, method_name=clustering_alg)
+    return render_template('deep_learning/cluster/spectral.html', session_id=filename2, clustering_alg=clustering_alg)
 
 
 @cluster_embedding_routes.route('/clustering/embedding/agglomerative', endpoint='clustering_embedding_agglomerative',  methods=['GET', 'POST'])
@@ -74,9 +68,6 @@ def clustering_embedding_agglomerative():
     filename2 = session['filename2']
     clustering_alg = 'agglomerative'
 
-    df, graph_embedding_cluster_path, p_value, q_value, number_of_clusters, layout = compute_embedding_cluster(filename2, clustering_alg)
-
-    return render_template('deep_learning/cluster/agglomerative.html', session_id=filename2, example=df, number_of_clusters=number_of_clusters,
-                            graph_embedding_cluster=graph_embedding_cluster_path, p_value=p_value, q_value=q_value, layout=layout, method_name=clustering_alg)
+    return render_template('deep_learning/cluster/agglomerative.html', session_id=filename2, clustering_alg=clustering_alg)
 
 

@@ -5,12 +5,12 @@ from flask import Flask, request, render_template, session
 from flask_cors import CORS
 
 from flask_session import Session
-from routes.centrality_routes import centrality_routes
-from routes.cluster_routes import cluster_routes
-from routes.node_routes import node_routes
-from routes.resilience_routes import resilience_routes
-from routes.cluster_embedding_routes import cluster_embedding_routes
-from routes.embedding_routes import embedding_routes
+from application.routes.centrality_routes import centrality_routes
+from application.routes.cluster_routes import cluster_routes
+from application.routes.node_routes import node_routes
+from application.routes.resilience_routes import resilience_routes
+from application.routes.cluster_embedding_routes import cluster_embedding_routes
+from application.routes.embedding_routes import embedding_routes
 
 sys.path.insert(1, '../')
 from src.NetworkGraphs import *
@@ -122,8 +122,9 @@ def home():
     # networkGraphs = NetworkGraphs(filepath, session_folder=filepath.split('/'+filename)[0], type=option)
         networkGraphs = NetworkGraphs(full_path, session_folder=filepath.split('.')[0], type=option)
         set_networkGraph(networkGraphs, filename2)
+
     # Pass the data to the HTML template
-    return render_template('home.html', data=networkGraphs.df.head(100))
+    return render_template('home.html', session_id=filename2)
 
 
 @app.route('/global-metrics', methods=['GET', 'POST'])
