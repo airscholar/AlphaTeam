@@ -17,7 +17,7 @@ BASE_URL = 'http://localhost:8000/api/v1/deeplearning/'
 def get_embedding_details(filename2, layout, p_value, q_value):
     url_query = f'?p={p_value}&q={q_value}&layout={layout}'
 
-    json_data = requests.get(f'{BASE_URL}{filename2}/node_embedding' + url_query).json()
+    json_data = requests.get(f'{BASE_URL}{filename2}/node2vec' + url_query).json()
 
     df = pd.read_json(json_data['data'], orient='split')
     graph_name = json_data['filename']

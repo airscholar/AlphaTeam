@@ -8,15 +8,9 @@ from src.visualisation import *
 custom_bp = Blueprint('resilience_custom', __name__, url_prefix="/api/v1/resilience")
 
 
-def extract_args():
+def get_args_listOfNodes():
     args = request.args
-
-    cluster_algorithm = args.get('cluster_algorithm') if (args.get('cluster_algorithm') or
-                                                          not args.get('cluster_algorithm') == '') else None
-    total_clusters = int(args.get('total_clusters')) if (args.get('total_clusters') or
-                                                         not args.get('total_clusters') == '') else None
-    cluster_ids = args.get('cluster_ids') if args.get('cluster_ids') else None
-    list_of_nodes = args.get('list_of_nodes') if args.get('list_of_nodes') else None
+    list_of_nodes = args.get('list_of_nodes')
 
     if list_of_nodes:
         list_of_nodes = list_of_nodes.split(',')
@@ -25,27 +19,16 @@ def extract_args():
         except:
             list_of_nodes = [str(i) for i in list_of_nodes]
 
-    if cluster_ids:
-        cluster_ids = cluster_ids.split(',')
-        try:
-            cluster_ids = [int(i) for i in cluster_ids]
-        except:
-            cluster_ids = [str(i) for i in cluster_ids]
-
-    return cluster_algorithm, total_clusters, cluster_ids, list_of_nodes
+    return list_of_nodes
 
 
 @custom_bp.route('<session_id>/custom')
 def compute_custom(session_id):
-    cluster_algorithm, total_clusters, cluster_ids, list_of_nodes = extract_args()
+    list_of_nodes = get_args_listOfNodes()
 
     networkGraphs = get_networkGraph(session_id)
 
-    if list_of_nodes:
-        networkGraphs2, df = resilience(networkGraphs, attack='custom', list_of_nodes=list_of_nodes)
-    else:
-        networkGraphs2, df = resilience(networkGraphs, attack='cluster_custom', cluster_algorithm=cluster_algorithm,
-                                        total_clusters=total_clusters, cluster_ids=cluster_ids)
+    networkGraphs2, df = resilience(networkGraphs, attack='custom', list_of_nodes=list_of_nodes)
 
     session_id2 = session_id + '_resilience'
     set_networkGraph(networkGraphs2, session_id2)

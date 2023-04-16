@@ -1,14 +1,11 @@
 const BASE_URL = 'http://localhost:8000/api/v1/resilience/';
 
-function performResilienceMalicious(data) {
+function performResilienceCustom(data) {
     console.log(data)
     $.ajax({
-        url: BASE_URL + data.session_id + '/malicious',
-        data: {
-            attack_type: data.type_of_attack,
-            number_of_nodes_malicious: data.number_of_nodes_malicious,
-            operator: data.threshold_operator,
-            number_of_thresholds: data.number_of_threshold,
+        url: `${BASE_URL}${data.session_id}/custom`,
+        data:{
+            list_of_nodes: data.listOfNodes,
         },
         type: 'GET',
         mode: 'no-cors',
