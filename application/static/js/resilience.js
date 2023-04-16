@@ -1,4 +1,9 @@
 function performResilienceMetrics(data, plot_type, section) {
+    const prefix = section + '_' + plot_type;
+    beforeFrame = document.getElementById(prefix + '_before');
+    afterFrame = document.getElementById(prefix + '_after');
+    $(beforeFrame).attr("src", '../static/loading.html');
+    $(afterFrame).attr("src", '../static/loading.html');
     $.ajax({
         url: BASE_URL + data.session_id + '/' + data.type_of_attack + '/' + plot_type,
         data: {
@@ -43,6 +48,11 @@ function performResilienceMetrics(data, plot_type, section) {
 }
 
 function performResilienceCluster(data, plot_type, section) {
+    const prefix = section + '_' + plot_type;
+    beforeFrame = document.getElementById(prefix + '_before');
+    afterFrame = document.getElementById(prefix + '_after');
+    $(beforeFrame).attr("src", '../static/loading.html');
+    $(afterFrame).attr("src", '../static/loading.html');
     $.ajax({
         url: BASE_URL + data.session_id + '/' + data.type_of_attack,
         data: {
@@ -148,6 +158,10 @@ const createTable = (tableElem, data, columns, isCluster = false) => {
 };
 
 function performVisualisation(data) {
+    beforeFrame = document.getElementById('before_frame');
+    afterFrame = document.getElementById('after_frame');
+    $(beforeFrame).attr("src", '../static/loading.html');
+    $(afterFrame).attr("src", '../static/loading.html');
     console.log(data)
     $.ajax({
         url: BASE_URL + data.session_id + '/visualisation',
