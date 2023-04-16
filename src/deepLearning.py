@@ -100,7 +100,7 @@ def get_DL_embedding(networkGraphs, model, features, dimension=128, epochs=200):
         data_features = np.array(data_features).T
 
     data = preprocess_data(networkGraphs.Graph, data_features)
-    if features == 'proximity':
+    if features == ['proximity']:
         positive_pairs, negative_pairs = generate_pairs(networkGraphs.Graph, num_negative_pairs=1000)
         positive_indices, negative_indices = pairs_to_indices(data, positive_pairs, negative_pairs)
         data.positive_pairs = positive_indices

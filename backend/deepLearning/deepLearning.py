@@ -4,7 +4,7 @@ from flask_jsonpify import jsonify
 
 from backend.common.common import get_arg_layout
 from src.utils import get_networkGraph
-from src.visualisation import plot_node2vec, plot_embedding_cluster
+from src.visualisation import plot_node2vec, plot_node2vec_cluster
 
 deepLearning_bp = Blueprint('deeplearning', __name__, url_prefix="/api/v1/deeplearning")
 
@@ -26,7 +26,7 @@ def get_arg_clustering_alg(args):
         raise ValueError('Clustering algorithm not supported, please choose between kmeans, spectral and agglomerative')
     return clustering_alg
 
-@deepLearning_bp.route('<session_id>/node_embedding')
+@deepLearning_bp.route('<session_id>/node2vec')
 def node_embedding(session_id):
     q = get_arg_q(request.args)
     p = get_arg_p(request.args)
@@ -44,7 +44,7 @@ def node_embedding(session_id):
     return jsonify({'message': 'Success', 'data': df_json, 'filename': filename})
 
 
-@deepLearning_bp.route('<session_id>/embedding_clustering')
+@deepLearning_bp.route('<session_id>/node2vec_clusters')
 def embedding_clustering(session_id):
     clustering_alg = get_arg_clustering_alg(request.args)
 
@@ -59,13 +59,13 @@ def embedding_clustering(session_id):
     networkGraphs = get_networkGraph(session_id)
 
     if layout in ['TSNE', 'PCA', 'UMAP', 'map', 'sfdp', 'twopi']:
-        df, filename = plot_embedding_cluster(networkGraphs,
-                                              clustering_alg,
-                                              layout=layout,
-                                              p=p,
-                                              q=q,
-                                              noOfCluster=no_of_clusters,
-                                              fullPath=True)
+        df, filename = plot_node2vec_cluster(networkGraphs,
+                                             clustering_alg,
+                                             layout=layout,
+                                             p=p,
+                                             q=q,
+                                             noOfCluster=no_of_clusters,
+                                             fullPath=True)
     else:
         raise ValueError('Layout not supported, please choose between TSNE, PCA and UMAP, map, sfdp, twopi')
     df_json = df.to_json(orient='split')

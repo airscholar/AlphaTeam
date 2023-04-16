@@ -129,6 +129,8 @@ def train_model(model, optimizer, data, device, epochs, proximity=False):
         if test_loss < best_loss:
             best_loss = test_loss
             best_weights = model.state_dict()
+        if test_loss < 0.01:  # early stopping
+            break
         print('Epoch: {:03d}, Loss: {:.5f}, Test Loss: {:.5f}'.format(epoch, loss, test_loss))
     model.load_state_dict(best_weights)
     return model
@@ -167,6 +169,7 @@ def pairs_to_indices(data, positive_pairs, negative_pairs):
                                  u in node_to_index and v in node_to_index])
 
     return positive_indices, negative_indices
+
 
 # --------------------------------------------------------------------------------------------- #
 
