@@ -38,6 +38,6 @@ def visualise_heatmap(session_id):
 def visualise_dataset(session_id):
     G = get_networkGraph(session_id)
 
-    df = G.df.to_json(orient='split')
+    df = G.df.head(3000).to_json(orient='split')
 
     return jsonify({"message": "Success", "data": df})

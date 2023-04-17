@@ -68,6 +68,7 @@
     <hr>
 
     <div class="card card-body">
+        <h3 class="styledh3">Clustering Information</h3>
         <table id="example-metrics" class="display" style="width:100%">
             <thead>
             <tr>
@@ -100,6 +101,8 @@
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#example-metrics').DataTable();
+        $('#example-metrics').DataTable({
+            "order": [[2, "asc"]],
+        });
     });
 </script>
