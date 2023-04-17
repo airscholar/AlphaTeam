@@ -95,7 +95,6 @@ def get_DL_embedding(networkGraphs, model, features, dimension=128, epochs=200):
             proximity = False
             df = get_metrics(networkGraphs, metric, directed=False, multi=False)
             np_arr = np.array(df.iloc[:, 1].values)
-            # check if nan values
             if np.isnan(np_arr).any():
                 np_arr = np.nan_to_num(np_arr)
             # np_arr = (np_arr - np_arr.min()) / (np_arr.max() - np_arr.min())
