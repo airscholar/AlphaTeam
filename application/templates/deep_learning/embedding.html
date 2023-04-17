@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-10">
             <div class="card card-body" style="align-items: center;">
-                <iframe src="{{ graph_embedding }}" width="100%" height="500"></iframe>
+                <iframe id="graph_embedding_frame" src="{{ graph_embedding }}" width="100%" height="500"></iframe>
                 <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
             </div>
         </div>
@@ -23,8 +23,8 @@
                     <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
                         <span>Parameters:</span>
                         <img src="{{ url_for('static', filename='app_images/question.png') }}" alt="Image"
-                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
-                            data-placement="bottom" title="{{tooltip_parameters}}">
+                             style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                             data-placement="bottom" title="{{tooltip_parameters}}">
                     </div>
 
                     <div class="row align-items-center">
@@ -33,8 +33,8 @@
                         </div>
                         <div class="col mx-1">
                             <input type="number" id="parameter_q" style="margin: 5px;" name="q_value"
-                                class="form-control" min="1" step="1" placeholder="None" {% if q_value is not none
-                                %}value="{{ q_value }}" {% endif %} style="size: 1rem;">
+                                   class="form-control" min="1" step="1" placeholder="None" value="1"
+                                   style="size: 1rem;">
                         </div>
                     </div>
                     <div class="row align-items-center">
@@ -43,16 +43,16 @@
                         </div>
                         <div class="col mx-1">
                             <input type="number" id="parameter_p" style="margin: 5px;" name="p_value"
-                                class="form-control" min="1" step="1" placeholder="None" {% if p_value is not none
-                                %}value="{{ p_value }}" {% endif %} style="size: 1rem;">
+                                   class="form-control" min="1" step="1" placeholder="None" value="1"
+                                   style="size: 1rem;">
                         </div>
                     </div>
 
                     <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
                         <span>Layout</span>
                         <img src="{{ url_for('static', filename='app_images/question.png') }}" alt="Image"
-                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
-                            data-placement="bottom" title="{{tooltip_layout}}">
+                             style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                             data-placement="bottom" title="{{tooltip_layout}}">
                     </div>
 
                     <div class="dropdown" style="margin:5px">
@@ -65,7 +65,7 @@
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" style="margin:5px; width: 100%;">Submit</button>
+                    <button type="button" class="btn btn-primary" style="margin:5px; width: 100%;">Submit</button>
                 </form>
             </div>
         </div>
@@ -73,34 +73,48 @@
     <hr>
 
     <div class="card card-body">
-        <table id="example-metrics" class="display" style="width:100%">
-            <thead>
-                <tr>
-                    {% for cell in example.columns %}
-                    <th>{{ cell }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in example.itertuples() %}
-                <tr>
-                    {% for cell in row[1:] %}
-                    <td>{{ cell }}</td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
+        <table id="embedding-metrics" class="display" style="width:100%">
         </table>
     </div>
-    <div class="row mt-3">
-        <div class="col-md-12">
-            <div class="text-right">
-                <button id="download_csv" type="button" class="btn btn-outline-secondary">Download CSV</button>
-            </div>
-        </div>
-    </div>
+    <!--    <div class="row mt-3">-->
+    <!--        <div class="col-md-12">-->
+    <!--            <div class="text-right">-->
+    <!--                <button id="download_csv" type="button" class="btn btn-outline-secondary">Download CSV</button>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
 
 </div>
+<script src="{{ url_for('static', filename='js/resilience.js') }}"></script>
+
+<script type="text/javascript">
+    const BASE_URL = 'http://localhost:8000/api/v1/deeplearning/';
+
+    $(document).ready(function () {
+        const submitButton = document.querySelector('button[type="button"]');
+        const parameter_q = document.getElementById('parameter_q');
+        const parameter_p = document.getElementById('parameter_p');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+
+        const data = {
+            'q_value': parameter_q.value,
+            'p_value': parameter_p.value,
+            'layout': dropdownMenu.value,
+            'session_id': '{{ session_id }}'
+        };
+
+        performEmbeddingVisualisation(data)
+
+        $(submitButton).on('click', function () {
+            const data = {
+                'q_value': parameter_q.value,
+                'p_value': parameter_p.value,
+                'layout': dropdownMenu.value,
+                'session_id': '{{ session_id }}'
+            };
+            performEmbeddingVisualisation(data)
+        });
+    });
+</script>
+
 {% endblock %}
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>

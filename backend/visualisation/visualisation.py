@@ -24,11 +24,20 @@ def visualise_network(session_id, plot_type):
 
     return jsonify({"message": "Success", "file": file_name})
 
+
 @visualisation_bp.route('<session_id>/heatmap')
 def visualise_heatmap(session_id):
-
     G = get_networkGraph(session_id)
 
     file_name = plot_heatmap(G)
 
     return jsonify({"message": "Success", "file": file_name})
+
+
+@visualisation_bp.route('/<session_id>/dataset')
+def visualise_dataset(session_id):
+    G = get_networkGraph(session_id)
+
+    df = G.df.to_json(orient='split')
+
+    return jsonify({"message": "Success", "data": df})
