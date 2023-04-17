@@ -116,7 +116,7 @@
             'clustering_alg': '{{ clustering_alg }}'
         };
 
-        performEmbClusteringVisualisation(data)
+        performNode2VecEmbClusteringVisualisation(data)
 
         $(submitButton).on('click', function () {
             const data = {
@@ -127,7 +127,7 @@
                 'session_id': '{{ session_id }}',
                 'clustering_alg': '{{ clustering_alg }}'
             };
-            performEmbClusteringVisualisation(data)
+            performNode2VecEmbClusteringVisualisation(data)
         });
     });
 </script>

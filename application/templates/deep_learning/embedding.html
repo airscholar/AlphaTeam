@@ -104,7 +104,7 @@
             'session_id': '{{ session_id }}'
         };
 
-        performEmbeddingVisualisation(data)
+        performNode2VecEmbeddingVisualisation(data)
 
         $(submitButton).on('click', function () {
             const data = {
@@ -113,7 +113,7 @@
                 'layout': dropdownMenu.value,
                 'session_id': '{{ session_id }}'
             };
-            performEmbeddingVisualisation(data)
+            performNode2VecEmbeddingVisualisation(data)
         });
     });
 </script>

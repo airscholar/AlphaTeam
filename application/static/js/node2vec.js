@@ -1,4 +1,4 @@
-const performEmbeddingVisualisation = (data) => {
+const performNode2VecEmbeddingVisualisation = (data) => {
     const BASE_URL = 'http://localhost:8000/api/v1/deeplearning/'
     const graphEmbedding = document.getElementById('graph_embedding_frame');
     $(graphEmbedding).attr('src', '../static/loading.html');
@@ -28,7 +28,7 @@ const performEmbeddingVisualisation = (data) => {
     });
 }
 
-const performEmbClusteringVisualisation = (data) => {
+const performNode2VecEmbClusteringVisualisation = (data) => {
     const graphEmbedding = document.getElementById('graph_embedding_cluster_frame');
     $(graphEmbedding).attr('src', '../../static/loading.html');
     const BASE_URL = 'http://localhost:8000/api/v1/deeplearning/'
