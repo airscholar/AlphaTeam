@@ -59,6 +59,10 @@ const retrieveGeneralMetrics = (data) => {
 }
 
 const performVisualisation = (data) => {
+    beforeFrame = document.getElementById('before_frame');
+    afterFrame = document.getElementById('after_frame');
+    $(beforeFrame).attr("src", '../static/loading.html');
+    $(afterFrame).attr("src", '../static/loading.html');
     console.log(data)
     $.ajax({
         url: BASE_URL + data.session_id + '/visualisation',
@@ -85,6 +89,11 @@ const performVisualisation = (data) => {
 }
 
 const performResilienceMetrics = (data, plot_type, section) => {
+    const prefix = section + '_' + plot_type;
+    beforeFrame = document.getElementById(prefix + '_before');
+    afterFrame = document.getElementById(prefix + '_after');
+    $(beforeFrame).attr("src", '../static/loading.html');
+    $(afterFrame).attr("src", '../static/loading.html');
     $.ajax({
         url: BASE_URL + data.session_id + '/' + data.type_of_attack + '/' + plot_type,
         data: {
@@ -131,6 +140,7 @@ const performResilienceMetrics = (data, plot_type, section) => {
 const performEmbeddingVisualisation = (data) => {
     const BASE_URL = 'http://localhost:8000/api/v1/deeplearning/'
     const graphEmbedding = document.getElementById('graph_embedding_frame');
+    $(graphEmbedding).attr('src', '../static/loading.html');
     $.ajax({
         url: BASE_URL + data.session_id + '/node2vec',
         data: {
@@ -159,6 +169,7 @@ const performEmbeddingVisualisation = (data) => {
 
 const performEmbClusteringVisualisation = (data) => {
     const graphEmbedding = document.getElementById('graph_embedding_cluster_frame');
+    $(graphEmbedding).attr('src', '../../static/loading.html');
     const BASE_URL = 'http://localhost:8000/api/v1/deeplearning/'
     $.ajax({
         url: BASE_URL + data.session_id + '/node2vec_clusters',
@@ -189,6 +200,11 @@ const performEmbClusteringVisualisation = (data) => {
 }
 
 const performResilienceCluster = (data, plot_type, section) => {
+    const prefix = section + '_' + plot_type;
+    beforeFrame = document.getElementById(prefix + '_before');
+    afterFrame = document.getElementById(prefix + '_after');
+    $(beforeFrame).attr("src", '../static/loading.html');
+    $(afterFrame).attr("src", '../static/loading.html');
     $.ajax({
         url: BASE_URL + data.session_id + '/' + data.type_of_attack,
         data: {
