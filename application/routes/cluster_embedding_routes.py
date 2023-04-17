@@ -1,8 +1,8 @@
 import sys
 
-from dictionary.information import *
+from application.dictionary.information import *
 from flask import Blueprint, render_template, session
-from routes.template_metrics import *
+from application.routes.template_metrics import *
 
 from backend.common.common import process_metric
 
@@ -18,7 +18,7 @@ BASE_URL = 'http://localhost:8000/api/v1/deeplearning/'
 def get_embedding_cluster_details(filename2, layout, p_value, q_value, clustering_alg, number_of_clusters):
     url_query = f'?p={p_value}&q={q_value}&layout={layout}&cluster_algorithm={clustering_alg}&number_of_clusters={number_of_clusters}'
 
-    json_data = requests.get(f'{BASE_URL}{filename2}/embedding_clustering' + url_query).json()
+    json_data = requests.get(f'{BASE_URL}{filename2}/node2vec_clusters' + url_query).json()
 
     df = pd.read_json(json_data['data'], orient='split')
     graph_name = json_data['filename']
@@ -53,20 +53,14 @@ def clustering_embedding_kmeans():
     filename2 = session['filename2']
     clustering_alg = 'kmeans'
 
-    df, graph_embedding_cluster_path, p_value, q_value, number_of_clusters, layout = compute_embedding_cluster(filename2, clustering_alg)
-
-    return render_template('deep_learning/cluster/kmeans.html', session_id=filename2, example=df, number_of_clusters=number_of_clusters,
-                            graph_embedding_cluster=graph_embedding_cluster_path, p_value=p_value, q_value=q_value, layout=layout, method_name=clustering_alg)
+    return render_template('deep_learning/cluster/kmeans.html', session_id=filename2, clustering_alg=clustering_alg)
 
 @cluster_embedding_routes.route('/clustering/embedding/spectral', endpoint='clustering_embedding_spectral',  methods=['GET', 'POST'])
 def clustering_embedding_spectral():
     filename2 = session['filename2']
     clustering_alg = 'spectral'
 
-    df, graph_embedding_cluster_path, p_value, q_value, number_of_clusters, layout = compute_embedding_cluster(filename2, clustering_alg)
-
-    return render_template('deep_learning/cluster/spectral.html', session_id=filename2, example=df, number_of_clusters=number_of_clusters,
-                            graph_embedding_cluster=graph_embedding_cluster_path, p_value=p_value, q_value=q_value, layout=layout, method_name=clustering_alg)
+    return render_template('deep_learning/cluster/spectral.html', session_id=filename2, clustering_alg=clustering_alg)
 
 
 @cluster_embedding_routes.route('/clustering/embedding/agglomerative', endpoint='clustering_embedding_agglomerative',  methods=['GET', 'POST'])
@@ -74,9 +68,6 @@ def clustering_embedding_agglomerative():
     filename2 = session['filename2']
     clustering_alg = 'agglomerative'
 
-    df, graph_embedding_cluster_path, p_value, q_value, number_of_clusters, layout = compute_embedding_cluster(filename2, clustering_alg)
-
-    return render_template('deep_learning/cluster/agglomerative.html', session_id=filename2, example=df, number_of_clusters=number_of_clusters,
-                            graph_embedding_cluster=graph_embedding_cluster_path, p_value=p_value, q_value=q_value, layout=layout, method_name=clustering_alg)
+    return render_template('deep_learning/cluster/agglomerative.html', session_id=filename2, clustering_alg=clustering_alg)
 
 
