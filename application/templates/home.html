@@ -26,31 +26,22 @@
 <script type="text/javascript">
     const BASE_URL = 'http://localhost:8000/api/v1/visualisation/';
     $(document).ready(function () {
-        var table = $('#datasetTable').DataTable({
-            "ajax": {
-                "url": BASE_URL + '{{session_id}}' + '/dataset',
-                "dataSrc": function (json) {
-                    return json.data
-                }
-            }
-        });
+        $.ajax({
+            url: BASE_URL + '{{session_id}}' + '/dataset',
+            type: 'GET',
+            mode: 'no-cors',
+            success: function (res) {
+                const data = JSON.parse(res.data);
+                const datasetTable = document.getElementById('datasetTable');
 
-        // $.ajax({
-        //     url: BASE_URL + '{{session_id}}' + '/dataset',
-        //     type: 'GET',
-        //     mode: 'no-cors',
-        //     success: function (res) {
-        //         const data = JSON.parse(res.data);
-        //         const datasetTable = document.getElementById('datasetTable');
-        //
-        //         createTable(datasetTable, data.data, data.columns);
-        //     },
-        //     error: function (data) {
-        //         alert('An error occurred. Please try again.');
-        //
-        //         console.log(data);
-        //     }
-        // })
+                createTable(datasetTable, data.data, data.columns);
+            },
+            error: function (data) {
+                alert('An error occurred. Please try again.');
+
+                console.log(data);
+            }
+        })
     });
 </script>
 {% endblock %}

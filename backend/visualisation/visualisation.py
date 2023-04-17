@@ -38,33 +38,6 @@ def visualise_heatmap(session_id):
 def visualise_dataset(session_id):
     G = get_networkGraph(session_id)
 
-    df = G.df.head(100).to_json()
+    df = G.df.head(3000).to_json(orient='split')
 
-    total_filtered = 10
-
-    # sorting
-    order = []
-    i = 0
-    while True:
-        col_index = request.args.get(f'order[{i}][column]')
-        if col_index is None:
-            break
-        col_name = request.args.get(f'columns[{col_index}][data]')
-        descending = request.args.get(f'order[{i}][dir]') == 'desc'
-
-        i += 1
-
-    # Set the pagination configuration
-    page = request.args.get('page', 1, type=int)
-    start = request.args.get('start', 1, type=int)
-    length = request.args.get('length', 5, type=int)
-    pagination = User.objects.paginate(page=start, per_page=length)
-    data = {
-        'data': [user.to_dict() for user in pagination.items],
-        'recordsFiltered': 10,
-        'recordsTotal': 100,
-        'draw': 1
-    }
-    return data
-
-    return df
+    return jsonify({"message": "Success", "data": df})
