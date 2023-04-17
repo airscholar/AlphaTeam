@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card card-body" style="align-items: center;">
-                <iframe src="{{ graph1 }}" width="100%" height="500"></iframe>
+                <iframe src="{{ graph1 }}" width="100%" height="700"></iframe>
                 <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
             </div>
         </div>
@@ -16,6 +16,7 @@
     <hr>
 
     <div class="card card-body">
+        <h3 class="styledh3">Density Information</h3>
         <table id="example-metrics" class="display" style="width:100%">
             <thead>
                 <tr>
@@ -46,3 +47,10 @@
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example-metrics').DataTable({
+            "order": [[0, "desc"]],
+        });
+    });
+</script>
