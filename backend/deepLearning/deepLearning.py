@@ -1,4 +1,3 @@
-import pandas as pd
 from flask import Blueprint, request
 from flask_jsonpify import jsonify
 
@@ -64,7 +63,8 @@ def node2vec(session_id):
 
     df_json = df.to_json(orient='split')
     filename = filename.replace('../application/', '')
-    return jsonify({'message': 'Success', 'data': df_json, 'filename': filename})
+
+    return jsonify({'message': 'Success', 'data': df_json, 'filename': filename })
 
 
 @deepLearning_bp.route('<session_id>/node2vec_clusters')
