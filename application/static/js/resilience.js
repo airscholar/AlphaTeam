@@ -24,11 +24,9 @@ const createTable = (tableElem, data, columns, isCluster = false) => {
             row.insertCell(j).innerHTML = data[i][j];
         }
     }
-    if (!isCluster) $(tableElem).DataTable();
-    else
-        $(tableElem).DataTable({
-            "scrollX": true,
-        });
+    $(tableElem).DataTable({
+        "scrollX": true,
+    });
 }
 
 const retrieveGeneralMetrics = (data) => {
