@@ -1,15 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Embedding{% endblock %}
+{% block span %}Embedding Node2Vector Page{% endblock %}
+{% block content %}
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <h3 class="styledh3">{{clustering_alg.title()}} Clustering with Deep Learning Embedding</h3>
+            <h3 class="styledh3">Embedding</h3>
             <hr> <!-- Add a horizontal rule for visual separation -->
         </div>
     </div>
     <div class="row">
         <div class="col-10">
             <div class="card card-body" style="align-items: center;">
-                <iframe id="graph_embedding_cluster_frame" src="{{ graph_embedding_cluster }}" width="100%"
-                        height="500"></iframe>
+                <iframe id="graph_embedding_frame" src="{{ graph_embedding }}" width="100%" height="500"></iframe>
                 <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
             </div>
         </div>
@@ -59,22 +62,9 @@
                             </option>
                             <option value="UMAP" {% if layout=='UMAP' %}selected{% endif %}>UMAP
                             </option>
-                            <option value="map" {% if layout=='map' %}selected{% endif %}>Map</option>
-                            <option value="sfdp" {% if layout=='sfdp' %}selected{% endif %}>Sfdp
-                            </option>
-                            <option value="twopi" {% if layout=='twopi' %}selected{% endif %}>Twopi
-                            </option>
                         </select>
                     </div>
 
-                    <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
-                        <span>Number of Clusters</span>
-                        <img src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
-                             alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
-                             data-placement="bottom" title="{{tooltip_number_of_clusters}}">
-                    </div>
-                    <input type="number" id="number_of_clusters" style="margin: 5px;" name="number_of_clusters"
-                           class="form-control" min="1" step="1" placeholder="None" value="8">
                     <button type="button" class="btn btn-primary" style="margin:5px; width: 100%;">Submit</button>
                 </form>
             </div>
@@ -83,7 +73,6 @@
     <hr>
 
     <div class="card card-body">
-        <h3 class="styledh3">Embedding Details</h3>
         <table id="embedding-metrics" class="display" style="width:100%">
         </table>
     </div>
@@ -96,8 +85,8 @@
     <!--    </div>-->
 
 </div>
-<script src="../../../static/js/utils.js"></script>
-<script type="text/javascript" src="../../../static/js/node2vec.js"></script>
+<script src="../../static/js/utils.js"></script>
+<script type="text/javascript" src="../../static/js/node2vec.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -105,29 +94,26 @@
         const parameter_q = document.getElementById('parameter_q');
         const parameter_p = document.getElementById('parameter_p');
         const dropdownMenu = document.getElementById('dropdown-menu');
-        const number_of_clusters = document.getElementById('number_of_clusters');
 
         const data = {
             'q_value': parameter_q.value,
             'p_value': parameter_p.value,
             'layout': dropdownMenu.value,
-            'number_of_clusters': number_of_clusters.value,
-            'session_id': '{{ session_id }}',
-            'clustering_alg': '{{ clustering_alg }}'
+            'session_id': '{{ session_id }}'
         };
 
-        performNode2VecEmbClusteringVisualisation(data)
+        performNode2VecEmbeddingVisualisation(data)
 
         $(submitButton).on('click', function () {
             const data = {
                 'q_value': parameter_q.value,
                 'p_value': parameter_p.value,
                 'layout': dropdownMenu.value,
-                'number_of_clusters': number_of_clusters.value,
-                'session_id': '{{ session_id }}',
-                'clustering_alg': '{{ clustering_alg }}'
+                'session_id': '{{ session_id }}'
             };
-            performNode2VecEmbClusteringVisualisation(data)
+            performNode2VecEmbeddingVisualisation(data)
         });
     });
 </script>
+
+{% endblock %}
