@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8000/api/v1/resilience/';
+const BASE_URL = 'http://localhost:8000/api/v1/deeplearning/';
 
 const performNode2VecEmbeddingVisualisation = (data) => {
     const graphEmbedding = document.getElementById('graph_embedding_frame');
@@ -19,7 +19,7 @@ const performNode2VecEmbeddingVisualisation = (data) => {
 
             createTable(datasetTable, df_data.data, df_data.columns, true);
 
-            $(graphEmbedding).attr('src', res.filename);
+            $(graphEmbedding).attr('src', '../../'+res.filename);
         },
         error: function (data) {
             alert('An error occurred. Please try again.');
@@ -31,7 +31,7 @@ const performNode2VecEmbeddingVisualisation = (data) => {
 
 const performNode2VecEmbClusteringVisualisation = (data) => {
     const graphEmbedding = document.getElementById('graph_embedding_cluster_frame');
-    $(graphEmbedding).attr('src', '../../static/loading.html');
+    $(graphEmbedding).attr('src', '../../../../static/loading.html');
     $.ajax({
         url: BASE_URL + data.session_id + '/node2vec_clusters',
         data: {
@@ -50,7 +50,7 @@ const performNode2VecEmbClusteringVisualisation = (data) => {
 
             createTable(datasetTable, df_data.data, df_data.columns, true);
 
-            $(graphEmbedding).attr('src', '../'+res.filename);
+            $(graphEmbedding).attr('src', '../../'+res.filename);
             console.log('success');
         },
         error: function (data) {

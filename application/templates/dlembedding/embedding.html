@@ -127,8 +127,6 @@
 <script src="{{ url_for('static', filename='js/dl_embedding.js') }}"></script>
 
 <script type="text/javascript">
-    const BASE_URL = 'http://localhost:8000/api/v1/deeplearning/';
-
     function getSelectedCheckboxes() {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
         const selectedCheckboxes = [];
@@ -176,8 +174,8 @@
         }
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const submitButton = document.querySelector('button[type="submit"]');
+    $(document).ready(function () {
+        const submitButton = document.querySelector('button[type="button"]');
         const parameter_dimension = document.getElementById('parameter_dimension');
         const dropdownMenu = document.getElementById('dropdown-menu');
         const dropdownModel = document.getElementById('dropdown-model');
@@ -216,9 +214,7 @@
 
         performEmbeddingVisualisationDlEmbedding(data);
 
-        submitButton.addEventListener('click', function (e) {
-            e.preventDefault();
-
+        $(submitButton).on('click', function () {
             const feature = getSelectedCheckboxes();
             const data = {
                 'dimension': parameter_dimension.value,
