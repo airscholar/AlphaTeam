@@ -1,5 +1,6 @@
+const BASE_URL = 'http://localhost:8000/api/v1/resilience/';
+
 const performNode2VecEmbeddingVisualisation = (data) => {
-    const BASE_URL = 'http://localhost:8000/api/v1/deeplearning/'
     const graphEmbedding = document.getElementById('graph_embedding_frame');
     $(graphEmbedding).attr('src', '../static/loading.html');
     $.ajax({
@@ -31,7 +32,6 @@ const performNode2VecEmbeddingVisualisation = (data) => {
 const performNode2VecEmbClusteringVisualisation = (data) => {
     const graphEmbedding = document.getElementById('graph_embedding_cluster_frame');
     $(graphEmbedding).attr('src', '../../static/loading.html');
-    const BASE_URL = 'http://localhost:8000/api/v1/deeplearning/'
     $.ajax({
         url: BASE_URL + data.session_id + '/node2vec_clusters',
         data: {
