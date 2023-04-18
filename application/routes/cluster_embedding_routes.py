@@ -37,4 +37,28 @@ def clustering_embedding_agglomerative():
 
     return render_template('node2vec/cluster/agglomerative.html', session_id=filename2, clustering_alg=clustering_alg)
 
+# Dl embedding
+
+@cluster_embedding_routes.route('/dlembedding/clustering/embedding/kmeans', endpoint='dlembedding_clustering_embedding_kmeans',  methods=['GET', 'POST'])
+def clustering_embedding_kmeans():
+    filename2 = session['filename2']
+    clustering_alg = 'kmeans'
+
+    return render_template('dlembedding/cluster/kmeans.html', session_id=filename2, clustering_alg=clustering_alg)
+
+@cluster_embedding_routes.route('/dlembedding/clustering/embedding/spectral', endpoint='dlembedding_clustering_embedding_spectral',  methods=['GET', 'POST'])
+def clustering_embedding_spectral():
+    filename2 = session['filename2']
+    clustering_alg = 'spectral'
+
+    return render_template('dlembedding/cluster/spectral.html', session_id=filename2, clustering_alg=clustering_alg)
+
+
+@cluster_embedding_routes.route('/dlembedding/clustering/embedding/agglomerative', endpoint='dlembedding_clustering_embedding_agglomerative',  methods=['GET', 'POST'])
+def clustering_embedding_agglomerative():
+    filename2 = session['filename2']
+    clustering_alg = 'agglomerative'
+
+    return render_template('dlembedding/cluster/agglomerative.html', session_id=filename2, clustering_alg=clustering_alg)
+
 
