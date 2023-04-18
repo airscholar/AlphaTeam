@@ -104,6 +104,8 @@ const performResilienceMetrics = (data, plot_type, section) => {
     });
 }
 
+
+
 const performResilienceCluster = (data, plot_type, section) => {
     const prefix = section + '_' + plot_type;
     beforeFrame = document.getElementById(prefix + '_before');
