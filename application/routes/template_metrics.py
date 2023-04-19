@@ -1,7 +1,7 @@
 import sys
 
 import requests
-from dictionary.information import *
+from application.dictionary.information import *
 from flask import render_template, session, request
 
 sys.path.insert(1, '../')

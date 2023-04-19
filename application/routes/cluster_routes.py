@@ -1,7 +1,7 @@
 import sys
 
 import requests
-from dictionary.information import *
+from application.dictionary.information import *
 from flask import Blueprint, render_template, session, request
 
 sys.path.insert(1, '../')
@@ -114,7 +114,6 @@ def clustering_k_clique():
     return render_template('cluster/clustering_k_clique.html', example=df, number_of_clusters=number_of_clusters,
                            multi_toggle=multi_toggle, dynamic_toggle=dynamic_toggle, directed_toggle=directed_toggle,
                            layout=layout, graph1=graph_path1, method_name='K Clique')
-
 
 @cluster_routes.route('/clustering/spectral', endpoint='clustering_spectral', methods=['GET', 'POST'])
 def clustering_spectral():

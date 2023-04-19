@@ -24,6 +24,7 @@ def dropStd(df_):
 
     return df_
 
+
 def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USING PLOTLY
     """
     :Function: Plot the metrics on the graph
@@ -45,7 +46,7 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
     df_['std'] = (df_[metrics_name] - df_[metrics_name].min()) / (df_[metrics_name].max() - df_[metrics_name].min())
     df_['std'] = df_['std'].fillna(0.00)
     size_ = 5 / df_['std'].mean()  # normalise the size of the nodes
-    df_['std'] = df_['std'].apply(lambda x: 0.05 if x < 0.1 else x)  # to avoid nodes with size 0
+    df_['std'] = df_['std'].apply(lambda x: 0.05 if x < 0.03 else x)  # to avoid nodes with size 0
     df_['std'] = df_['std'].apply(lambda x: x * size_)
 
     x_list = []

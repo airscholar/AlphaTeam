@@ -2,13 +2,26 @@
 
 from src.NetworkGraphs import NetworkGraphs
 from src.resilience import resilience
+from src.visualisation import *
+from src.machineLearning import *
+from src.deepLearning import *
 
 # networkGraph = NetworkGraphs('../datasets/Dune_Eth_transaction.csv', session_folder='plots', type="CRYPTO")
 networkGraph = NetworkGraphs('../datasets/Railway.csv', session_folder='plots', type="RAILWAY")
 # spectral_clustering(networkGraph)
 # plot_hotspot(networkGraph)
 # k_clique_clustering(networkGraph)
-graph = resilience(networkGraph, attack='cluster', number_of_clusters=2, cluster_algorithm='spectral', total_clusters=15)
+
+embeddings = get_DL_embedding(networkGraph, model='SAGE', features=['degree'], dimension=128)
+# embeddings = get_DL_embedding(networkGraph, model='SAGE', features=['proximity'], dimension=128)
+# embeddings = get_DL_embedding(networkGraph, model='SAGE', features=['degree', 'pagerank', 'kcore', 'triangles'], dimension=256)
+
+clusters = get_communities(networkGraph, method='kmeans', noOfClusters=5, embedding=embeddings)
+TSNE_visualisation(networkGraph, embeddings, filename='embedding3.html', clusters=clusters)
+generate_static_cluster(networkGraph, clusters, 'cluster_embedding3.html', 'kmeans', layout_='map', nbr=10)
+
+
+# graph = resilience(networkGraph, attack='cluster', number_of_clusters=2, cluster_algorithm='spectral', total_clusters=15)
 
 # plot_cluster(networkGraph, 'k_clique', dynamic=False, layout='map')
 # edge_betweenness_clustering(networkGraph)

@@ -19,15 +19,15 @@
                     <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
                         <span>Dynamic</span>
                         <img src="{{ url_for('static', filename='app_images/question.png') }}" alt="Image"
-                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
-                            data-placement="bottom" title="{{tooltip_dynamic}}">
+                             style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                             data-placement="bottom" title="{{tooltip_dynamic}}">
                     </div>
 
                     <div class="toggle-container"
-                        style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
+                         style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
                         <div class="toggle-btn">
                             <input type="checkbox" id="dynamic-toggle" name="dynamic_toggle" {% if dynamic_toggle
-                                %}checked{% endif %}>
+                                   %}checked{% endif %}>
                             <label for="dynamic-toggle"></label>
                         </div>
                     </div>
@@ -35,8 +35,8 @@
                     <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
                         <span>Layout</span>
                         <img src="{{ url_for('static', filename='app_images/question.png') }}" alt="Image"
-                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
-                            data-placement="bottom" title="{{tooltip_layout}}">
+                             style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                             data-placement="bottom" title="{{tooltip_layout}}">
                     </div>
 
                     <div class="dropdown" style="margin:5px">
@@ -48,16 +48,18 @@
                             </option>
                         </select>
                     </div>
-
+                    {% if not method_name == "Dbscan" %}
                     <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
                         <span>Number of Clusters</span>
                         <img src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
-                            alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
-                            data-placement="bottom" title="{{tooltip_number_of_clusters}}">
+                             alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                             data-placement="bottom" title="{{tooltip_number_of_clusters}}">
                     </div>
+
                     <input type="number" id="number_of_clusters" style="margin: 5px;" name="number_of_clusters"
-                        class="form-control" min="1" step="1" placeholder="None" {% if number_of_clusters is not none
-                        %}value="{{ number_of_clusters }}" {% endif %}>
+                           class="form-control" min="1" step="1" placeholder="None" {% if number_of_clusters is not none
+                           %}value="{{ number_of_clusters }}" {% endif %}>
+                    {% endif %}
                     <button type="submit" class="btn btn-primary" style="margin:5px; width: 100%;">Submit</button>
                 </form>
             </div>
@@ -66,22 +68,23 @@
     <hr>
 
     <div class="card card-body">
+        <h3 class="styledh3">Clustering Information</h3>
         <table id="example-metrics" class="display" style="width:100%">
             <thead>
-                <tr>
-                    {% for cell in example.columns %}
-                    <th>{{ cell }}</th>
-                    {% endfor %}
-                </tr>
+            <tr>
+                {% for cell in example.columns %}
+                <th>{{ cell }}</th>
+                {% endfor %}
+            </tr>
             </thead>
             <tbody>
-                {% for row in example.itertuples() %}
-                <tr>
-                    {% for cell in row[1:] %}
-                    <td>{{ cell }}</td>
-                    {% endfor %}
-                </tr>
+            {% for row in example.itertuples() %}
+            <tr>
+                {% for cell in row[1:] %}
+                <td>{{ cell }}</td>
                 {% endfor %}
+            </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>
@@ -96,3 +99,10 @@
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example-metrics').DataTable({
+            "order": [[2, "asc"]],
+        });
+    });
+</script>

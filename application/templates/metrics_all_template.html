@@ -337,18 +337,8 @@
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"></script>
-
-<script>
+<script type="text/javascript">
     $(document).ready(function () {
-        // Get the submitted tab value from the server
-        var submittedTab = "{{ tab|default('tab1') }}";
-
-        // Deactivate the default active tab
-        $('a[data-toggle="tab"]').parent().removeClass('active');
-        $('.tab-pane').removeClass('active show');
-
-        // Activate the submitted tab
-        $('a[href="#' + submittedTab + '"]').parent().addClass('active');
-        $('#' + submittedTab).addClass('active show');
+        $('#example-metrics').DataTable();
     });
 </script>
