@@ -74,11 +74,14 @@ def upload():
         csv_file = request.files['csv_file']
         option = request.form['option']
         # Save the CSV file to a folder on the server with a filename based on the selected option and file extension
-        if option != 'MTX':
-            filename = option + re.sub(r'\W+', '', timestamp) + '.csv'
+        if option == 'MTX':
+            filename = option + re.sub(r'\W+', '', timestamp) + 'mtx'
+            filename2 = option + re.sub(r'\W+', '', timestamp)
+        elif option == 'GTFS':
+            filename = option + re.sub(r'\W+', '', timestamp) + '.zip'
             filename2 = option + re.sub(r'\W+', '', timestamp)
         else:
-            filename = option + re.sub(r'\W+', '', timestamp) + '.mtx'
+            filename = option + re.sub(r'\W+', '', timestamp) + '.csv'
             filename2 = option + re.sub(r'\W+', '', timestamp)
 
         # Create the directory if it doesn't exist
