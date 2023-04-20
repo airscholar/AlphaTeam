@@ -48,17 +48,17 @@
                             </option>
                         </select>
                     </div>
-                    {% if not method_name == "Dbscan" %}
-                    <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
-                        <span>Number of Clusters</span>
-                        <img src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
-                             alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
-                             data-placement="bottom" title="{{tooltip_number_of_clusters}}">
+                    <div {% if method_name == "Dbscan" %}style="display: none;"{% endif %}>
+                        <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                            <span>Number of Clusters</span>
+                            <img src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                 alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                 data-placement="bottom" title="{{tooltip_number_of_clusters}}">
+                        </div>
+    
+                        <input type="number" id="number_of_clusters" style="margin: 5px;" name="number_of_clusters"
+                               class="form-control" min="1" step="1" placeholder="None" value="0">
                     </div>
-
-                    <input type="number" id="number_of_clusters" style="margin: 5px;" name="number_of_clusters"
-                           class="form-control" min="1" step="1" placeholder="None" value="0">
-                    {% endif %}
                     <button type="button" class="btn btn-primary" style="margin:5px; width: 100%;">Submit</button>
                 </form>
             </div>
