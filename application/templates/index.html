@@ -43,7 +43,7 @@
                         <div class="file-select-button" id="fileName" style="display: none;">Choose File</div>
                         <div class="file-select-name" id="noFile" style="display: none;">No file chosen...</div>
                       </div>
-                      <input type="file" name="csv_file" id="csv_file" accept=".csv, .mtx" style="display:none;">
+                      <input type="file" name="csv_file" id="csv_file" accept=".csv, .mtx, .zip" style="display:none;">
                       <div class="drag-text text-center"> <!-- add text-center class here -->
                         <img src="{{ url_for('static', filename='app_images/cloud.png') }}"
                           class="img-fluid mx-auto d-block" alt="Image" style="margin-top: 1rem;">
@@ -52,7 +52,7 @@
                         <p style="text-decoration-line: underline;
                         color: #676767;
                         font-weight: 400;
-                        font-size: 12px;"> <span id="file-type">Supported formates: CSV, MTX</span></p>
+                        font-size: 12px;"> <span id="file-type">Supported formates: CSV, MTX, ZIP (GTFS)</span></p>
                       </div>
                     </label>
                   </div>
@@ -61,10 +61,9 @@
                 <div class="dropdown">
                   <select id="dropdown-menu" class="mx-auto">
                     <option value="option1">Select Dataset Type</option>
-                    <option value="RAILWAY">Railway</option>
-                    <option value="CRYPTO">Crypto</option>
                     <option value="MTX">MTX</option>
-                    <option value="CUSTOM">Custom</option>
+                    <option value="GTFS">GTFS</option>
+                    <option value="CUSTOM">CSV Custom</option>
                   </select>
                 </div>
                 <div class="d-grid gap-2">

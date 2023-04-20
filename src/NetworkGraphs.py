@@ -193,6 +193,37 @@ class NetworkGraphs:
                                'DiGraph': nx.get_edge_attributes(self.DiGraph, 'color').values(),
                                'Graph': nx.get_edge_attributes(self.Graph, 'color').values()}
 
+
+        # ---------------------------------------------- GTFS -------------------------------------------------------
+
+        elif type == 'GTFS':
+
+            self.set_spatial(True)
+            self.set_temporal(True)
+            self.set_weighted(True)
+
+            self.DiGraph, self.MultiDiGraph = preprocess_gtfs(filename)
+            self.Graph, self.MultiGraph = self.DiGraph.to_undirected(), self.MultiDiGraph.to_undirected()
+
+            self.colors = {'MultiDiGraph': nx.get_edge_attributes(self.MultiDiGraph, 'color').values(),
+                            'MultiGraph': nx.get_edge_attributes(self.MultiGraph, 'color').values(),
+                            'DiGraph': nx.get_edge_attributes(self.DiGraph, 'color').values(),
+                            'Graph': nx.get_edge_attributes(self.Graph, 'color').values()}
+
+            self.df = self.DiGraph.edges(data=True)
+            self.df = pd.DataFrame(self.df, columns=['source', 'target', 'data'])
+
+            # check if nan in start or end
+            if self.df['data'].apply(lambda x: x['start']).isnull().values.any() or self.df['data'].apply(lambda x: x['end']).isnull().values.any():
+                self.set_temporal(False)
+            else:
+                self.df['start'] = self.df['data'].apply(lambda x: x['start'])
+                self.df['end'] = self.df['data'].apply(lambda x: x['end'])
+            self.df['weight'] = self.df['data'].apply(lambda x: x['weight'])
+            self.df['color'] = self.df['data'].apply(lambda x: x['color'])
+            self.df = self.df.drop(columns=['data'])
+
+
         # ---------------------------------------------- SPATIAL -------------------------------------------------------
 
         self.pos = {}
@@ -212,10 +243,16 @@ class NetworkGraphs:
             self.pos['map'] = nx.get_node_attributes(self.Graph, 'pos')
             location = self.pos['map'].values()
             # add space around the graph
-            self.set_min_long(min(location, key=lambda x: x[0])[0] - 0.5)
-            self.set_min_lat(min(location, key=lambda x: x[1])[1] - 0.5)
-            self.set_max_long(max(location, key=lambda x: x[0])[0] + 0.5)
-            self.set_max_lat(max(location, key=lambda x: x[1])[1] + 0.5)
+            self.set_min_long(min(location, key=lambda x: x[0])[0])
+            self.set_min_lat(min(location, key=lambda x: x[1])[1])
+            self.set_max_long(max(location, key=lambda x: x[0])[0])
+            self.set_max_lat(max(location, key=lambda x: x[1])[1])
+            delta_long = (self.get_max_long() - self.get_min_long()) * 0.05
+            delta_lat = (self.get_max_lat() - self.get_min_lat()) * 0.05
+            self.set_min_long(self.get_min_long() - delta_long)
+            self.set_min_lat(self.get_min_lat() - delta_lat)
+            self.set_max_long(self.get_max_long() + delta_long)
+            self.set_max_lat(self.get_max_lat() + delta_lat)
             self.set_mid_long()
             self.set_mid_lat()
 
@@ -350,10 +387,10 @@ class NetworkGraphs:
         :type data_type: str
         :return: None
         """
-        if data_type in ['RAILWAY', 'CRYPTO', 'CUSTOM', 'MTX']:
+        if data_type in ['RAILWAY', 'CRYPTO', 'CUSTOM', 'MTX', 'GTFS']:
             self.type = data_type
         else:
-            raise ValueError("The type must be 'RAILWAY', 'CRYPTO' or 'CUSTOM'")
+            raise ValueError("The type must be 'RAILWAY', 'CRYPTO', 'GTFS' or 'CUSTOM' ")
 
     def set_max_lat(self, max_lat):
         """
