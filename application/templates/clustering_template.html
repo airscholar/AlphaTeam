@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-10">
             <div class="card card-body" style="align-items: center;">
-                <iframe src="{{ graph1 }}" width="100%" height="500"></iframe>
+                <iframe id="graph_cluster" src="{{ graph1 }}" width="100%" height="500"></iframe>
                 <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
             </div>
         </div>
@@ -57,10 +57,9 @@
                     </div>
 
                     <input type="number" id="number_of_clusters" style="margin: 5px;" name="number_of_clusters"
-                           class="form-control" min="1" step="1" placeholder="None" {% if number_of_clusters is not none
-                           %}value="{{ number_of_clusters }}" {% endif %}>
+                           class="form-control" min="1" step="1" placeholder="None" value="0">
                     {% endif %}
-                    <button type="submit" class="btn btn-primary" style="margin:5px; width: 100%;">Submit</button>
+                    <button type="button" class="btn btn-primary" style="margin:5px; width: 100%;">Submit</button>
                 </form>
             </div>
         </div>
@@ -69,23 +68,7 @@
 
     <div class="card card-body">
         <h3 class="styledh3">Clustering Information</h3>
-        <table id="example-metrics" class="display" style="width:100%">
-            <thead>
-            <tr>
-                {% for cell in example.columns %}
-                <th>{{ cell }}</th>
-                {% endfor %}
-            </tr>
-            </thead>
-            <tbody>
-            {% for row in example.itertuples() %}
-            <tr>
-                {% for cell in row[1:] %}
-                <td>{{ cell }}</td>
-                {% endfor %}
-            </tr>
-            {% endfor %}
-            </tbody>
+        <table id="example-clusters" class="display" style="width:100%">
         </table>
     </div>
     <div class="row mt-3">
@@ -99,10 +82,40 @@
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../static/js/clusters.js"></script>
+<script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
         $('#example-metrics').DataTable({
             "order": [[2, "asc"]],
+        });
+
+        const submitButton = document.querySelector('button[type="button"]');
+        const dynamicToggle = document.getElementById('dynamic-toggle');
+        const numberOfClusters = document.getElementById('number_of_clusters');
+        const layout = document.getElementById('dropdown-menu');
+        
+        const data = {
+            'dynamicToggle': dynamicToggle.checked ? "True" : "False",
+            'numberOfClusters': numberOfClusters.value,
+            'layout': layout.value,
+            'session_id': '{{ session_id }}',
+            'clusterType': '{{ clusterType }}'
+        };
+
+        clusteringVisualisation(data)
+
+        $(submitButton).on('click', function () {
+            const dynamic_var = dynamicToggle.checked ? "True" : "False";
+            const data = {
+                'dynamicToggle': dynamic_var,
+                'numberOfClusters': numberOfClusters.value,
+                'layout': layout.value,
+                'session_id': '{{ session_id }}',
+                'clusterType': '{{ clusterType }}'
+            };
+            clusteringVisualisation(data)
         });
     });
 </script>
