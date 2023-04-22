@@ -19,39 +19,51 @@ def centrality_all():
     filename2 = session['filename2']
     metrics = 'centralities'
 
-    #graph_names, graph_paths, df, tab, layout, multi_toggles, directed_toggles = process_metric(networkGraphs,
-    #                                                                                            filename2, metrics)
-
     return render_template('metrics/centrality/centrality_all.html', method_name='All Centrality',
                            description=description['all_centrality'], tooltip_multi=tooltips['multi'],
                            metricsType=metrics, session_id=filename2)
 
-
 @centrality_routes.route('/centrality/degree', endpoint='degree', methods=['GET', 'POST'])
 def centrality_degree():
-    return process_single_metric('degree_centrality', 'metrics/centrality/centrality_degree.html', 'Degree Centrality',
-                                 'centrality_degree')
+    filename2 = session['filename2']
+    metrics = 'degree_centrality'
 
+    return render_template('metrics/centrality/centrality_degree.html', method_name='Degree Centrality',
+                           description=description['centrality_degree'], tooltip_multi=tooltips['multi'],
+                           metricsType=metrics, session_id=filename2)
 
 @centrality_routes.route('/centrality/eigenvector', endpoint='eigenvector', methods=['GET', 'POST'])
 def centrality_eigenvector():
-    return process_single_metric('eigenvector_centrality', 'metrics/centrality/centrality_eigenvector.html',
-                                 'Eigenvector Centrality', 'centrality_eigenvector')
+    filename2 = session['filename2']
+    metrics = 'eigenvector_centrality'
 
+    return render_template('metrics/centrality/centrality_eigenvector.html', method_name='Eigenvector Centrality',
+                           description=description['centrality_eigenvector'], tooltip_multi=tooltips['multi'],
+                           metricsType=metrics, session_id=filename2)
 
 @centrality_routes.route('/centrality/closeness', endpoint='closeness', methods=['GET', 'POST'])
 def centrality_closeness():
-    return process_single_metric('closeness_centrality', 'metrics/centrality/centrality_closeness.html', 'Closeness Centrality',
-                                 'centrality_closeness')
+    filename2 = session['filename2']
+    metrics = 'closeness_centrality'
 
+    return render_template('metrics/centrality/centrality_closeness.html', method_name='Closeness Centrality',
+                           description=description['centrality_closeness'], tooltip_multi=tooltips['multi'],
+                           metricsType=metrics, session_id=filename2)
 
 @centrality_routes.route('/centrality/betwenness', endpoint='betwenness', methods=['GET', 'POST'])
 def centrality_betwenness():
-    return process_single_metric('betweenness_centrality', 'metrics/centrality/centrality_betwenness.html',
-                                 'Betwenness Centrality', 'centrality_betwenness')
+    filename2 = session['filename2']
+    metrics = 'betweenness_centrality'
 
+    return render_template('metrics/centrality/centrality_betwenness.html', method_name='Betwenness Centrality',
+                           description=description['centrality_betwenness'], tooltip_multi=tooltips['multi'],
+                           metricsType=metrics, session_id=filename2)
 
 @centrality_routes.route('/centrality/load', endpoint='load', methods=['GET', 'POST'])
 def centrality_load():
-    return process_single_metric('load_centrality', 'metrics/centrality/centrality_load.html', 'Load Centrality',
-                                 'centrality_load')
+    filename2 = session['filename2']
+    metrics = 'load_centrality'
+
+    return render_template('metrics/centrality/centrality_load.html', method_name='Load Centrality',
+                           description=description['centrality_load'], tooltip_multi=tooltips['multi'],
+                           metricsType=metrics, session_id=filename2)

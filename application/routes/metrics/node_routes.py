@@ -26,19 +26,36 @@ def node_all():
 
 @node_routes.route('/node/degree', endpoint='node_degree', methods=['GET', 'POST'])
 def node_degree():
-    return process_single_metric('degree', 'metrics/nodes/node_degree.html', 'Node Degree', 'node_degree')
+    filename2 = session['filename2']
+    metrics = 'degree'
 
+    return render_template('metrics/nodes/node_degree.html', method_name='Node Degree',
+                           description=description['node_degree'], tooltip_multi=tooltips['multi'],
+                           metricsType=metrics, session_id=filename2)
 
 @node_routes.route('/node/kcore', endpoint='node_kcore', methods=['GET', 'POST'])
 def node_kcore():
-    return process_single_metric('kcore', 'metrics/nodes/node_kcore.html', 'Node K Core', 'node_kcore')
+    filename2 = session['filename2']
+    metrics = 'kcore'
 
+    return render_template('metrics/nodes/node_kcore.html', method_name='Node K Core',
+                           description=description['node_kcore'], tooltip_multi=tooltips['multi'],
+                           metricsType=metrics, session_id=filename2)
 
 @node_routes.route('/node/triangle', endpoint='node_triangle', methods=['GET', 'POST'])
 def node_triangle():
-    return process_single_metric('triangles', 'metrics/nodes/node_triangle.html', 'Node Triangle', 'node_triangle')
+    filename2 = session['filename2']
+    metrics = 'triangles'
 
+    return render_template('metrics/nodes/node_triangle.html', method_name='Node Triangle',
+                           description=description['node_triangle'], tooltip_multi=tooltips['multi'],
+                           metricsType=metrics, session_id=filename2)
 
 @node_routes.route('/node/pagerank', endpoint='node_pagerank', methods=['GET', 'POST'])
 def node_pagerank():
-    return process_single_metric('pagerank', 'metrics/nodes/node_pagerank.html', 'Node Page Rank', 'node_pagerank')
+    filename2 = session['filename2']
+    metrics = 'pagerank'
+
+    return render_template('metrics/nodes/node_pagerank.html', method_name='Node Page Rank',
+                           description=description['node_pagerank'], tooltip_multi=tooltips['multi'],
+                           metricsType=metrics, session_id=filename2)
