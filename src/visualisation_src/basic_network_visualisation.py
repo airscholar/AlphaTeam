@@ -99,8 +99,9 @@ def static_visualisation(networkGraphs, filepath, layout_='map'):
     if layout_ == 'map':
         with open(filepath, 'a') as f:
             f.write(scripts['to_clipboard_map'])
-    with open(filepath, 'a') as f:
-        f.write(scripts['to_clipboard_no_map'])
+    else:
+        with open(filepath, 'a') as f:
+            f.write(scripts['to_clipboard_no_map'])
 
     return fig
 
