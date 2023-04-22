@@ -61,6 +61,10 @@ def get_layout(networkGraphs, title=None, layout_='map'):  # FOR PLOTLY
     :rtype: plotly.graph_objects
     """
     if layout_ == 'map':
+        if networkGraphs.type == 'GTFS':
+            resolution = 50
+        else:
+            resolution = 110
         layout = go.Layout(
             title=f'<br>{title}',
             titlefont=dict(size=16, color='Black'),
@@ -83,6 +87,7 @@ def get_layout(networkGraphs, title=None, layout_='map'):  # FOR PLOTLY
                 center=dict(lat=networkGraphs.mid_lat, lon=networkGraphs.mid_long),
                 showland=True,
                 showcountries=True,
+                resolution=resolution,
             ),
             xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
             yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)
