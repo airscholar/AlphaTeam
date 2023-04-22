@@ -12,14 +12,14 @@
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <!-- Layout Tab UL -->
-                    <button class="nav-link {% if tab=='tab1' %} active {% else %}{% endif %}" id="nav-layout-tab"
+                    <button class="nav-link active" id="nav-layout-tab"
                         data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab" aria-controls="nav-layout"
                         aria-selected="true">Layout <span style="display: inline-block; margin-left: 5px;"><img
                                 src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
                                 alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
                                 data-placement="bottom" title="{{tooltip_layout_tab}}"></span></button>
                     <!-- Histogram Tab UL -->
-                    <button class="nav-link {% if tab=='tab2' %} active {% else %}{% endif %}" id="nav-histogram-tab"
+                    <button class="nav-link" id="nav-histogram-tab"
                         data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab"
                         aria-controls="nav-histogram" aria-selected="true">Histogram <span
                             style="display: inline-block; margin-left: 5px;"><img
@@ -27,14 +27,14 @@
                                 alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
                                 data-placement="bottom" title="{{tooltip_histogram_tab}}"></span></button>
                     <!-- Boxplot Tab UL -->
-                    <button class="nav-link {% if tab=='tab3' %} active {% else %}{% endif %}" id="nav-boxplot-tab"
+                    <button class="nav-link" id="nav-boxplot-tab"
                         data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab" aria-controls="nav-boxplot"
                         aria-selected="true">Boxplot <span style="display: inline-block; margin-left: 5px;"><img
                                 src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
                                 alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
                                 data-placement="bottom" title="{{tooltip_boxplot_tab}}"></span></button>
                     <!-- ViolinPlot Tab UL -->
-                    <button class="nav-link {% if tab=='tab4' %} active {% else %}{% endif %}" id="nav-violinplot-tab"
+                    <button class="nav-link" id="nav-violinplot-tab"
                         data-bs-toggle="tab" data-bs-target="#tab4" type="button" role="tab"
                         aria-controls="nav-violinplot" aria-selected="true">ViolinPlot <span
                             style="display: inline-block; margin-left: 5px;"><img
@@ -45,12 +45,12 @@
             </nav>
 
             <div class="tab-content" style="background-color: white; padding-bottom: 25px;">
-                <div id="tab1" class="container tab-pane {% if tab=='tab1' %}active{% else %}fade{% endif %}">
+                <div id="tab1" class="container tab-pane active">
                     <br />
                     <div class="row">
                         <div class="col-10">
                             <div class="card card-body" style="align-items: center;">
-                                <iframe src="{{ graph1 }}" width="100%" height="500"></iframe>
+                                <iframe id="graph1" src="{{ graph1 }}" width="100%" height="500"></iframe>
                                 <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
                             </div>
                         </div>
@@ -114,18 +114,18 @@
                                             </option>
                                         </select>
                                     </div>
-                                    <button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>
+                                    <button id="button" type="button" class="btn btn-primary" style="width: 100%;">Submit</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="tab2" class="container tab-pane {% if tab=='tab2' %}active{% else %}fade{% endif %}">
+                <div id="tab2" class="container tab-pane fade">
                     <br />
                     <div class="row">
                         <div class="col-10">
                             <div class="card card-body" style="align-items: center;">
-                                <iframe src="{{ graph2 }}" width="100%" height="500"></iframe>
+                                <iframe id="graph2" src="{{ graph2 }}" width="100%" height="500"></iframe>
                                 <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
                             </div>
                         </div>
@@ -171,19 +171,19 @@
                                         </div>
                                     </div>
 
-                                    <button type="submit" class="btn btn-primary"
+                                    <button id="button2" type="button" class="btn btn-primary"
                                         style="width: 100%; margin-top: 10px;">Submit</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="tab3" class="container tab-pane {% if tab=='tab3' %}active{% else %}fade{% endif %}">
+                <div id="tab3" class="container tab-pane fade">
                     <br />
                     <div class="row">
                         <div class="col-10">
                             <div class="card card-body" style="align-items: center;">
-                                <iframe src="{{ graph3 }}" width="100%" height="500"></iframe>
+                                <iframe id="graph3" src="{{ graph3 }}" width="100%" height="500"></iframe>
                                 <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
                             </div>
                         </div>
@@ -229,19 +229,19 @@
                                         </div>
                                     </div>
 
-                                    <button type="submit" class="btn btn-primary"
+                                    <button id="button3" type="button" class="btn btn-primary"
                                         style="width: 100%; margin-top: 10px;">Submit</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="tab4" class="container tab-pane {% if tab=='tab4' %}active{% else %}fade{% endif %}">
+                <div id="tab4" class="container tab-pane fade">
                     <br />
                     <div class="row">
                         <div class="col-10">
                             <div class="card card-body" style="align-items: center;">
-                                <iframe src="{{ graph4 }}" width="100%" height="500"></iframe>
+                                <iframe id="graph4" src="{{ graph4 }}" width="100%" height="500"></iframe>
                                 <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
                             </div>
                         </div>
@@ -287,7 +287,7 @@
                                         </div>
                                     </div>
 
-                                    <button type="submit" class="btn btn-primary"
+                                    <button id="button4" type="button" class="btn btn-primary"
                                         style="width: 100%; margin-top: 10px;">Submit</button>
                                 </form>
                             </div>
@@ -300,29 +300,13 @@
     <hr>
 
     <div class="card card-body">
-        <table id="example-metrics" class="display" style="width:100%">
-            <thead>
-                <tr>
-                    {% for cell in example.columns %}
-                    <th>{{ cell }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in example.itertuples() %}
-                <tr>
-                    {% for cell in row[1:] %}
-                    <td>{{ cell }}</td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
+        <table id="example-metrics-all" class="display" style="width:100%">
         </table>
     </div>
     <div class="row mt-3" style="margin-bottom: 25px;">
         <div class="col-md-12">
             <div class="text-right">
-                <button id="download_csv" type="button" class="btn btn-outline-secondary">Download CSV</button>
+                <button id="download_csv" type="button5" class="btn btn-outline-secondary">Download CSV</button>
             </div>
         </div>
     </div>
@@ -337,8 +321,143 @@
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"></script>
+<script type="text/javascript" src="../static/js/metrics/metrics.js"></script>
+<script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#example-metrics').DataTable();
+        $('#example-metrics').DataTable({
+            "order": [[2, "asc"]],
+        });
+
+        const submitButton1 = document.querySelector('#button');
+        const submitButton2 = document.querySelector('#button2');
+        const submitButton3 = document.querySelector('#button3');
+        const submitButton4 = document.querySelector('#button4');
+
+        const multiToggle = document.getElementById('multi-toggle');
+        const multiToggle2 = document.getElementById('multi-toggle2');
+        const multiToggle3 = document.getElementById('multi-toggle3');
+        const multiToggle4 = document.getElementById('multi-toggle4');
+
+        const directedToggle = document.getElementById('directed-toggle');
+        const directedToggle2 = document.getElementById('directed-toggle2');
+        const directedToggle3 = document.getElementById('directed-toggle3');
+        const directedToggle4 = document.getElementById('directed-toggle4');
+
+
+        const layout = document.getElementById('dropdown-menu');
+
+        const layoutsTab = document.getElementById('nav-layout-tab');
+        const histogramTab = document.getElementById('nav-histogram-tab');
+        const boxplotTab = document.getElementById('nav-boxplot-tab');
+        const violinplotTab = document.getElementById('nav-violinplot-tab');
+        
+        const data = {
+            'multiToggle': multiToggle.checked ? "True" : "False",
+            'multiToggle2': multiToggle2.checked ? "True" : "False",
+            'multiToggle3': multiToggle3.checked ? "True" : "False",
+            'multiToggle4': multiToggle4.checked ? "True" : "False",
+            'directedToggle': directedToggle.checked ? "True" : "False",
+            'directedToggle2': directedToggle2.checked ? "True" : "False",
+            'directedToggle3': directedToggle3.checked ? "True" : "False",
+            'directedToggle4': directedToggle4.checked ? "True" : "False",
+            'layout': layout.value,
+            'session_id': '{{ session_id }}',
+            'metricsType': '{{ metricsType }}'
+        };
+
+        metricsAllVisualisation(data, "layout")
+
+        function handleClick(plotType, e) {
+            e.preventDefault();
+            const data = {
+                'multiToggle': multiToggle.checked ? "True" : "False",
+                'multiToggle2': multiToggle2.checked ? "True" : "False",
+                'multiToggle3': multiToggle3.checked ? "True" : "False",
+                'multiToggle4': multiToggle4.checked ? "True" : "False",
+                'directedToggle': directedToggle.checked ? "True" : "False",
+                'directedToggle2': directedToggle2.checked ? "True" : "False",
+                'directedToggle3': directedToggle3.checked ? "True" : "False",
+                'directedToggle4': directedToggle4.checked ? "True" : "False",
+                'layout': layout.value,
+                'session_id': '{{ session_id }}',
+                'metricsType': '{{ metricsType }}'
+            };
+            metricsAllVisualisation(data, plotType)
+        }
+
+        $(submitButton1).on('click', function () {
+            const data = {
+                'multiToggle': multiToggle.checked ? "True" : "False",
+                'multiToggle2': multiToggle2.checked ? "True" : "False",
+                'multiToggle3': multiToggle3.checked ? "True" : "False",
+                'multiToggle4': multiToggle4.checked ? "True" : "False",
+                'directedToggle': directedToggle.checked ? "True" : "False",
+                'directedToggle2': directedToggle2.checked ? "True" : "False",
+                'directedToggle3': directedToggle3.checked ? "True" : "False",
+                'directedToggle4': directedToggle4.checked ? "True" : "False",
+                'layout': layout.value,
+                'session_id': '{{ session_id }}',
+                'metricsType': '{{ metricsType }}'
+            };
+            metricsAllVisualisation(data, "layout")
+        });
+
+        $(submitButton2).on('click', function () {
+            const data = {
+                'multiToggle': multiToggle.checked ? "True" : "False",
+                'multiToggle2': multiToggle2.checked ? "True" : "False",
+                'multiToggle3': multiToggle3.checked ? "True" : "False",
+                'multiToggle4': multiToggle4.checked ? "True" : "False",
+                'directedToggle': directedToggle.checked ? "True" : "False",
+                'directedToggle2': directedToggle2.checked ? "True" : "False",
+                'directedToggle3': directedToggle3.checked ? "True" : "False",
+                'directedToggle4': directedToggle4.checked ? "True" : "False",
+                'layout': layout.value,
+                'session_id': '{{ session_id }}',
+                'metricsType': '{{ metricsType }}'
+            };
+            metricsAllVisualisation(data, "histogram")
+        });
+
+        $(submitButton3).on('click', function () {
+            const data = {
+                'multiToggle': multiToggle.checked ? "True" : "False",
+                'multiToggle2': multiToggle2.checked ? "True" : "False",
+                'multiToggle3': multiToggle3.checked ? "True" : "False",
+                'multiToggle4': multiToggle4.checked ? "True" : "False",
+                'directedToggle': directedToggle.checked ? "True" : "False",
+                'directedToggle2': directedToggle2.checked ? "True" : "False",
+                'directedToggle3': directedToggle3.checked ? "True" : "False",
+                'directedToggle4': directedToggle4.checked ? "True" : "False",
+                'layout': layout.value,
+                'session_id': '{{ session_id }}',
+                'metricsType': '{{ metricsType }}'
+            };
+            metricsAllVisualisation(data, "boxplot")
+        });
+
+        $(submitButton4).on('click', function () {
+            const data = {
+                'multiToggle': multiToggle.checked ? "True" : "False",
+                'multiToggle2': multiToggle2.checked ? "True" : "False",
+                'multiToggle3': multiToggle3.checked ? "True" : "False",
+                'multiToggle4': multiToggle4.checked ? "True" : "False",
+                'directedToggle': directedToggle.checked ? "True" : "False",
+                'directedToggle2': directedToggle2.checked ? "True" : "False",
+                'directedToggle3': directedToggle3.checked ? "True" : "False",
+                'directedToggle4': directedToggle4.checked ? "True" : "False",
+                'layout': layout.value,
+                'session_id': '{{ session_id }}',
+                'metricsType': '{{ metricsType }}'
+            };
+            metricsAllVisualisation(data, "violin")
+        });
+
+        $(layoutsTab).on('click', handleClick.bind(null, 'layout'));
+        $(histogramTab).on('click', handleClick.bind(null, 'histogram'));
+        $(boxplotTab).on('click', handleClick.bind(null, 'boxplot'));
+        $(violinplotTab).on('click', handleClick.bind(null, 'violin'));
     });
 </script>

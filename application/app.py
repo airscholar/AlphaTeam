@@ -5,9 +5,9 @@ from flask import Flask, request, render_template, session
 from flask_cors import CORS
 
 from flask_session import Session
-from application.routes.centrality_routes import centrality_routes
+from application.routes.metrics.centrality_routes import centrality_routes
 from application.routes.cluster_routes import cluster_routes
-from application.routes.node_routes import node_routes
+from application.routes.metrics.node_routes import node_routes
 from application.routes.resilience_routes import resilience_routes
 from application.routes.cluster_embedding_routes import cluster_embedding_routes
 from application.routes.embedding_routes import embedding_routes

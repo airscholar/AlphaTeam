@@ -33,18 +33,18 @@ def process_single_metric(metrics_arg, template_name_arg, method_name_arg, descr
 
     json_data = requests.get(f'{BASE_URL}{filename2}/{metrics}' + url_query + '&layout=' + layout).json()
     df = pd.read_json(json_data['data'], orient='split')
-    graph_name1 = json_data['file']
+    graph_name1 = json_data['filename']
 
     session['graph_name1'] = graph_name1
 
     json_data = requests.get(f'{BASE_URL}{filename2}/{metrics}/histogram' + url_query).json()
-    graph_name2 = json_data['file']
+    graph_name2 = json_data['filename']
 
     json_data = requests.get(f'{BASE_URL}{filename2}/{metrics}/boxplot' + url_query).json()
-    graph_name3 = json_data['file']
+    graph_name3 = json_data['filename']
 
     json_data = requests.get(f'{BASE_URL}{filename2}/{metrics}/violin' + url_query).json()
-    graph_name4 = json_data['file']
+    graph_name4 = json_data['filename']
 
     graph_names = [graph_name1, graph_name2, graph_name3, graph_name4]
     graph_paths = [
