@@ -6,11 +6,12 @@ from flask_cors import CORS
 
 from flask_session import Session
 from application.routes.metrics.centrality_routes import centrality_routes
-from application.routes.cluster_routes import cluster_routes
+from application.routes.clusters.cluster_routes import cluster_routes
 from application.routes.metrics.node_routes import node_routes
 from application.routes.resilience_routes import resilience_routes
-from application.routes.cluster_embedding_routes import cluster_embedding_routes
-from application.routes.embedding_routes import embedding_routes
+from application.routes.deepLearning.cluster_embedding_routes import cluster_embedding_routes
+from application.routes.deepLearning.embedding_routes import embedding_routes
+from application.routes.hotspot.hotspot_routes import hotspot_routes
 
 sys.path.insert(1, '../')
 from src.NetworkGraphs import *
@@ -34,6 +35,7 @@ app.register_blueprint(node_routes)
 app.register_blueprint(resilience_routes)
 app.register_blueprint(cluster_embedding_routes)
 app.register_blueprint(embedding_routes)
+app.register_blueprint(hotspot_routes)
 
 BASE_URL = 'http://localhost:8000/api/v1'
 
@@ -196,21 +198,6 @@ def visualisation():
                            dynamic_toggle=dynamic_toggle, layout=layout, graph1=graph_path1,
                            layout2=layout2, graph2=graph_path2, graph3=heatmap)
 
-
-# -------------------------------------------HOTSPOT-----------------------------------------
-
-@app.route('/hotspot/density', endpoint='hotspot_density', methods=['GET', 'POST'])
-def hotspot_density():
-    filename2 = session['filename2']
-
-    json_data = requests.get(BASE_URL + f'/hotspot/{filename2}/density').json()
-    df = pd.read_json(json_data['data'], orient='split')
-    graph_name = json_data['file']
-
-    graph_path = '../static/' + graph_name if graph_name == 'no_graph.html' \
-        else '../static/uploads/' + filename2 + '/' + graph_name
-
-    return render_template('hotspot_density.html', example=df, graph1=graph_path, method_name='Density')
 
 
 # -------------------------------------------MAIN--------------------------------------------

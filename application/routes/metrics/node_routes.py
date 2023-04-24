@@ -2,7 +2,6 @@ import sys
 
 from application.dictionary.information import *
 from flask import Blueprint, render_template, session
-from application.routes.template_metrics import *
 
 from backend.common.common import process_metric
 
