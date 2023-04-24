@@ -8,7 +8,7 @@ from flask_session import Session
 from application.routes.metrics.centrality_routes import centrality_routes
 from application.routes.clusters.cluster_routes import cluster_routes
 from application.routes.metrics.node_routes import node_routes
-from application.routes.resilience_routes import resilience_routes
+from application.routes.resilience.resilience_routes import resilience_routes
 from application.routes.deepLearning.cluster_embedding_routes import cluster_embedding_routes
 from application.routes.deepLearning.embedding_routes import embedding_routes
 from application.routes.hotspot.hotspot_routes import hotspot_routes
@@ -52,14 +52,14 @@ def internal_server_error(e):
             shutil.rmtree(filepath)
         if is_saved(filename2):
             delete_networkGraph(filename2)
-            # cache.clear()
-        # Remove the keys from the session
-        # session.pop('network_graphs', None)
-        # session.pop('filename', None)
-        # session.pop('filename2', None)
-        # session.pop('filepath', None)
-        # session.pop('option', None)
-        # session.clear()
+            cache.clear()
+        Remove the keys from the session
+        session.pop('network_graphs', None)
+        session.pop('filename', None)
+        session.pop('filename2', None)
+        session.pop('filepath', None)
+        session.pop('option', None)
+        session.clear()
     return render_template('500.html')
 
 

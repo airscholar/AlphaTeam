@@ -4,7 +4,7 @@ import requests
 from application.dictionary.information import *
 from flask import Blueprint, render_template, session, request
 
-sys.path.insert(1, '../')
+sys.path.insert(1, '../../')
 
 resilience_routes = Blueprint('resilience_routes', __name__)
 BASE_URL = 'http://localhost:8000/api/v1'
