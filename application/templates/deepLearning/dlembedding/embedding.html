@@ -6,6 +6,7 @@
     <div class="row">
         <div class="col-md-12">
             <h3 class="styledh3">DL Embedding</h3>
+            <p>{{description | safe}}</p>
             <hr> <!-- Add a horizontal rule for visual separation -->
         </div>
     </div>
@@ -26,7 +27,7 @@
                         <span>Dimension</span>
                         <img src="{{ url_for('static', filename='app_images/question.png') }}" alt="Image"
                             style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
-                            data-placement="bottom" title="{{tooltip_layout}}">
+                            data-placement="bottom" title="{{tooltip_dimension}}">
                     </div>
 
                     <div class="row align-items-center">
@@ -41,7 +42,7 @@
                         <span>Model</span>
                         <img src="{{ url_for('static', filename='app_images/question.png') }}" alt="Image"
                             style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
-                            data-placement="bottom" title="{{tooltip_layout}}">
+                            data-placement="bottom" title="{{tooltip_model_dropdown}}">
                     </div>
 
                     <div class="dropdown" style="margin:5px">
@@ -78,7 +79,7 @@
                         <span>Features</span>
                         <img src="{{ url_for('static', filename='app_images/question.png') }}" alt="Image"
                             style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
-                            data-placement="bottom" title="{{tooltip_layout}}">
+                            data-placement="bottom" title="{{tooltip_features}}">
                     </div>
                     
                     <div style="margin: 5px;">

@@ -16,4 +16,5 @@ def hotspot_density():
     filename2 = session['filename2']
     hotspotType = 'density'
 
-    return render_template('hotspot/hotspot_density.html', session_id=filename2, hotspotType=hotspotType, method_name='Density')
+    return render_template('hotspot/hotspot_density.html', session_id=filename2, hotspotType=hotspotType, method_name='Density', 
+    description=description['hotspot_density'])
