@@ -20,6 +20,9 @@ def centrality_all():
 
     return render_template('metrics/centrality/centrality_all.html', method_name='All Centrality',
                            description=description['all_centrality'], tooltip_multi=tooltips['multi'],
+                           tooltip_layout_tab=tooltips['layout_tab'], tooltip_histogram_tab=tooltips['histogram_tab'],
+                           tooltip_boxplot_tab=tooltips['boxplot_tab'], tooltip_violinplot_tab=tooltips['violinplot_tab'],
+                           tooltip_directed=tooltips['directed'], tooltip_layout=tooltips['layout_dropdown'],
                            metricsType=metrics, session_id=filename2)
 
 @centrality_routes.route('/centrality/degree', endpoint='degree', methods=['GET', 'POST'])
@@ -29,6 +32,10 @@ def centrality_degree():
 
     return render_template('metrics/centrality/centrality_degree.html', method_name='Degree Centrality',
                            description=description['centrality_degree'], tooltip_multi=tooltips['multi'],
+                           tooltip_layout_tab=tooltips['layout_tab'], tooltip_histogram_tab=tooltips['histogram_tab'],
+                           tooltip_boxplot_tab=tooltips['boxplot_tab'], tooltip_violinplot_tab=tooltips['violinplot_tab'],
+                           tooltip_directed=tooltips['directed'], tooltip_layout=tooltips['layout_dropdown'],
+                           tooltip_dynamic=tooltips['dynamic'],
                            metricsType=metrics, session_id=filename2)
 
 @centrality_routes.route('/centrality/eigenvector', endpoint='eigenvector', methods=['GET', 'POST'])
@@ -38,6 +45,10 @@ def centrality_eigenvector():
 
     return render_template('metrics/centrality/centrality_eigenvector.html', method_name='Eigenvector Centrality',
                            description=description['centrality_eigenvector'], tooltip_multi=tooltips['multi'],
+                           tooltip_layout_tab=tooltips['layout_tab'], tooltip_histogram_tab=tooltips['histogram_tab'],
+                           tooltip_boxplot_tab=tooltips['boxplot_tab'], tooltip_violinplot_tab=tooltips['violinplot_tab'],
+                           tooltip_directed=tooltips['directed'], tooltip_layout=tooltips['layout_dropdown'],
+                           tooltip_dynamic=tooltips['dynamic'],
                            metricsType=metrics, session_id=filename2)
 
 @centrality_routes.route('/centrality/closeness', endpoint='closeness', methods=['GET', 'POST'])
@@ -47,6 +58,10 @@ def centrality_closeness():
 
     return render_template('metrics/centrality/centrality_closeness.html', method_name='Closeness Centrality',
                            description=description['centrality_closeness'], tooltip_multi=tooltips['multi'],
+                           tooltip_layout_tab=tooltips['layout_tab'], tooltip_histogram_tab=tooltips['histogram_tab'],
+                           tooltip_boxplot_tab=tooltips['boxplot_tab'], tooltip_violinplot_tab=tooltips['violinplot_tab'],
+                           tooltip_directed=tooltips['directed'], tooltip_layout=tooltips['layout_dropdown'],
+                           tooltip_dynamic=tooltips['dynamic'],
                            metricsType=metrics, session_id=filename2)
 
 @centrality_routes.route('/centrality/betwenness', endpoint='betwenness', methods=['GET', 'POST'])
@@ -56,6 +71,10 @@ def centrality_betwenness():
 
     return render_template('metrics/centrality/centrality_betwenness.html', method_name='Betwenness Centrality',
                            description=description['centrality_betwenness'], tooltip_multi=tooltips['multi'],
+                           tooltip_layout_tab=tooltips['layout_tab'], tooltip_histogram_tab=tooltips['histogram_tab'],
+                           tooltip_boxplot_tab=tooltips['boxplot_tab'], tooltip_violinplot_tab=tooltips['violinplot_tab'],
+                           tooltip_directed=tooltips['directed'], tooltip_layout=tooltips['layout_dropdown'],
+                           tooltip_dynamic=tooltips['dynamic'],
                            metricsType=metrics, session_id=filename2)
 
 @centrality_routes.route('/centrality/load', endpoint='load', methods=['GET', 'POST'])
@@ -65,4 +84,8 @@ def centrality_load():
 
     return render_template('metrics/centrality/centrality_load.html', method_name='Load Centrality',
                            description=description['centrality_load'], tooltip_multi=tooltips['multi'],
+                           tooltip_layout_tab=tooltips['layout_tab'], tooltip_histogram_tab=tooltips['histogram_tab'],
+                           tooltip_boxplot_tab=tooltips['boxplot_tab'], tooltip_violinplot_tab=tooltips['violinplot_tab'],
+                           tooltip_directed=tooltips['directed'], tooltip_layout=tooltips['layout_dropdown'],
+                           tooltip_dynamic=tooltips['dynamic'],
                            metricsType=metrics, session_id=filename2)

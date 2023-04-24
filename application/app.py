@@ -12,6 +12,8 @@ from application.routes.resilience.resilience_routes import resilience_routes
 from application.routes.deepLearning.cluster_embedding_routes import cluster_embedding_routes
 from application.routes.deepLearning.embedding_routes import embedding_routes
 from application.routes.hotspot.hotspot_routes import hotspot_routes
+from application.routes.metrics.global_metrics_routes import global_metrics_routes
+from application.dictionary.information import *
 
 sys.path.insert(1, '../')
 from src.NetworkGraphs import *
@@ -36,6 +38,7 @@ app.register_blueprint(resilience_routes)
 app.register_blueprint(cluster_embedding_routes)
 app.register_blueprint(embedding_routes)
 app.register_blueprint(hotspot_routes)
+app.register_blueprint(global_metrics_routes)
 
 BASE_URL = 'http://localhost:8000/api/v1'
 
@@ -128,25 +131,6 @@ def home():
     # Pass the data to the HTML template
     return render_template('home.html', session_id=filename2)
 
-
-@app.route('/global-metrics', methods=['GET', 'POST'])
-def globalmetrics():
-    filename2 = session['filename2']
-    networkGraphs = get_networkGraph(filename2)
-    multi_toggle = False
-    directed_toggle = False
-
-    if request.method == 'POST':
-        multi_toggle = bool(request.form.get('multi_toggle'))
-        directed_toggle = bool(request.form.get('directed_toggle'))
-        global_metrics = compute_global_metrics(networkGraphs, directed_toggle, multi_toggle)
-    else:
-        global_metrics = compute_global_metrics(networkGraphs, directed_toggle, multi_toggle)
-
-    return render_template('global_metrics.html', example=global_metrics, multi_toggle=multi_toggle,
-                           directed_toggle=directed_toggle)
-
-
 # -------------------------------------------VISUALISATION-----------------------------------
 
 @app.route('/visualisation', methods=['GET', 'POST'], endpoint='visualisation')
@@ -196,7 +180,10 @@ def visualisation():
 
     return render_template('visualisation.html', tab=tab, show_temporal=show_temporal,
                            dynamic_toggle=dynamic_toggle, layout=layout, graph1=graph_path1,
-                           layout2=layout2, graph2=graph_path2, graph3=heatmap)
+                           layout2=layout2, graph2=graph_path2, graph3=heatmap,
+                           #tooltips adding from here
+                            tooltip_network_tab=tooltips['network_tab'], tooltip_temporal_tab=tooltips['temporal_tab'], tooltip_heatmap_tab=tooltips['heatmap_tab'],
+                            tooltip_dynamic=tooltips['dynamic'], tooltip_layout_dropdown=tooltips['layout_dropdown'], description=description['visualisation'])
 
 
 

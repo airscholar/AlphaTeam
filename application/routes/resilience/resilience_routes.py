@@ -3,6 +3,7 @@ import sys
 import requests
 from application.dictionary.information import *
 from flask import Blueprint, render_template, session, request
+from src.utils import get_networkGraph
 
 sys.path.insert(1, '../../')
 

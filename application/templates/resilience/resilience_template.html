@@ -20,7 +20,10 @@
         </button>
         <button class="nav-link" id="nav-AttackSummary-tab" data-bs-toggle="tab" data-bs-target="#nav-AttackSummary"
                 type="button"
-                role="tab" aria-controls="nav-AttackSummary" aria-selected="false">Attack Summary
+                role="tab" aria-controls="nav-AttackSummary" aria-selected="false">Attack Summary<span style="display: inline-block; margin-left: 5px;"><img
+                    src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                    alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                    data-placement="bottom" title="{{tooltip_attack_summary}}"></span>
         </button>
     </div>
 </nav>

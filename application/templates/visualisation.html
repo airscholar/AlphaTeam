@@ -6,6 +6,7 @@
     <div class="row">
         <div class="col-md-12">
             <h3 class="styledh3">Visualisation</h3>
+            <p>{{description | safe}}</p>
             <hr> <!-- Add a horizontal rule for visual separation -->
         </div>
     </div>
@@ -83,7 +84,7 @@
                                         <img src="{{ url_for('static', filename='app_images/question.png') }}"
                                              class="mx-auto" alt="Image"
                                              style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
-                                             data-placement="bottom" title="{{tooltip_layout}}">
+                                             data-placement="bottom" title="{{tooltip_layout_dropdown}}">
                                     </div>
                                     <div class="dropdown" style="margin:5px">
                                         <select id="dropdown-menu" class="mx-auto" name="layout">
@@ -122,7 +123,7 @@
                                         <img src="{{ url_for('static', filename='app_images/question.png') }}"
                                              class="mx-auto" alt="Image"
                                              style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
-                                             data-placement="bottom" title="{{tooltip_layout}}">
+                                             data-placement="bottom" title="{{tooltip_layout_dropdown}}">
                                     </div>
                                     <div class="dropdown" style="margin:5px">
                                         <select id="dropdown-menu2" class="mx-auto" name="layout2">
