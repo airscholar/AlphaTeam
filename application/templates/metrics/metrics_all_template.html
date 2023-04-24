@@ -344,7 +344,6 @@
         const directedToggle3 = document.getElementById('directed-toggle3');
         const directedToggle4 = document.getElementById('directed-toggle4');
 
-
         const layout = document.getElementById('dropdown-menu');
 
         const layoutsTab = document.getElementById('nav-layout-tab');
@@ -366,9 +365,9 @@
             'metricsType': '{{ metricsType }}'
         };
 
-        metricsAllVisualisation(data, "layout")
+        metricsAllVisualisation(data, "layout", "graph1")
 
-        function handleClick(plotType, e) {
+        function handleClick(plotType, graphId, e) {
             e.preventDefault();
             const data = {
                 'multiToggle': multiToggle.checked ? "True" : "False",
@@ -383,7 +382,7 @@
                 'session_id': '{{ session_id }}',
                 'metricsType': '{{ metricsType }}'
             };
-            metricsAllVisualisation(data, plotType)
+            metricsAllVisualisation(data, plotType, graphId)
         }
 
         $(submitButton1).on('click', function () {
@@ -400,7 +399,7 @@
                 'session_id': '{{ session_id }}',
                 'metricsType': '{{ metricsType }}'
             };
-            metricsAllVisualisation(data, "layout")
+            metricsAllVisualisation(data, "layout", "graph1")
         });
 
         $(submitButton2).on('click', function () {
@@ -417,7 +416,7 @@
                 'session_id': '{{ session_id }}',
                 'metricsType': '{{ metricsType }}'
             };
-            metricsAllVisualisation(data, "histogram")
+            metricsAllVisualisation(data, "histogram", 'graph2')
         });
 
         $(submitButton3).on('click', function () {
@@ -434,7 +433,7 @@
                 'session_id': '{{ session_id }}',
                 'metricsType': '{{ metricsType }}'
             };
-            metricsAllVisualisation(data, "boxplot")
+            metricsAllVisualisation(data, "boxplot", "graph3")
         });
 
         $(submitButton4).on('click', function () {
@@ -451,12 +450,12 @@
                 'session_id': '{{ session_id }}',
                 'metricsType': '{{ metricsType }}'
             };
-            metricsAllVisualisation(data, "violin")
+            metricsAllVisualisation(data, "violin", "graph4")
         });
 
-        $(layoutsTab).on('click', handleClick.bind(null, 'layout'));
-        $(histogramTab).on('click', handleClick.bind(null, 'histogram'));
-        $(boxplotTab).on('click', handleClick.bind(null, 'boxplot'));
-        $(violinplotTab).on('click', handleClick.bind(null, 'violin'));
+        $(layoutsTab).on('click', handleClick.bind(null, 'layout', 'graph1'));
+        $(histogramTab).on('click', handleClick.bind(null, 'histogram', 'graph2'));
+        $(boxplotTab).on('click', handleClick.bind(null, 'boxplot', 'graph3'));
+        $(violinplotTab).on('click', handleClick.bind(null, 'violin', 'graph4'));
     });
 </script>

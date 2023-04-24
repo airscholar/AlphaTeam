@@ -3,7 +3,6 @@ import sys
 import requests
 from application.dictionary.information import *
 from flask import Blueprint, render_template, session, request
-from application.routes.template_metrics import *
 
 sys.path.insert(1, '../../')
 
