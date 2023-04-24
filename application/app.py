@@ -53,7 +53,7 @@ def internal_server_error(e):
         if is_saved(filename2):
             delete_networkGraph(filename2)
             cache.clear()
-        Remove the keys from the session
+        # Remove the keys from the session
         session.pop('network_graphs', None)
         session.pop('filename', None)
         session.pop('filename2', None)
