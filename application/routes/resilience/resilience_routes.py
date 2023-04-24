@@ -3,6 +3,7 @@ import sys
 import requests
 from application.dictionary.information import *
 from flask import Blueprint, render_template, session, request
+from application.routes.template_metrics import *
 
 sys.path.insert(1, '../../')
 
@@ -68,8 +69,11 @@ def resilience_analyisis_custom():
     total_clusters = None
     number_of_clusters = None
 
+    NetworkGraph = get_networkGraph(filename2)
+    layout = 'map' if NetworkGraph.is_spatial() else 'sfdp'
+
     json_data = requests.get(
-        f'{BASE_URL}/visualisation/{filename2}/plot_network/spatial?dynamic=False&layout={"sfdp"}').json()
+        f'{BASE_URL}/visualisation/{filename2}/plot_network/spatial?dynamic=False&layout={layout}').json()
     graph_input_custom = json_data['file']
     graph_input_custom = f"../static/uploads/{filename2}/"+graph_input_custom
 
