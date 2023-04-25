@@ -16,8 +16,13 @@ BASE_URL = 'http://localhost:8000/api/v1/clusters/'
 def clustering_louvanian():
     filename2 = session['filename2']
     clusterType = 'louvain'
-    
-    return render_template('clusters/clustering_louvanian.html', session_id=filename2, clusterType=clusterType, method_name='Louvain',
+    networkGraphs = get_networkGraph(filename2)
+    if networkGraphs.is_spatial():
+        is_spatial = 'yes'
+    else:
+        is_spatial = 'no'
+
+    return render_template('clusters/clustering_louvanian.html', session_id=filename2, clusterType=clusterType, method_name='Louvain', is_spatial=is_spatial,
     #tooltips starts from here
     description=description['louvain'], tooltip_dynamic=tooltips['dynamic'],
     tooltip_layout=tooltips['layout_dropdown'], tooltip_number_of_clusters=tooltips['number_of_clusters'])
@@ -27,8 +32,13 @@ def clustering_louvanian():
 def clustering_greedy_modularity():
     filename2 = session['filename2']
     clusterType = 'greedy_modularity'
-    
-    return render_template('clusters/clustering_greedy_modularity.html', session_id=filename2, clusterType=clusterType, method_name='Greedy Modularity',
+    networkGraphs = get_networkGraph(filename2)
+    if networkGraphs.is_spatial():
+        is_spatial = 'yes'
+    else:
+        is_spatial = 'no'
+
+    return render_template('clusters/clustering_greedy_modularity.html', session_id=filename2, clusterType=clusterType, method_name='Greedy Modularity', is_spatial=is_spatial,
     #tooltips starts from here
     description=description['greedy_modularity'], tooltip_dynamic=tooltips['dynamic'],
     tooltip_layout=tooltips['layout_dropdown'], tooltip_number_of_clusters=tooltips['number_of_clusters'])
@@ -39,8 +49,13 @@ def clustering_greedy_modularity():
 def clustering_label_propagation():
     filename2 = session['filename2']
     clusterType = 'label_propagation'
-    
-    return render_template('clusters/clustering_label_propagation.html', session_id=filename2, clusterType=clusterType, method_name='Label Propagation',
+    networkGraphs = get_networkGraph(filename2)
+    if networkGraphs.is_spatial():
+        is_spatial = 'yes'
+    else:
+        is_spatial = 'no'
+
+    return render_template('clusters/clustering_label_propagation.html', session_id=filename2, clusterType=clusterType, method_name='Label Propagation', is_spatial=is_spatial,
     #tooltips starts from here
     description=description['label_propagation'], tooltip_dynamic=tooltips['dynamic'],
     tooltip_layout=tooltips['layout_dropdown'], tooltip_number_of_clusters=tooltips['number_of_clusters'])
@@ -50,8 +65,13 @@ def clustering_label_propagation():
 def clustering_asyn_lpa():
     filename2 = session['filename2']
     clusterType = 'asyn_lpa'
-    
-    return render_template('clusters/clustering_asyn_lpa.html', session_id=filename2, clusterType=clusterType, method_name='Asyn Lpa',
+    networkGraphs = get_networkGraph(filename2)
+    if networkGraphs.is_spatial():
+        is_spatial = 'yes'
+    else:
+        is_spatial = 'no'
+
+    return render_template('clusters/clustering_asyn_lpa.html', session_id=filename2, clusterType=clusterType, method_name='Asyn Lpa', is_spatial=is_spatial,
     #tooltips starts from here
     description=description['asyn_lpa'], tooltip_dynamic=tooltips['dynamic'],
     tooltip_layout=tooltips['layout_dropdown'], tooltip_number_of_clusters=tooltips['number_of_clusters'])
@@ -60,8 +80,13 @@ def clustering_asyn_lpa():
 def clustering_k_clique():
     filename2 = session['filename2']
     clusterType = 'k_clique'
-    
-    return render_template('clusters/clustering_k_clique.html', session_id=filename2, clusterType=clusterType, method_name='K Clique',
+    networkGraphs = get_networkGraph(filename2)
+    if networkGraphs.is_spatial():
+        is_spatial = 'yes'
+    else:
+        is_spatial = 'no'
+
+    return render_template('clusters/clustering_k_clique.html', session_id=filename2, clusterType=clusterType, method_name='K Clique', is_spatial=is_spatial,
     #tooltips starts from here
     description=description['k_clique'], tooltip_dynamic=tooltips['dynamic'],
     tooltip_layout=tooltips['layout_dropdown'], tooltip_number_of_clusters=tooltips['number_of_clusters'])
@@ -70,8 +95,13 @@ def clustering_k_clique():
 def clustering_spectral():
     filename2 = session['filename2']
     clusterType = 'spectral'
-    
-    return render_template('clusters/clustering_spectral.html', session_id=filename2, clusterType=clusterType, method_name='Spectral',
+    networkGraphs = get_networkGraph(filename2)
+    if networkGraphs.is_spatial():
+        is_spatial = 'yes'
+    else:
+        is_spatial = 'no'
+
+    return render_template('clusters/clustering_spectral.html', session_id=filename2, clusterType=clusterType, method_name='Spectral', is_spatial=is_spatial,
     #tooltips starts from here
     description=description['spectral'], tooltip_dynamic=tooltips['dynamic'],
     tooltip_layout=tooltips['layout_dropdown'], tooltip_number_of_clusters=tooltips['number_of_clusters'])
@@ -80,8 +110,13 @@ def clustering_spectral():
 def clustering_kmeans():
     filename2 = session['filename2']
     clusterType = 'kmeans'
-    
-    return render_template('clusters/clustering_kmeans.html', session_id=filename2, clusterType=clusterType, method_name='KMeans',
+    networkGraphs = get_networkGraph(filename2)
+    if networkGraphs.is_spatial():
+        is_spatial = 'yes'
+    else:
+        is_spatial = 'no'
+
+    return render_template('clusters/clustering_kmeans.html', session_id=filename2, clusterType=clusterType, method_name='KMeans', is_spatial=is_spatial,
     #tooltips starts from here
     description=description['kmeans'], tooltip_dynamic=tooltips['dynamic'],
     tooltip_layout=tooltips['layout_dropdown'], tooltip_number_of_clusters=tooltips['number_of_clusters'])
@@ -90,8 +125,13 @@ def clustering_kmeans():
 def clustering_agglomerative():
     filename2 = session['filename2']
     clusterType = 'agglomerative'
-    
-    return render_template('clusters/clustering_agglomerative.html', session_id=filename2, clusterType=clusterType, method_name='Agglomerative',
+    networkGraphs = get_networkGraph(filename2)
+    if networkGraphs.is_spatial():
+        is_spatial = 'yes'
+    else:
+        is_spatial = 'no'
+
+    return render_template('clusters/clustering_agglomerative.html', session_id=filename2, clusterType=clusterType, method_name='Agglomerative', is_spatial=is_spatial,
     #tooltips starts from here
     description=description['agglomerative'], tooltip_dynamic=tooltips['dynamic'],
     tooltip_layout=tooltips['layout_dropdown'], tooltip_number_of_clusters=tooltips['number_of_clusters'])
@@ -101,8 +141,13 @@ def clustering_agglomerative():
 def clustering_dbscan():
     filename2 = session['filename2']
     clusterType = 'dbscan'
-    
-    return render_template('clusters/clustering_dbscan.html', session_id=filename2, clusterType=clusterType, method_name='Dbscan',
+    networkGraphs = get_networkGraph(filename2)
+    if networkGraphs.is_spatial():
+        is_spatial = 'yes'
+    else:
+        is_spatial = 'no'
+
+    return render_template('clusters/clustering_dbscan.html', session_id=filename2, clusterType=clusterType, method_name='Dbscan', is_spatial=is_spatial,
     #tooltips starts from here
     description=description['dbscan'], tooltip_dynamic=tooltips['dynamic'],
     tooltip_layout=tooltips['layout_dropdown'], tooltip_number_of_clusters=tooltips['number_of_clusters'])

@@ -42,7 +42,9 @@
 
                     <div class="dropdown" style="margin:5px">
                         <select id="dropdown-menu" class="mx-auto" name="layout">
-                            <option value="map" {% if layout=='map' %}selected{% endif %}>Map</option>
+                            {% if is_spatial=='yes' %}
+                            <option value="map">Map</option>
+                            {% endif %}
                             <option value="sfdp" {% if layout=='sfdp' %}selected{% endif %}>Sfdp
                             </option>
                             <option value="twopi" {% if layout=='twopi' %}selected{% endif %}>Twopi
@@ -68,13 +70,14 @@
     <hr>
 
     <div class="card card-body">
-        <h3 class="styledh3">Clustering Information</h3>
+        <h3 style="margin-top: 10px;">Clustering Information</h3>
+        <hr>
         <table id="example-clusters" class="display" style="width:100%">
         </table>
     </div>
     <div class="row mt-3">
         <div class="col-md-12">
-            <div class="text-right">
+            <div class="text-right" style="margin-bottom: 20px">
                 <button id="download_csv" type="button" class="btn btn-outline-secondary">Download CSV</button>
             </div>
         </div>

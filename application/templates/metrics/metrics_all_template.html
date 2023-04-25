@@ -105,8 +105,9 @@
 
                                     <div class="dropdown">
                                         <select id="dropdown-menu" class="mx-auto" name="layout">
-                                            <option value="map" {% if layout=='map' %}selected{% endif %}>Map
-                                            </option>
+                                            {% if is_spatial=='yes' %}
+                                            <option value="map">Map</option>
+                                            {% endif %}
                                             <option value="sfdp" {% if layout=='sfdp' %}selected{% endif %}>Sfdp
                                             </option>
                                             <option value="twopi" {% if layout=='twopi' %}selected{% endif %}>Twopi
@@ -299,12 +300,14 @@
     <hr>
 
     <div class="card card-body">
+        <h3 style="margin-top: 10px;">Metrics Information</h3>
+        <hr>
         <table id="example-metrics-all" class="display" style="width:100%">
         </table>
     </div>
     <div class="row mt-3" style="margin-bottom: 25px;">
         <div class="col-md-12">
-            <div class="text-right">
+            <div class="text-right" style="margin-bottom: 20px">
                 <button id="download_csv" type="button5" class="btn btn-outline-secondary">Download CSV</button>
             </div>
         </div>
@@ -351,6 +354,54 @@
         const boxplotTab = document.getElementById('nav-boxplot-tab');
         const violinplotTab = document.getElementById('nav-violinplot-tab');
         
+        multiToggle.addEventListener('change', () => {
+            multiToggle2.checked = multiToggle.checked;
+            multiToggle3.checked = multiToggle.checked;
+            multiToggle4.checked = multiToggle.checked;
+        });
+
+        multiToggle2.addEventListener('change', () => {
+            multiToggle.checked = multiToggle2.checked;
+            multiToggle3.checked = multiToggle2.checked;
+            multiToggle4.checked = multiToggle2.checked;
+        });
+
+        multiToggle3.addEventListener('change', () => {
+            multiToggle2.checked = multiToggle3.checked;
+            multiToggle.checked = multiToggle3.checked;
+            multiToggle4.checked = multiToggle3.checked;
+        });
+
+        multiToggle4.addEventListener('change', () => {
+            multiToggle2.checked = multiToggle4.checked;
+            multiToggle3.checked = multiToggle4.checked;
+            multiToggle.checked = multiToggle4.checked;
+        });
+
+        directedToggle.addEventListener('change', () => {
+            directedToggle2.checked = directedToggle.checked;
+            directedToggle3.checked = directedToggle.checked;
+            directedToggle4.checked = directedToggle.checked;
+        });
+
+        directedToggle2.addEventListener('change', () => {
+            directedToggle.checked = directedToggle2.checked;
+            directedToggle3.checked = directedToggle2.checked;
+            directedToggle4.checked = directedToggle2.checked;
+        });
+
+        directedToggle3.addEventListener('change', () => {
+            directedToggle2.checked = directedToggle3.checked;
+            directedToggle.checked = directedToggle3.checked;
+            directedToggle4.checked = directedToggle3.checked;
+        });
+
+        directedToggle4.addEventListener('change', () => {
+            directedToggle2.checked = directedToggle4.checked;
+            directedToggle3.checked = directedToggle4.checked;
+            directedToggle.checked = directedToggle4.checked;
+        });
+
         const data = {
             'multiToggle': multiToggle.checked ? "True" : "False",
             'multiToggle2': multiToggle2.checked ? "True" : "False",
