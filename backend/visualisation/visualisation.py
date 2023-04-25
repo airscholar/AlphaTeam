@@ -22,7 +22,7 @@ def visualise_network(session_id, plot_type):
     elif plot_type == 'temporal':
         file_name = plot_temporal(G, layout=layout)
 
-    return jsonify({"message": "Success", "file": file_name})
+    return jsonify({"message": "Success", "filename": file_name})
 
 
 @visualisation_bp.route('<session_id>/heatmap')
@@ -31,7 +31,7 @@ def visualise_heatmap(session_id):
 
     file_name = plot_heatmap(G)
 
-    return jsonify({"message": "Success", "file": file_name})
+    return jsonify({"message": "Success", "filename": file_name})
 
 
 @visualisation_bp.route('/<session_id>/dataset')

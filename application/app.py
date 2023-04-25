@@ -13,7 +13,7 @@ from application.routes.deepLearning.cluster_embedding_routes import cluster_emb
 from application.routes.deepLearning.embedding_routes import embedding_routes
 from application.routes.hotspot.hotspot_routes import hotspot_routes
 from application.routes.metrics.global_metrics_routes import global_metrics_routes
-from application.dictionary.information import *
+from application.routes.visualisation.visualisation_routes import visualisation_routes
 
 sys.path.insert(1, '../')
 from src.NetworkGraphs import *
@@ -39,6 +39,7 @@ app.register_blueprint(cluster_embedding_routes)
 app.register_blueprint(embedding_routes)
 app.register_blueprint(hotspot_routes)
 app.register_blueprint(global_metrics_routes)
+app.register_blueprint(visualisation_routes)
 
 BASE_URL = 'http://localhost:8000/api/v1'
 
@@ -130,62 +131,6 @@ def home():
 
     # Pass the data to the HTML template
     return render_template('home.html', session_id=filename2)
-
-# -------------------------------------------VISUALISATION-----------------------------------
-
-@app.route('/visualisation', methods=['GET', 'POST'], endpoint='visualisation')
-def visualisation():
-    filename2 = session['filename2']
-    networkGraphs = get_networkGraph(filename2)
-    dynamic_toggle = False
-    tab = 'tab1'
-    graph_path1 = '../static/' + 'no_graph.html'
-    graph_path2 = '../static/' + 'no_graph.html'
-
-    show_temporal = str(networkGraphs.is_temporal()).lower()
-
-    if networkGraphs.is_spatial():
-        layout = 'map'
-        layout2 = 'map'
-    else:
-        layout = 'sfdp'
-        layout2 = 'sfdp'
-
-    if request.method == 'POST':
-        dynamic_toggle = bool(request.form.get('dynamic_toggle', False))
-        layout = request.form.get('layout')
-        layout2 = request.form.get('layout2')
-
-    if not networkGraphs.is_spatial() and layout == 'map':
-        graph_path1 = '../static/' + 'no_graph.html'
-    else:
-        json_data = requests.get(
-            f'{BASE_URL}/visualisation/{filename2}/plot_network/spatial?dynamic={dynamic_toggle}&layout={layout}').json()
-        graph_name1 = json_data['file']
-
-        graph_path1 = '../static/uploads/' + filename2 + '/' + graph_name1 \
-            if graph_name1 != 'no_graph.html' else '../static/' + graph_name1
-
-    if networkGraphs.is_temporal() and layout2 is not None:
-        json_data = requests.get(
-            f'{BASE_URL}/visualisation/{filename2}/plot_network/temporal?layout={layout2}').json()
-        graph_name2 = json_data['file']
-
-        graph_path2 = '../static/uploads/' + filename2 + '/' + graph_name2 \
-            if graph_name2 != 'no_graph.html' else '../static/' + graph_name2
-
-    json_data = requests.get(f'{BASE_URL}/visualisation/{filename2}/heatmap').json()
-    heatmap = json_data['file']
-    heatmap = '../static/uploads/' + filename2 + '/' + heatmap
-
-    return render_template('visualisation.html', tab=tab, show_temporal=show_temporal,
-                           dynamic_toggle=dynamic_toggle, layout=layout, graph1=graph_path1,
-                           layout2=layout2, graph2=graph_path2, graph3=heatmap,
-                           #tooltips adding from here
-                            tooltip_network_tab=tooltips['network_tab'], tooltip_temporal_tab=tooltips['temporal_tab'], tooltip_heatmap_tab=tooltips['heatmap_tab'],
-                            tooltip_dynamic=tooltips['dynamic'], tooltip_layout_dropdown=tooltips['layout_dropdown'], description=description['visualisation'])
-
-
 
 # -------------------------------------------MAIN--------------------------------------------
 if __name__ == '__main__':
