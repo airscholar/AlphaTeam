@@ -1,0 +1,539 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="styledh3">{{method_name | safe}}</h3>
+            <p>{{description | safe}}</p>
+            <hr> <!-- Add a horizontal rule for visual separation -->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="container mt-3">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <!-- Layout Tab UL -->
+                    <button class="nav-link active" id="nav-layout-tab"
+                        data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab" aria-controls="nav-layout"
+                        aria-selected="true">Layout <span style="display: inline-block; margin-left: 5px;"><img
+                                src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                data-placement="bottom" title="{{tooltip_layout_tab}}"></span></button>
+                    <!-- Histogram Tab UL -->
+                    <button class="nav-link" id="nav-histogram-tab"
+                        data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab"
+                        aria-controls="nav-histogram" aria-selected="true">Histogram <span
+                            style="display: inline-block; margin-left: 5px;"><img
+                                src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                data-placement="bottom" title="{{tooltip_histogram_tab}}"></span></button>
+                    <!-- Boxplot Tab UL -->
+                    <button class="nav-link" id="nav-boxplot-tab"
+                        data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab" aria-controls="nav-boxplot"
+                        aria-selected="true">Boxplot <span style="display: inline-block; margin-left: 5px;"><img
+                                src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                data-placement="bottom" title="{{tooltip_boxplot_tab}}"></span></button>
+                    <!-- ViolinPlot Tab UL -->
+                    <button class="nav-link" id="nav-violinplot-tab"
+                        data-bs-toggle="tab" data-bs-target="#tab4" type="button" role="tab"
+                        aria-controls="nav-violinplot" aria-selected="true">ViolinPlot <span
+                            style="display: inline-block; margin-left: 5px;"><img
+                                src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                data-placement="bottom" title="{{tooltip_violinplot_tab}}"></span></button>
+                </div>
+            </nav>
+
+            <div class="tab-content" style="background-color: white; padding-bottom: 25px;">
+                <div id="tab1" class="container tab-pane active">
+                    <br />
+                    <div class="row">
+                        <div class="col-10">
+                            <div class="card card-body" style="align-items: center;">
+                                <iframe id="graph1" src="{{ graph1 }}" width="100%" height="500"></iframe>
+                                <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="card card-body" style="align-items: center;">
+                                <form method="post">
+
+                                    <div
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                                        <span>Multi</span>
+                                        <img src="{{ url_for('static', filename='app_images/question.png') }}"
+                                            class="mx-auto" alt="Image"
+                                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                            data-placement="bottom" title="{{tooltip_multi}}">
+                                    </div>
+
+                                    <div class="toggle-container"
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
+                                        <div class="toggle-btn">
+                                            <input type="checkbox" id="multi-toggle" name="multi_toggle" {% if
+                                                multi_toggle %}checked{% endif %}>
+                                            <label for="multi-toggle"></label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Dynamic toggle -->
+                                    <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                                        <span>Dynamic</span>
+                                        <img src="{{ url_for('static', filename='app_images/question.png') }}"
+                                            class="mx-auto" alt="Image"
+                                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                            data-placement="bottom" title="{{tooltip_dynamic}}">
+                                    </div>
+
+                                    <div class="toggle-container"
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
+                                        <div class="toggle-btn">
+                                            <input type="checkbox" id="dynamic-toggle" name="dynamic_toggle" {% if
+                                                dynamic_toggle %}checked{% endif %}>
+                                            <label for="dynamic-toggle"></label>
+                                        </div>
+
+                                    </div>
+
+                                    <div
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                                        <span style="display: inline-block; margin-right: 5px;">Directed</span>
+                                        <img src="{{ url_for('static', filename='app_images/question.png') }}"
+                                            class="mx-auto" alt="Image"
+                                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                            data-placement="bottom" title="{{tooltip_directed}}">
+                                    </div>
+
+                                    <div class="toggle-container"
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
+                                        <div class="toggle-btn">
+                                            <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if
+                                                directed_toggle %}checked{% endif %}>
+                                            <label for="directed-toggle"></label>
+                                        </div>
+                                    </div>
+                                    <div
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                                        <span>Layout</span>
+                                        <img src="{{ url_for('static', filename='app_images/question.png') }}"
+                                            class="mx-auto" alt="Image"
+                                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                            data-placement="bottom" title="{{tooltip_layout}}">
+                                    </div>
+
+
+                                    <div class="dropdown">
+                                        <select id="dropdown-menu" class="mx-auto" name="layout">
+                                            {% if is_spatial=='yes' %}
+                                            <option value="map">Map</option>
+                                            {% endif %}
+                                            <option value="sfdp" {% if layout=='sfdp' %}selected{% endif %}>Sfdp
+                                            </option>
+                                            <option value="twopi" {% if layout=='twopi' %}selected{% endif %}>Twopi
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <button id="button" type="button" class="btn btn-primary" style="width: 100%;">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab2" class="container tab-pane fade">
+                    <br />
+                    <div class="row">
+                        <div class="col-10">
+                            <div class="card card-body" style="align-items: center;">
+                                <iframe id="graph2" src="{{ graph2 }}" width="100%" height="500"></iframe>
+                                <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="card card-body" style="align-items: center;">
+
+                                <form method="post">
+
+                                    <div
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                                        <span>Multi</span>
+                                        <img src="{{ url_for('static', filename='app_images/question.png') }}"
+                                            class="mx-auto" alt="Image"
+                                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                            data-placement="bottom" title="{{tooltip_multi}}">
+                                    </div>
+
+                                    <div class="toggle-container"
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
+                                        <div class="toggle-btn">
+                                            <input type="checkbox" id="multi-toggle2" name="multi_toggle2" {% if
+                                                multi_toggle2 %}checked{% endif %}>
+                                            <label for="multi-toggle2"></label>
+                                        </div>
+                                    </div>
+
+
+                                    <div
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                                        <span style="display: inline-block; margin-right: 5px;">Directed</span>
+                                        <img src="{{ url_for('static', filename='app_images/question.png') }}"
+                                            class="mx-auto" alt="Image"
+                                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                            data-placement="bottom" title="{{tooltip_directed}}">
+                                    </div>
+
+                                    <div class="toggle-container"
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
+                                        <div class="toggle-btn">
+                                            <input type="checkbox" id="directed-toggle2" name="directed_toggle2" {% if
+                                                directed_toggle2 %}checked{% endif %}>
+                                            <label for="directed-toggle2"></label>
+                                        </div>
+                                    </div>
+
+                                    <button id="button2" type="button" class="btn btn-primary"
+                                        style="width: 100%; margin-top: 10px;">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab3" class="container tab-pane fade">
+                    <br />
+                    <div class="row">
+                        <div class="col-10">
+                            <div class="card card-body" style="align-items: center;">
+                                <iframe id="graph3" src="{{ graph3 }}" width="100%" height="500"></iframe>
+                                <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="card card-body" style="align-items: center;">
+
+                                <form method="post">
+
+                                    <div
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                                        <span>Multi</span>
+                                        <img src="{{ url_for('static', filename='app_images/question.png') }}"
+                                            class="mx-auto" alt="Image"
+                                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                            data-placement="bottom" title="{{tooltip_multi}}">
+                                    </div>
+
+                                    <div class="toggle-container"
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
+                                        <div class="toggle-btn">
+                                            <input type="checkbox" id="multi-toggle3" name="multi_toggle3" {% if
+                                                multi_toggle3 %}checked{% endif %}>
+                                            <label for="multi-toggle3"></label>
+                                        </div>
+                                    </div>
+
+
+                                    <div
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                                        <span style="display: inline-block; margin-right: 5px;">Directed</span>
+                                        <img src="{{ url_for('static', filename='app_images/question.png') }}"
+                                            class="mx-auto" alt="Image"
+                                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                            data-placement="bottom" title="{{tooltip_directed}}">
+                                    </div>
+
+                                    <div class="toggle-container"
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
+                                        <div class="toggle-btn">
+                                            <input type="checkbox" id="directed-toggle3" name="directed_toggle3" {% if
+                                                directed_toggle3 %}checked{% endif %}>
+                                            <label for="directed-toggle3"></label>
+                                        </div>
+                                    </div>
+
+                                    <button id="button3" type="button" class="btn btn-primary"
+                                        style="width: 100%; margin-top: 10px;">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab4" class="container tab-pane fade">
+                    <br />
+                    <div class="row">
+                        <div class="col-10">
+                            <div class="card card-body" style="align-items: center;">
+                                <iframe id="graph4" src="{{ graph4 }}" width="100%" height="500"></iframe>
+                                <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="card card-body" style="align-items: center;">
+
+                                <form method="post">
+
+                                    <div
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                                        <span>Multi</span>
+                                        <img src="{{ url_for('static', filename='app_images/question.png') }}"
+                                            class="mx-auto" alt="Image"
+                                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                            data-placement="bottom" title="{{tooltip_multi}}">
+                                    </div>
+
+                                    <div class="toggle-container"
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
+                                        <div class="toggle-btn">
+                                            <input type="checkbox" id="multi-toggle4" name="multi_toggle4" {% if
+                                                multi_toggle4 %}checked{% endif %}>
+                                            <label for="multi-toggle4"></label>
+                                        </div>
+                                    </div>
+
+
+                                    <div
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                                        <span style="display: inline-block; margin-right: 5px;">Directed</span>
+                                        <img src="{{ url_for('static', filename='app_images/question.png') }}"
+                                            class="mx-auto" alt="Image"
+                                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                            data-placement="bottom" title="{{tooltip_directed}}">
+                                    </div>
+
+                                    <div class="toggle-container"
+                                        style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
+                                        <div class="toggle-btn">
+                                            <input type="checkbox" id="directed-toggle4" name="directed_toggle4" {% if
+                                                directed_toggle4 %}checked{% endif %}>
+                                            <label for="directed-toggle4"></label>
+                                        </div>
+                                    </div>
+
+                                    <button id="button4" type="button" class="btn btn-primary"
+                                        style="width: 100%; margin-top: 10px;">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <div class="card card-body">
+        <h3 style="margin-top: 10px;">Metrics Information</h3>
+        <hr>
+        <table id="example-metrics-single" class="display" style="width:100%">
+        </table>
+    </div>
+    <div class="row mt-3" style="margin-bottom: 25px;">
+        <div class="col-md-12">
+            <div class="text-right" style="margin-bottom: 20px">
+                <button id="download_csv" type="button5" class="btn btn-outline-secondary">Download CSV</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"></script>
+<script type="text/javascript" src="../static/js/metrics/metrics.js"></script>
+<script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example-metrics').DataTable({
+            "order": [[2, "asc"]],
+        });
+
+        const submitButton1 = document.querySelector('#button');
+        const submitButton2 = document.querySelector('#button2');
+        const submitButton3 = document.querySelector('#button3');
+        const submitButton4 = document.querySelector('#button4');
+
+        const multiToggle = document.getElementById('multi-toggle');
+        const multiToggle2 = document.getElementById('multi-toggle2');
+        const multiToggle3 = document.getElementById('multi-toggle3');
+        const multiToggle4 = document.getElementById('multi-toggle4');
+
+        const directedToggle = document.getElementById('directed-toggle');
+        const directedToggle2 = document.getElementById('directed-toggle2');
+        const directedToggle3 = document.getElementById('directed-toggle3');
+        const directedToggle4 = document.getElementById('directed-toggle4');
+        
+        const dynamicToggle = document.getElementById('dynamic-toggle');
+
+        const layout = document.getElementById('dropdown-menu');
+
+        const layoutsTab = document.getElementById('nav-layout-tab');
+        const histogramTab = document.getElementById('nav-histogram-tab');
+        const boxplotTab = document.getElementById('nav-boxplot-tab');
+        const violinplotTab = document.getElementById('nav-violinplot-tab');
+        
+        multiToggle.addEventListener('change', () => {
+            multiToggle2.checked = multiToggle.checked;
+            multiToggle3.checked = multiToggle.checked;
+            multiToggle4.checked = multiToggle.checked;
+        });
+
+        multiToggle2.addEventListener('change', () => {
+            multiToggle.checked = multiToggle2.checked;
+            multiToggle3.checked = multiToggle2.checked;
+            multiToggle4.checked = multiToggle2.checked;
+        });
+
+        multiToggle3.addEventListener('change', () => {
+            multiToggle2.checked = multiToggle3.checked;
+            multiToggle.checked = multiToggle3.checked;
+            multiToggle4.checked = multiToggle3.checked;
+        });
+
+        multiToggle4.addEventListener('change', () => {
+            multiToggle2.checked = multiToggle4.checked;
+            multiToggle3.checked = multiToggle4.checked;
+            multiToggle.checked = multiToggle4.checked;
+        });
+
+        directedToggle.addEventListener('change', () => {
+            directedToggle2.checked = directedToggle.checked;
+            directedToggle3.checked = directedToggle.checked;
+            directedToggle4.checked = directedToggle.checked;
+        });
+
+        directedToggle2.addEventListener('change', () => {
+            directedToggle.checked = directedToggle2.checked;
+            directedToggle3.checked = directedToggle2.checked;
+            directedToggle4.checked = directedToggle2.checked;
+        });
+
+        directedToggle3.addEventListener('change', () => {
+            directedToggle2.checked = directedToggle3.checked;
+            directedToggle.checked = directedToggle3.checked;
+            directedToggle4.checked = directedToggle3.checked;
+        });
+
+        directedToggle4.addEventListener('change', () => {
+            directedToggle2.checked = directedToggle4.checked;
+            directedToggle3.checked = directedToggle4.checked;
+            directedToggle.checked = directedToggle4.checked;
+        });
+
+        const data = {
+            'multiToggle': multiToggle.checked ? "True" : "False",
+            'multiToggle2': multiToggle2.checked ? "True" : "False",
+            'multiToggle3': multiToggle3.checked ? "True" : "False",
+            'multiToggle4': multiToggle4.checked ? "True" : "False",
+            'directedToggle': directedToggle.checked ? "True" : "False",
+            'directedToggle2': directedToggle2.checked ? "True" : "False",
+            'directedToggle3': directedToggle3.checked ? "True" : "False",
+            'directedToggle4': directedToggle4.checked ? "True" : "False",
+            'dynamicToggle': dynamicToggle.checked ? "True" : "False",
+            'layout': layout.value,
+            'session_id': '{{ session_id }}',
+            'metricsType': '{{ metricsType }}'
+        };
+
+        metricsSingleVisualisation(data, "layout", "graph1")
+
+        function handleClick(plotType, graphId, e) {
+            e.preventDefault();
+            const data = {
+                'multiToggle': multiToggle.checked ? "True" : "False",
+                'multiToggle2': multiToggle2.checked ? "True" : "False",
+                'multiToggle3': multiToggle3.checked ? "True" : "False",
+                'multiToggle4': multiToggle4.checked ? "True" : "False",
+                'directedToggle': directedToggle.checked ? "True" : "False",
+                'directedToggle2': directedToggle2.checked ? "True" : "False",
+                'directedToggle3': directedToggle3.checked ? "True" : "False",
+                'directedToggle4': directedToggle4.checked ? "True" : "False",
+                'dynamicToggle': dynamicToggle.checked ? "True" : "False",
+                'layout': layout.value,
+                'session_id': '{{ session_id }}',
+                'metricsType': '{{ metricsType }}'
+            };
+            metricsSingleVisualisation(data, plotType, graphId)
+        }
+
+        $(submitButton1).on('click', function () {
+            const data = {
+                'multiToggle': multiToggle.checked ? "True" : "False",
+                'multiToggle2': multiToggle2.checked ? "True" : "False",
+                'multiToggle3': multiToggle3.checked ? "True" : "False",
+                'multiToggle4': multiToggle4.checked ? "True" : "False",
+                'directedToggle': directedToggle.checked ? "True" : "False",
+                'directedToggle2': directedToggle2.checked ? "True" : "False",
+                'directedToggle3': directedToggle3.checked ? "True" : "False",
+                'directedToggle4': directedToggle4.checked ? "True" : "False",
+                'dynamicToggle': dynamicToggle.checked ? "True" : "False",
+                'layout': layout.value,
+                'session_id': '{{ session_id }}',
+                'metricsType': '{{ metricsType }}'
+            };
+            metricsSingleVisualisation(data, "layout", "graph1")
+        });
+
+        $(submitButton2).on('click', function () {
+            const data = {
+                'multiToggle': multiToggle.checked ? "True" : "False",
+                'multiToggle2': multiToggle2.checked ? "True" : "False",
+                'multiToggle3': multiToggle3.checked ? "True" : "False",
+                'multiToggle4': multiToggle4.checked ? "True" : "False",
+                'directedToggle': directedToggle.checked ? "True" : "False",
+                'directedToggle2': directedToggle2.checked ? "True" : "False",
+                'directedToggle3': directedToggle3.checked ? "True" : "False",
+                'directedToggle4': directedToggle4.checked ? "True" : "False",
+                'dynamicToggle': dynamicToggle.checked ? "True" : "False",
+                'layout': layout.value,
+                'session_id': '{{ session_id }}',
+                'metricsType': '{{ metricsType }}'
+            };
+            metricsSingleVisualisation(data, "histogram", "graph2")
+        });
+
+        $(submitButton3).on('click', function () {
+            const data = {
+                'multiToggle': multiToggle.checked ? "True" : "False",
+                'multiToggle2': multiToggle2.checked ? "True" : "False",
+                'multiToggle3': multiToggle3.checked ? "True" : "False",
+                'multiToggle4': multiToggle4.checked ? "True" : "False",
+                'directedToggle': directedToggle.checked ? "True" : "False",
+                'directedToggle2': directedToggle2.checked ? "True" : "False",
+                'directedToggle3': directedToggle3.checked ? "True" : "False",
+                'directedToggle4': directedToggle4.checked ? "True" : "False",
+                'dynamicToggle': dynamicToggle.checked ? "True" : "False",
+                'layout': layout.value,
+                'session_id': '{{ session_id }}',
+                'metricsType': '{{ metricsType }}'
+            };
+            metricsSingleVisualisation(data, "boxplot", "graph3")
+        });
+
+        $(submitButton4).on('click', function () {
+            const data = {
+                'multiToggle': multiToggle.checked ? "True" : "False",
+                'multiToggle2': multiToggle2.checked ? "True" : "False",
+                'multiToggle3': multiToggle3.checked ? "True" : "False",
+                'multiToggle4': multiToggle4.checked ? "True" : "False",
+                'directedToggle': directedToggle.checked ? "True" : "False",
+                'directedToggle2': directedToggle2.checked ? "True" : "False",
+                'directedToggle3': directedToggle3.checked ? "True" : "False",
+                'directedToggle4': directedToggle4.checked ? "True" : "False",
+                'dynamicToggle': dynamicToggle.checked ? "True" : "False",
+                'layout': layout.value,
+                'session_id': '{{ session_id }}',
+                'metricsType': '{{ metricsType }}'
+            };
+            metricsSingleVisualisation(data, "violin", "graph4")
+        });
+
+        $(layoutsTab).on('click', handleClick.bind(null, 'layout', 'graph1'));
+        $(histogramTab).on('click', handleClick.bind(null, 'histogram', 'graph2'));
+        $(boxplotTab).on('click', handleClick.bind(null, 'boxplot', 'graph3'));
+        $(violinplotTab).on('click', handleClick.bind(null, 'violin', 'graph4'));
+    });
+</script>

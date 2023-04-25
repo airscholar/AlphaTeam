@@ -25,4 +25,4 @@ def compute_clustering(session_id, clustering_alg):
 
     df_json = df.to_json(orient='split')
 
-    return jsonify({"message": "Success", "data": df_json, "file": filename})
+    return jsonify({"message": "Success", "data": df_json, "filename": filename})
