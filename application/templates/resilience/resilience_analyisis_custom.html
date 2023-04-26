@@ -6,6 +6,7 @@
     <div class="row">
         <div class="col-md-12">
             <h3 class="styledh3">Custom Resilience Analysis</h3>
+            <p>{{description | safe}}</p>
             <hr> <!-- Add a horizontal rule for visual separation -->
         </div>
     </div>
@@ -39,7 +40,10 @@
 
                                                 <div class="row">
                                                     <label for="list_of_nodes_label" style="margin-top: 5px;">List of
-                                                        Nodes:</label>
+                                                        Nodes:<span style="display: inline-block; margin-left: 5px;"><img
+                                                            src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                                            alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                                            data-placement="bottom" title="{{tooltip_list_of_nodes}}"></span></label>
                                                     <textarea rows="16" cols="50" name="list_of_nodes" id="list_of_nodes"
                                                         form="resilienceCustomForm"
                                                         style="margin-top: 5px; margin-bottom: 5px;"
@@ -73,23 +77,31 @@
                 <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
                     data-bs-parent="#accordionFlushExample1">
                     <div>
-                        <div class="row justify-content-center align-items-center">
-                            <div class="col-auto"><label style="margin-top: 5px;">Multi:</label>
-                                <div class="toggle-btn">
-                                    <input type="checkbox" id="multi-toggle" name="multi_toggle" {% if multi_toggle
-                                        %}checked{% endif %}>
-                                    <label for="multi-toggle"></label>
-                                </div>
+                        <div class="row justify-content-center align-items-center" style="margin-top: 10px;">
+                            <div class="col-auto"><label style="margin-top: 5px;">Multi:<span style="display: inline-block; margin-left: 5px;"><img
+                                src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                data-placement="bottom" title="{{tooltip_multi}}"></span></label>
                             </div>
-                            <div class="col-auto"><label style="margin-top: 5px;">Directed:</label>
-                                <div class="toggle-btn">
-                                    <input type="checkbox" id="directed-toggle" name="directed_toggle" {% if
-                                        directed_toggle %}checked{% endif %}>
-                                    <label for="directed-toggle"></label>
-                                </div>
+                            <div class="toggle-btn" style="width:60px">
+                                <input type="checkbox" id="multi-toggle" name="multi_toggle">
+                                <label for="multi-toggle"></label>
+                            </div>
+                            <div class="col-auto"><label style="margin-top: 5px;">Directed:<span style="display: inline-block; margin-left: 5px;"><img
+                                src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                data-placement="bottom" title="{{tooltip_directed}}"></span></label>
+            
+                            </div>
+                            <div class="toggle-btn" style="width:60px">
+                                <input type="checkbox" id="directed-toggle" name="directed_toggle">
+                                <label for="directed-toggle"></label>
                             </div>
                             <div class="col-auto">
-                                <label for="layout_type" style="margin-top: 5px;">Layout:</label>
+                                <label for="layout_type" style="margin-top: 5px;">Layout:<span style="display: inline-block; margin-left: 5px;"><img
+                                    src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                    alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                    data-placement="bottom" title="{{tooltip_layout_dropdown}}"></span></label>
                             </div>
                             <div class="col-auto">
                                 <div class="dropdown" style="margin:5px">
@@ -102,12 +114,14 @@
                             </div>
                             <div class="col-auto">
                                 <label for="number_of_clusters" style="margin-top: 5px;">Number of
-                                    Clusters:</label>
+                                    Clusters:<span style="display: inline-block; margin-left: 5px;"><img
+                                        src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                        alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                        data-placement="bottom" title="{{tooltip_number_of_clusters}}"></span></label>
                             </div>
                             <div class="col-auto">
                                 <input type="number" id="number_of_clusters" name="number_of_clusters"
-                                    class="form-control" min="1" step="1" placeholder="None" {% if number_of_clusters is
-                                    not none %}value="{{ number_of_clusters }}" {% endif %}>
+                                    class="form-control" min="1" step="1" placeholder="None" />
                             </div>
                         </div>
                     </div>
@@ -125,7 +139,7 @@
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
-<script src="{{ url_for('static', filename='js/resilience_custom.js') }}"></script>
+<script src="{{ url_for('static', filename='js/resilience/resilience_custom.js') }}"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {

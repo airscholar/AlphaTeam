@@ -6,6 +6,7 @@
     <div class="row">
         <div class="col-md-12">
             <h3 class="styledh3">Malicious Resilience Analysis</h3>
+            <p>{{description | safe}}</p>
             <hr> <!-- Add a horizontal rule for visual separation -->
         </div>
     </div>
@@ -28,6 +29,10 @@
                             <div class="card-body">
                                 <form method="post" class="mx-auto" style="margin: 25px;" id="resilienceTemplateForm">
                                     <label for="type_of_attack" style="margin-top: 5px;">Type of Attack:</label>
+                                    <img src="{{ url_for('static', filename='app_images/question.png') }}" alt="Image"
+                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                            data-placement="bottom" title="{{ tooltip_type_of_attack }}">
+                            
                                     <div class="dropdown" style="margin:5px">
                                         <select id="type_of_attack" class="mx-auto" name="attack_type">
                                             {% for attack in attack_types %}
@@ -41,12 +46,18 @@
                                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                                     <button class="nav-link active" id="nav-node-tab"
                                                         data-bs-toggle="tab" data-bs-target="#nav-node" type="button"
-                                                        role="tab" aria-controls="nav-node" aria-selected="true">Node
+                                                        role="tab" aria-controls="nav-node" aria-selected="true">Node <span style="display: inline-block; margin-left: 5px;"><img
+                                                            src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                                            alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                                            data-placement="bottom" title="{{tooltip_node_tab}}"></span>
                                                     </button>
                                                     <button class="nav-link" id="nav-threshold-tab" data-bs-toggle="tab"
                                                         data-bs-target="#nav-threshold" type="button" role="tab"
                                                         aria-controls="nav-threshold" aria-selected="false">
-                                                        Threshold
+                                                        Threshold <span style="display: inline-block; margin-left: 5px;"><img
+                                                            src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                                            alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                                            data-placement="bottom" title="{{tooltip_threshold_tab}}"></span>
                                                     </button>
                                                 </div>
                                             </nav>
@@ -120,21 +131,31 @@
                 <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
                      data-bs-parent="#accordionFlushExample1">
                     <div>
-                        <div class="row justify-content-center align-items-center">
-                            <div class="col-auto"><label style="margin-top: 5px;">Multi:</label>
-                                <div class="toggle-btn">
-                                    <input type="checkbox" id="multi-toggle" name="multi_toggle">
-                                    <label for="multi-toggle"></label>
-                                </div>
+                        <div class="row justify-content-center align-items-center" style="margin-top: 10px;">
+                            <div class="col-auto"><label style="margin-top: 5px;">Multi:<span style="display: inline-block; margin-left: 5px;"><img
+                                src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                data-placement="bottom" title="{{tooltip_multi}}"></span></label>
                             </div>
-                            <div class="col-auto"><label style="margin-top: 5px;">Directed:</label>
-                                <div class="toggle-btn">
-                                    <input type="checkbox" id="directed-toggle" name="directed_toggle">
-                                    <label for="directed-toggle"></label>
-                                </div>
+                            <div class="toggle-btn" style="width:60px">
+                                <input type="checkbox" id="multi-toggle" name="multi_toggle">
+                                <label for="multi-toggle"></label>
+                            </div>
+                            <div class="col-auto"><label style="margin-top: 5px;">Directed:<span style="display: inline-block; margin-left: 5px;"><img
+                                src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                data-placement="bottom" title="{{tooltip_directed}}"></span></label>
+            
+                            </div>
+                            <div class="toggle-btn" style="width:60px">
+                                <input type="checkbox" id="directed-toggle" name="directed_toggle">
+                                <label for="directed-toggle"></label>
                             </div>
                             <div class="col-auto">
-                                <label for="layout_type" style="margin-top: 5px;">Layout:</label>
+                                <label for="layout_type" style="margin-top: 5px;">Layout:<span style="display: inline-block; margin-left: 5px;"><img
+                                    src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                    alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                    data-placement="bottom" title="{{tooltip_layout_dropdown}}"></span></label>
                             </div>
                             <div class="col-auto">
                                 <div class="dropdown" style="margin:5px">
@@ -147,7 +168,10 @@
                             </div>
                             <div class="col-auto">
                                 <label for="number_of_clusters" style="margin-top: 5px;">Number of
-                                    Clusters:</label>
+                                    Clusters:<span style="display: inline-block; margin-left: 5px;"><img
+                                        src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                        alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                        data-placement="bottom" title="{{tooltip_number_of_clusters}}"></span></label>
                             </div>
                             <div class="col-auto">
                                 <input type="number" id="number_of_clusters" name="number_of_clusters"
@@ -165,7 +189,7 @@
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
-<script src="{{ url_for('static', filename='js/resilience_malicious.js') }}"></script>
+<script src="{{ url_for('static', filename='js/resilience/resilience_malicious.js') }}"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {

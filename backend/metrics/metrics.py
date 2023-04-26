@@ -18,7 +18,7 @@ def compute_all_metrics(session_id, metric):
     dataframe, file_name = plot_all_metrics(G, metric, directed=directed_toggle, multi=multi_toggle, layout=layout)
     df_json = dataframe.to_json(orient='split')
 
-    return jsonify({"message": "Success", "data": df_json, "file": file_name})
+    return jsonify({"message": "Success", "data": df_json, "filename": file_name})
 
 @metrics_bp.route('<session_id>/<metric>')
 def compute_metrics(session_id, metric):
@@ -30,7 +30,7 @@ def compute_metrics(session_id, metric):
                                        layout=layout)
     df_json = dataframe.to_json(orient='split')
 
-    return jsonify({"message": "Success", "data": df_json, "file": file_name})
+    return jsonify({"message": "Success", "data": df_json, "filename": file_name})
 
 
 @metrics_bp.route('<session_id>/<metric>/<plot_type>')
@@ -51,6 +51,6 @@ def plot_graph(session_id, metric, plot_type):
 
     df_json = dataframe.to_json(orient='split')
 
-    data = {"message": "Success", "data": df_json, "file": file_name}
+    data = {"message": "Success", "data": df_json, "filename": file_name}
 
     return jsonify(data)

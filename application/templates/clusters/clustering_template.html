@@ -1,0 +1,122 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="styledh3">{{method_name}} Clustering</h3>
+            <p>{{description | safe}}</p>
+            <hr> <!-- Add a horizontal rule for visual separation -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-10">
+            <div class="card card-body" style="align-items: center;">
+                <iframe id="graph_cluster" src="{{ graph1 }}" width="100%" height="500"></iframe>
+                <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="card card-body" style="align-items: center;">
+
+                <form method="post">
+                    <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                        <span>Dynamic</span>
+                        <img src="{{ url_for('static', filename='app_images/question.png') }}" alt="Image"
+                             style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                             data-placement="bottom" title="{{tooltip_dynamic}}">
+                    </div>
+
+                    <div class="toggle-container"
+                         style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
+                        <div class="toggle-btn">
+                            <input type="checkbox" id="dynamic-toggle" name="dynamic_toggle" {% if dynamic_toggle
+                                   %}checked{% endif %}>
+                            <label for="dynamic-toggle"></label>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                        <span>Layout</span>
+                        <img src="{{ url_for('static', filename='app_images/question.png') }}" alt="Image"
+                             style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                             data-placement="bottom" title="{{tooltip_layout}}">
+                    </div>
+
+                    <div class="dropdown" style="margin:5px">
+                        <select id="dropdown-menu" class="mx-auto" name="layout">
+                            {% if is_spatial=='yes' %}
+                            <option value="map">Map</option>
+                            {% endif %}
+                            <option value="sfdp" {% if layout=='sfdp' %}selected{% endif %}>Sfdp
+                            </option>
+                            <option value="twopi" {% if layout=='twopi' %}selected{% endif %}>Twopi
+                            </option>
+                        </select>
+                    </div>
+                    <div {% if method_name == "Dbscan" %}style="display: none;"{% endif %}>
+                        <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                            <span>Number of Clusters</span>
+                            <img src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                 alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                 data-placement="bottom" title="{{tooltip_number_of_clusters}}">
+                        </div>
+    
+                        <input type="number" id="number_of_clusters" style="margin: 5px;" name="number_of_clusters"
+                               class="form-control" min="1" step="1" placeholder="None" value="0">
+                    </div>
+                    <button type="button" class="btn btn-primary" style="margin:5px; width: 100%;">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <div class="card card-body">
+        <h3 style="margin-top: 10px;">Clustering Information</h3>
+        <hr>
+        <table id="example-clusters" class="display" style="width:100%">
+        </table>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <div class="text-right" style="margin-bottom: 20px">
+                <button id="download_csv" type="button" class="btn btn-outline-secondary">Download CSV</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../static/js/clusters/clusters.js"></script>
+<script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        const submitButton = document.querySelector('button[type="button"]');
+        const dynamicToggle = document.getElementById('dynamic-toggle');
+        const numberOfClusters = document.getElementById('number_of_clusters');
+        const layout = document.getElementById('dropdown-menu');
+        
+        const data = {
+            'dynamicToggle': dynamicToggle.checked ? "True" : "False",
+            'numberOfClusters': numberOfClusters.value,
+            'layout': layout.value,
+            'session_id': '{{ session_id }}',
+            'clusterType': '{{ clusterType }}'
+        };
+
+        clusteringVisualisation(data)
+
+        $(submitButton).on('click', function () {
+            const dynamic_var = dynamicToggle.checked ? "True" : "False";
+            const data = {
+                'dynamicToggle': dynamic_var,
+                'numberOfClusters': numberOfClusters.value,
+                'layout': layout.value,
+                'session_id': '{{ session_id }}',
+                'clusterType': '{{ clusterType }}'
+            };
+            clusteringVisualisation(data)
+        });
+    });
+</script>

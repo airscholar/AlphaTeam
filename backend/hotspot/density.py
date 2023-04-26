@@ -14,4 +14,4 @@ def compute_density(session_id):
 
     df_json = df.to_json(orient='split')
 
-    return jsonify({"message": "Success", "data": df_json, "file": filename})
+    return jsonify({"message": "Success", "data": df_json, "filename": filename})
