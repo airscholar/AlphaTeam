@@ -93,7 +93,7 @@ def resilience_analyisis_custom():
 
     json_data = requests.get(
         f'{BASE_URL}/visualisation/{filename2}/plot_network/spatial?dynamic=False&layout={layout}').json()
-    graph_input_custom = json_data['file']
+    graph_input_custom = json_data['filename']
     graph_input_custom = f"../static/uploads/{filename2}/"+graph_input_custom
 
     return render_template('resilience/resilience_analyisis_custom.html', session_id=filename2,
