@@ -6,7 +6,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <h3>Uploaded Dataset</h3>
+            <h3 class="styledh3">Uploaded Dataset</h3>
             <hr> <!-- Add a horizontal rule for visual separation -->
         </div>
     </div>
@@ -14,30 +14,35 @@
         <div class="col-md-12">
             <div class="card card-body" style="margin-bottom: 50px;">
 
-                <table id="example1" class="display" style="width:100%">
-                    <thead>
-                        <tr>
-                            {% for cell in data.columns %}
-                            <th>{{ cell }}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for row in data.itertuples() %}
-                        <tr>
-                            {% for cell in row[1:] %}
-                            <td>{{ cell }}</td>
-                            {% endfor %}
-                        </tr>
-                        {% endfor %}
-                    </tbody>
+                <table id="datasetTable" class="display" style="width:100%">
                 </table>
             </div>
 
         </div>
     </div>
 </div>
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+<script src="{{ url_for('static', filename='js/resilience.js') }}"></script>
 
+<script type="text/javascript">
+    const BASE_URL = 'http://localhost:8000/api/v1/visualisation/';
+    $(document).ready(function () {
+        $.ajax({
+            url: BASE_URL + '{{session_id}}' + '/dataset',
+            type: 'GET',
+            mode: 'no-cors',
+            success: function (res) {
+                const data = JSON.parse(res.data);
+                const datasetTable = document.getElementById('datasetTable');
+
+                createTable(datasetTable, data.data, data.columns);
+            },
+            error: function (data) {
+                alert('An error occurred. Please try again.');
+
+                console.log(data);
+            }
+        })
+    });
+</script>
 {% endblock %}

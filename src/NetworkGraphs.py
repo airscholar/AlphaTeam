@@ -1,16 +1,20 @@
-# Imports
-import scipy.io as sio
-from pandas.api.types import is_numeric_dtype
-
-from src.preprocessing import *
-from src.visualisation import *
-
-# ----------------------------------------------------------------------------------------
 """
 Author: Alpha Team Group Project
 Date: March 2023
-Purpose: Class containing the NetworkX graphs
+Purpose: NetworkGraphs.py contains the NetworkGraphs custom class
+"""
 
+# ----------------------------------------- Imports ----------------------------------------- #
+
+# Internal imports
+from src.preprocessing import *
+from src.visualisation import *
+
+# External imports
+import scipy.io as sio
+from pandas.api.types import is_numeric_dtype
+
+"""
 ----------------------------------------------------------------------------------------
 
 INFORMATION ABOUT GRAPH ATTRIBUTES
@@ -46,9 +50,6 @@ GRAPHS:
 """
 
 
-# ----------------------------------------------------------------------------------------
-
-
 class NetworkGraphs:
     """
     Class containing the NetworkX graphs wrapping functionalities to generalise the use of the MultiDiGraph,
@@ -59,7 +60,7 @@ class NetworkGraphs:
     # ---------------------------------------------- CONSTRUCTOR ------------------------------------------------------
     # -----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, filename, type, session_folder=None, temporal=False, spatial=False, weighted=False):
+    def __init__(self, filename, type, session_folder=None, temporal=False, spatial=False, weighted=False, attack_vector=None):
         """
         Constructor of the NetworkGraphs class. It creates the NetworkX graphs and store the attributes of the graphs.
 
@@ -112,12 +113,14 @@ class NetworkGraphs:
         self.mid_long = None
         self.session_folder = None
         self.filename = None
+        self.attack_vector = None
 
         self.set_filename(filename)
         name = filename.split('/')[-1].split('.')[0]
         self.set_name(name)
         self.set_type(type)
         self.set_session_folder(session_folder)
+        self.set_attack_vector(attack_vector)
 
         # ---------------------------------------------- RAILWAY -------------------------------------------------------
 
@@ -190,6 +193,37 @@ class NetworkGraphs:
                                'DiGraph': nx.get_edge_attributes(self.DiGraph, 'color').values(),
                                'Graph': nx.get_edge_attributes(self.Graph, 'color').values()}
 
+
+        # ---------------------------------------------- GTFS -------------------------------------------------------
+
+        elif type == 'GTFS':
+
+            self.set_spatial(True)
+            self.set_temporal(True)
+            self.set_weighted(True)
+
+            self.DiGraph, self.MultiDiGraph = preprocess_gtfs(filename)
+            self.Graph, self.MultiGraph = self.DiGraph.to_undirected(), self.MultiDiGraph.to_undirected()
+
+            self.colors = {'MultiDiGraph': nx.get_edge_attributes(self.MultiDiGraph, 'color').values(),
+                            'MultiGraph': nx.get_edge_attributes(self.MultiGraph, 'color').values(),
+                            'DiGraph': nx.get_edge_attributes(self.DiGraph, 'color').values(),
+                            'Graph': nx.get_edge_attributes(self.Graph, 'color').values()}
+
+            self.df = self.DiGraph.edges(data=True)
+            self.df = pd.DataFrame(self.df, columns=['source', 'target', 'data'])
+
+            # check if nan in start or end
+            if self.df['data'].apply(lambda x: x['start']).isnull().values.any() or self.df['data'].apply(lambda x: x['end']).isnull().values.any():
+                self.set_temporal(False)
+            else:
+                self.df['start'] = self.df['data'].apply(lambda x: x['start'])
+                self.df['end'] = self.df['data'].apply(lambda x: x['end'])
+            self.df['weight'] = self.df['data'].apply(lambda x: x['weight'])
+            self.df['color'] = self.df['data'].apply(lambda x: x['color'])
+            self.df = self.df.drop(columns=['data'])
+
+
         # ---------------------------------------------- SPATIAL -------------------------------------------------------
 
         self.pos = {}
@@ -209,10 +243,16 @@ class NetworkGraphs:
             self.pos['map'] = nx.get_node_attributes(self.Graph, 'pos')
             location = self.pos['map'].values()
             # add space around the graph
-            self.set_min_long(min(location, key=lambda x: x[0])[0] - 0.5)
-            self.set_min_lat(min(location, key=lambda x: x[1])[1] - 0.5)
-            self.set_max_long(max(location, key=lambda x: x[0])[0] + 0.5)
-            self.set_max_lat(max(location, key=lambda x: x[1])[1] + 0.5)
+            self.set_min_long(min(location, key=lambda x: x[0])[0])
+            self.set_min_lat(min(location, key=lambda x: x[1])[1])
+            self.set_max_long(max(location, key=lambda x: x[0])[0])
+            self.set_max_lat(max(location, key=lambda x: x[1])[1])
+            delta_long = (self.get_max_long() - self.get_min_long()) * 0.05
+            delta_lat = (self.get_max_lat() - self.get_min_lat()) * 0.05
+            self.set_min_long(self.get_min_long() - delta_long)
+            self.set_min_lat(self.get_min_lat() - delta_lat)
+            self.set_max_long(self.get_max_long() + delta_long)
+            self.set_max_lat(self.get_max_lat() + delta_lat)
             self.set_mid_long()
             self.set_mid_lat()
 
@@ -260,6 +300,52 @@ class NetworkGraphs:
         else:
             raise ValueError("The graph is not weighted")
 
+    def update_attributes(self):
+        """
+        :Function: Update the attributes of the graph
+        :return: None
+        """
+        if self.colors is not None:
+            self.colors = {'MultiDiGraph': nx.get_edge_attributes(self.MultiDiGraph, 'color').values(),
+                           'MultiGraph': nx.get_edge_attributes(self.MultiGraph, 'color').values(),
+                           'DiGraph': nx.get_edge_attributes(self.DiGraph, 'color').values(),
+                           'Graph': nx.get_edge_attributes(self.Graph, 'color').values()}
+
+        if self.is_weighted():
+            self.weights = {'Graph': list(nx.get_edge_attributes(self.Graph, 'weight').values()),
+                            'MultiGraph': list(nx.get_edge_attributes(self.MultiGraph, 'weight').values()),
+                            'DiGraph': list(nx.get_edge_attributes(self.DiGraph, 'weight').values()),
+                            'MultiDiGraph': list(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())}
+            self.min_weight = {'Graph': min(nx.get_edge_attributes(self.Graph, 'weight').values()),
+                               'MultiGraph': min(nx.get_edge_attributes(self.MultiGraph, 'weight').values()),
+                               'DiGraph': min(nx.get_edge_attributes(self.DiGraph, 'weight').values()),
+                               'MultiDiGraph': min(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())}
+
+            self.max_weight = {'Graph': max(nx.get_edge_attributes(self.Graph, 'weight').values()),
+                               'MultiGraph': max(nx.get_edge_attributes(self.MultiGraph, 'weight').values()),
+                               'DiGraph': max(nx.get_edge_attributes(self.DiGraph, 'weight').values()),
+                               'MultiDiGraph': max(nx.get_edge_attributes(self.MultiDiGraph, 'weight').values())}
+
+            self.standardize_weights()
+
+        self.pos = {}
+        self.pos['twopi'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='twopi')
+        self.pos['sfdp'] = nx.nx_agraph.graphviz_layout(self.Graph, prog='sfdp')
+
+        if self.is_spatial():
+            self.pos['map'] = nx.get_node_attributes(self.Graph, 'pos')
+            location = self.pos['map'].values()
+            self.set_min_long(min(location, key=lambda x: x[0])[0] - 0.5)
+            self.set_min_lat(min(location, key=lambda x: x[1])[1] - 0.5)
+            self.set_max_long(max(location, key=lambda x: x[0])[0] + 0.5)
+            self.set_max_lat(max(location, key=lambda x: x[1])[1] + 0.5)
+            self.set_mid_long()
+            self.set_mid_lat()
+
+        if self.is_temporal():
+            self.start = min(nx.get_edge_attributes(self.MultiDiGraph, 'start').values())
+            self.end = max(nx.get_edge_attributes(self.MultiDiGraph, 'end').values())
+
     # ------------------------------------------------------------------------------------------------------------------
     # ---------------------------------------------- METHODS -----------------------------------------------------------
     # ------------------------------------------------------------------------------------------------------------------
@@ -301,10 +387,10 @@ class NetworkGraphs:
         :type data_type: str
         :return: None
         """
-        if data_type in ['RAILWAY', 'CRYPTO', 'CUSTOM', 'MTX']:
+        if data_type in ['RAILWAY', 'CRYPTO', 'CUSTOM', 'MTX', 'GTFS']:
             self.type = data_type
         else:
-            raise ValueError("The type must be 'RAILWAY', 'CRYPTO' or 'CUSTOM'")
+            raise ValueError("The type must be 'RAILWAY', 'CRYPTO', 'GTFS' or 'CUSTOM' ")
 
     def set_max_lat(self, max_lat):
         """
@@ -400,6 +486,9 @@ class NetworkGraphs:
         :return: None
         """
         self.filename = filename
+    
+    def set_attack_vector(self, attack_vector):
+        self.attack_vector = attack_vector
 
     # ---------------------------------------------- IS  -----------------------------------------------------------
 
@@ -562,6 +651,9 @@ class NetworkGraphs:
         :rtype: pandas.DataFrame
         """
         return self.df
+
+    def get_attack_vector(self):
+        return self.attack_vector
 
     # ---------------------------------------------- PRINT -----------------------------------------------------------
 

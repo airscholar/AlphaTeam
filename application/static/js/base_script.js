@@ -7,30 +7,6 @@ function setSpinnerVisibility(visible) {
 let showSpinner = false; // Set this variable to true to display the spinner or false to hide it
 setSpinnerVisibility(showSpinner);
 
-$(document).ready(function () {
-    $('#example1').DataTable({
-        dom: 'Bfrtip',
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ],
-        "pageLength": 10, // Show 10 rows per page
-        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]] // Customize page length menu
-    });
-});
-
-$(document).ready(function () {
-    $('#example').DataTable({
-        dom: 'Bfrtip',
-        buttons: [
-            'copyHtml5',
-            'excelHtml5',
-            'csvHtml5',
-            'pdfHtml5'
-        ],
-        "pageLength": 10, // Show 10 rows per page
-        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]] // Customize page length menu
-    });
-});
 
 document.querySelectorAll('.fetch-spinner').forEach(function (element) {
     element.addEventListener('click', function (event) {
@@ -52,7 +28,7 @@ document.querySelectorAll('.fetch-spinner').forEach(function (element) {
 
 $(document).ready(function () {
     // Initialize DataTables
-    var table = $('#example').DataTable();
+    // var table = $('#example').DataTable();
     $('#download_csv').on('click', function () {
         var csv = '';
         var headers = [];
@@ -94,3 +70,14 @@ function validateLayout() {
 
     return true;
 }
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+
+$(document).ready(function () {
+    $('#mainform-accordian').submit(function () {
+        $('#accordion-button-two').click();
+        return false;
+    });
+});

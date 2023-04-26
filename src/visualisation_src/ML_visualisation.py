@@ -1,18 +1,45 @@
-from tqdm import tqdm
-from pyvis import network as net
+"""
+Author: Alpha Team Group Project
+Date: March 2023
+Purpose: ML_visualisation module contains functions for visualising machine learning
+"""
 
+# ----------------------------------------- Imports ----------------------------------------- #
+
+# External imports
+from pyvis import network as net
+from tqdm import tqdm
+
+# Internal imports
 from src.visualisation_src.utils_visualisation import *
 
 
 # ----------------------------------------------------------------------------------------
 
-def generate_static_cluster(networkGraphs, df_, filename, layout_='map'):  # USING PLOTLY
 
+def generate_static_cluster(networkGraphs, df_, filename, algo, layout_='map', nbr=0):  # USING PLOTLY
+    """
+    :Function: Generate static cluster
+    :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
+    :param df_: Dataframe
+    :type df_: pd.DataFrame
+    :param filename: File name
+    :type filename: str
+    :param algo: Algorithm
+    :type algo: str
+    :param layout_: Layout
+    :type layout_: str
+    :param nbr: Number of clusters
+    :type nbr: int
+    :return: Plotly plot
+    :rtype: plotly.graph_objects
+    """
     G = networkGraphs.Graph
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
         print(ValueError('No spatial graph'))
-        return 'no_graph.html'
+        return '../application/static/no_graph.html'
 
     pos = networkGraphs.pos[layout_]
 
@@ -38,23 +65,30 @@ def generate_static_cluster(networkGraphs, df_, filename, layout_='map'):  # USI
 
     edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
 
-    layout = get_layout(networkGraphs, title=f"Cluster visualisation using {layout_} layout", layout_=layout_)
+    layout = get_layout(networkGraphs,
+                        title=f"{algo} {f'with {nbr} ' if nbr > 0 else ''}clusters using {layout_} layout",
+                        layout_=layout_)
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
     return fig
 
 
 # ----------------------------------------------------------------------------------------
 
+
 def generate_hotspot(networkGraphs, hotspot_df, filename):
     """
     :Function: Plot the hotspot for the given graph
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
     :param hotspot_df: Hotspot dataframe
+    :type hotspot_df: pd.DataFrame
     :param filename: Filename
-    :return:
+    :type filename: str
+    :return: Plotly plot
+    :rtype: plotly.graph_objects
     """
     latitude = hotspot_df['Latitude']
     longitude = hotspot_df['Longitude']
@@ -80,7 +114,7 @@ def generate_hotspot(networkGraphs, hotspot_df, filename):
                       mapbox_center_lat=networkGraphs.mid_lat, mapbox_zoom=3.5, margin={"r": 0, "t": 0, "l": 0, "b": 0},
                       legend=dict(orientation="h", yanchor="bottom", y=0.1, xanchor="right", x=1, title="Show/Hide"))
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
 
     return fig
 
@@ -91,9 +125,13 @@ def generate_dynamic_cluster(networkGraphs, df_, filename):  # USING PYVIS
     """
     :Function: Plot the metrics on the graph
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
     :param df_: Dataframe with the metrics
+    :type df_: pd.DataFrame
     :param filename: Name of the file to be saved
+    :type filename: str
     :return: Pyvis plot
+    :rtype: pyvis.network.Network
     """
     G = networkGraphs.Graph
 
@@ -106,7 +144,8 @@ def generate_dynamic_cluster(networkGraphs, df_, filename):  # USING PYVIS
     for u, v, d in G.edges(data=True):
         d.clear()
 
-    Net = net.Network(height="750px", width="100%", bgcolor="#E4ECF6", font_color="black", notebook=True)
+    Net = net.Network(height="750px", width="100%", bgcolor="#E4ECF6", font_color="black", notebook=False,
+                      cdn_resources='remote')
     Net.from_nx(G)
     Net.options.physics.use_force_atlas_2based(
         params={'central_gravity': 0.01, 'gravity': -50, 'spring_length': 100, 'spring_strength': 0.08, 'damping': 0.4,

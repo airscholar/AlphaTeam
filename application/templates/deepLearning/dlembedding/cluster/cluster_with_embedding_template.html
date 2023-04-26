@@ -1,0 +1,249 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="styledh3">{{clustering_alg.title()}} Clustering with Deep Learning Embedding</h3>
+            <p>{{description | safe}}</p>
+            <hr> <!-- Add a horizontal rule for visual separation -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-10">
+            <div class="card card-body" style="align-items: center; height: 100%;">
+                <iframe id="graph_embedding_cluster_frame" src="{{ graph_embedding_cluster }}" width="100%"
+                        height="100%"></iframe>
+                <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="card card-body" style="align-items: center;">
+
+                <form method="post">
+                    <!-- Dimension input field -->
+                    <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                        <span>Dimension</span>
+                        <img src="{{ url_for('static', filename='app_images/question.png') }}" alt="Image"
+                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                            data-placement="bottom" title="{{tooltip_dimension}}">
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col mx-auto">
+                            <input type="number" id="parameter_dimension" style="margin: 5px;" name="dimension_value"
+                                class="form-control" min="1" step="1" placeholder="None" value="128" style="size: 1rem;">
+                        </div>
+                    </div>
+
+                    <!-- Model input field -->
+                    <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                        <span>Model</span>
+                        <img src="{{ url_for('static', filename='app_images/question.png') }}" alt="Image"
+                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                            data-placement="bottom" title="{{tooltip_model_dropdown}}">
+                    </div>
+
+                    <div class="dropdown" style="margin:5px">
+                        <select id="dropdown-model" class="mx-auto" name="model">
+                            <option value="SAGE" {% if layout=='SAGE' %}selected{% endif %}>SAGE</option>
+                            <option value="GAT" {% if layout=='GAT' %}selected{% endif %}>GAT
+                            </option>
+                            <option value="GCN" {% if layout=='GCN' %}selected{% endif %}>GCN
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Layout input field -->
+                    <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                        <span>Layout</span>
+                        <img src="{{ url_for('static', filename='app_images/question.png') }}" alt="Image"
+                             style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                             data-placement="bottom" title="{{tooltip_layout}}">
+                    </div>
+
+                    <div class="dropdown" style="margin:5px">
+                        <select id="dropdown-menu" class="mx-auto" name="layout">
+                            <option value="TSNE" {% if layout=='TSNE' %}selected{% endif %}>TSNE</option>
+                            <option value="PCA" {% if layout=='PCA' %}selected{% endif %}>PCA
+                            </option>
+                            <option value="UMAP" {% if layout=='UMAP' %}selected{% endif %}>UMAP
+                            </option>
+                            <option value="map" {% if layout=='map' %}selected{% endif %}>Map</option>
+                            <option value="sfdp" {% if layout=='sfdp' %}selected{% endif %}>Sfdp
+                            </option>
+                            <option value="twopi" {% if layout=='twopi' %}selected{% endif %}>Twopi
+                            </option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                        <span>Number of Clusters</span>
+                        <img src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                             alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                             data-placement="bottom" title="{{tooltip_number_of_clusters}}">
+                    </div>
+                    <input type="number" id="number_of_clusters" style="margin: 5px;" name="number_of_clusters"
+                           class="form-control" min="1" step="1" placeholder="None" value="8">
+                    
+                    <!-- Features input field -->
+                    <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                        <span>Features</span>
+                        <img src="{{ url_for('static', filename='app_images/question.png') }}" alt="Image"
+                            style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                            data-placement="bottom" title="{{tooltip_features}}">
+                    </div>
+                    
+                    <div style="margin: 5px;">
+                        <input type="checkbox" id="proximity" name="proximity">
+                        <label for="proximity">Proximity</label><br>
+                        <input type="checkbox" id="degree" name="degree" checked>
+                        <label for="degree">Degree Node</label><br>
+                        <input type="checkbox" id="pagerank" name="pagerank">
+                        <label for="pagerank">PageRank</label><br>
+                        <input type="checkbox" id="triangles" name="triangles">
+                        <label for="triangles">Triangles</label><br>
+                        <input type="checkbox" id="kcore" name="kcore">
+                        <label for="kcore">K-core</label><br>
+                        <input type="checkbox" id="degree_centrality" name="degree_centrality">
+                        <label for="degree_centrality">Degree Centrality</label><br>
+                        <input type="checkbox" id="eigenvector_centrality" name="eigenvector_centrality">
+                        <label for="eigenvector_centrality">Eigenvector</label><br>
+                        <input type="checkbox" id="closeness_centrality" name="closeness_centrality">
+                        <label for="closeness_centrality">Closeness</label><br>
+                        <input type="checkbox" id="betweenness_centrality" name="betweenness_centrality">
+                        <label for="betweenness_centrality">Betweenness</label><br>
+                        <input type="checkbox" id="load_centrality" name="load_centrality">
+                        <label for="load_centrality">Load</label><br>
+                    </div>
+
+                    <button type="button" class="btn btn-primary" style="margin:5px; width: 100%;">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <div class="card card-body">
+        <h3 style="margin-top: 10px;">Embedding Details</h3>
+        <hr>
+        <table id="embedding-metrics" class="display" style="width:100%">
+        </table>
+    </div>
+    
+    <!--    <div class="row mt-3">-->
+    <!--        <div class="col-md-12">-->
+    <!--            <div class="text-right">-->
+    <!--                <button id="download_csv" type="button" class="btn btn-outline-secondary">Download CSV</button>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
+</div>
+<script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+<script src="{{ url_for('static', filename='js/deepLearning/dl_embedding.js') }}"></script>
+
+<script type="text/javascript">
+    function getSelectedCheckboxes() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const selectedCheckboxes = [];
+        for (let checkbox of checkboxes) {
+            if (checkbox.checked) {
+                selectedCheckboxes.push(checkbox.name);
+            }
+        }
+        return selectedCheckboxes;
+    }
+
+    function updateCheckboxes() {
+        const proximityCheckbox = document.getElementById('proximity');
+        const degreeCheckbox = document.getElementById('degree');
+        const pagerankCheckbox = document.getElementById('pagerank');
+        const trianglesCheckbox = document.getElementById('triangles');
+        const kcoreCheckbox = document.getElementById('kcore');
+        const degree_centralityCheckbox = document.getElementById('degree_centrality');
+        const eigenvector_centralityCheckbox = document.getElementById('eigenvector_centrality');
+        const closeness_centralityCheckbox = document.getElementById('closeness_centrality');
+        const betweenness_centralityCheckbox = document.getElementById('betweenness_centrality');
+        const load_centralityCheckbox = document.getElementById('load_centrality');
+        const number_of_clusters = document.getElementById('number_of_clusters');
+
+        if (proximityCheckbox.checked) {
+            degreeCheckbox.disabled = true;
+            pagerankCheckbox.disabled = true;
+            trianglesCheckbox.disabled = true;
+            kcoreCheckbox.disabled = true;
+            degree_centralityCheckbox.disabled = true;
+            eigenvector_centralityCheckbox.disabled = true;
+            closeness_centralityCheckbox.disabled = true;
+            betweenness_centralityCheckbox.disabled = true;
+            load_centralityCheckbox.disabled = true;
+        } else {
+            degreeCheckbox.disabled = false;
+            pagerankCheckbox.disabled = false;
+            trianglesCheckbox.disabled = false;
+            kcoreCheckbox.disabled = false;
+            degree_centralityCheckbox.disabled = false;
+            eigenvector_centralityCheckbox.disabled = false;
+            closeness_centralityCheckbox.disabled = false;
+            betweenness_centralityCheckbox.disabled = false;
+            load_centralityCheckbox.disabled = false;
+            proximityCheckbox.disabled = degreeCheckbox.checked || pagerankCheckbox.checked || trianglesCheckbox.checked || kcoreCheckbox.checked || degree_centralityCheckbox.checked || eigenvector_centralityCheckbox.checked || closeness_centralityCheckbox.checked || betweenness_centralityCheckbox.checked || load_centralityCheckbox.checked;
+        }
+    }
+
+    $(document).ready(function () {
+        const submitButton = document.querySelector('button[type="button"]');
+        const parameter_dimension = document.getElementById('parameter_dimension');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        const dropdownModel = document.getElementById('dropdown-model');
+
+        const proximityCheckbox = document.getElementById('proximity');
+        const degreeCheckbox = document.getElementById('degree');
+        const pagerankCheckbox = document.getElementById('pagerank');
+        const trianglesCheckbox = document.getElementById('triangles');
+        const kcoreCheckbox = document.getElementById('kcore');
+        const degree_centralityCheckbox = document.getElementById('degree_centrality');
+        const eigenvector_centralityCheckbox = document.getElementById('eigenvector_centrality');
+        const closeness_centralityCheckbox = document.getElementById('closeness_centrality');
+        const betweenness_centralityCheckbox = document.getElementById('betweenness_centrality');
+        const load_centralityCheckbox = document.getElementById('load_centrality');
+        const number_of_clusters = document.getElementById('number_of_clusters');
+        
+        updateCheckboxes();
+
+        proximityCheckbox.addEventListener('change', updateCheckboxes);
+        degreeCheckbox.addEventListener('change', updateCheckboxes);
+        pagerankCheckbox.addEventListener('change', updateCheckboxes);
+        trianglesCheckbox.addEventListener('change', updateCheckboxes);
+        kcoreCheckbox.addEventListener('change', updateCheckboxes);
+        degree_centralityCheckbox.addEventListener('change', updateCheckboxes);
+        eigenvector_centralityCheckbox.addEventListener('change', updateCheckboxes);
+        closeness_centralityCheckbox.addEventListener('change', updateCheckboxes);
+        betweenness_centralityCheckbox.addEventListener('change', updateCheckboxes);
+        load_centralityCheckbox.addEventListener('change', updateCheckboxes);
+
+        const data = {
+            'dimension': parameter_dimension.value,
+            'layout': dropdownMenu.value,
+            'model': dropdownModel.value,
+            'session_id': '{{ session_id }}',
+            'feature': getSelectedCheckboxes(),
+            'number_of_clusters': number_of_clusters.value,
+            'cluster_alg' : '{{ clustering_alg }}'
+        };
+
+        performEmbClusteringVisualisationDlEmbedding(data);
+
+        $(submitButton).on('click', function () {
+            const feature = getSelectedCheckboxes();
+            const data = {
+                'dimension': parameter_dimension.value,
+                'layout': dropdownMenu.value,
+                'model': dropdownModel.value,
+                'session_id': '{{ session_id }}',
+                'feature': feature,
+                'number_of_clusters': number_of_clusters.value,
+                'cluster_alg' : '{{ clustering_alg }}'
+            };
+            performEmbClusteringVisualisationDlEmbedding(data);
+        });
+    });
+</script>

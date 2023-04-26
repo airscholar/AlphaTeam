@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+{% block title %}Visualisation{% endblock %}
+{% block span %}Visualisation Page{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="styledh3">Visualisation</h3>
+            <p>{{description | safe}}</p>
+            <hr> <!-- Add a horizontal rule for visual separation -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="container mt-3">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <!-- Network Tab UL -->
+                    <button class="nav-link active" id="nav-network-tab"
+                            data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab"
+                            aria-controls="nav-network"
+                            aria-selected="true">Network <span style="display: inline-block; margin-left: 5px;"><img
+                            src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                            alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                            data-placement="bottom" title="{{tooltip_network_tab}}"></span></button>
+                    <!-- Temporal Tab UL -->
+                    {% if show_temporal=='true' %}
+                    <button class="nav-link" id="nav-temporal-tab"
+                            data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab"
+                            aria-controls="nav-temporal" aria-selected="true">Temporal <span
+                            style="display: inline-block; margin-left: 5px;"><img
+                            src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                            alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                            data-placement="bottom" title="{{tooltip_temporal_tab}}"></span></button>
+                    {% endif %}
+
+                    <!-- Heatmap Tab UL -->
+                    <button class="nav-link" id="nav-heatmap-tab"
+                            data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab"
+                            aria-controls="nav-heatmap" aria-selected="true">Heatmap <span
+                            style="display: inline-block; margin-left: 5px;"><img
+                            src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                            alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                            data-placement="bottom" title="{{tooltip_heatmap_tab}}"></span></button>
+                </div>
+            </nav>
+
+
+            <div class="tab-content" style="background-color: white; padding-bottom: 25px;">
+                <div id="tab1" class="container tab-pane active">
+                    <br/>
+                    <div class="row">
+                        <div class="col-10">
+                            <div class="card card-body" style="align-items: center;">
+                                <iframe id="graph1" src="{{ graph1 }}" width="100%" height="800"></iframe>
+                                <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="card card-body" style="align-items: center;">
+
+                                <form method="post">
+
+                                    <div
+                                            style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                                        <span>Dynamic</span>
+                                        <img src="{{ url_for('static', filename='app_images/question.png') }}"
+                                             class="mx-auto" alt="Image"
+                                             style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                             data-placement="bottom" title="{{tooltip_dynamic}}">
+                                    </div>
+
+                                    <div class="toggle-container"
+                                         style="display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
+                                        <div class="toggle-btn">
+                                            <input type="checkbox" id="dynamic-toggle" name="dynamic_toggle" {% if
+                                                   dynamic_toggle %}checked{% endif %}>
+                                            <label for="dynamic-toggle"></label>
+                                        </div>
+
+                                    </div>
+                                    <div
+                                            style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                                        <span>Layout</span>
+                                        <img src="{{ url_for('static', filename='app_images/question.png') }}"
+                                             class="mx-auto" alt="Image"
+                                             style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                             data-placement="bottom" title="{{tooltip_layout_dropdown}}">
+                                    </div>
+                                    <div class="dropdown" style="margin:5px">
+                                        <select id="dropdown-menu" class="mx-auto" name="layout">
+                                            {% if is_spatial=='yes' %}
+                                            <option value="map">Map</option>
+                                            {% endif %}
+                                            <option value="sfdp">Sfdp
+                                            </option>
+                                            <option value="twopi">Twopi
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <button id="button1" type="button" class="btn btn-primary"
+                                            style="margin:5px; width: 100%;">Submit
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if show_temporal=='true' %}
+                <div id="tab2" class="container tab-pane fade">
+                    <br/>
+                    <div class="row">
+                        <div class="col-10">
+                            <div class="card card-body" style="align-items: center;">
+                                <iframe id="graph2" src="{{ graph2 }}" width="100%" height="800"></iframe>
+                                <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="card card-body" style="align-items: center;">
+
+                                <form method="post">
+                                    <div
+                                            style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+                                        <span>Layout</span>
+                                        <img src="{{ url_for('static', filename='app_images/question.png') }}"
+                                             class="mx-auto" alt="Image"
+                                             style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                             data-placement="bottom" title="{{tooltip_layout_dropdown}}">
+                                    </div>
+                                    <div class="dropdown" style="margin:5px">
+                                        <select id="dropdown-menu2" class="mx-auto" name="layout">
+                                            {% if is_spatial=='yes' %}
+                                            <option value="map">Map</option>
+                                            {% endif %}
+                                            <option value="sfdp">Sfdp
+                                            </option>
+                                            <option value="twopi">Twopi
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <button id="button2" type="button" class="btn btn-primary"
+                                            style="margin:5px; width: 100%;">Submit
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                <div id="tab3" class="container tab-pane fade">
+                    <br/>
+                    <div class="row">
+                        <div class="card card-body" style="align-items: center;">
+                            <iframe id="graph3" src="{{ graph3 }}" width="100%" height="600"></iframe>
+                            <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+</div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../static/js/visualisation/visualisation.js"></script>
+<script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        const submitButton1 = document.querySelector('#button1');
+        const submitButton2 = document.querySelector('#button2');
+        const dynamicToggle = document.getElementById('dynamic-toggle');
+        const layout1 = document.getElementById('dropdown-menu');
+        const layout2 = document.getElementById('dropdown-menu2');
+
+        const networkTab = document.getElementById('nav-network-tab');
+        const temporalTab = document.getElementById('nav-temporal-tab');
+        const heatmapTab = document.getElementById('nav-heatmap-tab');
+        const is_temporal = '{{ show_temporal }}';
+        let defaultLayoutValue = "spatial";
+        if(is_temporal === "true")
+        {
+            defaultLayoutValue = "spatial";
+            layout1.addEventListener('change', () => {
+                layout2.value = layout1.value;
+            });
+
+            layout2.addEventListener('change', () => {
+                layout1.value = layout2.value;
+            });
+        } 
+        else{
+            defaultLayoutValue = "temporal";
+        }
+
+        const data = {
+            'dynamicToggle': dynamicToggle.checked ? "True" : "False",
+            'layout': layout1.value,
+            'session_id': '{{ session_id }}'
+        };
+
+        basicVisualisation(data, defaultLayoutValue, "graph1")
+
+        function handleClick(plotType, graphId, e) {
+            e.preventDefault();
+            const data = {
+                'dynamicToggle': dynamicToggle.checked ? "True" : "False",
+                'layout': layout1.value,
+                'session_id': '{{ session_id }}'
+            };
+            basicVisualisation(data, plotType, graphId)
+        }
+
+        $(submitButton1).on('click', function () {
+            const data = {
+                'dynamicToggle': dynamicToggle.checked ? "True" : "False",
+                'layout': layout1.value,
+                'session_id': '{{ session_id }}'
+            };
+            basicVisualisation(data, defaultLayoutValue, "graph1")
+        });
+
+        $(submitButton2).on('click', function () {
+            const data = {
+                'dynamicToggle': dynamicToggle.checked ? "True" : "False",
+                'layout': layout1.value,
+                'session_id': '{{ session_id }}'
+            };
+            basicVisualisation(data, "temporal", "graph2")
+        });
+
+        $(networkTab).on('click', handleClick.bind(null, defaultLayoutValue, 'graph1'));
+        $(temporalTab).on('click', handleClick.bind(null, 'temporal','graph2'));
+        $(heatmapTab).on('click', handleClick.bind(null, 'heatmap','graph3'));
+    });
+</script>
+{% endblock %}

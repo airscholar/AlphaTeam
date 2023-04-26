@@ -1,11 +1,29 @@
+"""
+Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Metrics visualisation module contains functions for visualising metrics
+"""
+
+# ----------------------------------------- Imports ----------------------------------------- #
+
+# External imports
 import matplotlib as mpl
 import networkx as nx
+import numpy as np
 from pyvis import network as net
 from tqdm import tqdm
 
+# Internal imports
 from src.visualisation_src.utils_visualisation import *
 
+
 # ----------------------------------------------------------------------------------------
+def dropStd(df_):
+    if any('std' in s for s in df_.columns):
+        df_.drop(columns=[col for col in df_.columns if 'std' in col], inplace=True)
+
+    return df_
+
 
 def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USING PLOTLY
     """
@@ -20,13 +38,16 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
         print(ValueError('No spatial graph'))
-        return 'no_graph.html'
+        return '../application/static/no_graph.html'
 
     pos = networkGraphs.pos[layout_]
 
     metrics_name = df_.columns[1]
     df_['std'] = (df_[metrics_name] - df_[metrics_name].min()) / (df_[metrics_name].max() - df_[metrics_name].min())
+    df_['std'] = df_['std'].fillna(0.00)
     size_ = 5 / df_['std'].mean()  # normalise the size of the nodes
+    df_['std'] = df_['std'].apply(lambda x: 0.05 if x < 0.03 else x)  # to avoid nodes with size 0
+    df_['std'] = df_['std'].apply(lambda x: x * size_)
 
     x_list = []
     y_list = []
@@ -45,13 +66,13 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
                                    marker=dict(showscale=True,
                                                colorbar=dict(thickness=10, title=metrics_name, xanchor='left',
                                                              titleside='right'), color=df_[metrics_name],
-                                               size=df_['std'] * size_))
+                                               size=df_['std']))
     else:
         node_trace = go.Scatter(x=x_list, y=y_list, text=text_list, mode='markers', hoverinfo='text',
                                 marker=dict(showscale=True,
                                             colorbar=dict(thickness=10, title=metrics_name, xanchor='left',
                                                           titleside='right'), color=df_[metrics_name],
-                                            size=df_['std'] * size_))
+                                            size=df_['std']))
 
     edge_trace = generate_edge_trace(Graph=G, pos=pos, layout=layout_)
 
@@ -59,7 +80,27 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
 
-    fig.write_html(filename)
+    steps = []
+    range_ = np.arange(0.2, 2, 0.4)
+    for i in range_:
+        step = dict(
+            method="restyle",
+            label=f"Scale {round(i, 2)}",
+        )
+        step["args"] = ["marker.size", [i * df_['std']]]
+        steps.append(step)
+
+    sliders = [dict(
+        active=2,
+        currentvalue={"prefix": "Size: ", "visible": False},
+        pad={"t": 10},
+        steps=steps
+    )]
+
+    fig.update_layout(sliders=sliders)
+
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
+    df_.drop(columns=['std'], inplace=True)
     return fig
 
 
@@ -78,7 +119,7 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
         print(ValueError('No spatial graph'))
-        return 'no_graph.html'
+        return '../application/static/no_graph.html'
 
     pos = networkGraphs.pos[layout_]
 
@@ -110,7 +151,7 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
     fig = go.Figure(data=[edge_trace, node_trace],
                     layout=layout)
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
     return fig
 
 
@@ -148,9 +189,8 @@ def generate_dynamic_metric(networkGraphs, df_, filename):  # USING PYVIS
     Net.options.physics.use_force_atlas_2based(
         params={'central_gravity': 0.01, 'gravity': -50, 'spring_length': 100, 'spring_strength': 0.08, 'damping': 0.4,
                 'overlap': 0})
-    print(f"Saving {filename}...")
     Net.write_html(filename)
-
+    df_.drop(columns=['std'], inplace=True)
     return Net
 
 
@@ -166,9 +206,13 @@ def generate_histogram_metric(df_, filename):
     :return: Plotly plot
     :rtype: plotly.graph_objects.Figure
     """
+    dropStd(df_)
+
     metrics_names = df_.columns[1:]
     metrics = df_[metrics_names].values
-    title = f"Histogram distribution of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
+    title = f"Histogram: {'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
+    if len(title) > 80:  # if title too long write it in two lines
+        title = title[:80] + '-<br>-' + title[80:]
 
     fig = go.Figure()
     for i, metric in enumerate(metrics_names):
@@ -180,8 +224,9 @@ def generate_histogram_metric(df_, filename):
                       yaxis_title="Count",
                       bargap=0.1, )
     fig.update_traces(opacity=0.75)
+    fig.update_layout(margin=dict(l=0, r=40, t=40, b=0))
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
 
     return fig
 
@@ -198,9 +243,13 @@ def generate_boxplot_metric(df_, filename):
     :return: Plotly plot
     :rtype: plotly.graph_objects.Figure
     """
+    dropStd(df_)
+
     metrics_names = df_.columns[1:]
     metrics = df_[metrics_names].values
     title = f"Boxplot of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
+    if len(title) > 80:  # if title too long write it in two lines
+        title = title[:80] + '-<br>-' + title[80:]
 
     fig = go.Figure()
     for i, metric in enumerate(metrics_names):
@@ -211,7 +260,9 @@ def generate_boxplot_metric(df_, filename):
                       yaxis_title="Values",
                       )
 
-    fig.write_html(filename)
+    fig.update_layout(margin=dict(l=0, r=40, t=40, b=0))
+
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
 
     return fig
 
@@ -228,9 +279,13 @@ def generate_violin_metric(df_, filename):
     :return: Plotly plot
     :rtype: plotly.graph_objects.Figure
     """
+    dropStd(df_)
+
     metrics_names = df_.columns[1:]
     metrics = df_[metrics_names].values
     title = f"Violin plot of the metric{'s' if len(metrics_names) > 1 else ''}: {', '.join(metrics_names)}"
+    if len(title) > 80:  # if title too long write it in two lines
+        title = title[:80] + '-<br>-' + title[80:]
 
     fig = go.Figure()
     for i, metric in enumerate(metrics_names):
@@ -240,8 +295,9 @@ def generate_violin_metric(df_, filename):
                       xaxis_title="Metrics",
                       yaxis_title="Values",
                       )
+    fig.update_layout(margin=dict(l=0, r=40, t=40, b=0))
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
 
     return fig
 
@@ -269,6 +325,7 @@ def generate_heatmap(networkGraph, filename):
 
     fig.update_xaxes(showticklabels=False)
     fig.update_yaxes(showticklabels=False)
+    fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
 
-    fig.write_html(filename)
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
     return fig

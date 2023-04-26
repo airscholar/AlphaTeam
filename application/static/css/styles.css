@@ -79,3 +79,46 @@ p {
 .black-text {
 	color: #483EA8;
 }
+
+.btn-circle {
+	border-radius: 100%;
+	width: 30px;
+	height: 30px;
+	font-size: 12px;
+}
+
+.btn-info.btn-circle:hover {
+	background-color: #f4f4f4;
+}
+
+.btn-circle i {
+	color: black;
+}
+
+/* Optional styling for the tooltip */
+.tooltip {
+	font-size: 14px;
+}
+
+.home-section {
+	position: relative;
+	/* Set position to relative for the parent container */
+}
+
+.sidebar.close~.home-section {
+	position: relative;
+}
+
+.home-section .home-content {
+	position: absolute;
+	/* Set position to absolute */
+	top: 0;
+	/* Position at the top of the parent container */
+	left: 0;
+	/* Position at the left of the parent container */
+	z-index: 1;
+	/* Set a higher z-index than the container div to make it appear on top */
+	height: 60px;
+	display: flex;
+	align-items: center;
+}

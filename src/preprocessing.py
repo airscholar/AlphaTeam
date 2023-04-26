@@ -6,11 +6,12 @@
 
 # ----------------------------------------------------------------------------------------
 
-# Imports
+# External imports
 import networkx as nx
 import pandas as pd
 import scipy.io as sio
-
+import partridge as ptg
+from random import randint
 
 # ----------------------------------------------------------------------------------------
 
@@ -249,7 +250,7 @@ def preprocess_crypto(filename_: str):
     MultiDiGraph.add_nodes_from(df['from'].unique())
     MultiDiGraph.add_nodes_from(df['to'].unique())
     for from_, to_, value_, time_ in df[['from', 'to', 'value', 'block_time']].values:
-        MultiDiGraph.add_edge(from_, to_, weight=value_, start=time_, end=time_+1)
+        MultiDiGraph.add_edge(from_, to_, weight=value_, start=time_, end=time_ + 1)
 
     DiGraph = convert_to_DiGraph(MultiDiGraph)
 
@@ -273,6 +274,17 @@ def preprocess_mtx(filename_: str):
     mtx = sio.mmread(filename_)
 
     MultiDiGraph = nx.MultiDiGraph(mtx)
+
+    # convert node labels to strings to avoid errors when using pyvis from_nx() function
+    temp = {}
+    for node in MultiDiGraph.nodes():
+        temp[node] = str(node)
+    MultiDiGraph = nx.relabel_nodes(MultiDiGraph, temp)
+    temp = {}
+    for edge in MultiDiGraph.edges():
+        temp[edge] = str(edge)
+    MultiDiGraph = nx.relabel_nodes(MultiDiGraph, temp)
+
     DiGraph = convert_to_DiGraph(MultiDiGraph)
 
     MultiDiGraph.remove_edges_from(nx.selfloop_edges(MultiDiGraph))
@@ -306,6 +318,10 @@ def preprocess_custom(filename_: str):
     df = pd.read_csv(filename_)
     df.sort_values(by=['from', 'to'], inplace=True)
     MultiDiGraph = nx.MultiDiGraph()
+
+    # Convert labels to string to avoid errors when using pyvis from_nx() function
+    df['from'] = df['from'].astype(str)
+    df['to'] = df['to'].astype(str)
 
     if not 'from' in df.columns and not 'to' in df.columns:
         print('No "from" and "to" columns in the dataset')
@@ -350,3 +366,43 @@ def preprocess_custom(filename_: str):
     MultiDiGraph.remove_edges_from(nx.selfloop_edges(MultiDiGraph))
     DiGraph.remove_edges_from(nx.selfloop_edges(DiGraph))
     return [DiGraph, MultiDiGraph]
+
+
+# ----------------------------------------------------------------------------------------
+
+def preprocess_gtfs(zip_file):
+    """
+    :Function: Preprocess the gtfs dataset and return a NetworkX DiGraph and MultiDiGraph
+    :param zip_file: Path to the gtfs dataset
+    :type zip_file: str
+    :return: List of NetworkX DiGraph and MultiDiGraph
+    :rtype: list
+    """
+    feed = ptg.load_feed(zip_file)
+    stops = feed.stops
+    routes = feed.routes
+    stop_times = feed.stop_times
+
+    G = nx.MultiDiGraph()
+
+    for index, stop in stops.iterrows():
+        G.add_node(stop['stop_id'], pos=(stop['stop_lon'], stop['stop_lat']))
+
+    stop_times_grouped = stop_times.groupby('trip_id')
+
+    for trip_id, trip_stop_times in stop_times_grouped:
+        trip_stop_times_sorted = trip_stop_times.sort_values('stop_sequence')
+        color = '#%06X' % randint(0, 0xFFFFFF)
+
+        for i in range(len(trip_stop_times_sorted) - 1):
+            origin = trip_stop_times_sorted.iloc[i]
+            destination = trip_stop_times_sorted.iloc[i + 1]
+            G.add_edge(origin['stop_id'], destination['stop_id'], start=origin['departure_time'],
+                       end=destination['arrival_time'], color=color, weight=1)
+
+    DiGraph = convert_to_DiGraph(G)
+    G.remove_edges_from(nx.selfloop_edges(G))
+    DiGraph.remove_edges_from(nx.selfloop_edges(DiGraph))
+
+    return [DiGraph, G]
+
