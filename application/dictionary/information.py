@@ -204,22 +204,125 @@ description = {
                 "spectral clustering results reveals network organization, inter-community relationships, "
                 "and individual node roles, offering insights into shared interests or functional modules.",
 
-    'kmeans': '.. kmeans ..',
-    'agglomerative': '.. agglomerative ..',
-    'dbscan': '.. dbscan page ..',
-    'hotspot_density': '.. hotspot density page ..',
-    'resilience_analysis_malicious': '.. resilience_analysis_malicious page ..',
-    'resilience_analyisis_random': '.. resilience_analyisis_random page ..',
-    'resilience_analyisis_cluster': '.. resilience_analyisis_cluster ..',
-    'resilience_analyisis_custom': '.. resilience_analyisis_custom ..',
-    'node2vec_embedding': '.. node2vec_embedding ..',
-    'node2vec_agglomerative': '.. node2vec_agglomerative ..',
-    'node2vec_kmeans': '.. node2vec_kmeans ..',
-    'node2vec_spectral': '.. node2vec_spectral ..',
-    'dlembedding_embedding': '.. dlembedding_embedding ..',
-    'dlembedding_agglomerative': '.. dlembedding_agglomerative ..',
-    'dlembedding_kmeans': '.. dlembedding_kmeans ..',
-    'dlembedding_spectral': '.. dlembedding_spectral ..',
+    'kmeans': 'The K-Means clustering displays the <b>community structure</b> within your network using the '
+              'K-Means Clustering algorithm. This method groups nodes based on their <b>topological similarity</b> in '
+              'the network, finding clusters with strong internal connections and fewer external links. Examining '
+              'K-Means Clustering results uncovers network organization, relationships between communities, '
+              'and individual node roles, providing insights into shared interests or functional groups.',
+
+    'agglomerative': "The Agglomerative clustering illustrates the <b>community structure</b> within your "
+                     "network using the Agglomerative Hierarchical Clustering algorithm. This method progressively "
+                     "merges nodes or clusters with the highest similarity, resulting in a hierarchy of nested groups "
+                     "with strong internal connections and fewer external links. Analyzing agglomerative clustering "
+                     "reveals network organization, inter-community relationships, and individual node roles, "
+                     "offering insights into shared interests or functional subgroups.",
+
+    'dbscan': "The DBSCAN clustering presents the <b>community structure</b> within your network using the "
+              "DBSCAN (Density-Based Spatial Clustering of Applications with Noise) algorithm. This method identifies "
+              "clusters of nodes with high <b>density</b> and minimal connections to other groups while classifying "
+              "sparsely connected nodes as noise. Exploring DBSCAN results uncovers network organization, "
+              "relationships between communities, and individual node roles, providing insights into shared interests "
+              "or functional groups.",
+
+    'hotspot_density': "Hotspot density visualizes <b>high-density regions</b> within your network using a "
+                       "heatmap-like representation. Hotspots represent areas where nodes are densely interconnected, "
+                       "suggesting strong relationships or shared interests among the group members. By examining "
+                       "hotspot density, you can identify significant clusters, gain insights into the network's "
+                       "community structure, and uncover key areas that may have a substantial impact on the "
+                       "network's overall dynamics and information flow.",
+
+    'resilience_analysis_malicious': "The malicious resilience analysis evaluates your network's <b>resilience "
+                                     "to targeted attacks</b> based on node metrics. By simulating the removal of "
+                                     "nodes with the highest centrality, degree, or other relevant metrics, "
+                                     "this analysis helps you understand the network's vulnerability to malicious "
+                                     "activities. Examining the impact of these targeted removals on network "
+                                     "connectivity and structure can inform strategies to <b>enhance robustness</b> "
+                                     "and protect critical nodes or subgroups from potential threats.",
+
+    'resilience_analyisis_random': "The random resilience analysis assesses your network's <b>resilience to "
+                                   "random failures</b> by simulating the removal of nodes without considering their "
+                                   "metrics. This analysis helps gauge the network's ability to withstand unexpected "
+                                   "disruptions or errors. By examining the impact of random removals on network "
+                                   "connectivity and structure, you can identify potential vulnerabilities and "
+                                   "develop strategies to <b>improve robustness</b> and maintain the stability of the "
+                                   "network under various conditions.",
+
+    'resilience_analyisis_cluster': "The cluster resilience analysis investigates your network's <b>resilience "
+                                    "against attacks or failures within specific clusters</b>. By simulating the "
+                                    "removal of nodes within identified communities or high-density regions, "
+                                    "this analysis helps you evaluate the network's ability to maintain connectivity "
+                                    "and overall structure under targeted or random disruptions. Understanding the "
+                                    "impact of these removals on cluster stability can inform strategies to "
+                                    "<b>strengthen resilience</b> and safeguard critical subgroups from potential "
+                                    "threats.",
+
+    'resilience_analyisis_custom': "The custom resilience analysis allows you to assess your network's "
+                                   "<b>resilience by simulating the removal of user-selected nodes</b>. This "
+                                   "customizable analysis helps you examine the network's vulnerability to specific "
+                                   "disruptions, whether targeted or random. By analyzing the impact of removing the "
+                                   "chosen nodes on network connectivity and structure, you can gain insights into "
+                                   "potential weaknesses and develop strategies to <b>enhance robustness</b> and "
+                                   "protect critical nodes or subgroups from potential threats.",
+
+    'node2vec_embedding': "The Node2Vec embedding presents the results of the <b>Node2Vec algorithm</b>, "
+                          "which generates low-dimensional vector representations of nodes in your network. These "
+                          "embeddings capture the network's topology and node relationships, preserving both local "
+                          "and global structural information. By analyzing node2vec embeddings, you can uncover "
+                          "patterns, identify similar nodes, and perform various machine learning tasks, "
+                          "such as clustering, classification, or link prediction, to gain <b>deeper insights</b> "
+                          "into your network's structure and dynamics.",
+
+    'node2vec_agglomerative': "The Node2Vec with agglomerative clustering combines <b>Node2Vec embeddings</b> and "
+                              "<b>Agglomerative Hierarchical Clustering</b> to reveal the community structure within "
+                              "your network. Node2Vec captures the network's topology, while Agglomerative Clustering "
+                              "groups similar nodes based on their embeddings. This combination allows for a deeper "
+                              "understanding of network organization, relationships between communities, "
+                              "and node roles within subgroups.",
+
+    'node2vec_kmeans': "The Node2Vec with K-Means clustering merges <b>Node2Vec embeddings</b> and <b>K-Means "
+                       "Clustering</b> to"
+                       "highlight the community structure within your network. Node2Vec captures the network's "
+                       "topological features, while K-Means Clustering groups similar nodes using their embeddings. "
+                       "Examining the joint results provides insights into network organization, relationships "
+                       "between communities, and individual node roles, unveiling shared interests or functional "
+                       "clusters.",
+
+    'node2vec_spectral': "The Node2Vec with spectral clustering integrates <b>Node2Vec embeddings</b> with <b>Spectral "
+                         "Clustering</b> to uncover your network's community structure. Node2Vec embeddings preserve "
+                         "network topology, and Spectral Clustering groups nodes based on these representations. By "
+                         "analyzing the combined results, you can gain insights into network organization, "
+                         "inter-community relationships, and individual node roles, revealing shared interests or "
+                         "functional modules.",
+
+    'dlembedding_embedding': "The Deep Learning Embedding showcases the <b>GNN embeddings</b> generated for your "
+                             "network. GNNs are powerful models that capture the network's topology and node "
+                             "features, creating low-dimensional vector representations of nodes that preserve both "
+                             "local and global structural information. By analyzing GNN embeddings, you can uncover "
+                             "hidden patterns, identify similar nodes, and perform various machine learning tasks, "
+                             "such as clustering, classification, or link prediction, to gain <b>deeper insights</b> "
+                             "into your network's structure and dynamics.",
+
+    'dlembedding_agglomerative': "The Deep Learning Embedding with agglomerative clustering combines <b>GNN "
+                                 "embeddings</b> and <b>Agglomerative"
+                                 "Hierarchical Clustering</b> to reveal the community structure within your network. "
+                                 "GNN captures the network's topology and node features, while Agglomerative "
+                                 "Clustering groups similar nodes based on their embeddings. This combination allows "
+                                 "for a deeper understanding of network organization, relationships between "
+                                 "communities, and node roles within subgroups.",
+
+    'dlembedding_spectral': "The Deep Learning Embedding with spectral clustering integrates <b>GNN embeddings</b> "
+                            "and <b>Spectral Clustering</b> to uncover your network's community structure. GNN "
+                            "embeddings preserve network topology and node features, and Spectral Clustering groups "
+                            "nodes based on these representations. This combination enables deeper insights into "
+                            "network organization, inter-community relationships, and individual node roles, "
+                            "revealing shared interests or functional modules.",
+
+    'dlembedding_kmeans': "The Deep Learning Embedding with K-Means clustering merges <b>GNN embeddings</b> and "
+                          "<b>K-Means Clustering</b> to highlight the community structure within your network. GNN "
+                          "captures the network's topological features and node attributes, while K-Means Clustering "
+                          "groups similar nodes using their embeddings. This combination provides a more "
+                          "comprehensive understanding of network organization, relationships between communities, "
+                          "and individual node roles, unveiling shared interests or functional clusters.",
     '': '',
     '': '',
     '': '',
