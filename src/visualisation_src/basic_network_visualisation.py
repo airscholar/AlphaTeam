@@ -18,19 +18,23 @@ from pyvis import network as net
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def static_visualisation(networkGraphs, filepath, directed=True, multi=False, layout_='map'):
+def static_visualisation(networkGraphs, filepath, layout_='map'):
     """
     :Function: Plot the NetworkX graph on as map
     :param networkGraphs: Network graphs
-    :param directed: Boolean to indicate if the graph is directed or not
-    :param multi: for multi graphs
+    :type networkGraphs: NetworkGraphs
+    :param filepath: File path to save the plot
+    :type filepath: str
+    :param layout_: layout of the graph
+    :type layout_: str
     :return: Matplotlib plot
+    :rtype: matplotlib.pyplot
     """
     G = networkGraphs.Graph
 
     if not networkGraphs.is_spatial() and layout_ == 'map':
         print(ValueError('No spatial graph'))
-        return 'no_graph.html'
+        return '../application/static/no_graph.html'
 
     pos = networkGraphs.pos[layout_]
     text = [f"Node: {node}" for node in G.nodes()]
@@ -95,8 +99,9 @@ def static_visualisation(networkGraphs, filepath, directed=True, multi=False, la
     if layout_ == 'map':
         with open(filepath, 'a') as f:
             f.write(scripts['to_clipboard_map'])
-    with open(filepath, 'a') as f:
-        f.write(scripts['to_clipboard_no_map'])
+    else:
+        with open(filepath, 'a') as f:
+            f.write(scripts['to_clipboard_no_map'])
 
     return fig
 
@@ -108,8 +113,13 @@ def dynamic_visualisation(networkGraphs, filepath, directed=True, multi=False):
     """
     :Function: Plot the NetworkX graph on a dynamic map using pyvis
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
+    :param filepath: Path to save the plot
+    :type filepath: str
     :param directed: Boolean to indicate if the graph is directed or not
+    :type directed: bool
     :param multi: for multi graphs
+    :type multi: bool
     :return: Plotly plot
     """
     if multi:

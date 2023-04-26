@@ -6,6 +6,7 @@
     <div class="row">
         <div class="col-md-12">
             <h3 class="styledh3">Random Resilience Analysis</h3>
+            <p>{{description | safe}}</p>
             <hr> <!-- Add a horizontal rule for visual separation -->
         </div>
     </div>
@@ -25,43 +26,45 @@
                     <div class="accordion-body">
                         <div class="card mx-auto" style="width: 30rem;">
                             <div class="card-body">
-                                <form id="resilienceRandomForm" method="post" action="/resilience/random/upload">
+                                <form id="resilienceRandomForm" method="post">
                                     <div class="row">
                                         <div class="container mt-3">
 
                                             <nav>
                                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                                    <button
-                                                        class="nav-link {% if tab_main=='tab1' %}active{% else %}{% endif %}"
-                                                        id="nav-Nodes-tab" data-bs-toggle="tab"
-                                                        data-bs-target="#form_tab1" type="button" role="tab"
-                                                        aria-controls="nav-Nodes" aria-selected="true">Nodes</button>
-                                                    <button
-                                                        class="nav-link {% if tab_main=='tab2' %}active{% else %}{% endif %}"
-                                                        id="nav-Edges-tab" data-bs-toggle="tab"
+                                                    <button class="nav-link active" id="nav-Nodes-tab"
+                                                        data-bs-toggle="tab" data-bs-target="#form_tab1" type="button"
+                                                        role="tab" aria-controls="nav-Nodes"
+                                                        aria-selected="true">Nodes<span style="display: inline-block; margin-left: 5px;"><img
+                                                            src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                                            alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                                            data-placement="bottom" title="{{tooltip_node_tab}}"></span></button>
+                                                    <button class="nav-link" id="nav-Edges-tab" data-bs-toggle="tab"
                                                         data-bs-target="#form_tab2" type="button" role="tab"
-                                                        aria-controls="nav-Edges" aria-selected="false">Edges</button>
+                                                        aria-controls="nav-Edges" aria-selected="false">Edges<span style="display: inline-block; margin-left: 5px;"><img
+                                                            src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                                            alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                                            data-placement="bottom" title="{{tooltip_edge_tab}}"></span></button>
                                                 </div>
                                             </nav>
 
 
                                             <div class="tab-content"
                                                 style="background-color: white; padding-bottom: 25px;">
-                                                <div id="form_tab1"
-                                                    class="container tab-pane {% if tab_main=='tab1' %}active{% else %}fade{% endif %}">
+                                                <div id="form_tab1" class="container tab-pane active">
                                                     <br />
                                                     <div class="row">
-                                                        <label for="number_of_nodes" style="margin-top: 5px;">Number of
+                                                        <label for="number_of_nodes_random"
+                                                            style="margin-top: 5px;">Number of
                                                             Nodes</label>
-                                                        <input type="number" id="number_of_nodes_input"
+                                                        <input type="number" id="number_of_nodes_random_input"
                                                             placeholder="None" style="margin: 5px;"
-                                                            name="number_of_nodes" class="form-control" min="1" step="1"
-                                                            {% if number_of_nodes is not none
-                                                            %}value="{{ number_of_nodes }}" {% endif %}>
+                                                            name="number_of_nodes_random" class="form-control" min="1"
+                                                            step="1" {% if number_of_nodes is not none
+                                                            %}value="{{ number_of_nodes_random }}" {% endif %}>
                                                     </div>
                                                 </div>
-                                                <div id="form_tab2"
-                                                    class="container tab-pane {% if tab_main=='tab2' %}active{% else %}fade{% endif %}">
+                                                <div id="form_tab2" class="container tab-pane fade">
                                                     <br />
 
                                                     <div class="row">
@@ -77,8 +80,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary" style="margin:5px; width: 100%;"
-                                        onclick="submitForm()">Submit</button>
+                                    <button type="button" class="btn btn-primary" style="margin:5px; width: 100%;"
+                                        id="resilience_btn">Submit
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -98,7 +102,56 @@
                 </h2>
                 <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
                     data-bs-parent="#accordionFlushExample1">
-                    <div class="accordion-body">
+                    <div>
+                        <div class="row justify-content-center align-items-center" style="margin-top: 10px;">
+                            <div class="col-auto"><label style="margin-top: 5px;">Multi:<span style="display: inline-block; margin-left: 5px;"><img
+                                src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                data-placement="bottom" title="{{tooltip_multi}}"></span></label>
+                            </div>
+                            <div class="toggle-btn" style="width:60px">
+                                <input type="checkbox" id="multi-toggle" name="multi_toggle">
+                                <label for="multi-toggle"></label>
+                            </div>
+                            <div class="col-auto"><label style="margin-top: 5px;">Directed:<span style="display: inline-block; margin-left: 5px;"><img
+                                src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                data-placement="bottom" title="{{tooltip_directed}}"></span></label>
+            
+                            </div>
+                            <div class="toggle-btn" style="width:60px">
+                                <input type="checkbox" id="directed-toggle" name="directed_toggle">
+                                <label for="directed-toggle"></label>
+                            </div>
+                            <div class="col-auto">
+                                <label for="layout_type" style="margin-top: 5px;">Layout:<span style="display: inline-block; margin-left: 5px;"><img
+                                    src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                    alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                    data-placement="bottom" title="{{tooltip_layout_dropdown}}"></span></label>
+                            </div>
+                            <div class="col-auto">
+                                <div class="dropdown" style="margin:5px">
+                                    <select id="layout_type" name="layout_type">
+                                        <option value="map"> Map</option>
+                                        <option value="sfdp" selected>Sfdp</option>
+                                        <option value="twopi">Twopi</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <label for="number_of_clusters" style="margin-top: 5px;">Number of
+                                    Clusters:<span style="display: inline-block; margin-left: 5px;"><img
+                                        src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                                        alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                                        data-placement="bottom" title="{{tooltip_number_of_clusters}}"></span></label>
+                            </div>
+                            <div class="col-auto">
+                                <input type="number" id="number_of_clusters" name="number_of_clusters"
+                                    class="form-control" min="1" step="1" placeholder="None" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-body" id="resilienceMaliciousIframe">
                         {% include 'resilience/resilience_template.html' %}
                     </div>
                 </div>
@@ -112,13 +165,45 @@
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script src="{{ url_for('static', filename='js/resilience/resilience_random.js') }}"></script>
+
 <script type="text/javascript">
-    function submitForm() {
-        // Set the values of the hidden input fields in the form
-        document.getElementById('number_of_nodes_input').value = number_of_nodes;
-        document.getElementById('number_of_edges_input').value = number_of_edges;
-        // Submit the form
-        document.getElementById('resilienceRandomForm').submit();
-    }
+    $(document).ready(function () {
+        const numberOfNodes = document.getElementById('number_of_nodes_random_input');
+        const numberOfEdges = document.getElementById('number_of_edges_input');
+
+        const res_btn = document.getElementById('resilience_btn');
+        const inputAccordion = document.getElementById('flush-collapseOne');
+        const outputAccordion = document.getElementById('flush-collapseTwo');
+
+        const nodeTab = document.getElementById('nav-Nodes-tab');
+        const edgesTab = document.getElementById('nav-Edges-tab');
+
+
+        $(res_btn).on('click', function (e) {
+            e.preventDefault();
+            if (inputAccordion.classList.contains('show')) {
+                inputAccordion.classList.remove('show');
+                outputAccordion.classList.add('show');
+            } else {
+                inputAccordion.classList.add('show');
+            }
+
+            const data = {
+                number_of_nodes: numberOfNodes.value,
+                number_of_edges: numberOfEdges.value,
+                session_id: '{{ session_id }}'
+            };
+
+            if (nodeTab.classList.contains('active')) {
+                data.number_of_edges = null;
+            } else if (edgesTab.classList.contains('active')) {
+                data.number_of_nodes = null;
+            }
+
+            performResilienceRandom(data);
+        });
+
+    });
 </script>
 {% endblock %}

@@ -56,13 +56,36 @@ def set_networkGraph(networkGraph, session_id):
 # ---------------------------------------------------------------------------------------- #
 
 
-@memoize
 def get_networkGraph(session_id):
     """
     Get the network graph
     :return: Network graph
     """
     return networkGraphs_cache[session_id]
+
+
+# ---------------------------------------------------------------------------------------- #
+
+
+def is_saved(session_id):
+    """
+    Check if the network graph is saved
+    :return: True if the network graph is saved, False otherwise
+    """
+    return session_id in networkGraphs_cache.keys()
+
+
+# ---------------------------------------------------------------------------------------- #
+
+
+def delete_networkGraph(session_id):
+    """
+    Delete the network graph
+    :return: None
+    """
+    del networkGraphs_cache[session_id]
+    print(f"{red}CACHE: Deleted network graph with session id: {yellow}{session_id}")
+    return 0
 
 
 # ---------------------------------------------------------------------------------------- #

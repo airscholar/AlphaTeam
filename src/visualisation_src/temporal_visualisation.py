@@ -20,9 +20,20 @@ from tqdm import tqdm
 
 
 def generate_temporal(networkGraphs, filename, layout_='map'):
+    """
+    :Function: Generate temporal visualisation of the network
+    :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
+    :param filename: File name
+    :type filename: str
+    :param layout_: Layout
+    :type layout_: str
+    :return: Plotly plot
+    :rtype: plotly.graph_objects
+    """
     if not networkGraphs.is_spatial() and layout_ == 'map':
         print(ValueError('The graph is not spatial, please choose a different layout'))
-        return 'no_graph.html'
+        return '../application/static/no_graph.html'
 
     G = networkGraphs.MultiDiGraph
 
