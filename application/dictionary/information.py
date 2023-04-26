@@ -78,7 +78,6 @@ tooltips = {
 
     'list_of_nodes': 'Enter a list of nodes to remove from the network for a personalized resilience analysis, '
                      'allowing you to evaluate the impact of specific node deletions on the overall network stability.',
-
 }
 
 description = {
@@ -280,7 +279,7 @@ description = {
                               "and node roles within subgroups.",
 
     'node2vec_kmeans': "The Node2Vec with K-Means clustering merges <b>Node2Vec embeddings</b> and <b>K-Means "
-                       "Clustering</b> to"
+                       "Clustering</b> to "
                        "highlight the community structure within your network. Node2Vec captures the network's "
                        "topological features, while K-Means Clustering groups similar nodes using their embeddings. "
                        "Examining the joint results provides insights into network organization, relationships "
@@ -303,7 +302,7 @@ description = {
                              "into your network's structure and dynamics.",
 
     'dlembedding_agglomerative': "The Deep Learning Embedding with agglomerative clustering combines <b>GNN "
-                                 "embeddings</b> and <b>Agglomerative"
+                                 "embeddings</b> and <b>Agglomerative "
                                  "Hierarchical Clustering</b> to reveal the community structure within your network. "
                                  "GNN captures the network's topology and node features, while Agglomerative "
                                  "Clustering groups similar nodes based on their embeddings. This combination allows "
@@ -323,10 +322,4 @@ description = {
                           "groups similar nodes using their embeddings. This combination provides a more "
                           "comprehensive understanding of network organization, relationships between communities, "
                           "and individual node roles, unveiling shared interests or functional clusters.",
-    '': '',
-    '': '',
-    '': '',
-    '': '',
-    '': '',
-
 }
