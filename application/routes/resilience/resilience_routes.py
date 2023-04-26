@@ -8,7 +8,7 @@ from src.utils import get_networkGraph
 sys.path.insert(1, '../../')
 
 resilience_routes = Blueprint('resilience_routes', __name__)
-BASE_URL = 'http://localhost:8000/api/v1'
+BASE_URL = 'http://3.221.153.241:8000/api/v1'
 
 # -------------------------------------------RESILIENCE_ANALYSIS-----------------------------
 

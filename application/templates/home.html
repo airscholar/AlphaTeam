@@ -25,7 +25,7 @@
 <script src="{{ url_for('static', filename='js/resilience.js') }}"></script>
 
 <script type="text/javascript">
-    const BASE_URL = 'http://localhost:8000/api/v1/visualisation/';
+    const BASE_URL = 'http://3.221.153.241:8000/api/v1/visualisation/';
     $(document).ready(function () {
         $.ajax({
             url: BASE_URL + '{{session_id}}' + '/dataset',

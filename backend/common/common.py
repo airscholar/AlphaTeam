@@ -2,7 +2,7 @@ import pandas as pd
 import requests
 from flask import request
 
-BASE_URL = 'http://localhost:8000/api/v1/metrics/'
+BASE_URL = 'http://3.221.153.241:8000/api/v1/metrics/'
 
 
 def get_arg_multi_toggle(args):
