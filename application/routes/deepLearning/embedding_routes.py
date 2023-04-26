@@ -11,7 +11,7 @@ from src.metrics import *
 embedding_routes = Blueprint('embedding_routes', __name__)
 
 # ----------------------------------------------CLUSTER-EMBEDDING------------------------------------------------------------------
-BASE_URL = 'http://localhost:8000/api/v1/deeplearning/'
+BASE_URL = 'http://3.221.153.241:8000/api/v1/deeplearning/'
 
 
 @embedding_routes.route('/node2vec/embedding', endpoint='node2vec_embedding', methods=['GET', 'POST'])

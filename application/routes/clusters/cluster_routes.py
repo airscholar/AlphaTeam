@@ -10,7 +10,7 @@ from src.metrics import *
 cluster_routes = Blueprint('cluster_routes', __name__)
 
 # -------------------------------------------ML-CLUSTERING-----------------------------------
-BASE_URL = 'http://localhost:8000/api/v1/clusters/'
+BASE_URL = 'http://3.221.153.241:8000/api/v1/clusters/'
 
 @cluster_routes.route('/clustering/louvain', endpoint='clustering_louvanian', methods=['GET', 'POST'])
 def clustering_louvanian():

@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8000/api/v1/clusters/';
+const BASE_URL = 'http://3.221.153.241:8000/api/v1/clusters/';
 
 const clusteringVisualisation = (data) => {
     const graphCluster = document.getElementById('graph_cluster');
