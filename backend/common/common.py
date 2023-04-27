@@ -5,6 +5,7 @@ from flask import request
 BASE_URL = 'http://3.221.153.241:8000/api/v1/metrics/'
 
 
+
 def get_arg_multi_toggle(args):
     if 'multi_toggle' in args:
         multi_toggle = args.get('multi_toggle', 'false')

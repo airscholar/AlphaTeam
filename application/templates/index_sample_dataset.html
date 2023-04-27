@@ -78,17 +78,16 @@
 
         // Submit the form
         // document.getElementById('form').submit();
-        const myHeaders = new Headers();
-        const requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: formData,
-            redirect: 'follow'
-        };
-
-        fetch("http://3.221.153.241:8000/api/v1/upload", requestOptions)
-            .then(response => response.json())
-            .then(result => {
+        $.ajax({
+            url: 'http://3.221.153.241:8000/api/v1/upload',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            mode: 'no-cors',
+            success: function (result) {
                 const filename = result['filename'];
                 const filename2 = result['filename2'];
                 option = result['option'];
@@ -96,10 +95,13 @@
                 const full_path = result['full_path'];
 
                 //redirect to the home
-                window.location.href = '/home?filename=' + filename + '&filename2=' + filename2 + '&option='
-                    + option + '&filepath=' + filepath + '&full_path=' + full_path;
-            })
-            .catch(error => console.log('error', error));
+                window.location.href = '/home?filename=' + filename + '&filename2=' + filename2 + '&option=' + option + '&filepath=' + filepath + '&full_path=' + full_path;
+            },
+            error: function (error) {
+                console.log('error', error);
+            }
+        });
+
 
         let showSpinner = true; // Set this variable to true to display the spinner or false to hide it
         setSpinnerVisibility(showSpinner);
