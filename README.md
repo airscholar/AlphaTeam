@@ -26,6 +26,7 @@ instructions [here](https://docs.docker.com/install/).
 3. Run `docker run -d -p 8000:8000 -p 3000:3000 --name alpha-team alpha-team` to start the application
 3. Open your browser and go to `http://127.0.0.1:3000`
 4. Enjoy!
+5. (Optional) Run `docker logs -f alpha-team` to see the logs of the container
 
 # Documentation
 

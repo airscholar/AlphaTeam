@@ -41,7 +41,10 @@ WORKDIR /alpha-team
 ENV FLASK_APP=app.py
 
 # Start the application
-CMD cd backend && flask run --host 0.0.0.0 --port 8000 & cd application && flask run --host 0.0.0.0 --port 3000
+CMD (cd backend && flask run --host 0.0.0.0 --port 8000 > backend.log 2>&1 &) && \
+    (cd application && flask run --host 0.0.0.0 --port 3000 > frontend.log 2>&1 &) && \
+    tail -f backend/backend.log application/frontend.log
+
 
 
 
