@@ -1,4 +1,4 @@
-const BASE_URL = 'http://3.221.153.241:8000/api/v1/visualisation/';
+const BASE_URL = 'http://localhost:8000/api/v1/visualisation/';
 
 const basicVisualisation = (data, plotType, id) => {
     const plot_type = plotType;

@@ -1,4 +1,3 @@
-
 FROM ubuntu:latest
 
 # Install python3 and pip3 and other dependencies
@@ -32,13 +31,17 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Expose the ports
+EXPOSE 8000
 EXPOSE 3000
 
-#change to frontend folder
-WORKDIR /alpha-team/frontend
+#change to backend folder
+WORKDIR /alpha-team
 
 # set flask environment variables
 ENV FLASK_APP=app.py
 
 # Start the application
-CMD [ "flask", "run","--host","0.0.0.0","--port","3000"]
+CMD cd backend && flask run --host 0.0.0.0 --port 8000 & cd application && flask run --host 0.0.0.0 --port 3000
+
+
+
