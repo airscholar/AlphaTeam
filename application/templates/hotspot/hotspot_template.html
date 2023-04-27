@@ -1,12 +1,8 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-<<<<<<<< Updated upstream:application/templates/hotspot/hotspot_template.html
             <h3 class="styledh3">{{method_name}} Hotspot</h3>
             <p>{{description | safe}}</p>
-========
-            <h3>{{method_name}} Hotspot</h3>
->>>>>>>> Stashed changes:application/templates/hotspot_template.html
             <hr> <!-- Add a horizontal rule for visual separation -->
         </div>
     </div>
@@ -21,29 +17,9 @@
     <hr>
 
     <div class="card card-body">
-<<<<<<<< Updated upstream:application/templates/hotspot/hotspot_template.html
         <h3 style="margin-top: 10px;">Density Information</h3>
         <hr>
         <table id="example-hotspot" class="display" style="width:100%">
-========
-        <table id="example" class="display" style="width:100%">
-            <thead>
-                <tr>
-                    {% for cell in example.columns %}
-                    <th>{{ cell }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in example.itertuples() %}
-                <tr>
-                    {% for cell in row[1:] %}
-                    <td>{{ cell }}</td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
->>>>>>>> Stashed changes:application/templates/hotspot_template.html
         </table>
     </div>
     <div class="row mt-3">
