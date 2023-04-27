@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8000/api/v1/deeplearning/';
+const BASE_URL = 'http://3.221.153.241:8000/api/v1/deeplearning/';
 
 const performNode2VecEmbeddingVisualisation = (data) => {
     const graphEmbedding = document.getElementById('graph_embedding_frame');
