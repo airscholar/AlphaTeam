@@ -1,4 +1,4 @@
-const BASE_URL = 'http://3.221.153.241:8000/api/v1/hotspot/';
+const BASE_URL = 'http://localhost:8000/api/v1/hotspot/';
 
 const hotspotVisualisation = (data, hotspotType) => {
     const hotspot_type = hotspotType;
