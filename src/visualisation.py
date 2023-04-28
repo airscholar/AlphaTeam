@@ -23,6 +23,7 @@ from src.visualisation_src.basic_network_visualisation import *
 from src.visualisation_src.metrics_visualisation import *
 from src.visualisation_src.temporal_visualisation import *
 from src.visualisation_src.utils_visualisation import *
+from src.stochastic import *
 
 
 # ----------------------------------------------------------------------------------------
@@ -257,6 +258,8 @@ def plot_histogram(networkGraphs, metrics, directed=True, multi=True, fullPath=F
         - 'degree_centrality'
         - 'centralities' - All centralities
         - 'nodes' - All node metrics
+        - 'clustering_coefficient' - Stochastic clustering coefficient
+        - 'shortest_path' - Stochastic shortest path
     :param networkGraphs: Network graphs
     :type networkGraphs: NetworkGraphs
     :param metrics: Metrics to be plotted
@@ -274,6 +277,10 @@ def plot_histogram(networkGraphs, metrics, directed=True, multi=True, fullPath=F
         df = m.compute_node_centralities(networkGraphs, directed=directed, multi=multi)
     elif metrics == 'nodes':
         df = m.compute_node_metrics(networkGraphs, directed=directed, multi=multi)
+    elif metrics == 'clustering_coefficient':
+        df = estimate_clustering_coefficient(networkGraphs)
+    elif metrics == 'shortest_path':
+        df = estimate_shortest_path_length(networkGraphs)
     else:
         df = m.get_metrics(networkGraphs, metrics, directed=directed, multi=multi)
 
@@ -332,6 +339,8 @@ def plot_boxplot(networkGraphs, metrics, directed=True, multi=True, fullPath=Fal
         - 'degree_centrality'
         - 'centralities' - All centralities
         - 'nodes' - All node metrics
+        - 'clustering_coefficient' - Stochastic clustering coefficient
+        - 'shortest_path' - Stochastic shortest path
     :param networkGraphs: Network graphs
     :type networkGraphs: NetworkGraphs
     :param metrics: Metrics to be plotted
@@ -349,6 +358,10 @@ def plot_boxplot(networkGraphs, metrics, directed=True, multi=True, fullPath=Fal
         df = m.compute_node_centralities(networkGraphs, directed=directed, multi=multi)
     elif metrics == 'nodes':
         df = m.compute_node_metrics(networkGraphs, directed=directed, multi=multi)
+    elif metrics == 'clustering_coefficient':
+        df = estimate_clustering_coefficient(networkGraphs)
+    elif metrics == 'shortest_path':
+        df = estimate_shortest_path_length(networkGraphs)
     else:
         df = m.get_metrics(networkGraphs, metrics, directed=directed, multi=multi)
 
@@ -379,6 +392,8 @@ def plot_violin(networkGraphs, metrics, directed=True, multi=True, fullPath=Fals
         - 'degree_centrality'
         - 'centralities' - All centralities
         - 'nodes' - All node metrics
+        - 'clustering_coefficient' - Stochastic clustering coefficient
+        - 'shortest_path' - Stochastic shortest path
     :param networkGraphs: Network graphs
     :type networkGraphs: NetworkGraphs
     :param metrics: Metrics to be plotted
@@ -396,6 +411,10 @@ def plot_violin(networkGraphs, metrics, directed=True, multi=True, fullPath=Fals
         df = m.compute_node_centralities(networkGraphs, directed=directed, multi=multi)
     elif metrics == 'nodes':
         df = m.compute_node_metrics(networkGraphs, directed=directed, multi=multi)
+    elif metrics == 'clustering_coefficient':
+        df = estimate_clustering_coefficient(networkGraphs)
+    elif metrics == 'shortest_path':
+        df = estimate_shortest_path_length(networkGraphs)
     else:
         df = m.get_metrics(networkGraphs, metrics, directed=directed, multi=multi)
 

@@ -43,16 +43,17 @@ def get_random_node(nodes):
 # -------------------------------------- FUNCTIONS -------------------------------------
 
 
-def estimate_shortest_path_length(G, iterations=10_000):
+def estimate_shortest_path_length(networkGraphs, iterations=10_000):
     """
     :Function: Estimate shortest path length between over a iterations number of samples
-    :param G: Graph
-    :type G: networkx.classes.graph.Graph
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: src.NetworkGraphs.NetworkGraphs
     :param iterations: Number of samples
     :type iterations: int
     :return: DataFrame of shortest path lengths
     :rtype: pandas.core.frame.DataFrame
     """
+    G = networkGraphs.Graph
     nodes = list(G.nodes())
     lengths = []
 
@@ -64,7 +65,10 @@ def estimate_shortest_path_length(G, iterations=10_000):
         except nx.NetworkXNoPath:
             pass
 
-    df = pd.DataFrame(lengths, columns=['Length'])
+    df = pd.DataFrame({
+        'Sample': range(len(lengths)),
+        'Shortest Path Length': lengths,
+    })
 
     return df
 
@@ -72,16 +76,17 @@ def estimate_shortest_path_length(G, iterations=10_000):
 # -------------------------------------------------------------------------------------
 
 
-def estimate_clustering_coefficient(G, iterations=10_000):
+def estimate_clustering_coefficient(networkGraphs, iterations=10_000):
     """
     :Function: Estimate clustering coefficient over a iterations number of samples
-    :param G: Graph
-    :type G: networkx.classes.graph.Graph
+    :param networkGraphs: NetworkGraphs object
+    :type networkGraphs: src.NetworkGraphs.NetworkGraphs
     :param iterations: Number of samples
     :type iterations: int
     :return: DataFrame of clustering coefficients
     :rtype: pandas.core.frame.DataFrame
     """
+    G = networkGraphs.Graph
     nodes = list(G.nodes())
     coefficients = []
 
@@ -90,6 +95,9 @@ def estimate_clustering_coefficient(G, iterations=10_000):
         coefficient = nx.clustering(G, node)
         coefficients.append(coefficient)
 
-    df = pd.DataFrame(coefficients, columns=['Coefficient'])
+    df = pd.DataFrame({
+        'Sample': range(len(coefficients)),
+        'Clustering Coefficient': coefficients,
+    })
 
     return df
