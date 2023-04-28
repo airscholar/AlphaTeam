@@ -6,12 +6,12 @@ Purpose: Compute the metrics for the network graphs
 
 # -------------------------------------- IMPORTS -------------------------------------------
 
-# Internal imports
-from src.utils import *
-
 # External imports
 import networkx as nx
 import pandas as pd
+
+# Internal imports
+from src.utils import *
 
 
 # ----------------------------------------------------------------------------------------

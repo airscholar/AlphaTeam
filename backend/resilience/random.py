@@ -7,6 +7,7 @@ from src.visualisation import *
 
 random_bp = Blueprint('resilience_random', __name__, url_prefix="/api/v1/resilience")
 
+
 def extract_args():
     args = request.args
 
@@ -21,6 +22,7 @@ def extract_args():
     print(number_of_nodes, number_of_edges)
 
     return number_of_nodes, number_of_edges
+
 
 @random_bp.route('<session_id>/random')
 def compute_random(session_id):
@@ -45,4 +47,3 @@ def compute_random(session_id):
 
     return jsonify({"message": "Success", "data": df_json, "network_before": before, "network_after": after,
                     "heatmap_before": heatmap_before, "heatmap_after": heatmap_after})
-

@@ -7,22 +7,22 @@ Purpose: Main visualisation file wrapping sub-visualisation functionalities
 
 # ----------------------------------------------------------------------------------------
 
+import pandas as pd
 # External Imports
 from pandas.api.types import is_numeric_dtype
-import pandas as pd
 
 # Internal Imports
 import src.deepLearning as dl
 import src.machineLearning as ml
 import src.metrics as m
 from src import utils
+from src.deepLearning import *
 from src.visualisation_src.DL_visualisation import *
 from src.visualisation_src.ML_visualisation import *
 from src.visualisation_src.basic_network_visualisation import *
 from src.visualisation_src.metrics_visualisation import *
 from src.visualisation_src.temporal_visualisation import *
 from src.visualisation_src.utils_visualisation import *
-from src.deepLearning import *
 
 
 # ----------------------------------------------------------------------------------------

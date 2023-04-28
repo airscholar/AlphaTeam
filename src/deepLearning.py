@@ -8,13 +8,12 @@ Purpose: Deep learning module contains functions for deep learning embeddings
 
 # External imports
 from node2vec import Node2Vec
-import numpy as np
-import plotly.graph_objects as go
 
 # Internal imports
-from src.utils import memoize
 from src.DeepLearning.embedding import *
 from src.metrics import get_metrics
+from src.utils import memoize
+
 
 # ----------------------------------------- CONSTANT ----------------------------------------- #
 

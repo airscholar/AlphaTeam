@@ -64,7 +64,7 @@ def node2vec(session_id):
     df_json = df.to_json(orient='split')
     filename = filename.replace('../application/', '')
 
-    return jsonify({'message': 'Success', 'data': df_json, 'filename': filename })
+    return jsonify({'message': 'Success', 'data': df_json, 'filename': filename})
 
 
 @deepLearning_bp.route('<session_id>/node2vec_clusters')
@@ -133,13 +133,13 @@ def dl_embedding_clusters(session_id):
 
     if layout in ['TSNE', 'PCA', 'UMAP', 'map', 'sfdp', 'twopi']:
         df, filename = plot_DL_embedding_cluster(networkGraphs,
-                                             clustering_alg,
-                                             model=model,
-                                             features=features,
-                                             dimension=dimension,
-                                             layout=layout,
-                                             noOfCluster=no_of_clusters,
-                                             fullPath=True)
+                                                 clustering_alg,
+                                                 model=model,
+                                                 features=features,
+                                                 dimension=dimension,
+                                                 layout=layout,
+                                                 noOfCluster=no_of_clusters,
+                                                 fullPath=True)
     else:
         raise ValueError('Layout not supported, please choose between TSNE, PCA and UMAP, map, sfdp, twopi')
     df_json = df.to_json(orient='split')

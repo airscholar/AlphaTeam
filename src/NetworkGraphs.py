@@ -6,13 +6,13 @@ Purpose: NetworkGraphs.py contains the NetworkGraphs custom class to generalise 
 
 # ----------------------------------------- Imports ----------------------------------------- #
 
-# Internal imports
-from src.preprocessing import *
-from src.visualisation import *
-
 # External imports
 import scipy.io as sio
 from pandas.api.types import is_numeric_dtype
+
+# Internal imports
+from src.preprocessing import *
+from src.visualisation import *
 
 """
 ----------------------------------------------------------------------------------------

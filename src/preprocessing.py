@@ -6,12 +6,14 @@
 
 # ----------------------------------------------------------------------------------------
 
+from random import randint
+
 # External imports
 import networkx as nx
 import pandas as pd
-import scipy.io as sio
 import partridge as ptg
-from random import randint
+import scipy.io as sio
+
 
 
 # ----------------------------------------------------------------------------------------

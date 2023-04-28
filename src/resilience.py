@@ -6,15 +6,14 @@ Purpose: Assess the resilience of a network using different attacks vectors
 
 # -------------------------------------- IMPORT ---------------------------------------------
 
+# External imports
+import random
+
 # Internal imports
 import src.machineLearning as ml
 from src.NetworkGraphs import NetworkGraphs
 from src.metrics import *
 from src.preprocessing import convert_to_DiGraph
-
-# External imports
-import random
-import pandas as pd
 
 # -------------------------------------- FUNCTIONS -------------------------------------------
 

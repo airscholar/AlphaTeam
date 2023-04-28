@@ -6,13 +6,14 @@ Purpose: Deep learning embedding module contains functions for deep learning emb
 
 # ----------------------------------------- Imports ----------------------------------------- #
 
+import random
+
+import numpy as np
 # External imports
 import torch
 import torch.nn.functional as F
 from torch_geometric.nn import GCNConv, GATConv, SAGEConv
 from torch_geometric.utils import from_networkx
-import numpy as np
-import random
 
 
 # ----------------------------------------- CONSTANT ----------------------------------------- #
