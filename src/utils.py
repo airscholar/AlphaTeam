@@ -1,7 +1,7 @@
 """
 Author: Alpha Team Group Project
 Date: March 2023
-Purpose: utils.py contains utility functions for the project
+Purpose: utils.py contains utilities functions for the project
 """
 
 # ----------------------------------------- Imports ----------------------------------------- #
@@ -24,9 +24,25 @@ networkGraphs_cache = {}
 # ----------------------------------------- Functions ----------------------------------------- #
 
 def memoize(func):
+    """
+    :Function: Memoize the function to avoid recomputing the same value, leverage the cache
+    :param func: Function to memoize
+    :type func: function
+    :return: Wrapper function
+    :rtype: function
+    """
     cache = {}
 
     def wrapper(*args, **kwargs):
+        """
+        :Function: Wrapper function for the memoization
+        :param args: arguments
+        :type args: list
+        :param kwargs: keyword arguments
+        :type kwargs: dict
+        :return: Result of the function
+        :rtype: any
+        """
         key = (func, args, tuple(sorted(kwargs.items())))
         key_hash = md5(str(key).encode('utf-8')).hexdigest()
         if key_hash in cache:
@@ -45,8 +61,9 @@ def memoize(func):
 
 def set_networkGraph(networkGraph, session_id):
     """
-    Set the network graph
+    :Function: Set the network graph in the cache
     :param networkGraph: Network graph
+    :type networkGraph: NetworkGraph
     :return: None
     """
     networkGraphs_cache[session_id] = networkGraph
@@ -58,8 +75,11 @@ def set_networkGraph(networkGraph, session_id):
 
 def get_networkGraph(session_id):
     """
-    Get the network graph
+    :Function: Get the network graph from the cache
+    :param session_id: Session id
+    :type session_id: str
     :return: Network graph
+    :rtype: NetworkGraph
     """
     return networkGraphs_cache[session_id]
 
@@ -69,8 +89,11 @@ def get_networkGraph(session_id):
 
 def is_saved(session_id):
     """
-    Check if the network graph is saved
+    :Function: Check if the network graph is saved in the cache
+    :param session_id: Session id
+    :type session_id: str
     :return: True if the network graph is saved, False otherwise
+    :rtype: bool
     """
     return session_id in networkGraphs_cache.keys()
 
@@ -80,7 +103,9 @@ def is_saved(session_id):
 
 def delete_networkGraph(session_id):
     """
-    Delete the network graph
+    :Function: Delete the network graph from the cache
+    :param session_id: Session id
+    :type session_id: str
     :return: None
     """
     del networkGraphs_cache[session_id]
@@ -97,7 +122,9 @@ def return_nan(networkGraphs, column):
     :param networkGraphs: NetworkGraphs object
     :type networkGraphs: NetworkGraphs
     :param column: Column name
+    :type column: str
     :return: Pandas dataframe with the metric and NaN values
+    :rtype: pd.DataFrame
     """
     df = pd.DataFrame(columns=['Node', column])
     df['Node'] = list(networkGraphs.Graph.nodes())
