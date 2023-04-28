@@ -1,40 +1,41 @@
-import matplotlib.pyplot as plt
+"""
+Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Visualisation utilities module contains functions for visualising the network graphs
+"""
+
+# ----------------------------------------- Imports ----------------------------------------- #
+
+# External imports
+import os
 import geopandas as gpd
+import matplotlib.pyplot as plt
 from plotly import graph_objects as go
-from utils import memoize
-from tqdm import tqdm
+
+# Internal imports
+from src.utils import memoize
 
 
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def plot_map(networkGraphs, background=True, edges=True):  # FOR MATPLOTLIB
+def get_layout(networkGraphs, title=None, layout_='map'):
     """
-    :Function: Plot the map of the location of the graphs
+    :Function: Get the layout of the graph
     :param networkGraphs: Network graphs
-    :param background: Boolean to indicate if the background is to be plotted or not
-    :param edges: Boolean to indicate if the edges are to be plotted or not
-    :return: Matplotlib plot
+    :type networkGraphs: NetworkGraphs
+    :param title: Title of the graph
+    :type title: str
+    :param layout_: layout of the graph
+    :type layout_: str
+    :return: Plotly layout
+    :rtype: plotly.graph_objects
     """
-    if not networkGraphs.is_spatial():
-        return 0
-
-    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-    world = world[(world.pop_est > 0) & (world.name != "Antarctica")]
-    ax = world.plot(figsize=(10, 10), edgecolor='black' if edges else 'white',
-                    color='white' if background else None)
-    ax.set_xlim(networkGraphs.get_min_long(), networkGraphs.get_max_long())
-    ax.set_ylim(networkGraphs.get_min_lat(), networkGraphs.get_max_lat())
-
-    return plt
-
-
-# ----------------------------------------------------------------------------------------
-
-@memoize
-def get_layout(networkGraphs, title=None, layout_='map'):  # FOR PLOTLY
-
     if layout_ == 'map':
+        if networkGraphs.type == 'GTFS':
+            resolution = 50
+        else:
+            resolution = 110
         layout = go.Layout(
             title=f'<br>{title}',
             titlefont=dict(size=16, color='Black'),
@@ -49,13 +50,15 @@ def get_layout(networkGraphs, title=None, layout_='map'):  # FOR PLOTLY
                     font=dict(color='black')
                 )
             ],
+            margin=dict(l=0, r=0, t=0, b=0),
             geo=dict(
                 scope='world',
                 lataxis_range=[networkGraphs.min_lat, networkGraphs.max_lat],
                 lonaxis_range=[networkGraphs.min_long, networkGraphs.max_long],
-                center=dict(lat=networkGraphs.mid_lat,
-                            lon=networkGraphs.mid_long),
+                center=dict(lat=networkGraphs.mid_lat, lon=networkGraphs.mid_long),
                 showland=True,
+                showcountries=True,
+                resolution=resolution,
             ),
             xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
             yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)
@@ -67,6 +70,7 @@ def get_layout(networkGraphs, title=None, layout_='map'):  # FOR PLOTLY
             titlefont=dict(size=16, color='Black'),
             showlegend=False,
             hovermode='closest',
+            margin=dict(l=0, r=0, t=0, b=0),
             annotations=[
                 dict(
                     text="Alpha Team - 2023",
@@ -90,26 +94,43 @@ def generate_edge_trace(Graph, pos, layout):
     """
     :Function: Generate the edge trace for the plotly plot, leveraging the memoize decorator for cache optimization
     :param Graph: Network graph
+    :type Graph: NetworkGraph
     :param pos: Position of the nodes
+    :type pos: dict
     :param layout: Layout of the plot
+    :type layout: str
     :return: Edge trace
+    :rtype: plotly.graph_objects
     """
-    if layout == 'map':
-        edge_trace = go.Scattergeo(
-            lon=[], lat=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
-
-    else:
-        edge_trace = go.Scatter(
-            x=[], y=[], hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
-
-    for edge in tqdm(Graph.edges()):
+    x_list = []
+    y_list = []
+    for edge in Graph.edges():
         x0, y0 = pos[edge[0]]
         x1, y1 = pos[edge[1]]
-        if layout == 'map':
-            edge_trace['lon'] += (x0, x1, None)
-            edge_trace['lat'] += (y0, y1, None)
-        else:
-            edge_trace['x'] += (x0, x1, None)
-            edge_trace['y'] += (y0, y1, None)
+        x_list.extend([x0, x1, None])
+        y_list.extend([y0, y1, None])
+
+    if layout == 'map':
+        edge_trace = go.Scattergeo(lon=x_list, lat=y_list, hoverinfo='none', mode='lines',
+                                   line=dict(width=0.5, color='#888'))
+    else:
+        edge_trace = go.Scatter(x=x_list, y=y_list, hoverinfo='none', mode='lines', line=dict(width=0.5, color='#888'))
 
     return edge_trace
+
+
+def get_file_path(networkGraphs, file_name):
+    """
+    :Function: Get the file path for the plotly plot
+    :param networkGraphs: Network graph
+    :type networkGraphs: NetworkGraph
+    :param file_name: Name of the file
+    :type file_name: str
+    :return: Filepath
+    :rtype: str
+    """
+    folder = f"{networkGraphs.session_folder}/"
+    if not os.path.isdir(folder):
+        os.mkdir(folder)
+
+    return f"{folder}{file_name}"

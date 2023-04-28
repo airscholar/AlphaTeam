@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.visualisation_src.metrics_visualisation &mdash; AlphaTeam 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            AlphaTeam
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">AlphaTeam</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.visualisation_src.metrics_visualisation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.visualisation_src.metrics_visualisation</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Author: Alpha Team Group Project</span>
+<span class="sd">Date: March 2023</span>
+<span class="sd">Purpose: Metrics visualisation module contains functions for visualising metrics</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># ----------------------------------------- Imports ----------------------------------------- #</span>
+
+<span class="c1"># External imports</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pyvis</span> <span class="kn">import</span> <span class="n">network</span> <span class="k">as</span> <span class="n">net</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="c1"># Internal imports</span>
+<span class="kn">from</span> <span class="nn">src.visualisation_src.utils_visualisation</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="dropStd"><a class="viewcode-back" href="../../../src.visualisation_src.html#src.visualisation_src.metrics_visualisation.dropStd">[docs]</a><span class="k">def</span> <span class="nf">dropStd</span><span class="p">(</span><span class="n">df_</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Drop the std column from the dataframe</span>
+<span class="sd">    :param df_: Dataframe with the metrics</span>
+<span class="sd">    :type df_: pandas.DataFrame</span>
+<span class="sd">    :return: Dataframe without the std column</span>
+<span class="sd">    :rtype: pandas.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="s1">&#39;std&#39;</span> <span class="ow">in</span> <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">df_</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
+        <span class="n">df_</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;std&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df_</span></div>
+
+
+<div class="viewcode-block" id="generate_static_metric"><a class="viewcode-back" href="../../../src.visualisation_src.html#src.visualisation_src.metrics_visualisation.generate_static_metric">[docs]</a><span class="k">def</span> <span class="nf">generate_static_metric</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">df_</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">layout_</span><span class="o">=</span><span class="s1">&#39;map&#39;</span><span class="p">):</span>  <span class="c1"># USING PLOTLY</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Plot the metrics on the graph</span>
+<span class="sd">    :param networkGraphs: Network graphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param df_: Dataframe with the metrics (first column is the node id) (second column is the metric)</span>
+<span class="sd">    :type df_: pandas.DataFrame</span>
+<span class="sd">    :param filename: Name of the file to be saved</span>
+<span class="sd">    :type filename: str</span>
+<span class="sd">    :param layout_: Layout to be used</span>
+<span class="sd">    :type layout_: str</span>
+<span class="sd">    :return: Plotly plot</span>
+<span class="sd">    :rtype: plotly.graph_objs._figure.Figure</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">is_spatial</span><span class="p">()</span> <span class="ow">and</span> <span class="n">layout_</span> <span class="o">==</span> <span class="s1">&#39;map&#39;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No spatial graph&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;../application/static/no_graph.html&#39;</span>
+
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">layout_</span><span class="p">]</span>
+
+    <span class="n">metrics_name</span> <span class="o">=</span> <span class="n">df_</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">df_</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_</span><span class="p">[</span><span class="n">metrics_name</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_</span><span class="p">[</span><span class="n">metrics_name</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">df_</span><span class="p">[</span><span class="n">metrics_name</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">df_</span><span class="p">[</span><span class="n">metrics_name</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+    <span class="n">df_</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.00</span><span class="p">)</span>
+    <span class="n">size_</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">/</span> <span class="n">df_</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>  <span class="c1"># normalise the size of the nodes</span>
+    <span class="n">df_</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mf">0.05</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mf">0.03</span> <span class="k">else</span> <span class="n">x</span><span class="p">)</span>  <span class="c1"># to avoid nodes with size 0</span>
+    <span class="n">df_</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="n">size_</span><span class="p">)</span>
+
+    <span class="n">x_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">y_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">text_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">()):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">pos</span><span class="p">[</span><span class="n">node</span><span class="p">]</span>
+        <span class="n">x_list</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">x</span><span class="p">])</span>
+        <span class="n">y_list</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">y</span><span class="p">])</span>
+        <span class="n">metric_df</span> <span class="o">=</span> <span class="n">df_</span><span class="p">[</span><span class="n">df_</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">node</span><span class="p">]</span>
+        <span class="n">node_info</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Node: </span><span class="si">{</span><span class="n">node</span><span class="si">}</span><span class="s2">&lt;br&gt;&quot;</span>
+        <span class="n">node_info</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metrics_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">metric_df</span><span class="p">[</span><span class="n">metrics_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">&lt;br&gt;&quot;</span>
+        <span class="n">text_list</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">node_info</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">layout_</span> <span class="o">==</span> <span class="s1">&#39;map&#39;</span><span class="p">:</span>
+        <span class="n">node_trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scattergeo</span><span class="p">(</span><span class="n">lon</span><span class="o">=</span><span class="n">x_list</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="n">y_list</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text_list</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;markers&#39;</span><span class="p">,</span> <span class="n">hoverinfo</span><span class="o">=</span><span class="s1">&#39;text&#39;</span><span class="p">,</span>
+                                   <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">showscale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                               <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">thickness</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">metrics_name</span><span class="p">,</span> <span class="n">xanchor</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span>
+                                                             <span class="n">titleside</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">df_</span><span class="p">[</span><span class="n">metrics_name</span><span class="p">],</span>
+                                               <span class="n">size</span><span class="o">=</span><span class="n">df_</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">node_trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_list</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_list</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text_list</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;markers&#39;</span><span class="p">,</span> <span class="n">hoverinfo</span><span class="o">=</span><span class="s1">&#39;text&#39;</span><span class="p">,</span>
+                                <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">showscale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                            <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">thickness</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">metrics_name</span><span class="p">,</span> <span class="n">xanchor</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span>
+                                                          <span class="n">titleside</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">df_</span><span class="p">[</span><span class="n">metrics_name</span><span class="p">],</span>
+                                            <span class="n">size</span><span class="o">=</span><span class="n">df_</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]))</span>
+
+    <span class="n">edge_trace</span> <span class="o">=</span> <span class="n">generate_edge_trace</span><span class="p">(</span><span class="n">Graph</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">layout_</span><span class="p">)</span>
+
+    <span class="n">layout</span> <span class="o">=</span> <span class="n">get_layout</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metrics_name</span><span class="si">}</span><span class="s2"> visualisation using </span><span class="si">{</span><span class="n">layout_</span><span class="si">}</span><span class="s2"> layout&quot;</span><span class="p">,</span> <span class="n">layout_</span><span class="o">=</span><span class="n">layout_</span><span class="p">)</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">edge_trace</span><span class="p">,</span> <span class="n">node_trace</span><span class="p">],</span>
+                    <span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span>
+
+    <span class="n">steps</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">range_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">range_</span><span class="p">:</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;restyle&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Scale </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">step</span><span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;marker.size&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">df_</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]]]</span>
+        <span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+
+    <span class="n">sliders</span> <span class="o">=</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">active</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">currentvalue</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;prefix&quot;</span><span class="p">:</span> <span class="s2">&quot;Size: &quot;</span><span class="p">,</span> <span class="s2">&quot;visible&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+        <span class="n">pad</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+        <span class="n">steps</span><span class="o">=</span><span class="n">steps</span>
+    <span class="p">)]</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">sliders</span><span class="o">=</span><span class="n">sliders</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">full_html</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_plotlyjs</span><span class="o">=</span><span class="s1">&#39;cdn&#39;</span><span class="p">)</span>
+    <span class="n">df_</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="generate_static_all_metrics"><a class="viewcode-back" href="../../../src.visualisation_src.html#src.visualisation_src.metrics_visualisation.generate_static_all_metrics">[docs]</a><span class="k">def</span> <span class="nf">generate_static_all_metrics</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">df_</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">layout_</span><span class="o">=</span><span class="s1">&#39;map&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Plot the metrics on the graph</span>
+<span class="sd">    :param networkGraphs: Network graphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param df_: Dataframe with the metrics</span>
+<span class="sd">    :type df_: pandas.DataFrame</span>
+<span class="sd">    :param filename: Name of the file to be saved</span>
+<span class="sd">    :type filename: str</span>
+<span class="sd">    :param layout_: Layout to be used</span>
+<span class="sd">    :type layout_: str</span>
+<span class="sd">    :return: Plotly plot</span>
+<span class="sd">    :rtype: plotly.graph_objs._figure.Figure</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">is_spatial</span><span class="p">()</span> <span class="ow">and</span> <span class="n">layout_</span> <span class="o">==</span> <span class="s1">&#39;map&#39;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No spatial graph&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;../application/static/no_graph.html&#39;</span>
+
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">layout_</span><span class="p">]</span>
+
+    <span class="n">metrics_names</span> <span class="o">=</span> <span class="n">df_</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+    <span class="n">x_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">y_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">text_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">pos</span><span class="p">[</span><span class="n">node</span><span class="p">]</span>
+        <span class="n">x_list</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">x</span><span class="p">])</span>
+        <span class="n">y_list</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">y</span><span class="p">])</span>
+        <span class="n">metric_df</span> <span class="o">=</span> <span class="n">df_</span><span class="p">[</span><span class="n">df_</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">node</span><span class="p">]</span>
+        <span class="n">node_info</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Node: </span><span class="si">{</span><span class="n">node</span><span class="si">}</span><span class="s2">&lt;br&gt;&quot;</span>
+        <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">metrics_names</span><span class="p">:</span>
+            <span class="n">node_info</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">metric_df</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">&lt;br&gt;&quot;</span>
+        <span class="n">text_list</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">node_info</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">layout_</span> <span class="o">==</span> <span class="s1">&#39;map&#39;</span><span class="p">:</span>
+        <span class="n">node_trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scattergeo</span><span class="p">(</span><span class="n">lon</span><span class="o">=</span><span class="n">x_list</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="n">y_list</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text_list</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;markers&#39;</span><span class="p">,</span> <span class="n">hoverinfo</span><span class="o">=</span><span class="s1">&#39;text&#39;</span><span class="p">,</span>
+                                   <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">showscale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">node_trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_list</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_list</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text_list</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;markers&#39;</span><span class="p">,</span> <span class="n">hoverinfo</span><span class="o">=</span><span class="s1">&#39;text&#39;</span><span class="p">,</span>
+                                <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">showscale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">))</span>
+
+    <span class="n">edge_trace</span> <span class="o">=</span> <span class="n">generate_edge_trace</span><span class="p">(</span><span class="n">Graph</span><span class="o">=</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">layout_</span><span class="p">)</span>
+
+    <span class="n">layout</span> <span class="o">=</span> <span class="n">get_layout</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Metrics visualisation using </span><span class="si">{</span><span class="n">layout_</span><span class="si">}</span><span class="s2"> layout&quot;</span><span class="p">,</span> <span class="n">layout_</span><span class="o">=</span><span class="n">layout_</span><span class="p">)</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">edge_trace</span><span class="p">,</span> <span class="n">node_trace</span><span class="p">],</span>
+                    <span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">full_html</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_plotlyjs</span><span class="o">=</span><span class="s1">&#39;cdn&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="generate_dynamic_metric"><a class="viewcode-back" href="../../../src.visualisation_src.html#src.visualisation_src.metrics_visualisation.generate_dynamic_metric">[docs]</a><span class="k">def</span> <span class="nf">generate_dynamic_metric</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">df_</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Plot the metrics on the graph</span>
+<span class="sd">    :param networkGraphs: Network graphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param df_: Dataframe with the metrics</span>
+<span class="sd">    :type df_: pandas.DataFrame</span>
+<span class="sd">    :param filename: Name of the file to be saved</span>
+<span class="sd">    :type filename: str</span>
+<span class="sd">    :return: Pyvis plot</span>
+<span class="sd">    :rtype: pyvis.network.Network</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span>
+    <span class="n">metrics_name</span> <span class="o">=</span> <span class="n">df_</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">df_</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_</span><span class="p">[</span><span class="n">metrics_name</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">df_</span><span class="p">[</span><span class="n">metrics_name</span><span class="p">]))</span> <span class="o">/</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">df_</span><span class="p">[</span><span class="n">metrics_name</span><span class="p">])</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">df_</span><span class="p">[</span><span class="n">metrics_name</span><span class="p">])))</span>
+    <span class="n">size_</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">/</span> <span class="n">df_</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">plasma</span>
+
+    <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">metric_df</span> <span class="o">=</span> <span class="n">df_</span><span class="p">[</span><span class="n">df_</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">u</span><span class="p">]</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">(</span><span class="n">metric_df</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">rgb2hex</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metric_df</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">size_</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Node: </span><span class="si">{</span><span class="n">u</span><span class="si">}</span><span class="s2">; </span><span class="si">{</span><span class="n">metrics_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">metric_df</span><span class="p">[</span><span class="n">metrics_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">d</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+    <span class="n">Net</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="s2">&quot;750px&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="s2">&quot;100%&quot;</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="s2">&quot;#E4ECF6&quot;</span><span class="p">,</span> <span class="n">font_color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">notebook</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">Net</span><span class="o">.</span><span class="n">from_nx</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+    <span class="n">Net</span><span class="o">.</span><span class="n">show_buttons</span><span class="p">(</span><span class="n">filter_</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;physics&#39;</span><span class="p">,</span> <span class="s1">&#39;edges&#39;</span><span class="p">,</span> <span class="s1">&#39;nodes&#39;</span><span class="p">])</span>
+    <span class="n">Net</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">physics</span><span class="o">.</span><span class="n">use_force_atlas_2based</span><span class="p">(</span>
+        <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;central_gravity&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span> <span class="s1">&#39;gravity&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="s1">&#39;spring_length&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;spring_strength&#39;</span><span class="p">:</span> <span class="mf">0.08</span><span class="p">,</span> <span class="s1">&#39;damping&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+                <span class="s1">&#39;overlap&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+    <span class="n">Net</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">df_</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Net</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="generate_histogram_metric"><a class="viewcode-back" href="../../../src.visualisation_src.html#src.visualisation_src.metrics_visualisation.generate_histogram_metric">[docs]</a><span class="k">def</span> <span class="nf">generate_histogram_metric</span><span class="p">(</span><span class="n">df_</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Generate histogram of the metrics</span>
+<span class="sd">    :param df_: Dataframe with the metrics</span>
+<span class="sd">    :type df_: pd.DataFrame</span>
+<span class="sd">    :param filename: Name of the file to be saved</span>
+<span class="sd">    :type filename: str</span>
+<span class="sd">    :return: Plotly plot</span>
+<span class="sd">    :rtype: plotly.graph_objects.Figure</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dropStd</span><span class="p">(</span><span class="n">df_</span><span class="p">)</span>
+
+    <span class="n">metrics_names</span> <span class="o">=</span> <span class="n">df_</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">metrics</span> <span class="o">=</span> <span class="n">df_</span><span class="p">[</span><span class="n">metrics_names</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Histogram: </span><span class="si">{</span><span class="s1">&#39;s&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">metrics_names</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">metrics_names</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">80</span><span class="p">:</span>  <span class="c1"># if title too long write it in two lines</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">title</span><span class="p">[:</span><span class="mi">80</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;-&lt;br&gt;-&#39;</span> <span class="o">+</span> <span class="n">title</span><span class="p">[</span><span class="mi">80</span><span class="p">:]</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">metric</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">metrics_names</span><span class="p">):</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Histogram</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">metrics</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="n">metric</span><span class="p">))</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">barmode</span><span class="o">=</span><span class="s1">&#39;overlay&#39;</span><span class="p">,</span>
+                      <span class="n">title_text</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+                      <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Values&quot;</span><span class="p">,</span>
+                      <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;Count&quot;</span><span class="p">,</span>
+                      <span class="n">bargap</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">opacity</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">full_html</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_plotlyjs</span><span class="o">=</span><span class="s1">&#39;cdn&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="generate_boxplot_metric"><a class="viewcode-back" href="../../../src.visualisation_src.html#src.visualisation_src.metrics_visualisation.generate_boxplot_metric">[docs]</a><span class="k">def</span> <span class="nf">generate_boxplot_metric</span><span class="p">(</span><span class="n">df_</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Generate boxplot of the metrics</span>
+<span class="sd">    :param df_: Dataframe with the metrics</span>
+<span class="sd">    :type df_: pd.DataFrame</span>
+<span class="sd">    :param filename: Name of the file to be saved</span>
+<span class="sd">    :type filename: str</span>
+<span class="sd">    :return: Plotly plot</span>
+<span class="sd">    :rtype: plotly.graph_objects.Figure</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dropStd</span><span class="p">(</span><span class="n">df_</span><span class="p">)</span>
+
+    <span class="n">metrics_names</span> <span class="o">=</span> <span class="n">df_</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">metrics</span> <span class="o">=</span> <span class="n">df_</span><span class="p">[</span><span class="n">metrics_names</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Boxplot of the metric</span><span class="si">{</span><span class="s1">&#39;s&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">metrics_names</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">metrics_names</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">80</span><span class="p">:</span>  <span class="c1"># if title too long write it in two lines</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">title</span><span class="p">[:</span><span class="mi">80</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;-&lt;br&gt;-&#39;</span> <span class="o">+</span> <span class="n">title</span><span class="p">[</span><span class="mi">80</span><span class="p">:]</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">metric</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">metrics_names</span><span class="p">):</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">metrics</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="n">metric</span><span class="p">))</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+                      <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Metrics&quot;</span><span class="p">,</span>
+                      <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;Values&quot;</span><span class="p">,</span>
+                      <span class="p">)</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">full_html</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_plotlyjs</span><span class="o">=</span><span class="s1">&#39;cdn&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="generate_violin_metric"><a class="viewcode-back" href="../../../src.visualisation_src.html#src.visualisation_src.metrics_visualisation.generate_violin_metric">[docs]</a><span class="k">def</span> <span class="nf">generate_violin_metric</span><span class="p">(</span><span class="n">df_</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Generate violin plot of the metrics</span>
+<span class="sd">    :param df_: Dataframe with the metrics</span>
+<span class="sd">    :type df_: pd.DataFrame</span>
+<span class="sd">    :param filename: Name of the file to be saved</span>
+<span class="sd">    :type filename: str</span>
+<span class="sd">    :return: Plotly plot</span>
+<span class="sd">    :rtype: plotly.graph_objects.Figure</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dropStd</span><span class="p">(</span><span class="n">df_</span><span class="p">)</span>
+
+    <span class="n">metrics_names</span> <span class="o">=</span> <span class="n">df_</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">metrics</span> <span class="o">=</span> <span class="n">df_</span><span class="p">[</span><span class="n">metrics_names</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Violin plot of the metric</span><span class="si">{</span><span class="s1">&#39;s&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">metrics_names</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">metrics_names</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">80</span><span class="p">:</span>  <span class="c1"># if title too long write it in two lines</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">title</span><span class="p">[:</span><span class="mi">80</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;-&lt;br&gt;-&#39;</span> <span class="o">+</span> <span class="n">title</span><span class="p">[</span><span class="mi">80</span><span class="p">:]</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">metric</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">metrics_names</span><span class="p">):</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Violin</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">metrics</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span> <span class="n">box_visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">meanline_visible</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+                      <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Metrics&quot;</span><span class="p">,</span>
+                      <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;Values&quot;</span><span class="p">,</span>
+                      <span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">full_html</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_plotlyjs</span><span class="o">=</span><span class="s1">&#39;cdn&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="generate_heatmap"><a class="viewcode-back" href="../../../src.visualisation_src.html#src.visualisation_src.metrics_visualisation.generate_heatmap">[docs]</a><span class="k">def</span> <span class="nf">generate_heatmap</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Show the heatmap of the graph</span>
+<span class="sd">    :param networkGraph: Network graph</span>
+<span class="sd">    :type networkGraph: NetworkGraph</span>
+<span class="sd">    :param filename: Name of the file to be saved</span>
+<span class="sd">    :type filename: str</span>
+<span class="sd">    :return: Plotly plot</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraph</span><span class="o">.</span><span class="n">Graph</span>
+
+    <span class="n">mat</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">to_scipy_sparse_array</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">(),</span> <span class="n">weight</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csc&#39;</span><span class="p">)</span>
+    <span class="n">mat</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">()]</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">go</span><span class="o">.</span><span class="n">Heatmap</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="n">mat</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">ax</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s2">&quot;Heatmap of connections between nodes&quot;</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_xaxes</span><span class="p">(</span><span class="n">showticklabels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">showticklabels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">full_html</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_plotlyjs</span><span class="o">=</span><span class="s1">&#39;cdn&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Alpha Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

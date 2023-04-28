@@ -412,3 +412,116 @@
     width: 3rem;
     height: 3rem;
 }
+
+.toggle-btn {
+    display: inline-block;
+    position: relative;
+    width: 60px;
+    height: 34px;
+    margin-right: 10px;
+}
+
+.toggle-btn input[type=checkbox] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-btn label {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ccc;
+    border-radius: 34px;
+    cursor: pointer;
+}
+
+.toggle-btn label:before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: all 0.3s ease-in-out;
+}
+
+.toggle-btn input[type=checkbox]:checked+label:before {
+    transform: translateX(26px);
+    background-color: #3cb371;
+}
+
+.dropdown {
+    margin-top: 5px;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.dropdown select {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 16px;
+    background-color: #fff;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    padding-left: 15px;
+}
+
+.btn-circle {
+    border-radius: 100%;
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+}
+
+.btn-info.btn-circle:hover {
+    background-color: #f4f4f4;
+}
+
+.btn-circle i {
+    color: black;
+}
+
+/* Optional styling for the tooltip */
+.tooltip {
+    font-size: 14px;
+}
+
+.home-section {
+    position: relative;
+    /* Set position to relative for the parent container */
+}
+
+.sidebar.close~.home-section {
+    position: relative;
+}
+
+.home-section .home-content {
+    position: absolute;
+    /* Set position to absolute */
+    top: 0;
+    /* Position at the top of the parent container */
+    left: 0;
+    /* Position at the left of the parent container */
+    z-index: 1;
+    /* Set a higher z-index than the container div to make it appear on top */
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.styledh3 {
+    margin-left: 40px;
+    margin-top: 13px;
+}

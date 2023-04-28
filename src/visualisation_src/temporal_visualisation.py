@@ -1,112 +1,136 @@
-import geopandas as gpd
-import matplotlib.pyplot as plt
+"""
+Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Temporal visualisation module contains functions for generating temporal visualisations
+"""
+
+# ----------------------------------------- Imports ----------------------------------------- #
+
+# External imports
 import networkx as nx
-import ipywidgets as widgets
-import os
-import cv2
+import numpy as np
+import plotly.graph_objects as go
+from tqdm import tqdm
 
-# ----------------------------------------------------------------------------------------
+# Internal imports
+from src.visualisation_src.utils_visualisation import get_layout
 
-def plot_temporal_graphs(temporal_graphs):
-    """
-    :Function: Plot the dynamic temporal graphs on a map using a slider
-    :param temporal_graphs: List of NetworkX Digraphs
-    :return: Matplotlib plot with slider
-    """
-    # Create a figure and subplot
-    fig, ax = plt.subplots()
-
-    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-    china = world[world['name'] == 'China']
-    # Draw the first graph
-    china.plot(ax=ax, color='white', edgecolor='black')
-    colors = nx.get_edge_attributes(temporal_graphs[0], 'color').values()
-    nx.draw(temporal_graphs[0], pos=nx.get_node_attributes(temporal_graphs[0], 'pos'), edge_color=colors,
-            with_labels=False, node_size=1,
-            node_color='red', width=0.5, ax=ax)
-    ax.set_title(f"Temporal Graph at {0 // 1440}:{(0 // 60) % 24:02d}:{0 % 60:02d}")
-
-    # Create a slider widget
-    slider = widgets.IntSlider(min=0, max=len(temporal_graphs) - 1, value=0, description='Timeframe')
-
-    # Define a function to update the plot when the slider is changed
-    def update_plot(val):
-        val = val['new']
-        ax.clear()
-        china.plot(ax=ax, color='white', edgecolor='black')
-        colors = nx.get_edge_attributes(temporal_graphs[val], 'color').values()
-        nx.draw(temporal_graphs[val], pos=nx.get_node_attributes(temporal_graphs[0], 'pos'), with_labels=False,
-                node_size=1, node_color='red', edge_color=colors, width=0.5, ax=ax)
-        ax.set_title(f"Temporal Graph at {val // 1440}:{(val // 60) % 24:02d}:{val % 60:02d}")
-        plt.show()
-
-    # Attach the update function to the slider
-    slider.observe(update_plot, names='value')
-    display(slider)
-    plt.show()
-    return [slider, plt]
-    # # Display the slider widget and plot
-    # display(slider)
-    # plt.show()
 
 # ----------------------------------------------------------------------------------------
 
 
-def create_frames(temporal_graphs):
+def generate_temporal(networkGraphs, filename, layout_='map'):
     """
-    :Function: Create a list of frames for the dynamic temporal graphs
-    :param temporal_graphs: List of NetworkX Digraphs
-    :return: List of frames
+    :Function: Generate temporal visualisation of the network
+    :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
+    :param filename: File name
+    :type filename: str
+    :param layout_: Layout
+    :type layout_: str
+    :return: Plotly plot
+    :rtype: plotly.graph_objects
     """
-    path = "frames/"
-    for i in range(len(temporal_graphs)):
-        fig, ax = plt.subplots()
-        world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-        china = world[world['name'] == 'China']
-        china.plot(ax=ax, color='white', edgecolor='black')
-        colors = nx.get_edge_attributes(temporal_graphs[i], 'color').values()
-        nx.draw(temporal_graphs[i], pos=nx.get_node_attributes(temporal_graphs[i], 'pos'), edge_color=colors,
-                with_labels=False, node_size=0.5,
-                node_color='red', width=1.5, ax=ax)
-        ax.set_title(f"Temporal Graph")
-        plt.savefig(path + f"{i}.png")
-        plt.close()
-        # free memory
-        del fig
-        del ax
-        print(f"\rCreating frames: {i + 1}/{len(temporal_graphs)}", end="")
+    if not networkGraphs.is_spatial() and layout_ == 'map':
+        print(ValueError('The graph is not spatial, please choose a different layout'))
+        return '../application/static/no_graph.html'
 
-    return 1
+    G = networkGraphs.MultiDiGraph
 
-# ----------------------------------------------------------------------------------------
+    fig = go.Figure()
 
+    start = networkGraphs.get_start()
+    end = networkGraphs.get_end()
+    step = (end - start) / 100
 
-def create_mp4():
-    """
-    :Function: Create a video from the frames
-    :return: 1 if successful
-    """
-    frames_folder = 'frames/'
-    frame_filenames = os.listdir(frames_folder)
-    frame_filenames.sort(key=lambda x: int(x[:-4]))
+    node_x = []
+    node_y = []
+    text_list = []
+    for node in G.nodes():
+        pos = networkGraphs.pos[layout_]
+        x, y = pos[node]
+        node_x.append(x)
+        node_y.append(y)
+        node_info = f"Node: {node}<br>"
+        text_list.append(node_info)
 
-    # Read the first frame to get its dimensions
-    frame = cv2.imread(frames_folder + frame_filenames[0])
-    height, width, layers = frame.shape
+    if layout_ == 'map':
+        node_trace = go.Scattergeo(
+            lon=node_x, lat=node_y,
+            mode='markers',
+            hoverinfo='text',
+            marker=dict(
+                reversescale=True,
+                color='black',
+                size=1,
+                line_width=1, ),
+            text=text_list)
+    else:
+        node_trace = go.Scatter(
+            x=node_x, y=node_y,
+            mode='markers',
+            hoverinfo='text',
+            marker=dict(
+                reversescale=True,
+                color='black',
+                size=1,
+                line_width=1, ),
+            text=text_list)
 
-    # Create a VideoWriter object to write the video
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    video = cv2.VideoWriter('output.mp4', fourcc, 30, (width, height))
+    fig.add_trace(node_trace)
 
-    # Loop through the frames and add them to the video
-    i = 0
-    for filename in frame_filenames:
-        frame = cv2.imread(frames_folder + filename)
-        video.write(frame)
-        print(f"\r{i / 2764 * 100:.2f}%", end="")
-        i += 1
+    for t in tqdm(np.arange(start, end + step, step)):
+        G2 = nx.DiGraph(((source, target, attr) for source, target, attr in G.edges(data=True) if
+                         attr['start'] <= t and t <= attr['end']))
 
-    video.release()
-    print('\nVideo saved as output.mp4')
+        lat = []
+        lon = []
+        for edge in G2.edges():
+            pos = networkGraphs.pos[layout_]
+            x0, y0 = pos[edge[0]]
+            x1, y1 = pos[edge[1]]
+            lon.extend([x0, x1, None])
+            lat.extend([y0, y1, None])
 
-    return 1
+        if layout_ == 'map':
+            edge_trace = go.Scattergeo(
+                lon=lon, lat=lat,
+                mode='lines',
+                line=dict(width=1, color='red'),
+                opacity=0.8,
+            )
+        else:
+            edge_trace = go.Scatter(
+                x=lon, y=lat,
+                mode='lines',
+                line=dict(width=1, color='red'),
+                opacity=0.8,
+            )
+
+        fig.add_trace(edge_trace)
+
+    # Create and add slider
+    steps = []
+    for i in range(len(fig.data)):
+        step = dict(
+            method="update",
+            args=[{"visible": [True] + [False] * len(fig.data)},
+                  {"title": "Date time " + str(i)}],  # layout attribute
+        )
+        step["args"][0]["visible"][i] = True  # Toggle i'th trace to "visible"
+        steps.append(step)
+
+    sliders = [dict(
+        active=0,
+        currentvalue={"prefix": "Frequency: "},
+        pad={"t": 50},
+        steps=steps,
+    )]
+
+    fig.update_layout(sliders=sliders)
+    layout = get_layout(networkGraphs, layout_)
+    fig.update_layout(layout)
+
+    fig.write_html(filename, full_html=False, include_plotlyjs='cdn')
+
+    return filename

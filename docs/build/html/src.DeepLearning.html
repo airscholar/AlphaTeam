@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.DeepLearning package &mdash; AlphaTeam 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AlphaTeam
+              <img src="_static/favicon.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">src.DeepLearning package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-src.DeepLearning.embedding">src.DeepLearning.embedding module</a><ul>
+<li><a class="reference internal" href="#src.DeepLearning.embedding.GAT"><code class="docutils literal notranslate"><span class="pre">GAT</span></code></a><ul>
+<li><a class="reference internal" href="#src.DeepLearning.embedding.GAT.forward"><code class="docutils literal notranslate"><span class="pre">GAT.forward()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#src.DeepLearning.embedding.GCN"><code class="docutils literal notranslate"><span class="pre">GCN</span></code></a><ul>
+<li><a class="reference internal" href="#src.DeepLearning.embedding.GCN.forward"><code class="docutils literal notranslate"><span class="pre">GCN.forward()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#src.DeepLearning.embedding.SAGE"><code class="docutils literal notranslate"><span class="pre">SAGE</span></code></a><ul>
+<li><a class="reference internal" href="#src.DeepLearning.embedding.SAGE.forward"><code class="docutils literal notranslate"><span class="pre">SAGE.forward()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#src.DeepLearning.embedding.contrastive_loss"><code class="docutils literal notranslate"><span class="pre">contrastive_loss()</span></code></a></li>
+<li><a class="reference internal" href="#src.DeepLearning.embedding.generate_pairs"><code class="docutils literal notranslate"><span class="pre">generate_pairs()</span></code></a></li>
+<li><a class="reference internal" href="#src.DeepLearning.embedding.get_embeddings"><code class="docutils literal notranslate"><span class="pre">get_embeddings()</span></code></a></li>
+<li><a class="reference internal" href="#src.DeepLearning.embedding.pairs_to_indices"><code class="docutils literal notranslate"><span class="pre">pairs_to_indices()</span></code></a></li>
+<li><a class="reference internal" href="#src.DeepLearning.embedding.preprocess_data"><code class="docutils literal notranslate"><span class="pre">preprocess_data()</span></code></a></li>
+<li><a class="reference internal" href="#src.DeepLearning.embedding.test"><code class="docutils literal notranslate"><span class="pre">test()</span></code></a></li>
+<li><a class="reference internal" href="#src.DeepLearning.embedding.train"><code class="docutils literal notranslate"><span class="pre">train()</span></code></a></li>
+<li><a class="reference internal" href="#src.DeepLearning.embedding.train_model"><code class="docutils literal notranslate"><span class="pre">train_model()</span></code></a></li>
+<li><a class="reference internal" href="#src.DeepLearning.embedding.unsupervised_loss"><code class="docutils literal notranslate"><span class="pre">unsupervised_loss()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-src.DeepLearning">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AlphaTeam</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src.DeepLearning package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/src.DeepLearning.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-deeplearning-package">
+<h1>src.DeepLearning package<a class="headerlink" href="#src-deeplearning-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-src.DeepLearning.embedding">
+<span id="src-deeplearning-embedding-module"></span><h2>src.DeepLearning.embedding module<a class="headerlink" href="#module-src.DeepLearning.embedding" title="Permalink to this heading"></a></h2>
+<p>Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Deep learning embedding module contains functions for deep learning embedding</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.DeepLearning.embedding.GAT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.DeepLearning.embedding.</span></span><span class="sig-name descname"><span class="pre">GAT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embed_dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/DeepLearning/embedding.html#GAT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.DeepLearning.embedding.GAT" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Graph Attention Network</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.DeepLearning.embedding.GAT.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/DeepLearning/embedding.html#GAT.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.DeepLearning.embedding.GAT.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.DeepLearning.embedding.GCN">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.DeepLearning.embedding.</span></span><span class="sig-name descname"><span class="pre">GCN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embed_dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/DeepLearning/embedding.html#GCN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.DeepLearning.embedding.GCN" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Graph Convolutional Network</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.DeepLearning.embedding.GCN.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/DeepLearning/embedding.html#GCN.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.DeepLearning.embedding.GCN.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.DeepLearning.embedding.SAGE">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.DeepLearning.embedding.</span></span><span class="sig-name descname"><span class="pre">SAGE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embed_dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/DeepLearning/embedding.html#SAGE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.DeepLearning.embedding.SAGE" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>GraphSAGE</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.DeepLearning.embedding.SAGE.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/DeepLearning/embedding.html#SAGE.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.DeepLearning.embedding.SAGE.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.DeepLearning.embedding.contrastive_loss">
+<span class="sig-prename descclassname"><span class="pre">src.DeepLearning.embedding.</span></span><span class="sig-name descname"><span class="pre">contrastive_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embeddings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positive_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">negative_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">margin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/DeepLearning/embedding.html#contrastive_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.DeepLearning.embedding.contrastive_loss" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Contrastive loss function for unsupervised learning</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>embeddings</strong> (<em>torch.Tensor</em>) – embeddings</p></li>
+<li><p><strong>positive_pairs</strong> (<em>torch.Tensor</em>) – positive pairs</p></li>
+<li><p><strong>negative_pairs</strong> (<em>torch.Tensor</em>) – negative pairs</p></li>
+<li><p><strong>margin</strong> (<em>float</em>) – margin</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>loss</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.DeepLearning.embedding.generate_pairs">
+<span class="sig-prename descclassname"><span class="pre">src.DeepLearning.embedding.</span></span><span class="sig-name descname"><span class="pre">generate_pairs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkx_graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_negative_pairs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/DeepLearning/embedding.html#generate_pairs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.DeepLearning.embedding.generate_pairs" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Generate positive and negative pairs</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>networkx_graph</strong> (<em>networkx.Graph</em>) – networkx graph</p></li>
+<li><p><strong>num_negative_pairs</strong> (<em>int</em>) – number of negative pairs</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>positive pairs, negative pairs</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.array, np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.DeepLearning.embedding.get_embeddings">
+<span class="sig-prename descclassname"><span class="pre">src.DeepLearning.embedding.</span></span><span class="sig-name descname"><span class="pre">get_embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/DeepLearning/embedding.html#get_embeddings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.DeepLearning.embedding.get_embeddings" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Get final embeddings</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>model</strong> (<em>torch.nn.Module</em>) – Deep learning model</p></li>
+<li><p><strong>data</strong> (<em>torch_geometric.data.Data</em>) – Data</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>embeddings</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.DeepLearning.embedding.pairs_to_indices">
+<span class="sig-prename descclassname"><span class="pre">src.DeepLearning.embedding.</span></span><span class="sig-name descname"><span class="pre">pairs_to_indices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positive_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">negative_pairs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/DeepLearning/embedding.html#pairs_to_indices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.DeepLearning.embedding.pairs_to_indices" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Convert pairs to indices</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>data</strong> (<em>torch_geometric.data.Data</em>) – Data</p></li>
+<li><p><strong>positive_pairs</strong> (<em>np.array</em>) – positive pairs</p></li>
+<li><p><strong>negative_pairs</strong> (<em>np.array</em>) – negative pairs</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>positive indices, negative indices</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.array, np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.DeepLearning.embedding.preprocess_data">
+<span class="sig-prename descclassname"><span class="pre">src.DeepLearning.embedding.</span></span><span class="sig-name descname"><span class="pre">preprocess_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkx_graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_features</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/DeepLearning/embedding.html#preprocess_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.DeepLearning.embedding.preprocess_data" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Preprocess data for deep learning embedding</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>networkx_graph</strong> (<em>networkx.Graph</em>) – Networkx graph</p></li>
+<li><p><strong>node_features</strong> (<em>np.array</em>) – Node features</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>data</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch_geometric.data.Data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.DeepLearning.embedding.test">
+<span class="sig-prename descclassname"><span class="pre">src.DeepLearning.embedding.</span></span><span class="sig-name descname"><span class="pre">test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proximity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/DeepLearning/embedding.html#test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.DeepLearning.embedding.test" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Test model for deep learning embedding</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>model</strong> (<em>torch.nn.Module</em>) – Deep learning model</p></li>
+<li><p><strong>data</strong> (<em>torch_geometric.data.Data</em>) – Data</p></li>
+<li><p><strong>device</strong> (<em>torch.device</em>) – Device</p></li>
+<li><p><strong>proximity</strong> (<em>bool</em>) – Proximity</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>loss</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.DeepLearning.embedding.train">
+<span class="sig-prename descclassname"><span class="pre">src.DeepLearning.embedding.</span></span><span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proximity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/DeepLearning/embedding.html#train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.DeepLearning.embedding.train" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Train model for deep learning embedding</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>model</strong> (<em>torch.nn.Module</em>) – Deep learning model</p></li>
+<li><p><strong>optimizer</strong> (<em>torch.optim.Optimizer</em>) – Optimizer</p></li>
+<li><p><strong>data</strong> (<em>torch_geometric.data.Data</em>) – Data</p></li>
+<li><p><strong>device</strong> (<em>torch.device</em>) – Device</p></li>
+<li><p><strong>proximity</strong> (<em>bool</em>) – Proximity</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>loss</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.DeepLearning.embedding.train_model">
+<span class="sig-prename descclassname"><span class="pre">src.DeepLearning.embedding.</span></span><span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proximity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/DeepLearning/embedding.html#train_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.DeepLearning.embedding.train_model" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Train model for deep learning embedding</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>model</strong> (<em>torch.nn.Module</em>) – Deep learning model</p></li>
+<li><p><strong>optimizer</strong> (<em>torch.optim.Optimizer</em>) – Optimizer</p></li>
+<li><p><strong>data</strong> (<em>torch_geometric.data.Data</em>) – Data</p></li>
+<li><p><strong>device</strong> (<em>torch.device</em>) – Device</p></li>
+<li><p><strong>epochs</strong> (<em>int</em>) – Epochs</p></li>
+<li><p><strong>proximity</strong> (<em>bool</em>) – Proximity</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>loss</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.DeepLearning.embedding.unsupervised_loss">
+<span class="sig-prename descclassname"><span class="pre">src.DeepLearning.embedding.</span></span><span class="sig-name descname"><span class="pre">unsupervised_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recon_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/DeepLearning/embedding.html#unsupervised_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.DeepLearning.embedding.unsupervised_loss" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Unsupervised loss function for deep learning embedding</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>recon_x</strong> (<em>torch.Tensor</em>) – reconstructed x</p></li>
+<li><p><strong>x</strong> (<em>torch.Tensor</em>) – original x</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>loss</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-src.DeepLearning">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.DeepLearning" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Alpha Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

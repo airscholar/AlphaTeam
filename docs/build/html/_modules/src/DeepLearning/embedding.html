@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.DeepLearning.embedding &mdash; AlphaTeam 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            AlphaTeam
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">AlphaTeam</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.DeepLearning.embedding</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.DeepLearning.embedding</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Author: Alpha Team Group Project</span>
+<span class="sd">Date: March 2023</span>
+<span class="sd">Purpose: Deep learning embedding module contains functions for deep learning embedding</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># ----------------------------------------- Imports ----------------------------------------- #</span>
+
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1"># External imports</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.nn</span> <span class="kn">import</span> <span class="n">GCNConv</span><span class="p">,</span> <span class="n">GATConv</span><span class="p">,</span> <span class="n">SAGEConv</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.utils</span> <span class="kn">import</span> <span class="n">from_networkx</span>
+
+
+<span class="c1"># ----------------------------------------- CONSTANT ----------------------------------------- #</span>
+
+<span class="c1"># ------------------------------------------- MODEL ------------------------------------------ #</span>
+
+
+<div class="viewcode-block" id="GCN"><a class="viewcode-back" href="../../../src.DeepLearning.html#src.DeepLearning.embedding.GCN">[docs]</a><span class="k">class</span> <span class="nc">GCN</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Graph Convolutional Network</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_features</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GCN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">GCNConv</span><span class="p">(</span><span class="n">num_features</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GCN.forward"><a class="viewcode-back" href="../../../src.DeepLearning.html#src.DeepLearning.embedding.GCN.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_index</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div></div>
+
+
+<span class="c1"># --------------------------------------------------------------------------------------------- #</span>
+
+
+<div class="viewcode-block" id="GAT"><a class="viewcode-back" href="../../../src.DeepLearning.html#src.DeepLearning.embedding.GAT">[docs]</a><span class="k">class</span> <span class="nc">GAT</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Graph Attention Network</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_features</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GAT</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">GATConv</span><span class="p">(</span><span class="n">num_features</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GAT.forward"><a class="viewcode-back" href="../../../src.DeepLearning.html#src.DeepLearning.embedding.GAT.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_index</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div></div>
+
+
+<span class="c1"># --------------------------------------------------------------------------------------------- #</span>
+
+
+<div class="viewcode-block" id="SAGE"><a class="viewcode-back" href="../../../src.DeepLearning.html#src.DeepLearning.embedding.SAGE">[docs]</a><span class="k">class</span> <span class="nc">SAGE</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    GraphSAGE</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_features</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SAGE</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">SAGEConv</span><span class="p">(</span><span class="n">num_features</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SAGE.forward"><a class="viewcode-back" href="../../../src.DeepLearning.html#src.DeepLearning.embedding.SAGE.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_index</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div></div>
+
+
+<span class="c1"># ------------------------------------------- LOSS ------------------------------------------- #</span>
+
+<div class="viewcode-block" id="unsupervised_loss"><a class="viewcode-back" href="../../../src.DeepLearning.html#src.DeepLearning.embedding.unsupervised_loss">[docs]</a><span class="k">def</span> <span class="nf">unsupervised_loss</span><span class="p">(</span><span class="n">recon_x</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Unsupervised loss function for deep learning embedding</span>
+<span class="sd">    :param recon_x: reconstructed x</span>
+<span class="sd">    :type recon_x: torch.Tensor</span>
+<span class="sd">    :param x: original x</span>
+<span class="sd">    :type x: torch.Tensor</span>
+<span class="sd">    :return: loss</span>
+<span class="sd">    :rtype: torch.Tensor</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mse_loss</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">recon_x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mse_loss</span></div>
+
+
+<span class="c1"># --------------------------------------------------------------------------------------------- #</span>
+
+
+<div class="viewcode-block" id="contrastive_loss"><a class="viewcode-back" href="../../../src.DeepLearning.html#src.DeepLearning.embedding.contrastive_loss">[docs]</a><span class="k">def</span> <span class="nf">contrastive_loss</span><span class="p">(</span><span class="n">embeddings</span><span class="p">,</span> <span class="n">positive_pairs</span><span class="p">,</span> <span class="n">negative_pairs</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Contrastive loss function for unsupervised learning</span>
+<span class="sd">    :param embeddings: embeddings</span>
+<span class="sd">    :type embeddings: torch.Tensor</span>
+<span class="sd">    :param positive_pairs: positive pairs</span>
+<span class="sd">    :type positive_pairs: torch.Tensor</span>
+<span class="sd">    :param negative_pairs: negative pairs</span>
+<span class="sd">    :type negative_pairs: torch.Tensor</span>
+<span class="sd">    :param margin: margin</span>
+<span class="sd">    :type margin: float</span>
+<span class="sd">    :return: loss</span>
+<span class="sd">    :rtype: torch.Tensor</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">positive_distances</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">embeddings</span><span class="p">[</span><span class="n">positive_pairs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]]</span> <span class="o">-</span> <span class="n">embeddings</span><span class="p">[</span><span class="n">positive_pairs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">negative_distances</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">embeddings</span><span class="p">[</span><span class="n">negative_pairs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]]</span> <span class="o">-</span> <span class="n">embeddings</span><span class="p">[</span><span class="n">negative_pairs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">positive_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">positive_distances</span><span class="p">))</span>
+    <span class="n">negative_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="n">margin</span> <span class="o">-</span> <span class="n">negative_distances</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)))</span>
+
+    <span class="n">loss</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">positive_loss</span> <span class="o">+</span> <span class="n">negative_loss</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">loss</span></div>
+
+
+<span class="c1"># ----------------------------------------- TRAINING ----------------------------------------- #</span>
+
+
+<div class="viewcode-block" id="train"><a class="viewcode-back" href="../../../src.DeepLearning.html#src.DeepLearning.embedding.train">[docs]</a><span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">proximity</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Train model for deep learning embedding</span>
+<span class="sd">    :param model: Deep learning model</span>
+<span class="sd">    :type model: torch.nn.Module</span>
+<span class="sd">    :param optimizer: Optimizer</span>
+<span class="sd">    :type optimizer: torch.optim.Optimizer</span>
+<span class="sd">    :param data: Data</span>
+<span class="sd">    :type data: torch_geometric.data.Data</span>
+<span class="sd">    :param device: Device</span>
+<span class="sd">    :type device: torch.device</span>
+<span class="sd">    :param proximity: Proximity</span>
+<span class="sd">    :type proximity: bool</span>
+<span class="sd">    :return: loss</span>
+<span class="sd">    :rtype: float</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">proximity</span><span class="p">:</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">contrastive_loss</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">positive_pairs</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">negative_pairs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">unsupervised_loss</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">train_mask</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">train_mask</span><span class="p">])</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span></div>
+
+
+<span class="c1"># --------------------------------------------------------------------------------------------- #</span>
+
+
+<div class="viewcode-block" id="test"><a class="viewcode-back" href="../../../src.DeepLearning.html#src.DeepLearning.embedding.test">[docs]</a><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">proximity</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Test model for deep learning embedding</span>
+<span class="sd">    :param model: Deep learning model</span>
+<span class="sd">    :type model: torch.nn.Module</span>
+<span class="sd">    :param data: Data</span>
+<span class="sd">    :type data: torch_geometric.data.Data</span>
+<span class="sd">    :param device: Device</span>
+<span class="sd">    :type device: torch.device</span>
+<span class="sd">    :param proximity: Proximity</span>
+<span class="sd">    :type proximity: bool</span>
+<span class="sd">    :return: loss</span>
+<span class="sd">    :rtype: float</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">proximity</span><span class="p">:</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">contrastive_loss</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">positive_pairs</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">negative_pairs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">unsupervised_loss</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">test_mask</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">test_mask</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span></div>
+
+
+<span class="c1"># --------------------------------------------------------------------------------------------- #</span>
+
+
+<div class="viewcode-block" id="train_model"><a class="viewcode-back" href="../../../src.DeepLearning.html#src.DeepLearning.embedding.train_model">[docs]</a><span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span> <span class="n">proximity</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Train model for deep learning embedding</span>
+<span class="sd">    :param model: Deep learning model</span>
+<span class="sd">    :type model: torch.nn.Module</span>
+<span class="sd">    :param optimizer: Optimizer</span>
+<span class="sd">    :type optimizer: torch.optim.Optimizer</span>
+<span class="sd">    :param data: Data</span>
+<span class="sd">    :type data: torch_geometric.data.Data</span>
+<span class="sd">    :param device: Device</span>
+<span class="sd">    :type device: torch.device</span>
+<span class="sd">    :param epochs: Epochs</span>
+<span class="sd">    :type epochs: int</span>
+<span class="sd">    :param proximity: Proximity</span>
+<span class="sd">    :type proximity: bool</span>
+<span class="sd">    :return: loss</span>
+<span class="sd">    :rtype: float</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">best_loss</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+    <span class="n">best_weights</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">epochs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">proximity</span><span class="o">=</span><span class="n">proximity</span><span class="p">)</span>
+        <span class="n">test_loss</span> <span class="o">=</span> <span class="n">test</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">proximity</span><span class="o">=</span><span class="n">proximity</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">test_loss</span> <span class="o">&lt;</span> <span class="n">best_loss</span><span class="p">:</span>
+            <span class="n">best_loss</span> <span class="o">=</span> <span class="n">test_loss</span>
+            <span class="n">best_weights</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">test_loss</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">:</span>  <span class="c1"># early stopping</span>
+            <span class="k">break</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Epoch: </span><span class="si">{:03d}</span><span class="s1">, Loss: </span><span class="si">{:.5f}</span><span class="s1">, Test Loss: </span><span class="si">{:.5f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">test_loss</span><span class="p">))</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">best_weights</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
+<span class="c1"># ---------------------------------------- PREPROCESS ---------------------------------------- #</span>
+
+
+<div class="viewcode-block" id="generate_pairs"><a class="viewcode-back" href="../../../src.DeepLearning.html#src.DeepLearning.embedding.generate_pairs">[docs]</a><span class="k">def</span> <span class="nf">generate_pairs</span><span class="p">(</span><span class="n">networkx_graph</span><span class="p">,</span> <span class="n">num_negative_pairs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Generate positive and negative pairs</span>
+<span class="sd">    :param networkx_graph: networkx graph</span>
+<span class="sd">    :type networkx_graph: networkx.Graph</span>
+<span class="sd">    :param num_negative_pairs: number of negative pairs</span>
+<span class="sd">    :type num_negative_pairs: int</span>
+<span class="sd">    :return: positive pairs, negative pairs</span>
+<span class="sd">    :rtype: np.array, np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">networkx_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+
+    <span class="n">positive_pairs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">networkx_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">num_negative_pairs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">num_negative_pairs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">positive_pairs</span><span class="p">)</span>
+
+    <span class="n">negative_pairs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">negative_pairs</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">num_negative_pairs</span><span class="p">:</span>
+        <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">networkx_graph</span><span class="o">.</span><span class="n">has_edge</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+            <span class="n">negative_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">])</span>
+    <span class="n">negative_pairs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">negative_pairs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">positive_pairs</span><span class="p">,</span> <span class="n">negative_pairs</span></div>
+
+
+<span class="c1"># --------------------------------------------------------------------------------------------- #</span>
+
+
+<div class="viewcode-block" id="pairs_to_indices"><a class="viewcode-back" href="../../../src.DeepLearning.html#src.DeepLearning.embedding.pairs_to_indices">[docs]</a><span class="k">def</span> <span class="nf">pairs_to_indices</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">positive_pairs</span><span class="p">,</span> <span class="n">negative_pairs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Convert pairs to indices</span>
+<span class="sd">    :param data: Data</span>
+<span class="sd">    :type data: torch_geometric.data.Data</span>
+<span class="sd">    :param positive_pairs: positive pairs</span>
+<span class="sd">    :type positive_pairs: np.array</span>
+<span class="sd">    :param negative_pairs: negative pairs</span>
+<span class="sd">    :type negative_pairs: np.array</span>
+<span class="sd">    :return: positive indices, negative indices</span>
+<span class="sd">    :rtype: np.array, np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">node_to_index</span> <span class="o">=</span> <span class="p">{</span><span class="n">node</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">mapping</span><span class="p">)}</span>
+
+    <span class="n">positive_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">node_to_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">node_to_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">v</span><span class="p">)]</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">positive_pairs</span> <span class="k">if</span>
+                                 <span class="n">u</span> <span class="ow">in</span> <span class="n">node_to_index</span> <span class="ow">and</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">node_to_index</span><span class="p">])</span>
+    <span class="n">negative_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">node_to_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">node_to_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">v</span><span class="p">)]</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">negative_pairs</span> <span class="k">if</span>
+                                 <span class="n">u</span> <span class="ow">in</span> <span class="n">node_to_index</span> <span class="ow">and</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">node_to_index</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">positive_indices</span><span class="p">,</span> <span class="n">negative_indices</span></div>
+
+
+<span class="c1"># --------------------------------------------------------------------------------------------- #</span>
+
+
+<div class="viewcode-block" id="preprocess_data"><a class="viewcode-back" href="../../../src.DeepLearning.html#src.DeepLearning.embedding.preprocess_data">[docs]</a><span class="k">def</span> <span class="nf">preprocess_data</span><span class="p">(</span><span class="n">networkx_graph</span><span class="p">,</span> <span class="n">node_features</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Preprocess data for deep learning embedding</span>
+<span class="sd">    :param networkx_graph: Networkx graph</span>
+<span class="sd">    :type networkx_graph: networkx.Graph</span>
+<span class="sd">    :param node_features: Node features</span>
+<span class="sd">    :type node_features: np.array</span>
+<span class="sd">    :return: data</span>
+<span class="sd">    :rtype: torch_geometric.data.Data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert to torch_geometric.data.Data</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">from_networkx</span><span class="p">(</span><span class="n">networkx_graph</span><span class="p">)</span>
+
+    <span class="c1"># Add node features</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">node_features</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+
+    <span class="c1"># Add train and test mask</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">train_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">train_mask</span><span class="p">[:</span><span class="n">data</span><span class="o">.</span><span class="n">num_nodes</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">test_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">test_mask</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">num_nodes</span> <span class="o">//</span> <span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">node</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">networkx_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">)}</span>
+
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<span class="c1"># --------------------------------------------------------------------------------------------- #</span>
+
+
+<div class="viewcode-block" id="get_embeddings"><a class="viewcode-back" href="../../../src.DeepLearning.html#src.DeepLearning.embedding.get_embeddings">[docs]</a><span class="k">def</span> <span class="nf">get_embeddings</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Get final embeddings</span>
+<span class="sd">    :param model: Deep learning model</span>
+<span class="sd">    :type model: torch.nn.Module</span>
+<span class="sd">    :param data: Data</span>
+<span class="sd">    :type data: torch_geometric.data.Data</span>
+<span class="sd">    :return: embeddings</span>
+<span class="sd">    :rtype: np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_index</span>
+        <span class="n">embeddings</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">embeddings</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Alpha Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

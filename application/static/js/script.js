@@ -20,49 +20,40 @@ $(function () {
             return;
         }
 
-        // Create a FormData object to send the data
-        var formData = new FormData();
+        // Set the values of the hidden input fields in the form
+        const formData = new FormData();
         formData.append('csv_file', csvFile);
         formData.append('option', option);
-        setSpinnerVisibility(true);
 
-        // Send the data using AJAX
+        // Submit the form
+        const myHeaders = new Headers();
+
         $.ajax({
-            url: '/upload',
-            type: 'POST',
+            url: "http://localhost:8000/api/v1/upload",
+            type: "POST",
             data: formData,
             processData: false,
             contentType: false,
-            xhr: function () {
-                var xhr = new XMLHttpRequest();
-                xhr.upload.addEventListener('progress', function (event) {
-                    if (event.lengthComputable) {
-                        var percent = Math.round((event.loaded / event.total) * 100);
-                        progressBar.val(percent);
-                    }
-                }, false);
-                return xhr;
-            },
-            success: function () {
-                alert('File Uploaded!');
-            },
-            beforeSend: function () {
-                progressBar.show();
-                progressBar.val(0);
-            },
-            success: function (response) {
-                // Redirect the user to the success page
-                window.location.href = '/home';
+            success: function (result) {
+                const filename = result['filename'];
+                const filename2 = result['filename2'];
+                const option = result['option'];
+                const filepath = result['filepath'];
+                const full_path = result['full_path'];
+
+                // Redirect to the home
+                window.location.href = '/home?filename=' + filename + '&filename2=' + filename2 + '&option='
+                    + option + '&filepath=' + filepath + '&full_path=' + full_path;
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                // Handle errors
-                console.log('Error:', errorThrown);
-            },
-            complete: function () {
-                // Hide the progress bar
-                progressBar.hide();
+                console.log('error', errorThrown);
             }
         });
+
+        let showSpinner = true; // Set this variable to true to display the spinner or false to hide it
+        setSpinnerVisibility(showSpinner);
+
+
     });
 
     // Update the selected file name in the file input field
@@ -84,3 +75,8 @@ function setSpinnerVisibility(visible) {
 // Example usage
 let showSpinner = false; // Set this variable to true to display the spinner or false to hide it
 setSpinnerVisibility(showSpinner);
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+

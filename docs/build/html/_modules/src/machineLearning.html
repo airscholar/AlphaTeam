@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.machineLearning &mdash; AlphaTeam 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AlphaTeam
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AlphaTeam</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.machineLearning</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.machineLearning</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Author: Alpha Team Group Project</span>
+<span class="sd">Date: March 2023</span>
+<span class="sd">Purpose: Machine Learning for the NetworkX graphs analysis</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># ----------------------------------------- Imports ----------------------------------------- #</span>
+
+<span class="c1"># External imports</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">networkx.algorithms.community</span> <span class="k">as</span> <span class="nn">nx_comm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">distinctipy</span> <span class="kn">import</span> <span class="n">distinctipy</span>
+<span class="kn">from</span> <span class="nn">kneed</span> <span class="kn">import</span> <span class="n">KneeLocator</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">SpectralClustering</span><span class="p">,</span> <span class="n">KMeans</span><span class="p">,</span> <span class="n">AgglomerativeClustering</span><span class="p">,</span> <span class="n">DBSCAN</span>
+
+<span class="c1"># Internal imports</span>
+<span class="kn">import</span> <span class="nn">src.utils</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">from</span> <span class="nn">src.utils</span> <span class="kn">import</span> <span class="n">memoize</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="create_comm_colors"><a class="viewcode-back" href="../../src.html#src.machineLearning.create_comm_colors">[docs]</a><span class="k">def</span> <span class="nf">create_comm_colors</span><span class="p">(</span><span class="n">communities</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Create a list of colors for the communities</span>
+<span class="sd">    :param communities: list of communities</span>
+<span class="sd">    :type communities: list</span>
+<span class="sd">    :return: list of colors</span>
+<span class="sd">    :rtype: list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">distinctipy</span><span class="o">.</span><span class="n">get_colors</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">communities</span><span class="p">))</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">([</span><span class="n">i</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">c</span><span class="p">])</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">colors</span><span class="p">]</span>
+    <span class="c1"># convert rgb tuple to hex</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;#</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">:</span><span class="s1">02x</span><span class="si">}{</span><span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="si">:</span><span class="s1">02x</span><span class="si">}{</span><span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="si">:</span><span class="s1">02x</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">colors</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">colors</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="create_comm_dataframe"><a class="viewcode-back" href="../../src.html#src.machineLearning.create_comm_dataframe">[docs]</a><span class="k">def</span> <span class="nf">create_comm_dataframe</span><span class="p">(</span><span class="n">communities</span><span class="p">,</span> <span class="n">colors</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Create a dataframe with the Node, communities ID and their colors</span>
+<span class="sd">    :param communities: list of communities</span>
+<span class="sd">    :type communities: list</span>
+<span class="sd">    :param colors: list of colors</span>
+<span class="sd">    :type colors: list</span>
+<span class="sd">    :return: dataframe</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">community</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">communities</span><span class="p">):</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">community</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Node&#39;</span><span class="p">:</span> <span class="n">node</span><span class="p">,</span>
+                                              <span class="s1">&#39;Color&#39;</span><span class="p">:</span> <span class="n">color</span><span class="p">,</span>
+                                              <span class="s1">&#39;Cluster_id&#39;</span><span class="p">:</span> <span class="n">idx</span>
+                                              <span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">louvain_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Detect communities based on Louvain clustering with a maximum of `totalCommunities`</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param noOfClusters: maximum number of communities</span>
+<span class="sd">    :type noOfClusters: int</span>
+<span class="sd">    :return: dataframe</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">noOfClusters</span><span class="p">:</span>
+        <span class="n">communities</span> <span class="o">=</span> <span class="n">binary_search</span><span class="p">(</span><span class="s1">&#39;louvain_communities&#39;</span><span class="p">,</span> <span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">communities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nx_comm</span><span class="o">.</span><span class="n">louvain_communities</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="p">))</span>
+
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">create_comm_colors</span><span class="p">(</span><span class="n">communities</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">create_comm_dataframe</span><span class="p">(</span><span class="n">communities</span><span class="p">,</span> <span class="n">colors</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">greedy_modularity_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Detect communities based on greedy modularity clustering with a maximum of `noOfClusters`</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param noOfClusters: maximum number of communities</span>
+<span class="sd">    :type noOfClusters: int</span>
+<span class="sd">    :return: dataframe</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">noOfClusters</span><span class="p">:</span>
+        <span class="n">communities</span> <span class="o">=</span> <span class="n">binary_search</span><span class="p">(</span><span class="s1">&#39;greedy_modularity_communities&#39;</span><span class="p">,</span> <span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">communities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nx_comm</span><span class="o">.</span><span class="n">greedy_modularity_communities</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="p">))</span>
+
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">create_comm_colors</span><span class="p">(</span><span class="n">communities</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">create_comm_dataframe</span><span class="p">(</span><span class="n">communities</span><span class="p">,</span> <span class="n">colors</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">label_propagation_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Detect communities based on label propagation</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param noOfClusters: maximum number of communities</span>
+<span class="sd">    :type noOfClusters: int</span>
+<span class="sd">    :return: dataframe</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">communities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+        <span class="n">nx_comm</span><span class="o">.</span><span class="n">label_propagation_communities</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="p">))</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">create_comm_colors</span><span class="p">(</span><span class="n">communities</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">create_comm_dataframe</span><span class="p">(</span><span class="n">communities</span><span class="p">,</span> <span class="n">colors</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">asyn_lpa_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Detect communities based on asynchronous label propagation</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :return: dataframe</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">communities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nx_comm</span><span class="o">.</span><span class="n">asyn_lpa_communities</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="p">))</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">create_comm_colors</span><span class="p">(</span><span class="n">communities</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">create_comm_dataframe</span><span class="p">(</span><span class="n">communities</span><span class="p">,</span> <span class="n">colors</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">k_clique_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Detect communities based on k-clique</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param noOfClusters: maximum number of communities</span>
+<span class="sd">    :type noOfClusters: int</span>
+<span class="sd">    :return: dataframe</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">communities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nx_comm</span><span class="o">.</span><span class="n">k_clique_communities</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">create_comm_colors</span><span class="p">(</span><span class="n">communities</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">create_comm_dataframe</span><span class="p">(</span><span class="n">communities</span><span class="p">,</span> <span class="n">colors</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">spectral_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">embedding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Detect communities based on spectral</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param noOfClusters: number of clusters</span>
+<span class="sd">    :type noOfClusters: int</span>
+<span class="sd">    :param embedding: embedding</span>
+<span class="sd">    :type embedding: np.array</span>
+<span class="sd">    :return: dataframe</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span>
+
+    <span class="k">if</span> <span class="n">embedding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">noOfClusters</span><span class="p">:</span>
+            <span class="n">adj_mat</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">to_numpy_array</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+            <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">noOfClusters</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">adj_mat</span><span class="p">,</span> <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">compute_clustering</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="n">clustering</span> <span class="o">=</span> <span class="n">SpectralClustering</span><span class="p">(</span><span class="n">optimal_k</span><span class="p">,</span> <span class="n">affinity</span><span class="o">=</span><span class="s1">&#39;precomputed&#39;</span><span class="p">,</span> <span class="n">eigen_solver</span><span class="o">=</span><span class="s1">&#39;arpack&#39;</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+            <span class="n">adj_mat</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">noOfClusters</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">adj_mat</span> <span class="o">=</span> <span class="n">embedding</span>
+        <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">noOfClusters</span>
+        <span class="n">clustering</span> <span class="o">=</span> <span class="n">SpectralClustering</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">optimal_k</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">adj_mat</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;If embedding is provided, noOfClusters must be &gt; 0&#39;</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">clustering_response</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">clustering</span><span class="p">,</span> <span class="n">optimal_k</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">compute_clustering</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Compute the optimal number of clusters</span>
+<span class="sd">    :param networkGraph: NetworkGraphs</span>
+<span class="sd">    :param max_range: maximum range of clusters</span>
+<span class="sd">    :return: adjacent matrics, optimal number of clusters</span>
+<span class="sd">    :rtype: numpy array, int</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">adj_mat</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">to_numpy_array</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">max_range</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">networkGraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()):</span>
+        <span class="n">max_range</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">networkGraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="c1"># get optimal number of clusters</span>
+    <span class="n">wcss</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_range</span><span class="p">):</span>
+        <span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="s1">&#39;k-means++&#39;</span><span class="p">,</span>
+                        <span class="n">random_state</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">adj_mat</span><span class="p">)</span>
+        <span class="n">wcss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kmeans</span><span class="o">.</span><span class="n">inertia_</span><span class="p">)</span>
+
+    <span class="c1"># find the optimal number of clusters</span>
+    <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">KneeLocator</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_range</span><span class="p">),</span> <span class="n">wcss</span><span class="p">,</span>
+                            <span class="n">curve</span><span class="o">=</span><span class="s1">&#39;convex&#39;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;decreasing&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">elbow</span>
+    <span class="k">if</span> <span class="n">optimal_k</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">optimal_k</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Optimal k is : &#39;</span><span class="p">,</span> <span class="n">optimal_k</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">adj_mat</span><span class="p">,</span> <span class="n">optimal_k</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="clustering_response"><a class="viewcode-back" href="../../src.html#src.machineLearning.clustering_response">[docs]</a><span class="k">def</span> <span class="nf">clustering_response</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">,</span> <span class="n">clustering_alg</span><span class="p">,</span> <span class="n">optimal_k</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Create a dataframe with the Node, communities ID and their colors</span>
+<span class="sd">    :param networkGraph: NetworkGraphs</span>
+<span class="sd">    :type networkGraph: NetworkGraphs</span>
+<span class="sd">    :param clustering_alg: clustering algorithm</span>
+<span class="sd">    :type clustering_alg: KMeans</span>
+<span class="sd">    :param optimal_k: optimal number of clusters</span>
+<span class="sd">    :type optimal_k: int</span>
+<span class="sd">    :return: dataframe</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">clustering_alg</span><span class="o">.</span><span class="n">labels_</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">create_comm_colors</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">optimal_k</span><span class="p">)))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">networkGraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Node&#39;</span><span class="p">:</span> <span class="n">node</span><span class="p">,</span>
+                                          <span class="s1">&#39;Color&#39;</span><span class="p">:</span> <span class="n">colors</span><span class="p">[</span><span class="n">clusters</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span>
+                                          <span class="s1">&#39;Cluster_id&#39;</span><span class="p">:</span> <span class="n">clusters</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                                          <span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">kmeans_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">embedding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Detect communities based on k-means</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param noOfClusters: number of clusters</span>
+<span class="sd">    :type noOfClusters: int</span>
+<span class="sd">    :param embedding: embedding</span>
+<span class="sd">    :type embedding: np.array</span>
+<span class="sd">    :return: dataframe</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span>
+
+    <span class="k">if</span> <span class="n">embedding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&gt;=</span> <span class="n">noOfClusters</span><span class="p">:</span>
+            <span class="n">adj_mat</span><span class="p">,</span> <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">compute_clustering</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">noOfClusters</span>
+            <span class="n">adj_mat</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">to_numpy_array</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">noOfClusters</span><span class="p">:</span>
+        <span class="n">adj_mat</span> <span class="o">=</span> <span class="n">embedding</span>
+        <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">noOfClusters</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;If embedding is provide, noOfClusters must be greater than 0&#39;</span><span class="p">)</span>
+
+    <span class="n">clustering</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">optimal_k</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="s1">&#39;k-means++&#39;</span><span class="p">,</span>
+                        <span class="n">random_state</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">adj_mat</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">clustering_response</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">clustering</span><span class="p">,</span> <span class="n">optimal_k</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">agglomerative_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">embedding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Detect communities based on agglomerative</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param noOfClusters: number of clusters</span>
+<span class="sd">    :type noOfClusters: int</span>
+<span class="sd">    :param embedding: embedding</span>
+<span class="sd">    :type embedding: np.array</span>
+<span class="sd">    :return: dataframe</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span>
+
+    <span class="k">if</span> <span class="n">embedding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">noOfClusters</span><span class="p">:</span>
+            <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">noOfClusters</span>
+            <span class="n">adj_mat</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">to_numpy_array</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">adj_mat</span><span class="p">,</span> <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">compute_clustering</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">noOfClusters</span><span class="p">:</span>
+        <span class="n">adj_mat</span> <span class="o">=</span> <span class="n">embedding</span>
+        <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">noOfClusters</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;If embedding is provided, noOfClusters must be &gt; 0&#39;</span><span class="p">)</span>
+
+    <span class="n">clustering</span> <span class="o">=</span> <span class="n">AgglomerativeClustering</span><span class="p">(</span>
+        <span class="n">n_clusters</span><span class="o">=</span><span class="n">optimal_k</span><span class="p">,</span> <span class="n">affinity</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span> <span class="n">linkage</span><span class="o">=</span><span class="s1">&#39;ward&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">adj_mat</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">clustering_response</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">clustering</span><span class="p">,</span> <span class="n">optimal_k</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">dbscan_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">embedding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Detect communities based on dbscan</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param noOfClusters: number of clusters</span>
+<span class="sd">    :type noOfClusters: int</span>
+<span class="sd">    :param embedding: embedding</span>
+<span class="sd">    :type embedding: np.array</span>
+<span class="sd">    :return: dataframe</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span>
+
+    <span class="k">if</span> <span class="n">embedding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">noOfClusters</span><span class="p">:</span>
+            <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">noOfClusters</span>
+            <span class="n">adj_mat</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">to_numpy_array</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">adj_mat</span><span class="p">,</span> <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">compute_clustering</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">noOfClusters</span><span class="p">:</span>
+        <span class="n">adj_mat</span> <span class="o">=</span> <span class="n">embedding</span>
+        <span class="n">optimal_k</span> <span class="o">=</span> <span class="n">noOfClusters</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;If embedding is provided, noOfClusters must be &gt; 0&#39;</span><span class="p">)</span>
+
+    <span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">dbscan</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">adj_mat</span><span class="p">)</span>
+
+    <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="c1"># Number of clusters in labels, ignoring noise if present.</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">clustering_response</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">dbscan</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="get_communities"><a class="viewcode-back" href="../../src.html#src.machineLearning.get_communities">[docs]</a><span class="k">def</span> <span class="nf">get_communities</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">embedding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Get communities based on the method</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param method: method to use</span>
+<span class="sd">    :type method: str</span>
+<span class="sd">    :param noOfClusters: size of the cluster</span>
+<span class="sd">    :type noOfClusters: int</span>
+<span class="sd">    :param embedding: embedding</span>
+<span class="sd">    :type embedding: np.array</span>
+<span class="sd">    :return: dataframe</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;louvain&#39;</span><span class="p">,</span> <span class="s1">&#39;greedy_modularity&#39;</span><span class="p">,</span> <span class="s1">&#39;label_propagation&#39;</span><span class="p">,</span> <span class="s1">&#39;asyn_lpa&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;k_clique&#39;</span><span class="p">,</span> <span class="s1">&#39;spectral&#39;</span><span class="p">,</span> <span class="s1">&#39;kmeans&#39;</span><span class="p">,</span> <span class="s1">&#39;agglomerative&#39;</span><span class="p">,</span> <span class="s1">&#39;hierarchical&#39;</span><span class="p">,</span> <span class="s1">&#39;dbscan&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid cluster type&quot;</span><span class="p">,</span> <span class="s2">&quot;please choose from the following: &#39;louvain&#39;, &#39;greedy_modularity&#39;, &quot;</span>
+                                                 <span class="s2">&quot;&#39;label_propagation&#39;, &#39;asyn_lpa&#39;,&quot;</span>
+                                                 <span class="s2">&quot;&#39;k_clique&#39;, &#39;spectral&#39;, &#39;kmeans&#39; &quot;</span>
+                                                 <span class="s2">&quot;&#39;agglomerative&#39;, &#39;hierarchical&#39;, &#39;dbscan&#39;&quot;</span><span class="p">))</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">return_nan</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="s1">&#39;Cluster&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;louvain&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">louvain_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="n">noOfClusters</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;greedy_modularity&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">greedy_modularity_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="n">noOfClusters</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;label_propagation&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">label_propagation_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="n">noOfClusters</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;asyn_lpa&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">asyn_lpa_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="n">noOfClusters</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;k_clique&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">k_clique_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="n">noOfClusters</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;kmeans&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">kmeans_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="n">noOfClusters</span><span class="p">,</span> <span class="n">embedding</span><span class="o">=</span><span class="n">embedding</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;spectral&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">spectral_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="n">noOfClusters</span><span class="p">,</span> <span class="n">embedding</span><span class="o">=</span><span class="n">embedding</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;agglomerative&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">agglomerative_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="n">noOfClusters</span><span class="p">,</span> <span class="n">embedding</span><span class="o">=</span><span class="n">embedding</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;dbscan&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">dbscan_clustering</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="n">noOfClusters</span><span class="p">,</span> <span class="n">embedding</span><span class="o">=</span><span class="n">embedding</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="get_hotspot"><a class="viewcode-back" href="../../src.html#src.machineLearning.get_hotspot">[docs]</a><span class="k">def</span> <span class="nf">get_hotspot</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Get hotspot</span>
+<span class="sd">    :param networkGraphs:</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :return: dataframe</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Degree&#39;</span><span class="p">:</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">degree</span><span class="p">(</span><span class="n">node</span><span class="p">),</span>
+                <span class="s1">&#39;Latitude&#39;</span><span class="p">:</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">][</span><span class="n">node</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s1">&#39;Longitude&#39;</span><span class="p">:</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">][</span><span class="n">node</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="s1">&#39;Node&#39;</span><span class="p">:</span> <span class="n">node</span><span class="p">,</span>
+                <span class="s1">&#39;Edges&#39;</span><span class="p">:</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="p">}</span>
+
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">binary_search</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">networkGraphs</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Perform binary search for optimal resolution parameter</span>
+<span class="sd">    :param func: the function to use</span>
+<span class="sd">    :type func: str</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param noOfClusters: number of clusters</span>
+<span class="sd">    :type noOfClusters: int</span>
+<span class="sd">    :return: dataframe</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">step</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="n">tolerance</span> <span class="o">=</span> <span class="mf">0.0001</span>
+    <span class="n">function</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">nx_comm</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+    <span class="n">prev_resolution</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">communities</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Perform binary search for optimal resolution parameter</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">upper_bound</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">resolution</span> <span class="o">=</span> <span class="n">lower_bound</span> <span class="o">+</span> <span class="n">step</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">resolution</span> <span class="o">=</span> <span class="p">(</span><span class="n">lower_bound</span> <span class="o">+</span> <span class="n">upper_bound</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+        <span class="n">communities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">function</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">))</span>
+        <span class="n">num_communities</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">communities</span><span class="p">)</span>
+
+        <span class="c1"># Check convergence criterion</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">resolution</span> <span class="o">-</span> <span class="n">prev_resolution</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tolerance</span><span class="p">:</span>
+            <span class="k">break</span>
+
+        <span class="c1"># Update bounds based on number of communities</span>
+        <span class="k">if</span> <span class="n">num_communities</span> <span class="o">&lt;</span> <span class="n">noOfClusters</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">upper_bound</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">step</span> <span class="o">/=</span> <span class="mi">2</span>
+            <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">resolution</span>
+        <span class="k">elif</span> <span class="n">num_communities</span> <span class="o">&gt;</span> <span class="n">noOfClusters</span><span class="p">:</span>
+            <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">resolution</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">prev_resolution</span> <span class="o">=</span> <span class="n">resolution</span>
+
+    <span class="k">return</span> <span class="n">communities</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Alpha Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,61 +1,126 @@
-import matplotlib.pyplot as plt
-import os
-import sys
-sys.path.insert(0, os.path.abspath('../'))
-from visualisation_src.utils_visualisation import *
-from utils import memoize
-import networkx as nx
+"""
+Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Basic network visualisation module contains functions for basic network visualisation
+"""
+
+# ----------------------------------------- Imports ----------------------------------------- #
+
+# External imports
+from itertools import zip_longest
+
 from pyvis import network as net
+
+from src.JS_scripts import scripts
+# Internal imports
+from src.visualisation_src.utils_visualisation import *
+
 
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def static_visualisation(networkGraphs, directed=True, multi=False, layout='map'):
+def static_visualisation(networkGraphs, filepath, layout_='map'):
     """
     :Function: Plot the NetworkX graph on as map
     :param networkGraphs: Network graphs
-    :param directed: Boolean to indicate if the graph is directed or not
-    :param multi: for multi graphs
+    :type networkGraphs: NetworkGraphs
+    :param filepath: File path to save the plot
+    :type filepath: str
+    :param layout_: layout of the graph
+    :type layout_: str
     :return: Matplotlib plot
+    :rtype: matplotlib.pyplot
     """
-    if not networkGraphs.is_spatial() and layout == 'map':
-        ValueError("Graph is not spatial with coordinates")
+    G = networkGraphs.Graph
 
-    if layout == 'map':
-        plot_map(networkGraphs)
+    if not networkGraphs.is_spatial() and layout_ == 'map':
+        print(ValueError('No spatial graph'))
+        return '../application/static/no_graph.html'
 
-    pos = networkGraphs.pos[layout]
+    pos = networkGraphs.pos[layout_]
+    text = [f"Node: {node}" for node in G.nodes()]
 
-    if directed:
-        if multi:
-            nx.draw(networkGraphs.MultiDiGraph, pos, with_labels=False, node_size=1,
-                    edge_color=networkGraphs.colors['MultiDiGraph'], node_color='red', width=0.5)
-        else:
-            nx.draw(networkGraphs.DiGraph, pos, with_labels=False, node_size=1,
-                    edge_color=networkGraphs.colors['DiGraph'], node_color='red', width=0.5)
+    if networkGraphs.colors is None:
+        colors = ['red' for _ in range(len(G.edges()))]
     else:
-        if multi:
-            nx.draw(networkGraphs.MultiGraph, pos, with_labels=False, node_size=1,
-                    width=0.5)
-        else:
-            nx.draw(networkGraphs.Graph, pos, with_labels=False, node_size=1, node_color='red',
-                    width=0.5)
+        colors = list(networkGraphs.colors['Graph'])
 
-    # plot axes
-    plt.axis('on')
-    plt.title(f"{networkGraphs.name} using {layout}")
+    if networkGraphs.is_weighted() is None:
+        weights = [5 for _ in range(len(G.edges()))]
+    else:
+        weights = list(networkGraphs.weights['Graph'])
+        weights = [w * 10 for w in weights]
 
-    return plt
+    x_ = []
+    y_ = []
+    x_list = []
+    y_list = []
+    for idx, vals in enumerate(zip_longest(G.nodes(), G.edges())):
+        node, edge = vals
+        if idx < len(G.edges()):
+            x0, y0 = pos[edge[0]]
+            x1, y1 = pos[edge[1]]
+            x_list.extend([x0, x1, None])
+            y_list.extend([y0, y1, None])
+        if idx < len(G.nodes()):
+            x, y = pos[node]
+            x_.extend([x])
+            y_.extend([y])
+
+    fig = go.Figure()
+
+    if layout_ == 'map':
+        for i, edge in enumerate(G.edges()):
+            fig.add_trace(
+                go.Scattergeo(
+                    lon=[pos[edge[0]][0], pos[edge[1]][0]],
+                    lat=[pos[edge[0]][1], pos[edge[1]][1]],
+                    mode='lines', line=dict(width=weights[i], color=colors[i]),
+                )
+            )
+        fig.add_trace(go.Scattergeo(lon=x_, lat=y_, text=text, mode='markers', hoverinfo='text',
+                                    marker=dict(showscale=False, color='black', size=2)))
+    else:
+        for i, edge in enumerate(G.edges()):
+            fig.add_trace(
+                go.Scatter(
+                    x=[pos[edge[0]][0], pos[edge[1]][0]],
+                    y=[pos[edge[0]][1], pos[edge[1]][1]],
+                    mode='lines', line=dict(width=weights[i], color=colors[i]),
+                )
+            )
+        fig.add_trace(go.Scatter(x=x_, y=y_, text=text, mode='markers', hoverinfo='text',
+                                 marker=dict(showscale=False, color='black', size=2)))
+
+    layout = get_layout(networkGraphs, title=f"Visualisation using {layout_} layout", layout_=layout_)
+    fig.update_layout(layout)
+
+    fig.write_html(filepath, full_html=False, include_plotlyjs='cdn')
+    # open the file and append the JS scripts at the end
+    if layout_ == 'map':
+        with open(filepath, 'a') as f:
+            f.write(scripts['to_clipboard_map'])
+    else:
+        with open(filepath, 'a') as f:
+            f.write(scripts['to_clipboard_no_map'])
+
+    return fig
+
 
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def dynamic_visualisation(networkGraphs, directed=True, multi=False):
+def dynamic_visualisation(networkGraphs, filepath, directed=True, multi=False):
     """
     :Function: Plot the NetworkX graph on a dynamic map using pyvis
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
+    :param filepath: Path to save the plot
+    :type filepath: str
     :param directed: Boolean to indicate if the graph is directed or not
+    :type directed: bool
     :param multi: for multi graphs
+    :type multi: bool
     :return: Plotly plot
     """
     if multi:
@@ -71,14 +136,13 @@ def dynamic_visualisation(networkGraphs, directed=True, multi=False):
     for i, (u, v) in enumerate(G.edges()):
         G[u][v]['weight'] = weights[i]
 
-
     Net = net.Network(height="750px", width="100%", bgcolor="grey", font_color="black")
     Net.from_nx(G)
     Net.show_buttons(filter_=['physics', 'edges', 'nodes'])
     Net.options.physics.use_force_atlas_2based(
         params={'central_gravity': 0.01, 'gravity': -50, 'spring_length': 100, 'spring_strength': 0.08, 'damping': 0.4,
                 'overlap': 0})
-    filename = f"Dynamic_{directed}_{multi}.html"
-    Net.write_html(filename)
+
+    Net.write_html(filepath)
 
     return Net
