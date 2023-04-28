@@ -29,7 +29,7 @@ $(function () {
         const myHeaders = new Headers();
 
         $.ajax({
-            url: "http://3.221.153.241:8000/api/v1/upload",
+            url: "http://localhost:8000/api/v1/upload",
             type: "POST",
             data: formData,
             processData: false,

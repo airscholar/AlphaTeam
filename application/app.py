@@ -41,7 +41,7 @@ app.register_blueprint(hotspot_routes)
 app.register_blueprint(global_metrics_routes)
 app.register_blueprint(visualisation_routes)
 
-BASE_URL = 'http://3.221.153.241:8000/api/v1'
+BASE_URL = 'http://localhost:8000/api/v1'
 
 
 # Define a custom error page for 500 Internal Server Error

@@ -10,7 +10,7 @@ cluster_embedding_routes = Blueprint('cluster_embedding_routes', __name__)
 
 
 #----------------------------------------------CLUSTER-EMBEDDING------------------------------------------------------------------
-BASE_URL = 'http://3.221.153.241:8000/api/v1/deeplearning/'
+BASE_URL = 'http://localhost:8000/api/v1/deeplearning/'
 
 @cluster_embedding_routes.route('/node2vec/clustering/embedding/kmeans', endpoint='clustering_embedding_kmeans',  methods=['GET', 'POST'])
 def clustering_embedding_kmeans():
