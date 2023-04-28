@@ -22,11 +22,15 @@ instructions [here](https://docs.docker.com/install/).
 ## Running the application using Docker
 
 1. Clone the repository
-2. Run `docker build -t alpha-team .` in the root directory of the project to build the Docker image
-3. Run `docker run -d -p 8000:8000 -p 3000:3000 --name alpha-team alpha-team` to start the application
+2. Run `docker build -t alphateamapp .` in the root directory of the project to build the Docker image
+3. Run `docker run -d -p 8000:8000 -p 3000:3000 --name alphateam alphateamapp` to start the application
 3. Open your browser and go to `http://127.0.0.1:3000`
 4. Enjoy!
-5. (Optional) Run `docker logs -f alpha-team` to see the logs of the container
+5. (Optional) Run `docker logs -f alphateam` to see the logs of the container
+
+### Alternatively
+You can run `docker pull airscholar/alphateamapp` to pull already built image and then run the container using
+the command in step 3 above.
 
 # Documentation
 
