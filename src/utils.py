@@ -44,6 +44,10 @@ def memoize(func):
         :return: Result of the function
         :rtype: any
         """
+        if len(cache) > 0 and len(cache) % 100 == 0:
+            cache.clear()
+            print(f"{red}CACHE: Cleared cache")
+
         key = (func, args, tuple(sorted(kwargs.items())))
         key_hash = md5(str(key).encode('utf-8')).hexdigest()
         if key_hash in cache:

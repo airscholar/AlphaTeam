@@ -12,6 +12,10 @@ centrality_routes = Blueprint('centrality_routes', __name__)
 # -------------------------------------------CENTRALITY--------------------------------------
 @centrality_routes.route('/centrality', endpoint='centrality', methods=['GET', 'POST'])
 def centrality_all():
+    """
+    :Function: Visualise the centrality metrics
+    :return: the centrality page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     metrics = 'centralities'
@@ -20,10 +24,8 @@ def centrality_all():
     multi_toggle2 = True
     directed_toggle2 = False
     multi_toggle3 = True
-    dynamic_toggle3 = False
     directed_toggle3 = False
     multi_toggle4 = True
-    dynamic_toggle4 = False
     directed_toggle4 = False
     tab = 'tab1'
     if networkGraphs.is_spatial():
@@ -119,6 +121,10 @@ def centrality_all():
 
 @centrality_routes.route('/centrality/degree', endpoint='degree', methods=['GET', 'POST'])
 def centrality_degree():
+    """
+    :Function: Degree centrality page
+    :return: degree centrality page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     metrics = 'degree_centrality'
@@ -236,6 +242,10 @@ def centrality_degree():
 
 @centrality_routes.route('/centrality/eigenvector', endpoint='eigenvector', methods=['GET', 'POST'])
 def centrality_eigenvector():
+    """
+    :Function: Visualisae Eigenvector Centrality
+    :return: Eigenvector Centrality plot page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     metrics = 'eigenvector_centrality'
@@ -354,6 +364,10 @@ def centrality_eigenvector():
 
 @centrality_routes.route('/centrality/closeness', endpoint='closeness', methods=['GET', 'POST'])
 def centrality_closeness():
+    """
+    :Function: visualise closeness centrality
+    :return: closeness centrality page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     metrics = 'closeness_centrality'
@@ -472,6 +486,10 @@ def centrality_closeness():
 
 @centrality_routes.route('/centrality/betwenness', endpoint='betwenness', methods=['GET', 'POST'])
 def centrality_betwenness():
+    """
+    :Function: Visualization of the betwenness centrality
+    :return: betwenness centrality page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     metrics = 'betweenness_centrality'
@@ -590,6 +608,10 @@ def centrality_betwenness():
 
 @centrality_routes.route('/centrality/load', endpoint='load', methods=['GET', 'POST'])
 def centrality_load():
+    """
+    :Function: Visualize the load centrality of the network
+    :return:
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     metrics = 'load_centrality'

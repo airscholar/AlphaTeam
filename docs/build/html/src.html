@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src package &mdash; AlphaTeam 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AlphaTeam
+              <img src="_static/favicon.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">src package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-src.JS_scripts">src.JS_scripts module</a></li>
+<li><a class="reference internal" href="#src-networkgraphs-module">src.NetworkGraphs module</a></li>
+<li><a class="reference internal" href="#module-src.deepLearning">src.deepLearning module</a><ul>
+<li><a class="reference internal" href="#src.deepLearning.get_DL_embedding"><code class="docutils literal notranslate"><span class="pre">get_DL_embedding()</span></code></a></li>
+<li><a class="reference internal" href="#src.deepLearning.get_model"><code class="docutils literal notranslate"><span class="pre">get_model()</span></code></a></li>
+<li><a class="reference internal" href="#src.deepLearning.get_similar_nodes"><code class="docutils literal notranslate"><span class="pre">get_similar_nodes()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-src.machineLearning">src.machineLearning module</a><ul>
+<li><a class="reference internal" href="#src.machineLearning.clustering_response"><code class="docutils literal notranslate"><span class="pre">clustering_response()</span></code></a></li>
+<li><a class="reference internal" href="#src.machineLearning.create_comm_colors"><code class="docutils literal notranslate"><span class="pre">create_comm_colors()</span></code></a></li>
+<li><a class="reference internal" href="#src.machineLearning.create_comm_dataframe"><code class="docutils literal notranslate"><span class="pre">create_comm_dataframe()</span></code></a></li>
+<li><a class="reference internal" href="#src.machineLearning.get_communities"><code class="docutils literal notranslate"><span class="pre">get_communities()</span></code></a></li>
+<li><a class="reference internal" href="#src.machineLearning.get_hotspot"><code class="docutils literal notranslate"><span class="pre">get_hotspot()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-src.metrics">src.metrics module</a><ul>
+<li><a class="reference internal" href="#src.metrics.get_metrics"><code class="docutils literal notranslate"><span class="pre">get_metrics()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-src.preprocessing">src.preprocessing module</a><ul>
+<li><a class="reference internal" href="#src.preprocessing.convert_to_DiGraph"><code class="docutils literal notranslate"><span class="pre">convert_to_DiGraph()</span></code></a></li>
+<li><a class="reference internal" href="#src.preprocessing.convert_to_undirected"><code class="docutils literal notranslate"><span class="pre">convert_to_undirected()</span></code></a></li>
+<li><a class="reference internal" href="#src.preprocessing.create_multi_DiGraph_railway"><code class="docutils literal notranslate"><span class="pre">create_multi_DiGraph_railway()</span></code></a></li>
+<li><a class="reference internal" href="#src.preprocessing.preprocess_crypto"><code class="docutils literal notranslate"><span class="pre">preprocess_crypto()</span></code></a></li>
+<li><a class="reference internal" href="#src.preprocessing.preprocess_custom"><code class="docutils literal notranslate"><span class="pre">preprocess_custom()</span></code></a></li>
+<li><a class="reference internal" href="#src.preprocessing.preprocess_gtfs"><code class="docutils literal notranslate"><span class="pre">preprocess_gtfs()</span></code></a></li>
+<li><a class="reference internal" href="#src.preprocessing.preprocess_mtx"><code class="docutils literal notranslate"><span class="pre">preprocess_mtx()</span></code></a></li>
+<li><a class="reference internal" href="#src.preprocessing.preprocess_railway"><code class="docutils literal notranslate"><span class="pre">preprocess_railway()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#src-resilience-module">src.resilience module</a></li>
+<li><a class="reference internal" href="#module-src.stochastic">src.stochastic module</a><ul>
+<li><a class="reference internal" href="#src.stochastic.estimate_clustering_coefficient"><code class="docutils literal notranslate"><span class="pre">estimate_clustering_coefficient()</span></code></a></li>
+<li><a class="reference internal" href="#src.stochastic.estimate_shortest_path_length"><code class="docutils literal notranslate"><span class="pre">estimate_shortest_path_length()</span></code></a></li>
+<li><a class="reference internal" href="#src.stochastic.get_random_node"><code class="docutils literal notranslate"><span class="pre">get_random_node()</span></code></a></li>
+<li><a class="reference internal" href="#src.stochastic.get_random_sample"><code class="docutils literal notranslate"><span class="pre">get_random_sample()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-src.utils">src.utils module</a><ul>
+<li><a class="reference internal" href="#src.utils.clean_df"><code class="docutils literal notranslate"><span class="pre">clean_df()</span></code></a></li>
+<li><a class="reference internal" href="#src.utils.delete_networkGraph"><code class="docutils literal notranslate"><span class="pre">delete_networkGraph()</span></code></a></li>
+<li><a class="reference internal" href="#src.utils.get_networkGraph"><code class="docutils literal notranslate"><span class="pre">get_networkGraph()</span></code></a></li>
+<li><a class="reference internal" href="#src.utils.is_saved"><code class="docutils literal notranslate"><span class="pre">is_saved()</span></code></a></li>
+<li><a class="reference internal" href="#src.utils.memoize"><code class="docutils literal notranslate"><span class="pre">memoize()</span></code></a></li>
+<li><a class="reference internal" href="#src.utils.return_nan"><code class="docutils literal notranslate"><span class="pre">return_nan()</span></code></a></li>
+<li><a class="reference internal" href="#src.utils.set_networkGraph"><code class="docutils literal notranslate"><span class="pre">set_networkGraph()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#src-visualisation-module">src.visualisation module</a></li>
+<li><a class="reference internal" href="#module-src">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AlphaTeam</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/src.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-package">
+<h1>src package<a class="headerlink" href="#src-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-src.JS_scripts">
+<span id="src-js-scripts-module"></span><h2>src.JS_scripts module<a class="headerlink" href="#module-src.JS_scripts" title="Permalink to this heading"></a></h2>
+<p>Author: Alpha Team Group Project
+Date: March 2023
+Purpose: JS_scripts module contains script to insert into the plotly graph for dynamic functionality</p>
+</section>
+<section id="src-networkgraphs-module">
+<h2>src.NetworkGraphs module<a class="headerlink" href="#src-networkgraphs-module" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-src.deepLearning">
+<span id="src-deeplearning-module"></span><h2>src.deepLearning module<a class="headerlink" href="#module-src.deepLearning" title="Permalink to this heading"></a></h2>
+<p>Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Deep learning module contains functions for deep learning embeddings</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.deepLearning.get_DL_embedding">
+<span class="sig-prename descclassname"><span class="pre">src.deepLearning.</span></span><span class="sig-name descname"><span class="pre">get_DL_embedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkGraphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/deepLearning.html#get_DL_embedding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.deepLearning.get_DL_embedding" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Get deep learning embedding</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>networkGraphs</strong> – Network graphs</p></li>
+<li><p><strong>model</strong> – Deep learning model</p></li>
+<li><p><strong>features</strong> – Features</p></li>
+<li><p><strong>dimension</strong> – Dimension of the embedding</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>embeddings</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.deepLearning.get_model">
+<span class="sig-prename descclassname"><span class="pre">src.deepLearning.</span></span><span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embed_dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/deepLearning.html#get_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.deepLearning.get_model" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Get deep learning model</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>model</strong> – Deep learning model</p></li>
+<li><p><strong>data</strong> – Data</p></li>
+<li><p><strong>dimension</strong> – Dimension of the embedding</p></li>
+<li><p><strong>embed_dim</strong> – Embedding dimension</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>model</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.nn.Module</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.deepLearning.get_similar_nodes">
+<span class="sig-prename descclassname"><span class="pre">src.deepLearning.</span></span><span class="sig-name descname"><span class="pre">get_similar_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkGraph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/deepLearning.html#get_similar_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.deepLearning.get_similar_nodes" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Get similar nodes to a given node using Node2Vec embedding model</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>networkGraph</strong> – Network graph</p></li>
+<li><p><strong>node</strong> – Node</p></li>
+<li><p><strong>model</strong> – Node2Vec model</p></li>
+<li><p><strong>k</strong> – Number of similar nodes (default: 10)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>similar_nodes</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-src.machineLearning">
+<span id="src-machinelearning-module"></span><h2>src.machineLearning module<a class="headerlink" href="#module-src.machineLearning" title="Permalink to this heading"></a></h2>
+<p>Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Machine Learning for the NetworkX graphs analysis</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.machineLearning.clustering_response">
+<span class="sig-prename descclassname"><span class="pre">src.machineLearning.</span></span><span class="sig-name descname"><span class="pre">clustering_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkGraph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clustering_alg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimal_k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/machineLearning.html#clustering_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.machineLearning.clustering_response" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Create a dataframe with the Node, communities ID and their colors</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>networkGraph</strong> (<em>NetworkGraphs</em>) – NetworkGraphs</p></li>
+<li><p><strong>clustering_alg</strong> (<em>KMeans</em>) – clustering algorithm</p></li>
+<li><p><strong>optimal_k</strong> (<em>int</em>) – optimal number of clusters</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dataframe</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.machineLearning.create_comm_colors">
+<span class="sig-prename descclassname"><span class="pre">src.machineLearning.</span></span><span class="sig-name descname"><span class="pre">create_comm_colors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">communities</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/machineLearning.html#create_comm_colors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.machineLearning.create_comm_colors" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Create a list of colors for the communities</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>communities</strong> (<em>list</em>) – list of communities</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of colors</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.machineLearning.create_comm_dataframe">
+<span class="sig-prename descclassname"><span class="pre">src.machineLearning.</span></span><span class="sig-name descname"><span class="pre">create_comm_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">communities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/machineLearning.html#create_comm_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.machineLearning.create_comm_dataframe" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Create a dataframe with the Node, communities ID and their colors</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>communities</strong> (<em>list</em>) – list of communities</p></li>
+<li><p><strong>colors</strong> (<em>list</em>) – list of colors</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dataframe</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.machineLearning.get_communities">
+<span class="sig-prename descclassname"><span class="pre">src.machineLearning.</span></span><span class="sig-name descname"><span class="pre">get_communities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkGraphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noOfClusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/machineLearning.html#get_communities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.machineLearning.get_communities" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Get communities based on the method</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>networkGraphs</strong> (<em>NetworkGraphs</em>) – NetworkGraphs</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – method to use</p></li>
+<li><p><strong>noOfClusters</strong> (<em>int</em>) – size of the cluster</p></li>
+<li><p><strong>embedding</strong> (<em>np.array</em>) – embedding</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.machineLearning.get_hotspot">
+<span class="sig-prename descclassname"><span class="pre">src.machineLearning.</span></span><span class="sig-name descname"><span class="pre">get_hotspot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkGraphs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/machineLearning.html#get_hotspot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.machineLearning.get_hotspot" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Get hotspot</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>networkGraphs</strong> (<em>NetworkGraphs</em>) – </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dataframe</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-src.metrics">
+<span id="src-metrics-module"></span><h2>src.metrics module<a class="headerlink" href="#module-src.metrics" title="Permalink to this heading"></a></h2>
+<p>Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Compute the metrics for the network graphs</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.metrics.get_metrics">
+<span class="sig-prename descclassname"><span class="pre">src.metrics.</span></span><span class="sig-name descname"><span class="pre">get_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkGraphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/metrics.html#get_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.metrics.get_metrics" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Get the metrics for the given graph
+Method:
+- ‘kcore’
+- ‘degree’
+- ‘triangles’
+- ‘pagerank’
+- ‘betweenness_centrality’
+- ‘closeness_centrality’
+- ‘eigenvector_centrality’
+- ‘load_centrality’
+- ‘degree_centrality’</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>networkGraphs</strong> (<em>NetworkGraphs</em>) – Network graphs</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Method to compute the metrics</p></li>
+<li><p><strong>directed</strong> (<em>bool</em>) – Compute the metrics for the directed graph</p></li>
+<li><p><strong>multi</strong> (<em>bool</em>) – Compute the metrics for the multi graph</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pandas dataframe with the metrics and values</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-src.preprocessing">
+<span id="src-preprocessing-module"></span><h2>src.preprocessing module<a class="headerlink" href="#module-src.preprocessing" title="Permalink to this heading"></a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Alpha Team Group Project</p>
+</dd>
+<dt class="field-even">Date<span class="colon">:</span></dt>
+<dd class="field-even"><p>March 2023</p>
+</dd>
+<dt class="field-odd">Purpose<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Preprocess the datasets and create custom NetworkGraphs class for general use in the project</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.preprocessing.convert_to_DiGraph">
+<span class="sig-prename descclassname"><span class="pre">src.preprocessing.</span></span><span class="sig-name descname"><span class="pre">convert_to_DiGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multi_graph</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/preprocessing.html#convert_to_DiGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.preprocessing.convert_to_DiGraph" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Create a DiGraph from a MultiDiGraph with the same nodes and edges containing the sum of the weights,</p>
+</dd>
+</dl>
+<p>and conserving the first edge’s attributes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>multi_graph</strong> (<em>networkx.MultiDiGraph</em>) – MultiDiGraph to convert</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>NetworkX DiGraph</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>networkx.DiGraph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.preprocessing.convert_to_undirected">
+<span class="sig-prename descclassname"><span class="pre">src.preprocessing.</span></span><span class="sig-name descname"><span class="pre">convert_to_undirected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g_directed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/preprocessing.html#convert_to_undirected"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.preprocessing.convert_to_undirected" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Convert a DiGraph to an undirected graph using NetworkX to_undirected() function</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>g_directed</strong> (<em>networkx.DiGraph</em>) – NetworkX DiGraph to convert</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NetworkX Graph</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>networkx.Graph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.preprocessing.create_multi_DiGraph_railway">
+<span class="sig-prename descclassname"><span class="pre">src.preprocessing.</span></span><span class="sig-name descname"><span class="pre">create_multi_DiGraph_railway</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">station_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/preprocessing.html#create_multi_DiGraph_railway"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.preprocessing.create_multi_DiGraph_railway" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Create a MultiDiGraph from the railway dataset JSON object</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>network</strong> (<em>dict</em>) – JSON object of the railway dataset</p></li>
+<li><p><strong>station_id</strong> (<em>dict</em>) – Dictionary of station id per location</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NetworkX MultiDiGraph</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>NetworkX MultiDiGraph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.preprocessing.preprocess_crypto">
+<span class="sig-prename descclassname"><span class="pre">src.preprocessing.</span></span><span class="sig-name descname"><span class="pre">preprocess_crypto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/preprocessing.html#preprocess_crypto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.preprocessing.preprocess_crypto" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Preprocess the crypto dataset and return a NetworkX DiGraph and MultiDiGraph</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>filename</strong> (<em>str</em>) – Path to the crypto dataset</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of NetworkX DiGraph and MultiDiGraph</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.preprocessing.preprocess_custom">
+<span class="sig-prename descclassname"><span class="pre">src.preprocessing.</span></span><span class="sig-name descname"><span class="pre">preprocess_custom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/preprocessing.html#preprocess_custom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.preprocessing.preprocess_custom" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Preprocess the custom dataset and return a NetworkX DiGraph and MultiDiGraph</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Dataset must have the following columns:</dt><dd><ul class="simple">
+<li><p>from: Source node</p></li>
+<li><p>to: Target node</p></li>
+</ul>
+</dd>
+<dt>Dataset could have the following columns:</dt><dd><ul class="simple">
+<li><p>weight: Edge weight</p></li>
+<li><p>start: Start time of the edge</p></li>
+<li><p>end: End time of the edge</p></li>
+<li><p>color: Color of the edge</p></li>
+<li><p>lat1: Latitude of the source node</p></li>
+<li><p>lon1: Longitude of the source node</p></li>
+<li><p>lat2: Latitude of the target node</p></li>
+<li><p>lon2: Longitude of the target node</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Path to the custom dataset</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of NetworkX DiGraph and MultiDiGraph</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.preprocessing.preprocess_gtfs">
+<span class="sig-prename descclassname"><span class="pre">src.preprocessing.</span></span><span class="sig-name descname"><span class="pre">preprocess_gtfs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zip_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/preprocessing.html#preprocess_gtfs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.preprocessing.preprocess_gtfs" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Preprocess the gtfs dataset and return a NetworkX DiGraph and MultiDiGraph</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>zip_file</strong> (<em>str</em>) – Path to the gtfs dataset</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of NetworkX DiGraph and MultiDiGraph</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.preprocessing.preprocess_mtx">
+<span class="sig-prename descclassname"><span class="pre">src.preprocessing.</span></span><span class="sig-name descname"><span class="pre">preprocess_mtx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/preprocessing.html#preprocess_mtx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.preprocessing.preprocess_mtx" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Preprocess the mtx dataset and return a NetworkX DiGraph and MultiDiGraph</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>filename</strong> (<em>str</em>) – Path to the mtx dataset</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of NetworkX DiGraph and MultiDiGraph</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.preprocessing.preprocess_railway">
+<span class="sig-prename descclassname"><span class="pre">src.preprocessing.</span></span><span class="sig-name descname"><span class="pre">preprocess_railway</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/preprocessing.html#preprocess_railway"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.preprocessing.preprocess_railway" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Preprocess the railway dataset and create NetworkX graphs</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>filename</strong> (<em>str</em>) – Path to the file (csv)</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NetworkX graphs (DiGraph and MultiDiGraph)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of NetworkX graphs</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="src-resilience-module">
+<h2>src.resilience module<a class="headerlink" href="#src-resilience-module" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-src.stochastic">
+<span id="src-stochastic-module"></span><h2>src.stochastic module<a class="headerlink" href="#module-src.stochastic" title="Permalink to this heading"></a></h2>
+<p>Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Stochastic approximation algorithms for estimating graph properties Leveraging sampling techniques to improve computational efficiency</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.stochastic.estimate_clustering_coefficient">
+<span class="sig-prename descclassname"><span class="pre">src.stochastic.</span></span><span class="sig-name descname"><span class="pre">estimate_clustering_coefficient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/stochastic.html#estimate_clustering_coefficient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.stochastic.estimate_clustering_coefficient" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Estimate clustering coefficient over a iterations number of samples</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>G</strong> (<em>networkx.classes.graph.Graph</em>) – Graph</p></li>
+<li><p><strong>iterations</strong> (<em>int</em>) – Number of samples</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame of clustering coefficients</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas.core.frame.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.stochastic.estimate_shortest_path_length">
+<span class="sig-prename descclassname"><span class="pre">src.stochastic.</span></span><span class="sig-name descname"><span class="pre">estimate_shortest_path_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/stochastic.html#estimate_shortest_path_length"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.stochastic.estimate_shortest_path_length" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Estimate shortest path length between over a iterations number of samples</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>G</strong> (<em>networkx.classes.graph.Graph</em>) – Graph</p></li>
+<li><p><strong>iterations</strong> (<em>int</em>) – Number of samples</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame of shortest path lengths</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas.core.frame.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.stochastic.get_random_node">
+<span class="sig-prename descclassname"><span class="pre">src.stochastic.</span></span><span class="sig-name descname"><span class="pre">get_random_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/stochastic.html#get_random_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.stochastic.get_random_node" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Get random node from nodes</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>nodes</strong> (<em>list</em>) – list of nodes</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>random node from nodes</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.stochastic.get_random_sample">
+<span class="sig-prename descclassname"><span class="pre">src.stochastic.</span></span><span class="sig-name descname"><span class="pre">get_random_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/stochastic.html#get_random_sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.stochastic.get_random_sample" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Get random sample of 2 nodes from nodes</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>nodes</strong> (<em>list</em>) – list of nodes</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>random sample of 2 nodes from nodes</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-src.utils">
+<span id="src-utils-module"></span><h2>src.utils module<a class="headerlink" href="#module-src.utils" title="Permalink to this heading"></a></h2>
+<p>Author: Alpha Team Group Project
+Date: March 2023
+Purpose: utils.py contains utilities functions for the project</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utils.clean_df">
+<span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">clean_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#clean_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.clean_df" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Clean the dataframe by rounding the values to 6 decimals and shortening the strings to 12 characters</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>df</strong> (<em>pd.DataFrame</em>) – Pandas dataframe to clean</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pandas dataframe cleaned</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utils.delete_networkGraph">
+<span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">delete_networkGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#delete_networkGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.delete_networkGraph" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Delete the network graph from the cache</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>session_id</strong> (<em>str</em>) – Session id</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utils.get_networkGraph">
+<span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">get_networkGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#get_networkGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.get_networkGraph" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Get the network graph from the cache</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>session_id</strong> (<em>str</em>) – Session id</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Network graph</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>NetworkGraph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utils.is_saved">
+<span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">is_saved</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#is_saved"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.is_saved" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Check if the network graph is saved in the cache</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>session_id</strong> (<em>str</em>) – Session id</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the network graph is saved, False otherwise</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utils.memoize">
+<span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">memoize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#memoize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.memoize" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Memoize the function to avoid recomputing the same value, leverage the cache</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>func</strong> (<em>function</em>) – Function to memoize</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Wrapper function</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utils.return_nan">
+<span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">return_nan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkGraphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#return_nan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.return_nan" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Return a dataframe with NaN values for the given metric</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>networkGraphs</strong> (<em>NetworkGraphs</em>) – NetworkGraphs object</p></li>
+<li><p><strong>column</strong> (<em>str</em>) – Column name</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pandas dataframe with the metric and NaN values</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utils.set_networkGraph">
+<span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">set_networkGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkGraph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#set_networkGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.set_networkGraph" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Set the network graph in the cache</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>networkGraph</strong> (<em>NetworkGraph</em>) – Network graph</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="src-visualisation-module">
+<h2>src.visualisation module<a class="headerlink" href="#src-visualisation-module" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-src">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Alpha Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

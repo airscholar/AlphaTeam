@@ -13,6 +13,10 @@ hotspot_routes = Blueprint('hotspot_routes', __name__)
 
 @hotspot_routes.route('/hotspot/density', endpoint='hotspot_density', methods=['GET', 'POST'])
 def hotspot_density():
+    """
+    :Function: Visualise the hotspot using density
+    :return: the hotspot page
+    """
     filename2 = session['filename2']
     hotspotType = 'density'
 

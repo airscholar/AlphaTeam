@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>backend.common.common &mdash; AlphaTeam 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            AlphaTeam
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">AlphaTeam</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">backend.common.common</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for backend.common.common</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">request</span>
+
+<span class="n">BASE_URL</span> <span class="o">=</span> <span class="s1">&#39;http://localhost:8000/api/v1/metrics/&#39;</span>
+
+
+<div class="viewcode-block" id="get_arg_multi_toggle"><a class="viewcode-back" href="../../../backend.common.html#backend.common.common.get_arg_multi_toggle">[docs]</a><span class="k">def</span> <span class="nf">get_arg_multi_toggle</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Get the multi toggle from the request args</span>
+<span class="sd">    :param args: the request args (such as multi_toggle, multi)</span>
+<span class="sd">    :type args: dict</span>
+<span class="sd">    :return: boolean value of the multi toggle or multi</span>
+<span class="sd">    :rtype: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;multi_toggle&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+        <span class="n">multi_toggle</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;multi_toggle&#39;</span><span class="p">,</span> <span class="s1">&#39;false&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="s1">&#39;multi&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+        <span class="n">multi_toggle</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;multi&#39;</span><span class="p">,</span> <span class="s1">&#39;false&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;multi_toggle or multi not found in args&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">multi_toggle</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="s1">&#39;True&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">]</span> <span class="k">else</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="get_arg_directed_toggle"><a class="viewcode-back" href="../../../backend.common.html#backend.common.common.get_arg_directed_toggle">[docs]</a><span class="k">def</span> <span class="nf">get_arg_directed_toggle</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Get the directed toggle from the request args</span>
+<span class="sd">    :param args: the request args (such as directed_toggle, directed)</span>
+<span class="sd">    :type args: dict</span>
+<span class="sd">    :return: boolean value of the directed toggle or directed</span>
+<span class="sd">    :rtype: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;directed_toggle&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+        <span class="n">directed_toggle</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;directed_toggle&#39;</span><span class="p">,</span> <span class="s1">&#39;false&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="s1">&#39;directed&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+        <span class="n">directed_toggle</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;directed&#39;</span><span class="p">,</span> <span class="s1">&#39;false&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;directed_toggle or directed not found in args&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">directed_toggle</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="s1">&#39;True&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">]</span> <span class="k">else</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="get_arg_dynamic_toggle"><a class="viewcode-back" href="../../../backend.common.html#backend.common.common.get_arg_dynamic_toggle">[docs]</a><span class="k">def</span> <span class="nf">get_arg_dynamic_toggle</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Get the dynamic toggle from the request args</span>
+<span class="sd">    :param args: the request args (such as dynamic_toggle, dynamic)</span>
+<span class="sd">    :type args: dict</span>
+<span class="sd">    :return: boolean value of the dynamic toggle or dynamic</span>
+<span class="sd">    :rtype: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dynamic_toggle</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;dynamic&#39;</span><span class="p">,</span> <span class="s1">&#39;false&#39;</span><span class="p">)</span>
+    <span class="n">dynamic_toggle</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">dynamic_toggle</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="s1">&#39;True&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">]</span> <span class="k">else</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">dynamic_toggle</span></div>
+
+
+<div class="viewcode-block" id="get_arg_layout"><a class="viewcode-back" href="../../../backend.common.html#backend.common.common.get_arg_layout">[docs]</a><span class="k">def</span> <span class="nf">get_arg_layout</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Get the layout from the request args</span>
+<span class="sd">    :param args: the layout argument (default is sfdp)</span>
+<span class="sd">    :type args: dict</span>
+<span class="sd">    :return: the layout</span>
+<span class="sd">    :rtype: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">layout</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;layout&#39;</span><span class="p">,</span> <span class="s1">&#39;sfdp&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">layout</span></div>
+
+
+<div class="viewcode-block" id="extract_args"><a class="viewcode-back" href="../../../backend.common.html#backend.common.common.extract_args">[docs]</a><span class="k">def</span> <span class="nf">extract_args</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Extract the arguments from the request args</span>
+<span class="sd">    :param args: the request args</span>
+<span class="sd">    :type args: dict</span>
+<span class="sd">    :return: the multi toggle, directed toggle, dynamic toggle, and layout</span>
+<span class="sd">    :rtype: tuple</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">multi_toggle</span> <span class="o">=</span> <span class="n">get_arg_multi_toggle</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">directed_toggle</span> <span class="o">=</span> <span class="n">get_arg_directed_toggle</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">dynamic_toggle</span> <span class="o">=</span> <span class="n">get_arg_dynamic_toggle</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">layout</span> <span class="o">=</span> <span class="n">get_arg_layout</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">directed_toggle</span><span class="p">,</span> <span class="n">multi_toggle</span><span class="p">,</span> <span class="n">dynamic_toggle</span><span class="p">,</span> <span class="n">layout</span></div>
+
+
+<div class="viewcode-block" id="process_metric"><a class="viewcode-back" href="../../../backend.common.html#backend.common.common.process_metric">[docs]</a><span class="k">def</span> <span class="nf">process_metric</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filename2</span><span class="p">,</span> <span class="n">metrics</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Process the network graph and metrics</span>
+<span class="sd">    :param networkGraphs: the network graph</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param filename2: the session id</span>
+<span class="sd">    :type filename2: str</span>
+<span class="sd">    :param metrics: the metrics</span>
+<span class="sd">    :type metrics: list</span>
+<span class="sd">    :return: the processed metrics</span>
+<span class="sd">    :rtype: tuple</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">multi_toggle</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">multi_toggle2</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">multi_toggle3</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">multi_toggle4</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">directed_toggle</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">directed_toggle2</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">directed_toggle3</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">directed_toggle4</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">tab</span> <span class="o">=</span> <span class="s1">&#39;tab1&#39;</span>
+
+    <span class="n">layout</span> <span class="o">=</span> <span class="s1">&#39;map&#39;</span> <span class="k">if</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">is_spatial</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;sfdp&#39;</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;multi_toggle&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;directed_toggle&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
+                <span class="ow">and</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;layout&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">multi_toggle</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;multi_toggle&#39;</span><span class="p">))</span>
+            <span class="n">directed_toggle</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;directed_toggle&#39;</span><span class="p">))</span>
+            <span class="n">layout</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;layout&#39;</span><span class="p">)</span>
+            <span class="n">tab</span> <span class="o">=</span> <span class="s1">&#39;tab1&#39;</span>
+
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;multi_toggle2&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;directed_toggle2&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">multi_toggle2</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;multi_toggle2&#39;</span><span class="p">))</span>
+            <span class="n">directed_toggle2</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;directed_toggle2&#39;</span><span class="p">))</span>
+            <span class="n">tab</span> <span class="o">=</span> <span class="s1">&#39;tab2&#39;</span>
+
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;multi_toggle3&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;directed_toggle3&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">multi_toggle3</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;multi_toggle3&#39;</span><span class="p">))</span>
+            <span class="n">directed_toggle3</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;directed_toggle3&#39;</span><span class="p">))</span>
+            <span class="n">tab</span> <span class="o">=</span> <span class="s1">&#39;tab3&#39;</span>
+
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;multi_toggle4&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;directed_toggle4&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">multi_toggle4</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;multi_toggle4&#39;</span><span class="p">))</span>
+            <span class="n">directed_toggle4</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;directed_toggle4&#39;</span><span class="p">))</span>
+            <span class="n">tab</span> <span class="o">=</span> <span class="s1">&#39;tab4&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">multi_toggle</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">multi_toggle2</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">multi_toggle3</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">multi_toggle4</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">directed_toggle</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">directed_toggle2</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">directed_toggle3</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">directed_toggle4</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">url_query</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;?directed=</span><span class="si">{</span><span class="n">directed_toggle</span><span class="si">}</span><span class="s1">&amp;multi=</span><span class="si">{</span><span class="n">multi_toggle</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="n">json_data</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">BASE_URL</span><span class="si">}{</span><span class="n">filename2</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">metrics</span><span class="si">}</span><span class="s1">/all&#39;</span> <span class="o">+</span> <span class="n">url_query</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">json_data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;split&#39;</span><span class="p">)</span>
+    <span class="n">graph_name1</span> <span class="o">=</span> <span class="n">json_data</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]</span>
+
+    <span class="n">url_query</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;?directed=</span><span class="si">{</span><span class="n">directed_toggle2</span><span class="si">}</span><span class="s1">&amp;multi=</span><span class="si">{</span><span class="n">multi_toggle2</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="n">json_data</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">BASE_URL</span><span class="si">}{</span><span class="n">filename2</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">metrics</span><span class="si">}</span><span class="s1">/histogram&#39;</span> <span class="o">+</span> <span class="n">url_query</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">graph_name2</span> <span class="o">=</span> <span class="n">json_data</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]</span>
+
+    <span class="n">url_query</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;?directed=</span><span class="si">{</span><span class="n">directed_toggle3</span><span class="si">}</span><span class="s1">&amp;multi=</span><span class="si">{</span><span class="n">multi_toggle3</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="n">json_data</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">BASE_URL</span><span class="si">}{</span><span class="n">filename2</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">metrics</span><span class="si">}</span><span class="s1">/boxplot&#39;</span> <span class="o">+</span> <span class="n">url_query</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">graph_name3</span> <span class="o">=</span> <span class="n">json_data</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]</span>
+
+    <span class="n">url_query</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;?directed=</span><span class="si">{</span><span class="n">directed_toggle4</span><span class="si">}</span><span class="s1">&amp;multi=</span><span class="si">{</span><span class="n">multi_toggle4</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="n">json_data</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">BASE_URL</span><span class="si">}{</span><span class="n">filename2</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">metrics</span><span class="si">}</span><span class="s1">/violin&#39;</span> <span class="o">+</span> <span class="n">url_query</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">graph_name4</span> <span class="o">=</span> <span class="n">json_data</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]</span>
+
+    <span class="n">graph_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">graph_name1</span><span class="p">,</span> <span class="n">graph_name2</span><span class="p">,</span> <span class="n">graph_name3</span><span class="p">,</span> <span class="n">graph_name4</span><span class="p">]</span>
+    <span class="n">graph_paths</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;../static/uploads/&#39;</span> <span class="o">+</span> <span class="n">filename2</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">graph_name</span> <span class="k">if</span> <span class="n">graph_name</span> <span class="o">!=</span> <span class="s1">&#39;no_graph.html&#39;</span>
+        <span class="k">else</span> <span class="s1">&#39;../static/no_graph.html&#39;</span>
+        <span class="k">for</span> <span class="n">graph_name</span> <span class="ow">in</span> <span class="n">graph_names</span><span class="p">]</span>
+    <span class="n">multi_toggles</span> <span class="o">=</span> <span class="p">[</span><span class="n">multi_toggle</span><span class="p">,</span> <span class="n">multi_toggle2</span><span class="p">,</span> <span class="n">multi_toggle3</span><span class="p">,</span> <span class="n">multi_toggle4</span><span class="p">]</span>
+    <span class="n">directed_toggles</span> <span class="o">=</span> <span class="p">[</span><span class="n">directed_toggle</span><span class="p">,</span> <span class="n">directed_toggle2</span><span class="p">,</span> <span class="n">directed_toggle3</span><span class="p">,</span> <span class="n">directed_toggle4</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">graph_names</span><span class="p">,</span> <span class="n">graph_paths</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">tab</span><span class="p">,</span> <span class="n">layout</span><span class="p">,</span> <span class="n">multi_toggles</span><span class="p">,</span> <span class="n">directed_toggles</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Alpha Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

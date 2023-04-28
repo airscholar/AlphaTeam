@@ -20,5 +20,5 @@ df['block_time'] = df['block_time'].apply(lambda x: int(datetime.strptime(x, '%Y
 df = df[['from', 'to', 'value','block_time']]
 
 # write to csv
-df.to_csv('Dune_Eth_transaction.csv', index=False)
+df.to_csv('CRYPTO.csv', index=False)
 

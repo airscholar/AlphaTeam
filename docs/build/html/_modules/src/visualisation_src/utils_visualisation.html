@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.visualisation_src.utils_visualisation &mdash; AlphaTeam 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            AlphaTeam
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">AlphaTeam</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.visualisation_src.utils_visualisation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.visualisation_src.utils_visualisation</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Author: Alpha Team Group Project</span>
+<span class="sd">Date: March 2023</span>
+<span class="sd">Purpose: Visualisation utilities module contains functions for visualising the network graphs</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># ----------------------------------------- Imports ----------------------------------------- #</span>
+
+<span class="c1"># External imports</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">plotly</span> <span class="kn">import</span> <span class="n">graph_objects</span> <span class="k">as</span> <span class="n">go</span>
+
+<span class="c1"># Internal imports</span>
+<span class="kn">from</span> <span class="nn">src.utils</span> <span class="kn">import</span> <span class="n">memoize</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">get_layout</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layout_</span><span class="o">=</span><span class="s1">&#39;map&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Get the layout of the graph</span>
+<span class="sd">    :param networkGraphs: Network graphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param title: Title of the graph</span>
+<span class="sd">    :type title: str</span>
+<span class="sd">    :param layout_: layout of the graph</span>
+<span class="sd">    :type layout_: str</span>
+<span class="sd">    :return: Plotly layout</span>
+<span class="sd">    :rtype: plotly.graph_objects</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">layout_</span> <span class="o">==</span> <span class="s1">&#39;map&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;GTFS&#39;</span><span class="p">:</span>
+            <span class="n">resolution</span> <span class="o">=</span> <span class="mi">50</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">resolution</span> <span class="o">=</span> <span class="mi">110</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;&lt;br&gt;</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="n">titlefont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Black&#39;</span><span class="p">),</span>
+            <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">hovermode</span><span class="o">=</span><span class="s1">&#39;closest&#39;</span><span class="p">,</span>
+            <span class="n">annotations</span><span class="o">=</span><span class="p">[</span>
+                <span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Alpha Team - 2023&quot;</span><span class="p">,</span>
+                    <span class="n">showarrow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">xref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="n">yref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+                    <span class="n">x</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.002</span><span class="p">,</span>
+                    <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">],</span>
+            <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+            <span class="n">geo</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">scope</span><span class="o">=</span><span class="s1">&#39;world&#39;</span><span class="p">,</span>
+                <span class="n">lataxis_range</span><span class="o">=</span><span class="p">[</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">min_lat</span><span class="p">,</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">max_lat</span><span class="p">],</span>
+                <span class="n">lonaxis_range</span><span class="o">=</span><span class="p">[</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">min_long</span><span class="p">,</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">max_long</span><span class="p">],</span>
+                <span class="n">center</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">mid_lat</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">mid_long</span><span class="p">),</span>
+                <span class="n">showland</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">showcountries</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">zeroline</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">showticklabels</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+            <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">zeroline</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">showticklabels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;&lt;br&gt;</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="n">titlefont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Black&#39;</span><span class="p">),</span>
+            <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">hovermode</span><span class="o">=</span><span class="s1">&#39;closest&#39;</span><span class="p">,</span>
+            <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+            <span class="n">annotations</span><span class="o">=</span><span class="p">[</span>
+                <span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Alpha Team - 2023&quot;</span><span class="p">,</span>
+                    <span class="n">showarrow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">xref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="n">yref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+                    <span class="n">x</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.002</span><span class="p">,</span>
+                    <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">],</span>
+            <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">zeroline</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">showticklabels</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+            <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">zeroline</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">showticklabels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">layout</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">generate_edge_trace</span><span class="p">(</span><span class="n">Graph</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">layout</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Generate the edge trace for the plotly plot, leveraging the memoize decorator for cache optimization</span>
+<span class="sd">    :param Graph: Network graph</span>
+<span class="sd">    :type Graph: NetworkGraph</span>
+<span class="sd">    :param pos: Position of the nodes</span>
+<span class="sd">    :type pos: dict</span>
+<span class="sd">    :param layout: Layout of the plot</span>
+<span class="sd">    :type layout: str</span>
+<span class="sd">    :return: Edge trace</span>
+<span class="sd">    :rtype: plotly.graph_objects</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">y_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">Graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">=</span> <span class="n">pos</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">pos</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">x_list</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span>
+        <span class="n">y_list</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">y0</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;map&#39;</span><span class="p">:</span>
+        <span class="n">edge_trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scattergeo</span><span class="p">(</span><span class="n">lon</span><span class="o">=</span><span class="n">x_list</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="n">y_list</span><span class="p">,</span> <span class="n">hoverinfo</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
+                                   <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#888&#39;</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">edge_trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_list</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_list</span><span class="p">,</span> <span class="n">hoverinfo</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#888&#39;</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">edge_trace</span>
+
+
+<div class="viewcode-block" id="get_file_path"><a class="viewcode-back" href="../../../src.visualisation_src.html#src.visualisation_src.utils_visualisation.get_file_path">[docs]</a><span class="k">def</span> <span class="nf">get_file_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">file_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Get the file path for the plotly plot</span>
+<span class="sd">    :param networkGraphs: Network graph</span>
+<span class="sd">    :type networkGraphs: NetworkGraph</span>
+<span class="sd">    :param file_name: Name of the file</span>
+<span class="sd">    :type file_name: str</span>
+<span class="sd">    :return: Filepath</span>
+<span class="sd">    :rtype: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">folder</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">session_folder</span><span class="si">}</span><span class="s2">/&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">folder</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">folder</span><span class="si">}{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&quot;</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Alpha Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

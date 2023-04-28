@@ -15,6 +15,10 @@ BASE_URL = 'http://localhost:8000/api/v1'
 # -------------------------------------------RESILIENCE_ANALYSIS-----------------------------
 @resilience_routes.route('/resilience/malicious', endpoint='resilience_malicious', methods=['GET'])
 def resilience_analysis_malicious():
+    """
+    :Function: Visualise the malicious resilience analysis
+    :return: the malicious resilience analysis page
+    """
     filename2 = session['filename2']
     graph_path1 = '../static/no_graph.html'
     graph_path2 = '../static/no_graph.html'
@@ -40,7 +44,11 @@ def resilience_analysis_malicious():
 
 
 @resilience_routes.route('/resilience/random', endpoint='resilience_random', methods=['GET'])
-def resilience_analyisis_random():
+def resilience_analysis_random():
+    """
+    :Function: Visualise the random resilience analysis
+    :return: the random resilience analysis page
+    """
     filename2 = session['filename2']
     graph_path1 = '../static/no_graph.html'
     graph_path2 = '../static/no_graph.html'
@@ -58,7 +66,11 @@ def resilience_analyisis_random():
 
 
 @resilience_routes.route('/resilience/cluster', endpoint='resilience_cluster', methods=['GET', 'POST'])
-def resilience_analyisis_cluster():
+def resilience_analysis_cluster():
+    """
+    :Function: Visualise the cluster resilience analysis
+    :return: the cluster resilience analysis page
+    """
     filename2 = session['filename2']
     graph_path1 = '../static/no_graph.html'
     graph_path2 = '../static/no_graph.html'
@@ -81,7 +93,11 @@ def resilience_analyisis_cluster():
 
 
 @resilience_routes.route('/resilience/custom', endpoint='resilience_custom', methods=['GET', 'POST'])
-def resilience_analyisis_custom():
+def resilience_analysis_custom():
+    """
+    :Function: Visualise the custom resilience analysis
+    :return: the custom resilience analysis page
+    """
     filename2 = session['filename2']
     graph_path1 = '../static/no_graph.html'
     graph_path2 = '../static/no_graph.html'

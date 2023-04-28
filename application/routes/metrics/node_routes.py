@@ -13,6 +13,10 @@ node_routes = Blueprint('node_routes', __name__)
 # -------------------------------------------NODE--------------------------------------------
 @node_routes.route('/node_all', endpoint='node_all', methods=['GET', 'POST'])
 def node_all():
+    """
+    :Function: Visualise the node metrics
+    :return: the node metrics page
+    """
     filename2 = session['filename2']
     metrics = 'nodes'
     networkGraphs = get_networkGraph(filename2)
@@ -32,6 +36,10 @@ def node_all():
 
 @node_routes.route('/node/degree', endpoint='node_degree', methods=['GET', 'POST'])
 def node_degree():
+    """
+    :Function: Visualise the node degree
+    :return: the node degree page
+    """
     filename2 = session['filename2']
     metrics = 'degree'
     networkGraphs = get_networkGraph(filename2)
@@ -52,6 +60,10 @@ def node_degree():
 
 @node_routes.route('/node/kcore', endpoint='node_kcore', methods=['GET', 'POST'])
 def node_kcore():
+    """
+    :Function: Visualise the node kcore
+    :return: the node kcore page
+    """
     filename2 = session['filename2']
     metrics = 'kcore'
     networkGraphs = get_networkGraph(filename2)
@@ -72,6 +84,10 @@ def node_kcore():
 
 @node_routes.route('/node/triangle', endpoint='node_triangle', methods=['GET', 'POST'])
 def node_triangle():
+    """
+    :Function: Visualise the node triangle
+    :return: the node triangle page
+    """
     filename2 = session['filename2']
     metrics = 'triangles'
     networkGraphs = get_networkGraph(filename2)
@@ -92,6 +108,10 @@ def node_triangle():
 
 @node_routes.route('/node/pagerank', endpoint='node_pagerank', methods=['GET', 'POST'])
 def node_pagerank():
+    """
+    :Function: Visualise the node pagerank
+    :return: the node pagerank page
+    """
     filename2 = session['filename2']
     metrics = 'pagerank'
     networkGraphs = get_networkGraph(filename2)

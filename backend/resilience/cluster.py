@@ -9,6 +9,11 @@ clusters_bp = Blueprint('resilience_clusters', __name__, url_prefix="/api/v1/res
 
 
 def extract_args():
+    """
+    :Function: Extract the arguments from the request
+    :return: the arguments (cluster_algorithm, total_clusters, number_of_clusters)
+    :rtype: tuple
+    """
     args = request.args
 
     cluster_algorithm = args.get('cluster_algorithm')
@@ -20,6 +25,13 @@ def extract_args():
 
 @clusters_bp.route('<session_id>/clusters')
 def compute_clusters(session_id):
+    """
+    :Function: Compute the clusters for the network
+    :param session_id: the session id
+    :type session_id: str
+    :return: the clusters
+    :rtype: json
+    """
     cluster_algorithm, total_clusters, number_of_clusters = extract_args()
 
     networkGraphs = get_networkGraph(session_id)
