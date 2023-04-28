@@ -17,7 +17,7 @@ from src.visualisation_src.utils_visualisation import *
 # ----------------------------------------------------------------------------------------
 
 
-def generate_static_cluster(networkGraphs, df_, filename, algo, layout_='map', nbr=0):  # USING PLOTLY
+def generate_static_cluster(networkGraphs, df_, filename, algo, layout_='map', nbr=0):
     """
     :Function: Generate static cluster
     :param networkGraphs: Network graphs
@@ -121,7 +121,7 @@ def generate_hotspot(networkGraphs, hotspot_df, filename):
 
 # ----------------------------------------------------------------------------------------
 
-def generate_dynamic_cluster(networkGraphs, df_, filename):  # USING PYVIS
+def generate_dynamic_cluster(networkGraphs, df_, filename):
     """
     :Function: Plot the metrics on the graph
     :param networkGraphs: Network graphs
