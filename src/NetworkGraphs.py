@@ -1,7 +1,7 @@
 """
 Author: Alpha Team Group Project
 Date: March 2023
-Purpose: NetworkGraphs.py contains the NetworkGraphs custom class
+Purpose: NetworkGraphs.py contains the NetworkGraphs custom class to generalise complex network analysis
 """
 
 # ----------------------------------------- Imports ----------------------------------------- #
@@ -68,12 +68,13 @@ class NetworkGraphs:
         File format accepted:
             - .csv
             - .mtx
-            - .txt
+            - .zip (for GTFS files)
         Type accepted:
             - 'RAILWAY'
             - 'CRYPTO'
             - 'MTX'
             - 'CUSTOM'
+            - 'GTFS'
         :param filename: Path to the file containing the dataset to be loaded
         :type filename: str
         :param type: Type of the dataset to be loaded

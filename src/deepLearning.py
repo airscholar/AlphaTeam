@@ -1,7 +1,7 @@
 """
 Author: Alpha Team Group Project
 Date: March 2023
-Purpose: Deep learning module contains functions for deep learning
+Purpose: Deep learning module contains functions for deep learning embeddings
 """
 
 # ----------------------------------------- Imports ----------------------------------------- #
@@ -23,7 +23,7 @@ from src.utils import memoize
 @memoize
 def node2vec_embedding(networkGraph, p=1, q=1, dimensions=64, walk_length=80, num_walks=10, workers=4):
     """
-    :Function: Node2Vec embedding
+    :Function: Generate Node2Vec embedding
     :param networkGraph: Network graph
     :param p: Return hyper parameter (default: 1)
     :param q: Inout parameter (default: 1)
@@ -142,3 +142,4 @@ def get_model(model, data, dimension, embed_dim):
         raise ValueError("Model not found")
 
     return model
+

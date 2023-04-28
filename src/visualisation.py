@@ -1,7 +1,8 @@
 """
 Author: Alpha Team Group Project
-Date: March 2023
-Purpose: Visualisation for the NetworkX graphs
+Date: May 2023
+Purpose: Main visualisation file wrapping sub-visualisation functionalities
+        this file is used to generate the API calls by the user
 """
 
 # ----------------------------------------------------------------------------------------
@@ -10,8 +11,8 @@ import pandas as pd
 # External Imports
 from pandas.api.types import is_numeric_dtype
 
-import src.deepLearning as dl
 # Internal Imports
+import src.deepLearning as dl
 import src.machineLearning as ml
 import src.metrics as m
 from src import utils
@@ -29,7 +30,7 @@ from src.visualisation_src.utils_visualisation import *
 
 def plot_network(networkGraphs, layout='map', dynamic=False, fullPath=False):
     """
-    :Function: Plot the NetworkX graph on as map
+    :Function: Plot network on a static graph
     Layouts:
         - 'map'
         - 'twopi'
@@ -67,7 +68,7 @@ def plot_network(networkGraphs, layout='map', dynamic=False, fullPath=False):
 
 def plot_cluster(networkGraphs, clusterType, noOfClusters=0, dynamic=False, layout='map', fullPath=False):
     """
-    :Function: Plot the cluster for the given graph
+    :Function: Plot the cluster for the given network on a graph
     Clusters:
         - 'louvain'
         - 'greedy_modularity'
@@ -133,7 +134,7 @@ def plot_cluster(networkGraphs, clusterType, noOfClusters=0, dynamic=False, layo
 
 def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False, layout='map', fullPath=False):
     """
-    :Function: Plot the metric for the given graph
+    :Function: Plot the metric for the given network on a graph
     Metrics:
         - 'kcore'
         - 'degree'
@@ -192,7 +193,7 @@ def plot_metric(networkGraphs, metrics, directed=True, multi=True, dynamic=False
 
 def plot_all_metrics(networkGraphs, metrics, directed=True, multi=True, layout='map'):
     """
-    :Function: Plot all the metrics for the given graph
+    :Function: Plot all the metrics for the given network on a graph
     Metrics:
         - 'centralities'
         - 'nodes'
@@ -289,7 +290,7 @@ def plot_histogram(networkGraphs, metrics, directed=True, multi=True, fullPath=F
 
 def plot_hotspot(networkGraphs, fullPath=False):
     """
-    :Function: Plot the hotspot and coldspot for the given graph
+    :Function: Plot the hotspot and coldspot for the given network, only for spatial graphs
     :param networkGraphs: NetworkGraphs object
     :type networkGraphs: NetworkGraphs
     :param fullPath: Boolean to indicate if the full path is required
@@ -412,7 +413,7 @@ def plot_violin(networkGraphs, metrics, directed=True, multi=True, fullPath=Fals
 
 def plot_heatmap(networkGraphs, fullPath=False):
     """
-    :Function: Plot the heatmap for the given graph
+    :Function: Plot the heatmap for the given network
     :param networkGraphs:
     :type networkGraphs: NetworkGraphs
     :param fullPath: Boolean to indicate if the full path is required
@@ -433,7 +434,7 @@ def plot_heatmap(networkGraphs, fullPath=False):
 
 def plot_temporal(networkGraphs, layout='map'):
     """
-    :Function: Plot the temporal graph for the given graph
+    :Function: Plot the temporal graph for the given network, only for temporal graphs
     :param networkGraphs: NetworkGraphs object
     :type networkGraphs: NetworkGraphs
     :param layout: Layout of the graph
@@ -462,16 +463,16 @@ def plot_temporal(networkGraphs, layout='map'):
 
 def plot_node2vec(networkGraphs, p=1, q=1, layout='TSNE', fullPath=False):
     """
-    :Function: Plot the node2vec for the given graph
+    :Function: Plot the Node2Vec embedding for the given network
     layout:
         - 'TSNE'
         - 'UMAP'
         - 'PCA'
     :param networkGraphs: NetworkGraphs object
     :type networkGraphs: NetworkGraphs
-    :param p: p parameter for node2vec
+    :param p: p parameter for Node2Vec
     :type p: float
-    :param q: q parameter for node2vec
+    :param q: q parameter for Node2Vec
     :type q: float
     :param layout: Visualisation method
     :type layout: str
@@ -505,7 +506,7 @@ def plot_node2vec(networkGraphs, p=1, q=1, layout='TSNE', fullPath=False):
 
 def plot_node2vec_cluster(networkGraphs, method, noOfCluster=8, p=1, q=1, layout='TSNE', fullPath=False):
     """
-    :Function: Plot the embedding cluster for the given graph
+    :Function: Plot the Node2Vec embedding with cluster on top for the given network
     method:
         - 'kmeans'
         - 'spectral'
@@ -524,9 +525,9 @@ def plot_node2vec_cluster(networkGraphs, method, noOfCluster=8, p=1, q=1, layout
     :type method: str
     :param noOfCluster: Number of clusters
     :type noOfCluster: int
-    :param p: p parameter for node2vec
+    :param p: p parameter for Node2Vec
     :type p: float
-    :param q: q parameter for node2vec
+    :param q: q parameter for Node2Vec
     :type q: float
     :param layout: Visualisation method
     :type layout: str
@@ -573,7 +574,7 @@ def plot_node2vec_cluster(networkGraphs, method, noOfCluster=8, p=1, q=1, layout
 def plot_DL_embedding(networkGraphs, features=['proximity'], dimension=128, model='SAGE', layout='TSNE',
                       fullPath=False):
     """
-    :Function: Plot the embedding for the given graph
+    :Function: Plot the DL embedding for the given network
     features:
         Format: ['feature1', 'feature2', ...]
         If choose proximity just put ['proximity'] without any other features
@@ -582,6 +583,11 @@ def plot_DL_embedding(networkGraphs, features=['proximity'], dimension=128, mode
         - 'triangles'
         - 'degree'
         - 'pagerank'
+        - 'degree_centrality'
+        - 'closeness_centrality'
+        - 'betweenness_centrality'
+        - 'eigenvector_centrality'
+        - 'load_centrality'
     layout:
         - 'TSNE'
         - 'UMAP'
@@ -632,7 +638,7 @@ def plot_DL_embedding(networkGraphs, features=['proximity'], dimension=128, mode
 def plot_DL_embedding_cluster(networkGraphs, method, noOfCluster=8, features=['proximity'], dimension=128, model='SAGE',
                               layout='TSNE', fullPath=False):
     """
-    :Function: Plot the embedding cluster
+    :Function: Plot the DL embeddings with clusters on top for the given network
     method:
         - 'kmeans'
         - 'spectral'
@@ -646,6 +652,11 @@ def plot_DL_embedding_cluster(networkGraphs, method, noOfCluster=8, features=['p
         - 'triangles'
         - 'degree'
         - 'pagerank'
+        - 'degree_centrality'
+        - 'closeness_centrality'
+        - 'betweenness_centrality'
+        - 'eigenvector_centrality'
+        - 'load_centrality'
     layout:
         - 'TSNE'
         - 'UMAP'
