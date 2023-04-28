@@ -1,7 +1,7 @@
 """
 Author: Alpha Team Group Project
 Date: March 2023
-Purpose: Deep learning module contains functions for deep learning
+Purpose: Deep learning module contains functions for deep learning embeddings
 """
 
 # ----------------------------------------- Imports ----------------------------------------- #
@@ -10,9 +10,9 @@ Purpose: Deep learning module contains functions for deep learning
 from node2vec import Node2Vec
 import numpy as np
 import plotly.graph_objects as go
-from src.utils import memoize
 
 # Internal imports
+from src.utils import memoize
 from src.DeepLearning.embedding import *
 from src.metrics import get_metrics
 
@@ -24,7 +24,7 @@ from src.metrics import get_metrics
 @memoize
 def node2vec_embedding(networkGraph, p=1, q=1, dimensions=64, walk_length=80, num_walks=10, workers=4):
     """
-    :Function: Node2Vec embedding
+    :Function: Generate Node2Vec embedding
     :param networkGraph: Network graph
     :param p: Return hyper parameter (default: 1)
     :param q: Inout parameter (default: 1)
