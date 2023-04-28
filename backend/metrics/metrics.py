@@ -1,4 +1,3 @@
-import pandas as pd
 from flask import Blueprint, request
 from flask_jsonpify import jsonify
 
@@ -19,6 +18,7 @@ def compute_all_metrics(session_id, metric):
     df_json = dataframe.to_json(orient='split')
 
     return jsonify({"message": "Success", "data": df_json, "filename": file_name})
+
 
 @metrics_bp.route('<session_id>/<metric>')
 def compute_metrics(session_id, metric):

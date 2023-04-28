@@ -8,13 +8,12 @@ Purpose: Deep learning module contains functions for deep learning
 
 # External imports
 from node2vec import Node2Vec
-import numpy as np
-import plotly.graph_objects as go
-from src.utils import memoize
 
 # Internal imports
 from src.DeepLearning.embedding import *
 from src.metrics import get_metrics
+from src.utils import memoize
+
 
 # ----------------------------------------- CONSTANT ----------------------------------------- #
 
@@ -143,4 +142,3 @@ def get_model(model, data, dimension, embed_dim):
         raise ValueError("Model not found")
 
     return model
-

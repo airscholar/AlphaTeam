@@ -4,29 +4,27 @@ import shutil
 import time
 
 import flask
-import flask_restx
 from flask import request, session
 from flask_cors import CORS
 
 from backend.clusters.clusters import cluster_bp
+from backend.deepLearning.deepLearning import deepLearning_bp
 from backend.hotspot.density import hotspot_bp
 from backend.metrics.metrics import metrics_bp
-from backend.resilience.resilience import resilience_bp
-from backend.visualisation.visualisation import visualisation_bp
-from backend.resilience.malicious import malicious_bp
-from backend.resilience.random import random_bp
 from backend.resilience.cluster import clusters_bp
 from backend.resilience.custom import custom_bp
-from backend.deepLearning.deepLearning import deepLearning_bp
+from backend.resilience.malicious import malicious_bp
+from backend.resilience.random import random_bp
+from backend.resilience.resilience import resilience_bp
+from backend.visualisation.visualisation import visualisation_bp
 from src.NetworkGraphs import NetworkGraphs
 from src.utils import set_networkGraph, get_networkGraph
-
 
 app = flask.Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 app.config['SECRET_KEY'] = 'your_secret_key'
-api_bp = flask.Blueprint("api", __name__, url_prefix="/api/v1",)
+api_bp = flask.Blueprint("api", __name__, url_prefix="/api/v1", )
 
 
 @api_bp.route('/')
