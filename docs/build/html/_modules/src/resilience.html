@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.resilience &mdash; AlphaTeam 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AlphaTeam
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AlphaTeam</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.resilience</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.resilience</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Author: Alpha Team Group Project</span>
+<span class="sd">Date: March 2023</span>
+<span class="sd">Purpose: Assess the resilience of a network using different attacks vectors</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># -------------------------------------- IMPORT ---------------------------------------------</span>
+
+<span class="c1"># External imports</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="c1"># Internal imports</span>
+<span class="kn">import</span> <span class="nn">src.machineLearning</span> <span class="k">as</span> <span class="nn">ml</span>
+<span class="kn">from</span> <span class="nn">src.NetworkGraphs</span> <span class="kn">import</span> <span class="n">NetworkGraphs</span>
+<span class="kn">from</span> <span class="nn">src.metrics</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">src.preprocessing</span> <span class="kn">import</span> <span class="n">convert_to_DiGraph</span>
+
+<span class="c1"># -------------------------------------- FUNCTIONS -------------------------------------------</span>
+
+
+<span class="n">idx</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+<div class="viewcode-block" id="resilience"><a class="viewcode-back" href="../../src.html#src.resilience.resilience">[docs]</a><span class="k">def</span> <span class="nf">resilience</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">,</span> <span class="n">attack</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Compute the resilience of the networkGraph</span>
+<span class="sd">    Attack can be:</span>
+<span class="sd">        - &quot;random&quot;</span>
+<span class="sd">        - &quot;malicious&quot;</span>
+<span class="sd">        - &quot;cluster&quot;</span>
+<span class="sd">        - &quot;random&quot;</span>
+<span class="sd">    Args of the attacks:</span>
+<span class="sd">        - &quot;random&quot;:</span>
+<span class="sd">            - &quot;number_of_nodes&quot;: Number of nodes to be removed</span>
+<span class="sd">            - &quot;number_of_edges&quot;: Number of edges to be removed</span>
+<span class="sd">        - &quot;malicious&quot;:</span>
+<span class="sd">            - &quot;metric&quot;: Metric to be used to select the nodes to be removed</span>
+<span class="sd">                - &#39;kcore&#39;</span>
+<span class="sd">                - &#39;degree&#39;</span>
+<span class="sd">                - &#39;triangles&#39;</span>
+<span class="sd">                - &#39;pagerank&#39;</span>
+<span class="sd">                - &#39;betweenness_centrality&#39;</span>
+<span class="sd">                - &#39;closeness_centrality&#39;</span>
+<span class="sd">                - &#39;eigenvector_centrality&#39;</span>
+<span class="sd">                - &#39;load_centrality&#39;</span>
+<span class="sd">                - &#39;degree_centrality&#39;</span>
+<span class="sd">            - &#39;directed&#39;: True or False</span>
+<span class="sd">            - &#39;multi&#39;: True or False</span>
+<span class="sd">            - &quot;number_of_nodes&quot;: Number of nodes to be removed</span>
+<span class="sd">            - &quot;threshold&quot;: Threshold to be used to select the nodes to be removed</span>
+<span class="sd">            - &quot;operator&quot; can be:</span>
+<span class="sd">                    - &quot;&gt;&quot;</span>
+<span class="sd">                    - &quot;&lt;&quot;</span>
+<span class="sd">                    - &quot;&gt;=&quot;</span>
+<span class="sd">                    - &quot;&lt;=&quot;</span>
+<span class="sd">        - &quot;cluster&quot;:</span>
+<span class="sd">            - &quot;cluster_algorithm&quot;: Algorithm to be used to compute the clusters</span>
+<span class="sd">            - &quot;total_clusters&quot;: Total number of clusters to be generated</span>
+<span class="sd">            - &quot;number_of_clusters&quot;: Number of clusters to be removed</span>
+<span class="sd">        - &quot;custom&quot;:</span>
+<span class="sd">            - &quot;list_of_nodes&quot;: List of nodes to be removed</span>
+<span class="sd">    :param networkGraph: NetworkGraph</span>
+<span class="sd">    :type networkGraph: NetworkGraph</span>
+<span class="sd">    :param attack: Attack to be performed</span>
+<span class="sd">    :type attack: str</span>
+<span class="sd">    :param kwargs: Arguments of the attack to be performed</span>
+<span class="sd">    :type kwargs: dict</span>
+<span class="sd">    :return: NetworkGraph with the nodes removed, and a dataframe with the changed nodes/edges</span>
+<span class="sd">    :rtype: NetworkGraph, pd.DataFrame</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">    &gt;&gt;&gt; # Random attack</span>
+<span class="sd">    &gt;&gt;&gt; graph, df = resilience(networkGraph, attack=&#39;random&#39;, number_of_nodes=10)</span>
+<span class="sd">    &gt;&gt;&gt; graph, df = resilience(networkGraph, attack=&#39;random&#39;, number_of_edges=10)</span>
+<span class="sd">    &gt;&gt;&gt; # Malicious attack</span>
+<span class="sd">    &gt;&gt;&gt; graph, df = resilience(networkGraph, attack=&#39;malicious&#39;, metric=&#39;degree&#39;, number_of_nodes=10)</span>
+<span class="sd">    &gt;&gt;&gt; graph, df = resilience(networkGraph, attack=&#39;malicious&#39;, metric=&#39;degree&#39;, threshold=10, operator=&#39;&gt;&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; # Cluster attack</span>
+<span class="sd">    &gt;&gt;&gt; graph, df = resilience(networkGraph, attack=&#39;cluster&#39;, cluster_algorithm=&#39;spectral&#39;, total_clusters=15, number_of_clusters=2)</span>
+<span class="sd">    &gt;&gt;&gt; # Custom attack</span>
+<span class="sd">    &gt;&gt;&gt; graph, df = resilience(networkGraph, attack=&#39;custom&#39;, list_of_nodes=[1, 2, 3])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">attack</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;number_of_nodes&quot;</span><span class="p">,</span> <span class="s2">&quot;number_of_edges&quot;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Argument </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> not recognized&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">resilience_random</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">attack</span> <span class="o">==</span> <span class="s2">&quot;malicious&quot;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;metric&quot;</span><span class="p">,</span> <span class="s2">&quot;number_of_nodes&quot;</span><span class="p">,</span> <span class="s2">&quot;threshold&quot;</span><span class="p">,</span> <span class="s2">&quot;operator&quot;</span><span class="p">,</span> <span class="s2">&quot;multi&quot;</span><span class="p">,</span> <span class="s2">&quot;directed&quot;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Argument </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> not recognized&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;metric&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Metric not specified&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">resilience_malicious</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">attack</span> <span class="o">==</span> <span class="s2">&quot;cluster&quot;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;cluster_algorithm&quot;</span><span class="p">,</span> <span class="s2">&quot;total_clusters&quot;</span><span class="p">,</span> <span class="s2">&quot;number_of_clusters&quot;</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Argument </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> not recognized&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="s2">&quot;cluster_algorithm&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cluster algorithm not specified&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">resilience_cluster</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">attack</span> <span class="o">==</span> <span class="s2">&quot;custom&quot;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;list_of_nodes&quot;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Argument </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> not recognized&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">resilience_custom</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Attack not recognized&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+
+<span class="c1"># ------------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="resilience_random"><a class="viewcode-back" href="../../src.html#src.resilience.resilience_random">[docs]</a><span class="k">def</span> <span class="nf">resilience_random</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">,</span> <span class="n">number_of_nodes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">number_of_edges</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Generate the random attack to the networkGraph</span>
+<span class="sd">    :param networkGraph: NetworkGraph</span>
+<span class="sd">    :type networkGraph: NetworkGraph</span>
+<span class="sd">    :param number_of_nodes: Number of nodes to be removed</span>
+<span class="sd">    :type number_of_nodes: int</span>
+<span class="sd">    :param number_of_edges: Number of edges to be removed</span>
+<span class="sd">    :type number_of_edges: int</span>
+<span class="sd">    :return: NetworkGraph with the nodes removed</span>
+<span class="sd">    :rtype: NetworkGraph</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">copy_networkGraph</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">)</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">set_attack_vector</span><span class="p">(</span><span class="s1">&#39;random&#39;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">number_of_nodes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
+        <span class="n">nodes_to_remove</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">nodes</span><span class="p">),</span> <span class="n">number_of_nodes</span><span class="p">)</span>
+        <span class="n">G</span><span class="p">,</span> <span class="n">df</span> <span class="o">=</span> <span class="n">remove_nodes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">nodes_to_remove</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">number_of_edges</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">edges</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
+        <span class="n">edges_to_remove</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">edges</span><span class="p">),</span> <span class="n">number_of_edges</span><span class="p">)</span>
+        <span class="n">G</span><span class="p">,</span> <span class="n">df</span> <span class="o">=</span> <span class="n">remove_edges</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">edges_to_remove</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">G</span><span class="p">,</span> <span class="n">df</span></div>
+
+
+<span class="c1"># ------------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="resilience_malicious"><a class="viewcode-back" href="../../src.html#src.resilience.resilience_malicious">[docs]</a><span class="k">def</span> <span class="nf">resilience_malicious</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">number_of_nodes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                         <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Generate the malicious attack to the networkGraph</span>
+<span class="sd">    Metrics:</span>
+<span class="sd">        - &#39;kcore&#39;</span>
+<span class="sd">        - &#39;degree&#39;</span>
+<span class="sd">        - &#39;triangles&#39;</span>
+<span class="sd">        - &#39;pagerank&#39;</span>
+<span class="sd">        - &#39;betweenness_centrality&#39;</span>
+<span class="sd">        - &#39;closeness_centrality&#39;</span>
+<span class="sd">        - &#39;eigenvector_centrality&#39;</span>
+<span class="sd">        - &#39;load_centrality&#39;</span>
+<span class="sd">        - &#39;degree_centrality&#39;</span>
+<span class="sd">    operators:</span>
+<span class="sd">        - &quot;&gt;&quot; (default)</span>
+<span class="sd">        - &quot;&lt;&quot;</span>
+<span class="sd">        - &quot;&gt;=&quot;</span>
+<span class="sd">        - &quot;&lt;=&quot;</span>
+<span class="sd">    :param networkGraph: NetworkGraph</span>
+<span class="sd">    :type networkGraph: NetworkGraph</span>
+<span class="sd">    :param metric: Metric to be used to select the nodes to be removed</span>
+<span class="sd">    :type metric: str</span>
+<span class="sd">    :param number_of_nodes: Number of nodes to be removed</span>
+<span class="sd">    :type number_of_nodes: int</span>
+<span class="sd">    :param threshold: Threshold to be used to select the nodes to be removed</span>
+<span class="sd">    :type threshold: float</span>
+<span class="sd">    :param operator: Operator to be used to select the nodes to be removed</span>
+<span class="sd">    :type operator: str</span>
+<span class="sd">    :param multi: True if the graph is multi</span>
+<span class="sd">    :type multi: bool</span>
+<span class="sd">    :param directed: True if the graph is directed</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :return: NetworkGraph with the nodes removed</span>
+<span class="sd">    :rtype: NetworkGraph</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">copy_networkGraph</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">)</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">set_attack_vector</span><span class="p">(</span><span class="s1">&#39;malicious&#39;</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">get_metrics</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+    <span class="n">metric</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">nodes_to_remove</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">threshold</span><span class="p">:</span>
+        <span class="n">nodes_to_remove</span> <span class="o">=</span> <span class="n">execute_threshold</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">operator</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">number_of_nodes</span><span class="p">:</span>
+        <span class="n">number_of_nodes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">number_of_nodes</span><span class="p">)</span>
+        <span class="n">nodes_to_remove</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[:</span><span class="n">number_of_nodes</span><span class="p">]</span>
+
+    <span class="n">G</span><span class="p">,</span> <span class="n">df</span> <span class="o">=</span> <span class="n">remove_nodes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">nodes_to_remove</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">G</span><span class="p">,</span> <span class="n">df</span></div>
+
+
+<span class="c1"># ------------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="resilience_cluster"><a class="viewcode-back" href="../../src.html#src.resilience.resilience_cluster">[docs]</a><span class="k">def</span> <span class="nf">resilience_cluster</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">,</span> <span class="n">cluster_algorithm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">total_clusters</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">number_of_clusters</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Generate the cluster attack to the networkGraph</span>
+<span class="sd">    :param networkGraph: NetworkGraph</span>
+<span class="sd">    :type networkGraph: NetworkGraph</span>
+<span class="sd">    :param cluster_algorithm: Algorithm to be used to compute the clusters</span>
+<span class="sd">    :type cluster_algorithm: str</span>
+<span class="sd">    :param total_clusters: Total number of clusters to be generated</span>
+<span class="sd">    :type total_clusters: int</span>
+<span class="sd">    :param number_of_clusters: Number of clusters to be removed</span>
+<span class="sd">    :type number_of_clusters: int</span>
+<span class="sd">    :return: NetworkGraph with the nodes removed</span>
+<span class="sd">    :rtype: NetworkGraph</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">copy_networkGraph</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">)</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">set_attack_vector</span><span class="p">(</span><span class="s1">&#39;cluster&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">cluster_algorithm</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;louvain&#39;</span><span class="p">,</span> <span class="s1">&#39;greedy_modularity&#39;</span><span class="p">,</span> <span class="s1">&#39;label_propagation&#39;</span><span class="p">,</span> <span class="s1">&#39;asyn_lpa&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;k_clique&#39;</span><span class="p">,</span> <span class="s1">&#39;spectral&#39;</span><span class="p">,</span> <span class="s1">&#39;kmeans&#39;</span><span class="p">,</span> <span class="s1">&#39;agglomerative&#39;</span><span class="p">,</span> <span class="s1">&#39;hierarchical&#39;</span><span class="p">,</span> <span class="s1">&#39;dbscan&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid cluster type&quot;</span><span class="p">,</span> <span class="s2">&quot;please choose from the following: &#39;louvain&#39;, &#39;greedy_modularity&#39;, &quot;</span>
+                                                 <span class="s2">&quot;&#39;label_propagation&#39;, &#39;asyn_lpa&#39;,&quot;</span>
+                                                 <span class="s2">&quot;&#39;k_clique&#39;, &#39;spectral&#39;, &#39;kmeans&#39; &quot;</span>
+                                                 <span class="s2">&quot;&#39;agglomerative&#39;, &#39;hierarchical&#39;, &#39;dbscan&#39;&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="mi">0</span> <span class="o">&gt;=</span> <span class="n">number_of_clusters</span> <span class="o">&gt;</span> <span class="n">total_clusters</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid number of clusters&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;please choose a number of clusters smaller than the total number of clusters&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;or a positive number&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">get_communities</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">,</span> <span class="n">cluster_algorithm</span><span class="p">,</span> <span class="n">total_clusters</span><span class="p">)</span>
+
+    <span class="n">cluster_ids</span> <span class="o">=</span> <span class="n">clusters</span><span class="p">[</span><span class="s1">&#39;Cluster_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+    <span class="n">cluster_ids</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">cluster_ids</span><span class="p">),</span> <span class="n">number_of_clusters</span><span class="p">)</span>
+    <span class="n">clusters_to_remove</span> <span class="o">=</span> <span class="n">clusters</span><span class="p">[</span><span class="n">clusters</span><span class="p">[</span><span class="s1">&#39;Cluster_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">cluster_ids</span><span class="p">)]</span>
+    <span class="n">nodes_to_remove</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="n">clusters_to_remove</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">nodes_to_remove</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cluster</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;Node&#39;</span><span class="p">])</span>
+    <span class="n">networkGraph</span><span class="p">,</span> <span class="n">df</span> <span class="o">=</span> <span class="n">remove_nodes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">nodes_to_remove</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">networkGraph</span><span class="p">,</span> <span class="n">df</span></div>
+
+
+<span class="c1"># ------------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="resilience_custom"><a class="viewcode-back" href="../../src.html#src.resilience.resilience_custom">[docs]</a><span class="k">def</span> <span class="nf">resilience_custom</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">,</span> <span class="n">list_of_nodes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Generate the custom attack to the networkGraph</span>
+<span class="sd">    :param networkGraph: NetworkGraph</span>
+<span class="sd">    :type networkGraph: NetworkGraph</span>
+<span class="sd">    :param list_of_nodes: List of nodes to be removed</span>
+<span class="sd">    :type list_of_nodes: list</span>
+<span class="sd">    :return: NetworkGraph with the nodes removed</span>
+<span class="sd">    :rtype: NetworkGraph</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">copy_networkGraph</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">)</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">set_attack_vector</span><span class="p">(</span><span class="s1">&#39;custom_node&#39;</span><span class="p">)</span>
+
+    <span class="n">G</span><span class="p">,</span> <span class="n">df</span> <span class="o">=</span> <span class="n">remove_nodes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">list_of_nodes</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">G</span><span class="p">,</span> <span class="n">df</span></div>
+
+
+<span class="c1"># ------------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="copy_networkGraph"><a class="viewcode-back" href="../../src.html#src.resilience.copy_networkGraph">[docs]</a><span class="k">def</span> <span class="nf">copy_networkGraph</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Copy the networkGraph object</span>
+<span class="sd">    :param networkGraph: NetworkGraph</span>
+<span class="sd">    :type networkGraph: NetworkGraph</span>
+<span class="sd">    :return: Copy of the networkGraph</span>
+<span class="sd">    :rtype: NetworkGraph</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">networkGraph</span><span class="o">.</span><span class="n">session_folder</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">idx</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">idx</span><span class="p">[</span><span class="n">networkGraph</span><span class="o">.</span><span class="n">session_folder</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">idx</span><span class="p">[</span><span class="n">networkGraph</span><span class="o">.</span><span class="n">session_folder</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span><span class="p">[</span><span class="n">networkGraph</span><span class="o">.</span><span class="n">session_folder</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">session_folder</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">networkGraph</span><span class="o">.</span><span class="n">session_folder</span><span class="si">}</span><span class="s1">/resilience</span><span class="si">{</span><span class="n">idx</span><span class="p">[</span><span class="n">networkGraph</span><span class="o">.</span><span class="n">session_folder</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
+
+    <span class="k">return</span> <span class="n">NetworkGraphs</span><span class="p">(</span><span class="n">networkGraph</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">networkGraph</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">session_folder</span><span class="o">=</span><span class="n">session_folder</span><span class="p">)</span></div>
+
+
+<span class="c1"># ------------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="remove_nodes"><a class="viewcode-back" href="../../src.html#src.resilience.remove_nodes">[docs]</a><span class="k">def</span> <span class="nf">remove_nodes</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">,</span> <span class="n">nodes</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Remove the nodes from the networkGraph</span>
+<span class="sd">    :param networkGraph: NetworkGraph</span>
+<span class="sd">    :type networkGraph: NetworkGraph</span>
+<span class="sd">    :param nodes: Nodes to be removed</span>
+<span class="sd">    :type nodes: list</span>
+<span class="sd">    :return: NetworkGraph with the nodes removed</span>
+<span class="sd">    :rtype: NetworkGraph</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+        <span class="n">networkGraph</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+    <span class="n">networkGraph</span><span class="o">.</span><span class="n">DiGraph</span> <span class="o">=</span> <span class="n">convert_to_DiGraph</span><span class="p">(</span><span class="n">networkGraph</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">)</span>
+    <span class="n">networkGraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">networkGraph</span><span class="o">.</span><span class="n">MultiGraph</span> <span class="o">=</span> <span class="n">networkGraph</span><span class="o">.</span><span class="n">DiGraph</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">(</span>
+    <span class="p">),</span> <span class="n">networkGraph</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">()</span>
+    <span class="n">networkGraph</span><span class="o">.</span><span class="n">update_attributes</span><span class="p">()</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">networkGraph</span><span class="p">,</span> <span class="n">df</span></div>
+
+
+<span class="c1"># ------------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="remove_edges"><a class="viewcode-back" href="../../src.html#src.resilience.remove_edges">[docs]</a><span class="k">def</span> <span class="nf">remove_edges</span><span class="p">(</span><span class="n">networkGraph</span><span class="p">,</span> <span class="n">edges</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Remove the edges from the networkGraph</span>
+<span class="sd">    :param networkGraph: NetworkGraph</span>
+<span class="sd">    :type networkGraph: NetworkGraph</span>
+<span class="sd">    :param edges: Edges to be removed</span>
+<span class="sd">    :type edges: list</span>
+<span class="sd">    :return: NetworkGraph with the edges removed</span>
+<span class="sd">    :rtype: NetworkGraph</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+        <span class="n">networkGraph</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">networkGraph</span><span class="o">.</span><span class="n">DiGraph</span> <span class="o">=</span> <span class="n">convert_to_DiGraph</span><span class="p">(</span><span class="n">networkGraph</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">)</span>
+    <span class="n">networkGraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">networkGraph</span><span class="o">.</span><span class="n">MultiGraph</span> <span class="o">=</span> <span class="n">networkGraph</span><span class="o">.</span><span class="n">DiGraph</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">(</span>
+    <span class="p">),</span> <span class="n">networkGraph</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">()</span>
+    <span class="n">networkGraph</span><span class="o">.</span><span class="n">update_attributes</span><span class="p">()</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Source&#39;</span><span class="p">,</span> <span class="s1">&#39;Target&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">networkGraph</span><span class="p">,</span> <span class="n">df</span></div>
+
+
+<span class="c1"># ------------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="execute_threshold"><a class="viewcode-back" href="../../src.html#src.resilience.execute_threshold">[docs]</a><span class="k">def</span> <span class="nf">execute_threshold</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="s1">&#39;&gt;&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Execute the threshold operation</span>
+<span class="sd">    :param df: DataFrame with the metrics</span>
+<span class="sd">    :type df: DataFrame</span>
+<span class="sd">    :param metric: Metric to be used to select the nodes to be removed</span>
+<span class="sd">    :type metric: str</span>
+<span class="sd">    :param threshold: Threshold to be used to select the nodes to be removed</span>
+<span class="sd">    :type threshold: float</span>
+<span class="sd">    :param operator: Operator to be used to select the nodes to be removed</span>
+<span class="sd">    :type operator: str</span>
+<span class="sd">    :return: DataFrame with the nodes to be removed</span>
+<span class="sd">    :rtype: DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">operator</span> <span class="o">==</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">:</span>
+        <span class="n">nodes_to_remove</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">][</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">elif</span> <span class="n">operator</span> <span class="o">==</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">:</span>
+        <span class="n">nodes_to_remove</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">threshold</span><span class="p">][</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">elif</span> <span class="n">operator</span> <span class="o">==</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">:</span>
+        <span class="n">nodes_to_remove</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">][</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">elif</span> <span class="n">operator</span> <span class="o">==</span> <span class="s1">&#39;&lt;=&#39;</span><span class="p">:</span>
+        <span class="n">nodes_to_remove</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">threshold</span><span class="p">][</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Operator </span><span class="si">{</span><span class="n">operator</span><span class="si">}</span><span class="s2"> not supported&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">nodes_to_remove</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Alpha Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

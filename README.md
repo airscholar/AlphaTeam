@@ -34,5 +34,7 @@ the command in step 3 above.
 
 # Documentation
 
-On the frontend of the application, you can find the documentation for the API endpoints once the frontend application
-is started at `http://localhost:{chosen port}/docs`
+You can view the documentation in the `docs/` directory. The documentation is generated using Sphinx.
+
+### To regenerate the documentation
+In the root directory of the project, run `sh generate_docs.sh` to regenerate the documentation.

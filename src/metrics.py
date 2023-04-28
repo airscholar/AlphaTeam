@@ -21,7 +21,7 @@ from src.utils import *
 def get_metrics(networkGraphs, method, directed=False, multi=False):
     """
     :Function: Get the metrics for the given graph
-    Method:
+        Method:
         - 'kcore'
         - 'degree'
         - 'triangles'

@@ -9,6 +9,11 @@ custom_bp = Blueprint('resilience_custom', __name__, url_prefix="/api/v1/resilie
 
 
 def get_args_listOfNodes():
+    """
+    :Function: Extract the list of nodes from the request
+    :return: the list of nodes (list_of_nodes)
+    :rtype: list
+    """
     args = request.args
     list_of_nodes = args.get('list_of_nodes')
 
@@ -24,6 +29,13 @@ def get_args_listOfNodes():
 
 @custom_bp.route('<session_id>/custom')
 def compute_custom(session_id):
+    """
+    :Function: Compute the custom resilience of the network
+    :param session_id: the session id
+    :type session_id: str
+    :return: the custom resilience of the network
+    :rtype: json
+    """
     list_of_nodes = get_args_listOfNodes()
 
     networkGraphs = get_networkGraph(session_id)

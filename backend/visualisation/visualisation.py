@@ -10,6 +10,15 @@ visualisation_bp = Blueprint('visualisation', __name__, url_prefix="/api/v1/visu
 
 @visualisation_bp.route('<session_id>/plot_network/<plot_type>')
 def visualise_network(session_id, plot_type):
+    """
+    :Function: Plot the network graph
+    :param session_id: the session id
+    :type session_id: str
+    :param plot_type: the type of plot
+    :type plot_type: str
+    :return: jsonified response
+    :rtype: json
+    """
     dynamic_toggle = get_arg_dynamic_toggle(request.args)
     layout = get_arg_layout(request.args)
 
@@ -27,6 +36,13 @@ def visualise_network(session_id, plot_type):
 
 @visualisation_bp.route('<session_id>/heatmap')
 def visualise_heatmap(session_id):
+    """
+    :Function: Plot the heatmap
+    :param session_id: the session id
+    :type session_id: str
+    :return: jsonified response
+    :rtype: json
+    """
     G = get_networkGraph(session_id)
 
     file_name = plot_heatmap(G)
@@ -36,6 +52,13 @@ def visualise_heatmap(session_id):
 
 @visualisation_bp.route('/<session_id>/dataset')
 def visualise_dataset(session_id):
+    """
+    :Function: Plot the dataset
+    :param session_id: the session id
+    :type session_id: str
+    :return: jsonified response
+    :rtype: json
+    """
     G = get_networkGraph(session_id)
 
     df = G.df.head(3000).to_json(orient='split')

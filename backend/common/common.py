@@ -6,6 +6,13 @@ BASE_URL = 'http://localhost:8000/api/v1/metrics/'
 
 
 def get_arg_multi_toggle(args):
+    """
+    :Function: Get the multi toggle from the request args
+    :param args: the request args (such as multi_toggle, multi)
+    :type args: dict
+    :return: boolean value of the multi toggle or multi
+    :rtype: bool
+    """
     if 'multi_toggle' in args:
         multi_toggle = args.get('multi_toggle', 'false')
     elif 'multi' in args:
@@ -16,6 +23,13 @@ def get_arg_multi_toggle(args):
 
 
 def get_arg_directed_toggle(args):
+    """
+    :Function: Get the directed toggle from the request args
+    :param args: the request args (such as directed_toggle, directed)
+    :type args: dict
+    :return: boolean value of the directed toggle or directed
+    :rtype: bool
+    """
     if 'directed_toggle' in args:
         directed_toggle = args.get('directed_toggle', 'false')
     elif 'directed' in args:
@@ -26,17 +40,38 @@ def get_arg_directed_toggle(args):
 
 
 def get_arg_dynamic_toggle(args):
+    """
+    :Function: Get the dynamic toggle from the request args
+    :param args: the request args (such as dynamic_toggle, dynamic)
+    :type args: dict
+    :return: boolean value of the dynamic toggle or dynamic
+    :rtype: bool
+    """
     dynamic_toggle = args.get('dynamic', 'false')
     dynamic_toggle = True if dynamic_toggle in ['true', 'True', True] else False
     return dynamic_toggle
 
 
 def get_arg_layout(args):
+    """
+    :Function: Get the layout from the request args
+    :param args: the layout argument (default is sfdp)
+    :type args: dict
+    :return: the layout
+    :rtype: str
+    """
     layout = args.get('layout', 'sfdp')
     return layout
 
 
 def extract_args(args):
+    """
+    :Function: Extract the arguments from the request args
+    :param args: the request args
+    :type args: dict
+    :return: the multi toggle, directed toggle, dynamic toggle, and layout
+    :rtype: tuple
+    """
     multi_toggle = get_arg_multi_toggle(args)
     directed_toggle = get_arg_directed_toggle(args)
     dynamic_toggle = get_arg_dynamic_toggle(args)
@@ -46,6 +81,17 @@ def extract_args(args):
 
 
 def process_metric(networkGraphs, filename2, metrics):
+    """
+    :Function: Process the network graph and metrics
+    :param networkGraphs: the network graph
+    :type networkGraphs: NetworkGraphs
+    :param filename2: the session id
+    :type filename2: str
+    :param metrics: the metrics
+    :type metrics: list
+    :return: the processed metrics
+    :rtype: tuple
+    """
     multi_toggle = None
     multi_toggle2 = None
     multi_toggle3 = None

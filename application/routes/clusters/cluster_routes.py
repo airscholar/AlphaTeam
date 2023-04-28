@@ -15,6 +15,11 @@ BASE_URL = 'http://localhost:8000/api/v1/clusters/'
 
 @cluster_routes.route('/clustering/louvain', endpoint='clustering_louvanian', methods=['GET', 'POST'])
 def clustering_louvanian():
+    """
+    :Function: Visualise the clusters using Louvain algorithm
+    :return: the cluster page
+    
+    """
     filename2 = session['filename2']
     clusterType = 'louvain'
     networkGraphs = get_networkGraph(filename2)
@@ -32,6 +37,11 @@ def clustering_louvanian():
 
 @cluster_routes.route('/clustering/greedy_modularity', endpoint='clustering_greedy_modularity', methods=['GET', 'POST'])
 def clustering_greedy_modularity():
+    """
+    :Function: Visualise the clusters using Greedy Modularity algorithm
+    :return: the clusters page
+    
+    """
     filename2 = session['filename2']
     clusterType = 'greedy_modularity'
     networkGraphs = get_networkGraph(filename2)
@@ -49,6 +59,11 @@ def clustering_greedy_modularity():
 
 @cluster_routes.route('/clustering/label_propagation', endpoint='clustering_label_propagation', methods=['GET', 'POST'])
 def clustering_label_propagation():
+    """
+    :Function: Visualise the clusters using Label Propagation algorithm
+    :return: the clusters page
+    
+    """
     filename2 = session['filename2']
     clusterType = 'label_propagation'
     networkGraphs = get_networkGraph(filename2)
@@ -66,6 +81,11 @@ def clustering_label_propagation():
 
 @cluster_routes.route('/clustering/asyn_lpa', endpoint='clustering_asyn_lpa', methods=['GET', 'POST'])
 def clustering_asyn_lpa():
+    """
+    :Function: Visualise the clusters using Asyn Lpa algorithm
+    :return: the clusters page
+    
+    """
     filename2 = session['filename2']
     clusterType = 'asyn_lpa'
     networkGraphs = get_networkGraph(filename2)
@@ -83,6 +103,11 @@ def clustering_asyn_lpa():
 
 @cluster_routes.route('/clustering/k_clique', endpoint='clustering_k_clique', methods=['GET', 'POST'])
 def clustering_k_clique():
+    """
+    :Function: Visualise the clusters using K Clique algorithm
+    :return: the clusters page
+    
+    """
     filename2 = session['filename2']
     clusterType = 'k_clique'
     networkGraphs = get_networkGraph(filename2)
@@ -100,6 +125,11 @@ def clustering_k_clique():
 
 @cluster_routes.route('/clustering/spectral', endpoint='clustering_spectral', methods=['GET', 'POST'])
 def clustering_spectral():
+    """
+    :Function: Visualise the clusters using Spectral algorithm
+    :return: the clusters page
+    
+    """
     filename2 = session['filename2']
     clusterType = 'spectral'
     networkGraphs = get_networkGraph(filename2)
@@ -117,6 +147,11 @@ def clustering_spectral():
 
 @cluster_routes.route('/clustering/kmeans', endpoint='clustering_kmeans', methods=['GET', 'POST'])
 def clustering_kmeans():
+    """
+    :Function: Visualise the clusters using KMeans algorithm
+    :return: the clusters page
+    
+    """
     filename2 = session['filename2']
     clusterType = 'kmeans'
     networkGraphs = get_networkGraph(filename2)
@@ -134,6 +169,11 @@ def clustering_kmeans():
 
 @cluster_routes.route('/clustering/agglomerative', endpoint='clustering_agglomerative', methods=['GET', 'POST'])
 def clustering_agglomerative():
+    """
+    :Function: Visualise the clusters using Agglomerative algorithm
+    :return: the clusters page
+    
+    """
     filename2 = session['filename2']
     clusterType = 'agglomerative'
     networkGraphs = get_networkGraph(filename2)
@@ -151,6 +191,11 @@ def clustering_agglomerative():
 
 @cluster_routes.route('/clustering/dbscan', endpoint='clustering_dbscan', methods=['GET', 'POST'])
 def clustering_dbscan():
+    """
+    :Function: Visualise the clusters using Dbscan algorithm
+    :return: the clusters page
+    
+    """
     filename2 = session['filename2']
     clusterType = 'dbscan'
     networkGraphs = get_networkGraph(filename2)

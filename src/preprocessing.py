@@ -15,7 +15,6 @@ import partridge as ptg
 import scipy.io as sio
 
 
-
 # ----------------------------------------------------------------------------------------
 
 
@@ -151,6 +150,7 @@ def convert_to_DiGraph(multi_graph):
     """
     :Function: Create a DiGraph from a MultiDiGraph with the same nodes and edges containing the sum of the weights,
     and conserving the first edge's attributes
+
     :param multi_graph: MultiDiGraph to convert
     :type multi_graph: networkx.MultiDiGraph
     :return: NetworkX DiGraph

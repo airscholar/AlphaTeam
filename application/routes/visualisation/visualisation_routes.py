@@ -13,6 +13,10 @@ visualisation_routes = Blueprint('visualisation_routes', __name__)
 # -------------------------------------------VISUALISATION-----------------------------------
 @visualisation_routes.route('/visualisation', methods=['GET', 'POST'], endpoint='visualisation')
 def visualisation():
+    """
+    :Function: Visualise the network
+    :return: the visualisation page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
 
@@ -22,8 +26,6 @@ def visualisation():
         is_spatial = 'yes'
     else:
         is_spatial = 'no'
-
-    print('check spatial if yes means map, else sfdp', is_spatial)
 
     return render_template('visualisation/visualisation.html', show_temporal=show_temporal,
                            session_id=filename2, is_spatial=is_spatial,

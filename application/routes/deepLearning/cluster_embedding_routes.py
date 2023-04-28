@@ -15,6 +15,10 @@ BASE_URL = 'http://localhost:8000/api/v1/deeplearning/'
 @cluster_embedding_routes.route('/node2vec/clustering/embedding/kmeans', endpoint='clustering_embedding_kmeans',
                                 methods=['GET', 'POST'])
 def clustering_embedding_kmeans():
+    """
+    :Function: Visualise the clusters using Kmeans algorithm
+    :return: the cluster page
+    """
     filename2 = session['filename2']
     clustering_alg = 'kmeans'
 
@@ -28,6 +32,10 @@ def clustering_embedding_kmeans():
 @cluster_embedding_routes.route('/node2vec/clustering/embedding/spectral', endpoint='clustering_embedding_spectral',
                                 methods=['GET', 'POST'])
 def clustering_embedding_spectral():
+    """
+    :Function: Visualise the clusters using Spectral algorithm
+    :return: the cluster page
+    """
     filename2 = session['filename2']
     clustering_alg = 'spectral'
 
@@ -41,6 +49,10 @@ def clustering_embedding_spectral():
 @cluster_embedding_routes.route('/node2vec/clustering/embedding/agglomerative',
                                 endpoint='clustering_embedding_agglomerative', methods=['GET', 'POST'])
 def clustering_embedding_agglomerative():
+    """
+    :Function: Visualise the clusters using Agglomerative algorithm
+    :return: the cluster page
+    """
     filename2 = session['filename2']
     clustering_alg = 'agglomerative'
 
@@ -71,6 +83,10 @@ def clustering_embedding_kmeans():
 @cluster_embedding_routes.route('/dlembedding/clustering/embedding/spectral',
                                 endpoint='dlembedding_clustering_embedding_spectral', methods=['GET', 'POST'])
 def clustering_embedding_spectral():
+    """
+    :Function: Visualise the clusters using Spectral algorithm
+    :return: the cluster page
+    """
     filename2 = session['filename2']
     clustering_alg = 'spectral'
 
@@ -86,6 +102,10 @@ def clustering_embedding_spectral():
 @cluster_embedding_routes.route('/dlembedding/clustering/embedding/agglomerative',
                                 endpoint='dlembedding_clustering_embedding_agglomerative', methods=['GET', 'POST'])
 def clustering_embedding_agglomerative():
+    """
+    :Function: Visualise the clusters using Agglomerative algorithm
+    :return: the cluster page
+    """
     filename2 = session['filename2']
     clustering_alg = 'agglomerative'
 

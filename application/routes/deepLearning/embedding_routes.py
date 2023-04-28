@@ -14,6 +14,10 @@ BASE_URL = 'http://localhost:8000/api/v1/deeplearning/'
 
 @embedding_routes.route('/node2vec/embedding', endpoint='node2vec_embedding', methods=['GET', 'POST'])
 def embedding_visualisation():
+    """
+    :Function: Visualise the embedding
+    :return: the embedding page
+    """
     filename2 = session['filename2']
 
     return render_template('deepLearning/node2vec/embedding.html', session_id=filename2,
@@ -23,6 +27,10 @@ def embedding_visualisation():
 
 @embedding_routes.route('/dlembedding/embedding', endpoint='dlembedding_embedding', methods=['GET', 'POST'])
 def dlembedding_embedding_visualisation():
+    """
+    :Function: Visualise the embedding
+    :return: the embedding page
+    """
     filename2 = session['filename2']
 
     return render_template('deepLearning/dlembedding/embedding.html', session_id=filename2,

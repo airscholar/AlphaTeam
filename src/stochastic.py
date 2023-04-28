@@ -1,15 +1,14 @@
 """
 Author: Alpha Team Group Project
 Date: March 2023
-Purpose: Stochastic approximation algorithms for estimating graph properties
-        Leveraging sampling techniques to improve computational efficiency
+Purpose: Stochastic approximation algorithms for estimating graph properties Leveraging sampling techniques to improve computational efficiency
 """
 
 # ------------------------------------------------------------------------------
 
+import networkx as nx
 # External import
 import numpy as np
-import networkx as nx
 import pandas as pd
 from tqdm import tqdm
 

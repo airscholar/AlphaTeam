@@ -11,6 +11,17 @@ resilience_bp = Blueprint('resilience', __name__, url_prefix="/api/v1/resilience
 
 @resilience_bp.route('<session_id>/<metric>/<plot_type>/')
 def compute_metrics(session_id, metric, plot_type):
+    """
+    :Function: Compute the metric for the network
+    :param session_id: the session id
+    :type session_id: str
+    :param metric: the metric to compute
+    :type metric: str
+    :param plot_type: the type of plot to generate
+    :type plot_type: str
+    :return: the metric values
+    :rtype: json
+    """
     directed_toggle = get_arg_directed_toggle(request.args)
     multi_toggle = get_arg_multi_toggle(request.args)
     layout = get_arg_layout(request.args)
@@ -51,6 +62,15 @@ def compute_metrics(session_id, metric, plot_type):
 
 @resilience_bp.route('<session_id>/<cluster_type>')
 def visualise_cluster(session_id, cluster_type):
+    """
+    :Function: Visualise the clusters
+    :param session_id: the session id
+    :type session_id: str
+    :param cluster_type: the type of cluster
+    :type cluster_type: str
+    :return: the cluster values
+    :rtype: json
+    """
     layout = get_arg_layout(request.args)
     noOfClusters = request.args.get('noOfClusters', 0, type=int)
     if noOfClusters == '':
@@ -73,6 +93,13 @@ def visualise_cluster(session_id, cluster_type):
 
 @resilience_bp.route('<session_id>/global_metrics')
 def global_metrics(session_id):
+    """
+    :Function: Compute the global metrics for the network
+    :param session_id: the session id
+    :type session_id: str
+    :return: the global metrics values
+    :rtype: json
+    """
     directed_toggle = get_arg_directed_toggle(request.args)
     multi_toggle = get_arg_multi_toggle(request.args)
 
@@ -90,6 +117,13 @@ def global_metrics(session_id):
 
 @resilience_bp.route('<session_id>/visualisation')
 def visualisation(session_id):
+    """
+    :Function: Visualise the network
+    :param session_id: the session id
+    :type session_id: str
+    :return: the network visualisation
+    :rtype: json
+    """
     layout = get_arg_layout(request.args)
 
     networkGraphs = get_networkGraph(session_id)

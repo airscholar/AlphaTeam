@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.visualisation_src package &mdash; AlphaTeam 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AlphaTeam
+              <img src="_static/favicon.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">src.visualisation_src package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#src-visualisation-src-dl-visualisation-module">src.visualisation_src.DL_visualisation module</a></li>
+<li><a class="reference internal" href="#module-src.visualisation_src.ML_visualisation">src.visualisation_src.ML_visualisation module</a><ul>
+<li><a class="reference internal" href="#src.visualisation_src.ML_visualisation.generate_dynamic_cluster"><code class="docutils literal notranslate"><span class="pre">generate_dynamic_cluster()</span></code></a></li>
+<li><a class="reference internal" href="#src.visualisation_src.ML_visualisation.generate_hotspot"><code class="docutils literal notranslate"><span class="pre">generate_hotspot()</span></code></a></li>
+<li><a class="reference internal" href="#src.visualisation_src.ML_visualisation.generate_static_cluster"><code class="docutils literal notranslate"><span class="pre">generate_static_cluster()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-src.visualisation_src.basic_network_visualisation">src.visualisation_src.basic_network_visualisation module</a></li>
+<li><a class="reference internal" href="#module-src.visualisation_src.metrics_visualisation">src.visualisation_src.metrics_visualisation module</a><ul>
+<li><a class="reference internal" href="#src.visualisation_src.metrics_visualisation.dropStd"><code class="docutils literal notranslate"><span class="pre">dropStd()</span></code></a></li>
+<li><a class="reference internal" href="#src.visualisation_src.metrics_visualisation.generate_boxplot_metric"><code class="docutils literal notranslate"><span class="pre">generate_boxplot_metric()</span></code></a></li>
+<li><a class="reference internal" href="#src.visualisation_src.metrics_visualisation.generate_dynamic_metric"><code class="docutils literal notranslate"><span class="pre">generate_dynamic_metric()</span></code></a></li>
+<li><a class="reference internal" href="#src.visualisation_src.metrics_visualisation.generate_heatmap"><code class="docutils literal notranslate"><span class="pre">generate_heatmap()</span></code></a></li>
+<li><a class="reference internal" href="#src.visualisation_src.metrics_visualisation.generate_histogram_metric"><code class="docutils literal notranslate"><span class="pre">generate_histogram_metric()</span></code></a></li>
+<li><a class="reference internal" href="#src.visualisation_src.metrics_visualisation.generate_static_all_metrics"><code class="docutils literal notranslate"><span class="pre">generate_static_all_metrics()</span></code></a></li>
+<li><a class="reference internal" href="#src.visualisation_src.metrics_visualisation.generate_static_metric"><code class="docutils literal notranslate"><span class="pre">generate_static_metric()</span></code></a></li>
+<li><a class="reference internal" href="#src.visualisation_src.metrics_visualisation.generate_violin_metric"><code class="docutils literal notranslate"><span class="pre">generate_violin_metric()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-src.visualisation_src.temporal_visualisation">src.visualisation_src.temporal_visualisation module</a><ul>
+<li><a class="reference internal" href="#src.visualisation_src.temporal_visualisation.generate_temporal"><code class="docutils literal notranslate"><span class="pre">generate_temporal()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-src.visualisation_src.utils_visualisation">src.visualisation_src.utils_visualisation module</a><ul>
+<li><a class="reference internal" href="#src.visualisation_src.utils_visualisation.get_file_path"><code class="docutils literal notranslate"><span class="pre">get_file_path()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-src.visualisation_src">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AlphaTeam</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src.visualisation_src package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/src.visualisation_src.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-visualisation-src-package">
+<h1>src.visualisation_src package<a class="headerlink" href="#src-visualisation-src-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="src-visualisation-src-dl-visualisation-module">
+<h2>src.visualisation_src.DL_visualisation module<a class="headerlink" href="#src-visualisation-src-dl-visualisation-module" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-src.visualisation_src.ML_visualisation">
+<span id="src-visualisation-src-ml-visualisation-module"></span><h2>src.visualisation_src.ML_visualisation module<a class="headerlink" href="#module-src.visualisation_src.ML_visualisation" title="Permalink to this heading"></a></h2>
+<p>Author: Alpha Team Group Project
+Date: March 2023
+Purpose: ML_visualisation module contains functions for visualising machine learning</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.visualisation_src.ML_visualisation.generate_dynamic_cluster">
+<span class="sig-prename descclassname"><span class="pre">src.visualisation_src.ML_visualisation.</span></span><span class="sig-name descname"><span class="pre">generate_dynamic_cluster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkGraphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/visualisation_src/ML_visualisation.html#generate_dynamic_cluster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.visualisation_src.ML_visualisation.generate_dynamic_cluster" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Plot the metrics on the graph</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>networkGraphs</strong> (<em>NetworkGraphs</em>) – Network graphs</p></li>
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Dataframe with the metrics</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Name of the file to be saved</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pyvis plot</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pyvis.network.Network</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.visualisation_src.ML_visualisation.generate_hotspot">
+<span class="sig-prename descclassname"><span class="pre">src.visualisation_src.ML_visualisation.</span></span><span class="sig-name descname"><span class="pre">generate_hotspot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkGraphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hotspot_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/visualisation_src/ML_visualisation.html#generate_hotspot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.visualisation_src.ML_visualisation.generate_hotspot" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Plot the hotspot for the given graph</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>networkGraphs</strong> (<em>NetworkGraphs</em>) – Network graphs</p></li>
+<li><p><strong>hotspot_df</strong> (<em>pd.DataFrame</em>) – Hotspot dataframe</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Filename</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Plotly plot</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>plotly.graph_objects</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.visualisation_src.ML_visualisation.generate_static_cluster">
+<span class="sig-prename descclassname"><span class="pre">src.visualisation_src.ML_visualisation.</span></span><span class="sig-name descname"><span class="pre">generate_static_cluster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkGraphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layout_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'map'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/visualisation_src/ML_visualisation.html#generate_static_cluster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.visualisation_src.ML_visualisation.generate_static_cluster" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Generate static cluster</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>networkGraphs</strong> (<em>NetworkGraphs</em>) – Network graphs</p></li>
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Dataframe</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – File name</p></li>
+<li><p><strong>algo</strong> (<em>str</em>) – Algorithm</p></li>
+<li><p><strong>layout</strong> (<em>str</em>) – Layout</p></li>
+<li><p><strong>nbr</strong> (<em>int</em>) – Number of clusters</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Plotly plot</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>plotly.graph_objects</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-src.visualisation_src.basic_network_visualisation">
+<span id="src-visualisation-src-basic-network-visualisation-module"></span><h2>src.visualisation_src.basic_network_visualisation module<a class="headerlink" href="#module-src.visualisation_src.basic_network_visualisation" title="Permalink to this heading"></a></h2>
+<p>Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Basic network visualisation module contains functions for basic network visualisation</p>
+</section>
+<section id="module-src.visualisation_src.metrics_visualisation">
+<span id="src-visualisation-src-metrics-visualisation-module"></span><h2>src.visualisation_src.metrics_visualisation module<a class="headerlink" href="#module-src.visualisation_src.metrics_visualisation" title="Permalink to this heading"></a></h2>
+<p>Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Metrics visualisation module contains functions for visualising metrics</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.visualisation_src.metrics_visualisation.dropStd">
+<span class="sig-prename descclassname"><span class="pre">src.visualisation_src.metrics_visualisation.</span></span><span class="sig-name descname"><span class="pre">dropStd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/visualisation_src/metrics_visualisation.html#dropStd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.visualisation_src.metrics_visualisation.dropStd" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Drop the std column from the dataframe</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Dataframe with the metrics</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dataframe without the std column</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.visualisation_src.metrics_visualisation.generate_boxplot_metric">
+<span class="sig-prename descclassname"><span class="pre">src.visualisation_src.metrics_visualisation.</span></span><span class="sig-name descname"><span class="pre">generate_boxplot_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/visualisation_src/metrics_visualisation.html#generate_boxplot_metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.visualisation_src.metrics_visualisation.generate_boxplot_metric" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Generate boxplot of the metrics</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Dataframe with the metrics</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Name of the file to be saved</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Plotly plot</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.visualisation_src.metrics_visualisation.generate_dynamic_metric">
+<span class="sig-prename descclassname"><span class="pre">src.visualisation_src.metrics_visualisation.</span></span><span class="sig-name descname"><span class="pre">generate_dynamic_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkGraphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/visualisation_src/metrics_visualisation.html#generate_dynamic_metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.visualisation_src.metrics_visualisation.generate_dynamic_metric" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Plot the metrics on the graph</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>networkGraphs</strong> (<em>NetworkGraphs</em>) – Network graphs</p></li>
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Dataframe with the metrics</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Name of the file to be saved</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pyvis plot</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pyvis.network.Network</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.visualisation_src.metrics_visualisation.generate_heatmap">
+<span class="sig-prename descclassname"><span class="pre">src.visualisation_src.metrics_visualisation.</span></span><span class="sig-name descname"><span class="pre">generate_heatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkGraph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/visualisation_src/metrics_visualisation.html#generate_heatmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.visualisation_src.metrics_visualisation.generate_heatmap" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Show the heatmap of the graph</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>networkGraph</strong> (<em>NetworkGraph</em>) – Network graph</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Name of the file to be saved</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Plotly plot</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.visualisation_src.metrics_visualisation.generate_histogram_metric">
+<span class="sig-prename descclassname"><span class="pre">src.visualisation_src.metrics_visualisation.</span></span><span class="sig-name descname"><span class="pre">generate_histogram_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/visualisation_src/metrics_visualisation.html#generate_histogram_metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.visualisation_src.metrics_visualisation.generate_histogram_metric" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Generate histogram of the metrics</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Dataframe with the metrics</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Name of the file to be saved</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Plotly plot</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.visualisation_src.metrics_visualisation.generate_static_all_metrics">
+<span class="sig-prename descclassname"><span class="pre">src.visualisation_src.metrics_visualisation.</span></span><span class="sig-name descname"><span class="pre">generate_static_all_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkGraphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layout_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'map'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/visualisation_src/metrics_visualisation.html#generate_static_all_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.visualisation_src.metrics_visualisation.generate_static_all_metrics" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Plot the metrics on the graph</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>networkGraphs</strong> (<em>NetworkGraphs</em>) – Network graphs</p></li>
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Dataframe with the metrics</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Name of the file to be saved</p></li>
+<li><p><strong>layout</strong> (<em>str</em>) – Layout to be used</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Plotly plot</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>plotly.graph_objs._figure.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.visualisation_src.metrics_visualisation.generate_static_metric">
+<span class="sig-prename descclassname"><span class="pre">src.visualisation_src.metrics_visualisation.</span></span><span class="sig-name descname"><span class="pre">generate_static_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkGraphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layout_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'map'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/visualisation_src/metrics_visualisation.html#generate_static_metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.visualisation_src.metrics_visualisation.generate_static_metric" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Plot the metrics on the graph</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>networkGraphs</strong> (<em>NetworkGraphs</em>) – Network graphs</p></li>
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Dataframe with the metrics (first column is the node id) (second column is the metric)</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Name of the file to be saved</p></li>
+<li><p><strong>layout</strong> (<em>str</em>) – Layout to be used</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Plotly plot</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>plotly.graph_objs._figure.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.visualisation_src.metrics_visualisation.generate_violin_metric">
+<span class="sig-prename descclassname"><span class="pre">src.visualisation_src.metrics_visualisation.</span></span><span class="sig-name descname"><span class="pre">generate_violin_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/visualisation_src/metrics_visualisation.html#generate_violin_metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.visualisation_src.metrics_visualisation.generate_violin_metric" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Generate violin plot of the metrics</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Dataframe with the metrics</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Name of the file to be saved</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Plotly plot</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-src.visualisation_src.temporal_visualisation">
+<span id="src-visualisation-src-temporal-visualisation-module"></span><h2>src.visualisation_src.temporal_visualisation module<a class="headerlink" href="#module-src.visualisation_src.temporal_visualisation" title="Permalink to this heading"></a></h2>
+<p>Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Temporal visualisation module contains functions for generating temporal visualisations</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.visualisation_src.temporal_visualisation.generate_temporal">
+<span class="sig-prename descclassname"><span class="pre">src.visualisation_src.temporal_visualisation.</span></span><span class="sig-name descname"><span class="pre">generate_temporal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkGraphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layout_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'map'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/visualisation_src/temporal_visualisation.html#generate_temporal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.visualisation_src.temporal_visualisation.generate_temporal" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Generate temporal visualisation of the network</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>networkGraphs</strong> (<em>NetworkGraphs</em>) – Network graphs</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – File name</p></li>
+<li><p><strong>layout</strong> (<em>str</em>) – Layout</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Plotly plot</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>plotly.graph_objects</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-src.visualisation_src.utils_visualisation">
+<span id="src-visualisation-src-utils-visualisation-module"></span><h2>src.visualisation_src.utils_visualisation module<a class="headerlink" href="#module-src.visualisation_src.utils_visualisation" title="Permalink to this heading"></a></h2>
+<p>Author: Alpha Team Group Project
+Date: March 2023
+Purpose: Visualisation utilities module contains functions for visualising the network graphs</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.visualisation_src.utils_visualisation.get_file_path">
+<span class="sig-prename descclassname"><span class="pre">src.visualisation_src.utils_visualisation.</span></span><span class="sig-name descname"><span class="pre">get_file_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkGraphs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/visualisation_src/utils_visualisation.html#get_file_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.visualisation_src.utils_visualisation.get_file_path" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Get the file path for the plotly plot</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>networkGraphs</strong> (<em>NetworkGraph</em>) – Network graph</p></li>
+<li><p><strong>file_name</strong> (<em>str</em>) – Name of the file</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Filepath</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-src.visualisation_src">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.visualisation_src" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Alpha Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

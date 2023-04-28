@@ -14,6 +14,10 @@ global_metrics_routes = Blueprint('global_metrics_routes', __name__)
 # -------------------------------------------GLOBAL-METRICS-----------------------------------
 @global_metrics_routes.route('/global-metrics', methods=['GET', 'POST'])
 def globalmetrics():
+    """
+    :Function: Visualise the global metrics
+    :return: the global metrics page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     multi_toggle = False

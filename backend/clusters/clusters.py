@@ -8,12 +8,25 @@ cluster_bp = Blueprint('clusters', __name__, url_prefix="/api/v1/clusters")
 
 
 def get_arg_no_of_clusters(args):
+    """
+    :Function: Get the number of clusters from the request args
+    :param args: number of clusters
+    :type: int
+    :return: number of clusters
+    :rtype: int
+    """
     no_of_clusters = args.get('no_of_clusters', 0, type=int)
     return no_of_clusters
 
 
 @cluster_bp.route('/<session_id>/<clustering_alg>')
 def compute_clustering(session_id, clustering_alg):
+    """
+    Compute the clustering for the network graph
+    :param session_id: the session id
+    :param clustering_alg: the clustering algorithm
+    :return: the jsonified response
+    """
     dynamic_toggle = get_arg_dynamic_toggle(request.args)
     layout = get_arg_layout(request.args)
 

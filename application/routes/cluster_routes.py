@@ -12,6 +12,10 @@ cluster_routes = Blueprint('cluster_routes', __name__)
 # -------------------------------------------ML-CLUSTERING-----------------------------------
 @cluster_routes.route('/clustering/louvain', endpoint='clustering_louvanian', methods=['GET', 'POST'])
 def clustering_louvanian():
+    """
+    :Function: Visualise the clustering using louvain algorithm
+    :return: the clustering page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     clusterType = 'louvain'
@@ -47,6 +51,10 @@ def clustering_louvanian():
 
 @cluster_routes.route('/clustering/greedy_modularity', endpoint='clustering_greedy_modularity', methods=['GET', 'POST'])
 def clustering_greedy_modularity():
+    """
+    :Function: Visualise the clustering using greedy modularity algorithm
+    :return: the clustering page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     clusterType = 'greedy_modularity'
@@ -83,6 +91,10 @@ def clustering_greedy_modularity():
 
 @cluster_routes.route('/clustering/label_propagation', endpoint='clustering_label_propagation', methods=['GET', 'POST'])
 def clustering_label_propagation():
+    """
+    :Function: Visualise the clustering using label propagation algorithm
+    :return: the clustering page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     clusterType = 'label_propagation'
@@ -119,6 +131,10 @@ def clustering_label_propagation():
 
 @cluster_routes.route('/clustering/asyn_lpa', endpoint='clustering_asyn_lpa', methods=['GET', 'POST'])
 def clustering_asyn_lpa():
+    """
+    :Function: Visualise the clustering using asynchronous label propagation algorithm
+    :return: the clustering page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     clusterType = 'asyn_lpa'
@@ -154,6 +170,10 @@ def clustering_asyn_lpa():
 
 @cluster_routes.route('/clustering/k_clique', endpoint='clustering_k_clique', methods=['GET', 'POST'])
 def clustering_k_clique():
+    """
+    :Function: Visualise the clustering using k clique algorithm
+    :return: the clustering page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     clusterType = 'k_clique'
@@ -189,6 +209,10 @@ def clustering_k_clique():
 
 @cluster_routes.route('/clustering/spectral', endpoint='clustering_spectral', methods=['GET', 'POST'])
 def clustering_spectral():
+    """
+    :Function: Visualise the clustering using spectral algorithm
+    :return: the clustering page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     clusterType = 'spectral'
@@ -224,6 +248,10 @@ def clustering_spectral():
 
 @cluster_routes.route('/clustering/kmeans', endpoint='clustering_kmeans', methods=['GET', 'POST'])
 def clustering_kmeans():
+    """
+    :Function: Visualise the clustering using kmeans algorithm
+    :return: the clustering page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     clusterType = 'kmeans'
@@ -259,6 +287,10 @@ def clustering_kmeans():
 
 @cluster_routes.route('/clustering/agglomerative', endpoint='clustering_agglomerative', methods=['GET', 'POST'])
 def clustering_agglomerative():
+    """
+    :Function: Visualise the clustering using agglomerative algorithm
+    :return: the clustering page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     clusterType = 'agglomerative'
@@ -294,6 +326,10 @@ def clustering_agglomerative():
 
 @cluster_routes.route('/clustering/dbscan', endpoint='clustering_dbscan', methods=['GET', 'POST'])
 def clustering_dbscan():
+    """
+    :Function: Visualise the clustering using dbscan algorithm
+    :return: the clustering page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     clusterType = 'dbscan'
@@ -329,6 +365,10 @@ def clustering_dbscan():
 
 @cluster_routes.route('/clustering/hierarchical', endpoint='clustering_hierarchical', methods=['GET', 'POST'])
 def clustering_hierarchical():
+    """
+    :Function: Visualise the clustering using hierarchical algorithm
+    :return: the clustering page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     clusterType = 'hierarchical'
