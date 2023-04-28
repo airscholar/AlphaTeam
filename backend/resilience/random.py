@@ -7,23 +7,37 @@ from src.visualisation import *
 
 random_bp = Blueprint('resilience_random', __name__, url_prefix="/api/v1/resilience")
 
+
 def extract_args():
+    """
+    :Function: Extract the arguments from the request
+    :return: the arguments (number of nodes, number of edges)
+    :rtype: tuple
+    """
     args = request.args
 
     number_of_nodes = args.get('number_of_nodes', None, type=int)
     number_of_edges = args.get('number_of_edges', None, type=int)
 
-    if number_of_nodes is '':
+    if number_of_nodes == '':
         number_of_nodes = None
-    if number_of_edges is '':
+    if number_of_edges == '':
         number_of_edges = None
 
     print(number_of_nodes, number_of_edges)
 
     return number_of_nodes, number_of_edges
 
+
 @random_bp.route('<session_id>/random')
 def compute_random(session_id):
+    """
+    :Function: Compute the random resilience for the network
+    :param session_id: the session id
+    :type session_id: str
+    :return: the clusters
+    :rtype: json
+    """
     number_of_nodes, number_of_edges = extract_args()
 
     networkGraphs = get_networkGraph(session_id)
@@ -45,4 +59,3 @@ def compute_random(session_id):
 
     return jsonify({"message": "Success", "data": df_json, "network_before": before, "network_after": after,
                     "heatmap_before": heatmap_before, "heatmap_after": heatmap_after})
-

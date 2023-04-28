@@ -1,14 +1,13 @@
 """
 Author: Alpha Team Group Project
 Date: March 2023
-Purpose: Machine Learning for the NetworkX graphs
+Purpose: Machine Learning for the NetworkX graphs analysis
 """
 
 # ----------------------------------------- Imports ----------------------------------------- #
 
 # External imports
 import warnings
-
 import networkx as nx
 import networkx.algorithms.community as nx_comm
 import numpy as np
@@ -22,13 +21,6 @@ import src.utils as utils
 from src.utils import memoize
 
 warnings.filterwarnings("ignore")
-
-
-# ----------------------------------------------------------------------------------------
-
-def short_path_distance(networkx_, from_, to_):
-    # return dataframe
-    return 0
 
 
 # ----------------------------------------------------------------------------------------
@@ -234,7 +226,6 @@ def compute_clustering(networkGraph, max_range=30):
     adj_mat = nx.to_numpy_array(networkGraph)
 
     if max_range >= len(networkGraph.nodes()):
-        print('overriding max range', len(networkGraph.nodes()) - 1)
         max_range = len(networkGraph.nodes()) - 1
 
     # get optimal number of clusters

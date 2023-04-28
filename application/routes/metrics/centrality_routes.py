@@ -1,9 +1,8 @@
 import sys
 
-from application.dictionary.information import *
 from flask import Blueprint, render_template, session
 
-from backend.common.common import process_metric
+from application.dictionary.information import *
 
 sys.path.insert(1, '../../')
 from src.metrics import *
@@ -12,9 +11,12 @@ centrality_routes = Blueprint('centrality_routes', __name__)
 
 
 # -------------------------------------------CENTRALITY--------------------------------------
-
 @centrality_routes.route('/centrality', endpoint='centrality', methods=['GET', 'POST'])
 def centrality_all():
+    """
+    :Function: Visualise the centrality
+    :return: the centrality page
+    """
     filename2 = session['filename2']
     metrics = 'centralities'
     networkGraphs = get_networkGraph(filename2)
@@ -23,15 +25,22 @@ def centrality_all():
     else:
         is_spatial = 'no'
 
-    return render_template('metrics/centrality/centrality_all.html', method_name='All Centrality', is_spatial=is_spatial,
+    return render_template('metrics/centrality/centrality_all.html', method_name='All Centrality',
+                           is_spatial=is_spatial,
                            description=description['all_centrality'], tooltip_multi=tooltips['multi'],
                            tooltip_layout_tab=tooltips['layout_tab'], tooltip_histogram_tab=tooltips['histogram_tab'],
-                           tooltip_boxplot_tab=tooltips['boxplot_tab'], tooltip_violinplot_tab=tooltips['violinplot_tab'],
+                           tooltip_boxplot_tab=tooltips['boxplot_tab'],
+                           tooltip_violinplot_tab=tooltips['violinplot_tab'],
                            tooltip_directed=tooltips['directed'], tooltip_layout=tooltips['layout_dropdown'],
                            metricsType=metrics, session_id=filename2)
 
+
 @centrality_routes.route('/centrality/degree', endpoint='degree', methods=['GET', 'POST'])
 def centrality_degree():
+    """
+    :Function: Visualise the degree centrality
+    :return: the degree centrality page
+    """
     filename2 = session['filename2']
     metrics = 'degree_centrality'
     networkGraphs = get_networkGraph(filename2)
@@ -40,16 +49,23 @@ def centrality_degree():
     else:
         is_spatial = 'no'
 
-    return render_template('metrics/centrality/centrality_degree.html', method_name='Degree Centrality', is_spatial=is_spatial,
+    return render_template('metrics/centrality/centrality_degree.html', method_name='Degree Centrality',
+                           is_spatial=is_spatial,
                            description=description['centrality_degree'], tooltip_multi=tooltips['multi'],
                            tooltip_layout_tab=tooltips['layout_tab'], tooltip_histogram_tab=tooltips['histogram_tab'],
-                           tooltip_boxplot_tab=tooltips['boxplot_tab'], tooltip_violinplot_tab=tooltips['violinplot_tab'],
+                           tooltip_boxplot_tab=tooltips['boxplot_tab'],
+                           tooltip_violinplot_tab=tooltips['violinplot_tab'],
                            tooltip_directed=tooltips['directed'], tooltip_layout=tooltips['layout_dropdown'],
                            tooltip_dynamic=tooltips['dynamic'],
                            metricsType=metrics, session_id=filename2)
 
+
 @centrality_routes.route('/centrality/eigenvector', endpoint='eigenvector', methods=['GET', 'POST'])
 def centrality_eigenvector():
+    """
+    :Function: Visualise the eigenvector centrality
+    :return: the eigenvector centrality page
+    """
     filename2 = session['filename2']
     metrics = 'eigenvector_centrality'
     networkGraphs = get_networkGraph(filename2)
@@ -58,16 +74,23 @@ def centrality_eigenvector():
     else:
         is_spatial = 'no'
 
-    return render_template('metrics/centrality/centrality_eigenvector.html', method_name='Eigenvector Centrality', is_spatial=is_spatial,
+    return render_template('metrics/centrality/centrality_eigenvector.html', method_name='Eigenvector Centrality',
+                           is_spatial=is_spatial,
                            description=description['centrality_eigenvector'], tooltip_multi=tooltips['multi'],
                            tooltip_layout_tab=tooltips['layout_tab'], tooltip_histogram_tab=tooltips['histogram_tab'],
-                           tooltip_boxplot_tab=tooltips['boxplot_tab'], tooltip_violinplot_tab=tooltips['violinplot_tab'],
+                           tooltip_boxplot_tab=tooltips['boxplot_tab'],
+                           tooltip_violinplot_tab=tooltips['violinplot_tab'],
                            tooltip_directed=tooltips['directed'], tooltip_layout=tooltips['layout_dropdown'],
                            tooltip_dynamic=tooltips['dynamic'],
                            metricsType=metrics, session_id=filename2)
 
+
 @centrality_routes.route('/centrality/closeness', endpoint='closeness', methods=['GET', 'POST'])
 def centrality_closeness():
+    """
+    :Function: Visualise the closeness centrality
+    :return: the closeness centrality page
+    """
     filename2 = session['filename2']
     metrics = 'closeness_centrality'
     networkGraphs = get_networkGraph(filename2)
@@ -76,16 +99,23 @@ def centrality_closeness():
     else:
         is_spatial = 'no'
 
-    return render_template('metrics/centrality/centrality_closeness.html', method_name='Closeness Centrality', is_spatial=is_spatial,
+    return render_template('metrics/centrality/centrality_closeness.html', method_name='Closeness Centrality',
+                           is_spatial=is_spatial,
                            description=description['centrality_closeness'], tooltip_multi=tooltips['multi'],
                            tooltip_layout_tab=tooltips['layout_tab'], tooltip_histogram_tab=tooltips['histogram_tab'],
-                           tooltip_boxplot_tab=tooltips['boxplot_tab'], tooltip_violinplot_tab=tooltips['violinplot_tab'],
+                           tooltip_boxplot_tab=tooltips['boxplot_tab'],
+                           tooltip_violinplot_tab=tooltips['violinplot_tab'],
                            tooltip_directed=tooltips['directed'], tooltip_layout=tooltips['layout_dropdown'],
                            tooltip_dynamic=tooltips['dynamic'],
                            metricsType=metrics, session_id=filename2)
 
+
 @centrality_routes.route('/centrality/betwenness', endpoint='betwenness', methods=['GET', 'POST'])
 def centrality_betwenness():
+    """
+    :Function: Visualise the betwenness centrality
+    :return: the betwenness centrality page
+    """
     filename2 = session['filename2']
     metrics = 'betweenness_centrality'
     networkGraphs = get_networkGraph(filename2)
@@ -94,16 +124,23 @@ def centrality_betwenness():
     else:
         is_spatial = 'no'
 
-    return render_template('metrics/centrality/centrality_betwenness.html', method_name='Betwenness Centrality', is_spatial=is_spatial,
+    return render_template('metrics/centrality/centrality_betwenness.html', method_name='Betwenness Centrality',
+                           is_spatial=is_spatial,
                            description=description['centrality_betwenness'], tooltip_multi=tooltips['multi'],
                            tooltip_layout_tab=tooltips['layout_tab'], tooltip_histogram_tab=tooltips['histogram_tab'],
-                           tooltip_boxplot_tab=tooltips['boxplot_tab'], tooltip_violinplot_tab=tooltips['violinplot_tab'],
+                           tooltip_boxplot_tab=tooltips['boxplot_tab'],
+                           tooltip_violinplot_tab=tooltips['violinplot_tab'],
                            tooltip_directed=tooltips['directed'], tooltip_layout=tooltips['layout_dropdown'],
                            tooltip_dynamic=tooltips['dynamic'],
                            metricsType=metrics, session_id=filename2)
 
+
 @centrality_routes.route('/centrality/load', endpoint='load', methods=['GET', 'POST'])
 def centrality_load():
+    """
+    :Function: Visualise the load centrality
+    :return: the load centrality page
+    """
     filename2 = session['filename2']
     metrics = 'load_centrality'
     networkGraphs = get_networkGraph(filename2)
@@ -112,10 +149,12 @@ def centrality_load():
     else:
         is_spatial = 'no'
 
-    return render_template('metrics/centrality/centrality_load.html', method_name='Load Centrality', is_spatial=is_spatial,
+    return render_template('metrics/centrality/centrality_load.html', method_name='Load Centrality',
+                           is_spatial=is_spatial,
                            description=description['centrality_load'], tooltip_multi=tooltips['multi'],
                            tooltip_layout_tab=tooltips['layout_tab'], tooltip_histogram_tab=tooltips['histogram_tab'],
-                           tooltip_boxplot_tab=tooltips['boxplot_tab'], tooltip_violinplot_tab=tooltips['violinplot_tab'],
+                           tooltip_boxplot_tab=tooltips['boxplot_tab'],
+                           tooltip_violinplot_tab=tooltips['violinplot_tab'],
                            tooltip_directed=tooltips['directed'], tooltip_layout=tooltips['layout_dropdown'],
                            tooltip_dynamic=tooltips['dynamic'],
                            metricsType=metrics, session_id=filename2)

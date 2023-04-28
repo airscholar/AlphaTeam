@@ -3,6 +3,7 @@ venv/
 .vscode/
 .ipynb_checkpoints/
 __pycache__/
+application/__pycache__/
 *.mp4
 .env
 .DS_Store
@@ -17,3 +18,4 @@ application/flask_session/
 application/__pycache__/app.cpython-311.pyc
 *.pyc
 *.pyc
+flask_session/

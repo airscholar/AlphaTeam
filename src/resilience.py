@@ -1,20 +1,19 @@
 """
 Author: Alpha Team Group Project
 Date: March 2023
-Purpose: Resilience of the network
+Purpose: Assess the resilience of a network using different attacks vectors
 """
 
 # -------------------------------------- IMPORT ---------------------------------------------
+
+# External imports
+import random
 
 # Internal imports
 import src.machineLearning as ml
 from src.NetworkGraphs import NetworkGraphs
 from src.metrics import *
 from src.preprocessing import convert_to_DiGraph
-
-# External imports
-import random
-import pandas as pd
 
 # -------------------------------------- FUNCTIONS -------------------------------------------
 
@@ -29,6 +28,7 @@ def resilience(networkGraph, attack, **kwargs):
         - "random"
         - "malicious"
         - "cluster"
+        - "random"
     Args of the attacks:
         - "random":
             - "number_of_nodes": Number of nodes to be removed
@@ -57,15 +57,8 @@ def resilience(networkGraph, attack, **kwargs):
             - "cluster_algorithm": Algorithm to be used to compute the clusters
             - "total_clusters": Total number of clusters to be generated
             - "number_of_clusters": Number of clusters to be removed
-        - "cluster_custom":
-            - "cluster_algorithm": Algorithm to be used to compute the clusters
-            - "total_clusters": Total number of clusters to be generated
-            - "cluster_ids": List of cluster ids to be removed
         - "custom":
             - "list_of_nodes": List of nodes to be removed
-                If "cluster_algorithm" is specified, the list of nodes will be recomputed to delete the whole cluster that belong to each node
-            - "cluster_algorithm": Algorithm to be used to compute the clusters
-            - "total_clusters": Total number of clusters to be generated
     :param networkGraph: NetworkGraph
     :type networkGraph: NetworkGraph
     :param attack: Attack to be performed
@@ -86,8 +79,6 @@ def resilience(networkGraph, attack, **kwargs):
     >>> graph, df = resilience(networkGraph, attack='cluster', cluster_algorithm='spectral', total_clusters=15, number_of_clusters=2)
     >>> # Custom attack
     >>> graph, df = resilience(networkGraph, attack='custom', list_of_nodes=[1, 2, 3])
-    >>> # Custom attack with cluster
-    >>> graph, df = resilience(networkGraph, attack='cluster_custom', cluster_ids=[1, 2, 3], cluster_algorithm='spectral', total_clusters=15)
     """
     if attack == "random":
         for key in kwargs.keys():
@@ -113,15 +104,6 @@ def resilience(networkGraph, attack, **kwargs):
             raise ValueError("Cluster algorithm not specified")
         return resilience_cluster(networkGraph, **kwargs)
 
-    elif attack == "cluster_custom":
-        for key in kwargs.keys():
-            if key not in ["cluster_algorithm", "total_clusters", "cluster_ids"]:
-                print(f"Argument {key} not recognized")
-                return 0
-        if "cluster_algorithm" not in kwargs.keys():
-            raise ValueError("Cluster algorithm not specified")
-        return resilience_cluster_custom(networkGraph, **kwargs)
-
     elif attack == "custom":
         for key in kwargs.keys():
             if key not in ["list_of_nodes"]:
@@ -138,7 +120,7 @@ def resilience(networkGraph, attack, **kwargs):
 
 def resilience_random(networkGraph, number_of_nodes=None, number_of_edges=None):
     """
-    :Function: Compute the resilience of the networkGraph using the random attack
+    :Function: Generate the random attack to the networkGraph
     :param networkGraph: NetworkGraph
     :type networkGraph: NetworkGraph
     :param number_of_nodes: Number of nodes to be removed
@@ -149,7 +131,6 @@ def resilience_random(networkGraph, number_of_nodes=None, number_of_edges=None):
     :rtype: NetworkGraph
     """
     G = copy_networkGraph(networkGraph)
-    # print(G.__dict__)
     G.set_attack_vector('random')
     df = None
 
@@ -172,7 +153,7 @@ def resilience_random(networkGraph, number_of_nodes=None, number_of_edges=None):
 def resilience_malicious(networkGraph, metric=None, number_of_nodes=None, threshold=None, operator='>', multi=False,
                          directed=False):
     """
-    :Function: Compute the resilience of the networkGraph using the malicious attack
+    :Function: Generate the malicious attack to the networkGraph
     Metrics:
         - 'kcore'
         - 'degree'
@@ -229,7 +210,7 @@ def resilience_malicious(networkGraph, metric=None, number_of_nodes=None, thresh
 
 def resilience_cluster(networkGraph, cluster_algorithm=None, total_clusters=0, number_of_clusters=0):
     """
-    :Function: Compute the resilience of the networkGraph using the cluster attack
+    :Function: Generate the cluster attack to the networkGraph
     :param networkGraph: NetworkGraph
     :type networkGraph: NetworkGraph
     :param cluster_algorithm: Algorithm to be used to compute the clusters
@@ -276,7 +257,7 @@ def resilience_cluster(networkGraph, cluster_algorithm=None, total_clusters=0, n
 
 def resilience_custom(networkGraph, list_of_nodes=None):
     """
-    :Function: Compute the resilience of the networkGraph using the custom attack
+    :Function: Generate the custom attack to the networkGraph
     :param networkGraph: NetworkGraph
     :type networkGraph: NetworkGraph
     :param list_of_nodes: List of nodes to be removed
@@ -369,6 +350,8 @@ def execute_threshold(df, metric, threshold, operator='>'):
     :Function: Execute the threshold operation
     :param df: DataFrame with the metrics
     :type df: DataFrame
+    :param metric: Metric to be used to select the nodes to be removed
+    :type metric: str
     :param threshold: Threshold to be used to select the nodes to be removed
     :type threshold: float
     :param operator: Operator to be used to select the nodes to be removed
@@ -388,47 +371,3 @@ def execute_threshold(df, metric, threshold, operator='>'):
         raise ValueError(f"Operator {operator} not supported")
 
     return nodes_to_remove
-
-
-# ------------------------------------------------------------------------------------------
-
-
-def resilience_cluster_custom(networkGraph, cluster_algorithm=None, total_clusters=None, cluster_ids=None):
-    """
-    :Function: Compute the clusters of the networkGraph
-    :param networkGraph: NetworkGraph
-    :type networkGraph: NetworkGraph
-    :param cluster_algorithm: Algorithm to be used to compute the clusters
-    :type cluster_algorithm: str
-    :param total_clusters: Total number of clusters
-    :type total_clusters: int
-    :param cluster_ids: Cluster ids to be removed
-    :type cluster_ids: list
-    """
-    if cluster_algorithm not in ['louvain', 'greedy_modularity', 'label_propagation', 'asyn_lpa',
-                                 'k_clique', 'spectral', 'kmeans', 'agglomerative', 'hierarchical', 'dbscan']:
-        print(ValueError("Invalid cluster type", "please choose from the following: 'louvain', 'greedy_modularity', "
-                                                 "'label_propagation', 'asyn_lpa',"
-                                                 "'k_clique', 'spectral', 'kmeans' "
-                                                 "'agglomerative', 'hierarchical', 'dbscan'"))
-        return 0
-
-    if 0 >= len(cluster_ids) > total_clusters:
-        print(ValueError("Invalid number of clusters",
-                         "please choose a number of clusters smaller than the total number of clusters",
-                         "or a positive number"))
-        return 0
-
-    G = copy_networkGraph(networkGraph)
-    G.set_attack_vector('cluster_custom')
-
-    clusters = ml.get_communities(networkGraph, cluster_algorithm, total_clusters)
-
-    nodes_to_remove = []
-    for cluster_id in cluster_ids:
-        nodes = clusters[clusters['Cluster_id'] == cluster_id]['Node'].values
-        nodes_to_remove.extend(nodes)
-
-    G, df = remove_nodes(G, nodes_to_remove)
-
-    return G, df

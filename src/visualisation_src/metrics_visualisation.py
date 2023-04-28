@@ -19,6 +19,13 @@ from src.visualisation_src.utils_visualisation import *
 
 # ----------------------------------------------------------------------------------------
 def dropStd(df_):
+    """
+    :Function: Drop the std column from the dataframe
+    :param df_: Dataframe with the metrics
+    :type df_: pandas.DataFrame
+    :return: Dataframe without the std column
+    :rtype: pandas.DataFrame
+    """
     if any('std' in s for s in df_.columns):
         df_.drop(columns=[col for col in df_.columns if 'std' in col], inplace=True)
 
@@ -29,10 +36,15 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
     """
     :Function: Plot the metrics on the graph
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
     :param df_: Dataframe with the metrics (first column is the node id) (second column is the metric)
+    :type df_: pandas.DataFrame
     :param filename: Name of the file to be saved
+    :type filename: str
     :param layout_: Layout to be used
+    :type layout_: str
     :return: Plotly plot
+    :rtype: plotly.graph_objs._figure.Figure
     """
     G = networkGraphs.Graph
 
@@ -106,14 +118,19 @@ def generate_static_metric(networkGraphs, df_, filename, layout_='map'):  # USIN
 
 # ----------------------------------------------------------------------------------------
 
-def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  # USING PLOTLY
+def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):
     """
     :Function: Plot the metrics on the graph
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
     :param df_: Dataframe with the metrics
+    :type df_: pandas.DataFrame
     :param filename: Name of the file to be saved
+    :type filename: str
     :param layout_: Layout to be used
+    :type layout_: str
     :return: Plotly plot
+    :rtype: plotly.graph_objs._figure.Figure
     """
     G = networkGraphs.Graph
 
@@ -157,13 +174,17 @@ def generate_static_all_metrics(networkGraphs, df_, filename, layout_='map'):  #
 
 # ----------------------------------------------------------------------------------------
 
-def generate_dynamic_metric(networkGraphs, df_, filename):  # USING PYVIS
+def generate_dynamic_metric(networkGraphs, df_, filename):
     """
     :Function: Plot the metrics on the graph
     :param networkGraphs: Network graphs
+    :type networkGraphs: NetworkGraphs
     :param df_: Dataframe with the metrics
+    :type df_: pandas.DataFrame
     :param filename: Name of the file to be saved
+    :type filename: str
     :return: Pyvis plot
+    :rtype: pyvis.network.Network
     """
     G = networkGraphs.Graph
     metrics_name = df_.columns[1]

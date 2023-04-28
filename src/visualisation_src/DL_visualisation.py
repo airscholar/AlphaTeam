@@ -136,5 +136,3 @@ def get_dl_layout_update(fig, embeddings_2d, nodes, title=None, clusters=None):
     return fig
 
 # ----------------------------------------------------------------------------------
-
-

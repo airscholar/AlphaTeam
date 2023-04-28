@@ -1,17 +1,17 @@
 """
 Author: Alpha Team Group Project
 Date: March 2023
-Purpose: Compute the metrics for the NetworkX graphs
+Purpose: Compute the metrics for the network graphs
 """
 
 # -------------------------------------- IMPORTS -------------------------------------------
 
-# Internal imports
-from src.utils import *
-
 # External imports
 import networkx as nx
 import pandas as pd
+
+# Internal imports
+from src.utils import *
 
 
 # ----------------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ import pandas as pd
 def get_metrics(networkGraphs, method, directed=False, multi=False):
     """
     :Function: Get the metrics for the given graph
-    Method:
+        Method:
         - 'kcore'
         - 'degree'
         - 'triangles'
@@ -546,65 +546,3 @@ def compute_page_rank(networkGraphs, directed=True, multi=True):
         df = return_nan(networkGraphs, metric)
 
     return df
-
-
-# ----------------------------------------------------------------------------------------
-# --------------------------- CONVERT TO HISTOGRAM ---------------------------------------
-# ----------------------------------------------------------------------------------------
-@memoize
-def compute_CDF(df, column):
-    """
-    :Function: Compute the Cumulative Distribution Function for a given column
-    :param df: Pandas dataframe
-    :type df: pd.DataFrame
-    :param column: Column name
-    :type column: str
-    :return: Pandas dataframe with the CDF
-    :rtype: pd.DataFrame
-    """
-    df = df.sort_values(by=column, ascending=True)
-    df['CDF'] = np.cumsum(df[column]) / np.sum(df[column])
-    return df
-
-
-# ----------------------------------------------------------------------------------------
-
-@memoize
-def compute_CCDF(df, column):
-    """
-    :Function: Compute the Complementary Cumulative Distribution Function for a given column
-    :param df: Pandas dataframe
-    :type df: pd.DataFrame
-    :param column: Column name
-    :type column: str
-    :return: Pandas dataframe with the CCDF
-    :rtype: pd.DataFrame
-    """
-    df = compute_CDF(df, column)
-    df['CCDF'] = 1 - df['CDF']
-    return df
-
-
-# ----------------------------------------------------------------------------------------
-# ----------------------------------- OTHERS ---------------------------------------------
-# ----------------------------------------------------------------------------------------
-
-@memoize
-def get_shortest_path(networkGraphs, source, target, weight=None, directed=False):
-    if not directed:
-        return nx.shortest_path(networkGraphs.Graph, source, target, weight=weight)
-    else:
-        return nx.shortest_path(networkGraphs.DiGraph, source, target, weight=weight)
-
-
-# ----------------------------------------------------------------------------------------
-
-def export_to_csv(df, filename):
-    """
-    :Function: Export the dataframe to a csv file
-    :param df: Pandas dataframe
-    :param filename: Filename
-    :return: 1 if the file is exported
-    """
-    df.to_csv(filename, index=False)
-    return 1

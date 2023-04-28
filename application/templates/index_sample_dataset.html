@@ -86,7 +86,7 @@
             redirect: 'follow'
         };
 
-        fetch("http://127.0.0.1:8000/api/v1/upload", requestOptions)
+        fetch("http://localhost:8000/api/v1/upload", requestOptions)
             .then(response => response.json())
             .then(result => {
                 const filename = result['filename'];

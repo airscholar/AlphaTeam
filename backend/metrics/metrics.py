@@ -1,4 +1,3 @@
-import pandas as pd
 from flask import Blueprint, request
 from flask_jsonpify import jsonify
 
@@ -11,6 +10,15 @@ metrics_bp = Blueprint('metrics', __name__, url_prefix="/api/v1/metrics")
 
 @metrics_bp.route('<session_id>/<metric>/all')
 def compute_all_metrics(session_id, metric):
+    """
+    :Function: Compute all metrics for the network
+    :param session_id: the session id
+    :type session_id: str
+    :param metric: the metric to compute
+    :type metric: str
+    :return: the metric values
+    :rtype: json
+    """
     directed_toggle, multi_toggle, dynamic_toggle, layout = extract_args(request.args)
 
     G = get_networkGraph(session_id)
@@ -20,8 +28,18 @@ def compute_all_metrics(session_id, metric):
 
     return jsonify({"message": "Success", "data": df_json, "filename": file_name})
 
+
 @metrics_bp.route('<session_id>/<metric>')
 def compute_metrics(session_id, metric):
+    """
+    :Function: Compute the metric for the network
+    :param session_id: the session id
+    :type session_id: str
+    :param metric: the metric to compute
+    :type session_id: str
+    :return: the metric values
+    :rtype: json
+    """
     directed_toggle, multi_toggle, dynamic_toggle, layout = extract_args(request.args)
 
     G = get_networkGraph(session_id)
@@ -35,7 +53,22 @@ def compute_metrics(session_id, metric):
 
 @metrics_bp.route('<session_id>/<metric>/<plot_type>')
 def plot_graph(session_id, metric, plot_type):
-    directed_toggle, multi_toggle, dynamic_toggle, layout = extract_args(request.args)
+    """
+    :Function: Plot the graph for the metric
+    :param session_id: the session id
+    :type session_id: str
+    :param metric: the metric to compute
+    :type metric: str
+    :param plot_type: the type of plot
+    :type plot_type: str
+    :return: jsonified response
+    :rtype: json
+    """
+    if metric in ['shortest_path', 'clustering_coefficient']:
+        directed_toggle = False
+        multi_toggle = False
+    else:
+        directed_toggle, multi_toggle, dynamic_toggle, layout = extract_args(request.args)
 
     G = get_networkGraph(session_id)
 
