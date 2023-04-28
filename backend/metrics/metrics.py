@@ -64,7 +64,11 @@ def plot_graph(session_id, metric, plot_type):
     :return: jsonified response
     :rtype: json
     """
-    directed_toggle, multi_toggle, dynamic_toggle, layout = extract_args(request.args)
+    if metric in ['shortest_path', 'clustering_coefficient']:
+        directed_toggle = False
+        multi_toggle = False
+    else:
+        directed_toggle, multi_toggle, dynamic_toggle, layout = extract_args(request.args)
 
     G = get_networkGraph(session_id)
 
