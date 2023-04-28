@@ -6,11 +6,9 @@ Purpose: Stochastic approximation algorithms
 
 # ------------------------------------------------------------------------------
 
+import networkx as nx
 # External import
 import numpy as np
-import networkx as nx
-from random import random
-from scipy.optimize import minimize
 import pandas as pd
 from tqdm import tqdm
 

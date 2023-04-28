@@ -6,15 +6,14 @@ Purpose: Resilience of the network
 
 # -------------------------------------- IMPORT ---------------------------------------------
 
+# External imports
+import random
+
 # Internal imports
 import src.machineLearning as ml
 from src.NetworkGraphs import NetworkGraphs
 from src.metrics import *
 from src.preprocessing import convert_to_DiGraph
-
-# External imports
-import random
-import pandas as pd
 
 # -------------------------------------- FUNCTIONS -------------------------------------------
 

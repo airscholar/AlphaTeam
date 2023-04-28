@@ -6,13 +6,14 @@ Purpose: Basic network visualisation module contains functions for basic network
 
 # ----------------------------------------- Imports ----------------------------------------- #
 
-# Internal imports
-from src.visualisation_src.utils_visualisation import *
-from src.JS_scripts import scripts
-
 # External imports
 from itertools import zip_longest
+
 from pyvis import network as net
+
+from src.JS_scripts import scripts
+# Internal imports
+from src.visualisation_src.utils_visualisation import *
 
 
 # ----------------------------------------------------------------------------------------

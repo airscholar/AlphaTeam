@@ -7,7 +7,6 @@ Purpose: Report module contains functions for generating reports
 # ----------------------------------------- Imports ----------------------------------------- #
 
 
-
 # ----------------------------------------- CONSTANT ----------------------------------------- #
 
 red = "\033[0;91m"
@@ -90,5 +89,3 @@ def generate_report_resilience(networkGraph):
     :return: None
     """
     return 0
-
-

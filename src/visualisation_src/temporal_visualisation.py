@@ -6,14 +6,14 @@ Purpose: Temporal visualisation module contains functions for generating tempora
 
 # ----------------------------------------- Imports ----------------------------------------- #
 
-# Internal imports
-from src.visualisation_src.utils_visualisation import get_layout
-
 # External imports
 import networkx as nx
-import plotly.graph_objects as go
 import numpy as np
+import plotly.graph_objects as go
 from tqdm import tqdm
+
+# Internal imports
+from src.visualisation_src.utils_visualisation import get_layout
 
 
 # ----------------------------------------------------------------------------------------

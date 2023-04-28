@@ -1,8 +1,9 @@
 import sys
 
 import requests
+from flask import Blueprint, render_template, session
+
 from application.dictionary.information import *
-from flask import Blueprint, render_template, session, request
 from src.utils import get_networkGraph
 
 sys.path.insert(1, '../../')
@@ -10,8 +11,8 @@ sys.path.insert(1, '../../')
 resilience_routes = Blueprint('resilience_routes', __name__)
 BASE_URL = 'http://localhost:8000/api/v1'
 
-# -------------------------------------------RESILIENCE_ANALYSIS-----------------------------
 
+# -------------------------------------------RESILIENCE_ANALYSIS-----------------------------
 @resilience_routes.route('/resilience/malicious', endpoint='resilience_malicious', methods=['GET'])
 def resilience_analysis_malicious():
     filename2 = session['filename2']
@@ -30,10 +31,10 @@ def resilience_analysis_malicious():
                            number_of_threshold=number_of_threshold, number_of_clusters=number_of_clusters,
                            number_of_nodes_malicious=number_of_nodes_malicious, graph_path1=graph_path1,
                            graph_path2=graph_path2,
-                           
                            tooltip_attack_summary=tooltips['attack_summary'], tooltip_multi=tooltips['multi'],
                            tooltip_directed=tooltips['directed'], tooltip_layout_dropdown=tooltips['layout_dropdown'],
-                           tooltip_number_of_clusters=tooltips['number_of_clusters'], description=description['resilience_analysis_malicious'],
+                           tooltip_number_of_clusters=tooltips['number_of_clusters'],
+                           description=description['resilience_analysis_malicious'],
                            tooltip_type_of_attack=tooltips['type_of_attack'], tooltip_node_tab=tooltips['node_tab'],
                            tooltip_threshold_tab=tooltips['threshold_tab'])
 
@@ -48,10 +49,10 @@ def resilience_analyisis_random():
                            number_of_edges=0, number_of_clusters=0,
                            number_of_nodes_random=0, graph_path1=graph_path1,
                            graph_path2=graph_path2,
-                           
                            tooltip_attack_summary=tooltips['attack_summary'], tooltip_multi=tooltips['multi'],
                            tooltip_directed=tooltips['directed'], tooltip_layout_dropdown=tooltips['layout_dropdown'],
-                           tooltip_number_of_clusters=tooltips['number_of_clusters'], description=description['resilience_analyisis_random'],
+                           tooltip_number_of_clusters=tooltips['number_of_clusters'],
+                           description=description['resilience_analyisis_random'],
                            tooltip_node_tab=tooltips['node_tab'],
                            tooltip_edge_tab=tooltips['edge_tab'])
 
@@ -70,13 +71,14 @@ def resilience_analyisis_cluster():
                            layout3=cluster_algorithm, cluster_to_attack=number_of_clusters,
                            number_of_cluster_to_generate=total_clusters, graph_path1=graph_path1,
                            graph_path2=graph_path2,
-                           
                            tooltip_attack_summary=tooltips['attack_summary'], tooltip_multi=tooltips['multi'],
                            tooltip_directed=tooltips['directed'], tooltip_layout_dropdown=tooltips['layout_dropdown'],
-                            tooltip_number_of_clusters=tooltips['number_of_clusters'], description=description['resilience_analyisis_cluster'],
+                           tooltip_number_of_clusters=tooltips['number_of_clusters'],
+                           description=description['resilience_analyisis_cluster'],
                            tooltip_type_of_cluster=tooltips['type_of_cluster'],
                            tooltip_number_of_cluster_to_generate=tooltips['number_of_cluster_to_generate'],
                            tooltip_number_of_cluster_to_attack=tooltips['number_of_cluster_to_attack'])
+
 
 @resilience_routes.route('/resilience/custom', endpoint='resilience_custom', methods=['GET', 'POST'])
 def resilience_analyisis_custom():
@@ -94,15 +96,14 @@ def resilience_analyisis_custom():
     json_data = requests.get(
         f'{BASE_URL}/visualisation/{filename2}/plot_network/spatial?dynamic=False&layout={layout}').json()
     graph_input_custom = json_data['filename']
-    graph_input_custom = f"../static/uploads/{filename2}/"+graph_input_custom
+    graph_input_custom = f"../static/uploads/{filename2}/" + graph_input_custom
 
     return render_template('resilience/resilience_analyisis_custom.html', session_id=filename2,
                            layout3=cluster_algorithm, cluster_to_attack=number_of_clusters,
                            number_of_cluster_to_generate=total_clusters, graph_path1=graph_path1,
                            graph_path2=graph_path2, graph_input_custom=graph_input_custom,
-                           
                            tooltip_attack_summary=tooltips['attack_summary'], tooltip_multi=tooltips['multi'],
                            tooltip_directed=tooltips['directed'], tooltip_layout_dropdown=tooltips['layout_dropdown'],
-                            tooltip_number_of_clusters=tooltips['number_of_clusters'], description=description['resilience_analyisis_custom'],
+                           tooltip_number_of_clusters=tooltips['number_of_clusters'],
+                           description=description['resilience_analyisis_custom'],
                            tooltip_list_of_nodes=tooltips['list_of_nodes'])
-

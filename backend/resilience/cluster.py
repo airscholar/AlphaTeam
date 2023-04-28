@@ -7,6 +7,7 @@ from src.visualisation import *
 
 clusters_bp = Blueprint('resilience_clusters', __name__, url_prefix="/api/v1/resilience")
 
+
 def extract_args():
     args = request.args
 
@@ -15,6 +16,7 @@ def extract_args():
     number_of_clusters = int(args.get('number_of_clusters'))
 
     return cluster_algorithm, total_clusters, number_of_clusters
+
 
 @clusters_bp.route('<session_id>/clusters')
 def compute_clusters(session_id):
@@ -39,4 +41,3 @@ def compute_clusters(session_id):
 
     return jsonify({"message": "Success", "data": df_json, "network_before": before, "network_after": after,
                     "heatmap_before": heatmap_before, "heatmap_after": heatmap_after})
-
