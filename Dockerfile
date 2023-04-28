@@ -20,7 +20,7 @@ WORKDIR /alpha-team
 
 # Install GDAL and pygraphviz
 RUN pip install GDAL pygraphviz
-
+RUN pip3 install torch --index-url https://download.pytorch.org/whl/cpu
 # Copy the current directory contents into the container at /AlphaTeam
 COPY requirements.txt .
 
