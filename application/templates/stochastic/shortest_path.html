@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Stochastic{% endblock %}
+{% block span %}Shortest Path{% endblock %}
+{% block content %}
+{% include 'stochastic/stochastic_template.html' %}
+<script type="text/javascript" src="../static/js/stochastic/stochastic.js"></script>
+<script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        const histogramTab = document.getElementById('nav-histogram-tab');
+        const boxplotTab = document.getElementById('nav-boxplot-tab');
+        const violinplotTab = document.getElementById('nav-violinplot-tab');
+
+        const data = {
+            'session_id': '{{ session_id }}'
+        };
+
+        stochasticShortestPathVisualisation(data, "histogram", "graph1")
+
+        function handleClick(plotType, graphId, e) {
+            e.preventDefault();
+            const data = {
+                'session_id': '{{ session_id }}'
+            };
+            stochasticShortestPathVisualisation(data, plotType, graphId)
+        }
+
+        $(histogramTab).on('click', handleClick.bind(null, 'histogram', 'graph1'));
+        $(boxplotTab).on('click', handleClick.bind(null, 'boxplot','graph2'));
+        $(violinplotTab).on('click', handleClick.bind(null, 'violinplot','graph3'));
+    });
+</script>
+{% endblock %}
