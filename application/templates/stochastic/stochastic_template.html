@@ -1,0 +1,93 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="styledh3">Stochastic Analysis</h3>
+            <p>{{description | safe}}</p>
+            <hr> <!-- Add a horizontal rule for visual separation -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="container mt-3">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <!-- Histogram Tab UL -->
+                    <button class="nav-link active" id="nav-histogram-tab"
+                            data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab"
+                            aria-controls="nav-histogram"
+                            aria-selected="true">Histogram <span style="display: inline-block; margin-left: 5px;"><img
+                            src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                            alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                            data-placement="bottom" title="{{tooltip_histogram_tab}}"></span></button>
+                    <!-- boxplot  Tab UL -->
+                    <button class="nav-link" id="nav-boxplot-tab"
+                            data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab"
+                            aria-controls="nav-boxplot " aria-selected="true">Boxplot <span
+                            style="display: inline-block; margin-left: 5px;"><img
+                            src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                            alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                            data-placement="bottom" title="{{tooltip_boxplot_tab}}"></span></button>
+                    <!-- violinplot Tab UL -->
+                    <button class="nav-link" id="nav-violinplot-tab"
+                            data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab"
+                            aria-controls="nav-violinplot" aria-selected="true">Violinplot <span
+                            style="display: inline-block; margin-left: 5px;"><img
+                            src="{{ url_for('static', filename='app_images/question.png') }}" class="mx-auto"
+                            alt="Image" style="width: 20px; height: 20px; margin-left: 5px;" data-toggle="tooltip"
+                            data-placement="bottom" title="{{tooltip_violinplot_tab}}"></span></button>
+                </div>
+            </nav>
+
+
+            <div class="tab-content" style="background-color: white; padding-bottom: 25px;">
+                <div id="tab1" class="container tab-pane active">
+                    <br/>
+                    <div class="row">
+                        <div class="col mx-auto">
+                            <div class="card card-body" style="align-items: center;">
+                                <iframe id="graph1" src="{{ graph1 }}" width="100%" height="800"></iframe>
+                                <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab2" class="container tab-pane fade">
+                    <br/>
+                    <div class="row">
+                        <div class="col mx-auto">
+                            <div class="card card-body" style="align-items: center;">
+                                <iframe id="graph2" src="{{ graph2 }}" width="100%" height="800"></iframe>
+                                <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div id="tab3" class="container tab-pane fade">
+                    <br/>
+                    <div class="row">
+                        <div class="card card-body" style="align-items: center;">
+                            <iframe id="graph3" src="{{ graph3 }}" width="100%" height="600"></iframe>
+                            <!--<img src="{{ url_for('static', filename=image_path) }}" class="img-fluid" style="width: 500px;">-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <div class="card card-body">
+        <h3 style="margin-top: 10px;">Stochastic Information</h3>
+        <hr>
+        <table id="example-stochastic" class="display" style="width:100%">
+        </table>
+    </div>
+    <hr>
+</div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script src="{{ url_for('static', filename='js/utils.js') }}"></script>

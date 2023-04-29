@@ -78,6 +78,7 @@ tooltips = {
 
     'list_of_nodes': 'Enter a list of nodes to remove from the network for a personalized resilience analysis, '
                      'allowing you to evaluate the impact of specific node deletions on the overall network stability.',
+    
 }
 
 description = {
@@ -322,4 +323,8 @@ description = {
                           "groups similar nodes using their embeddings. This combination provides a more "
                           "comprehensive understanding of network organization, relationships between communities, "
                           "and individual node roles, unveiling shared interests or functional clusters.",
+
+    'clustering_coefficient': "..clustering_coefficient..",
+
+    'shortest_path': "..shortest_path..",
 }
