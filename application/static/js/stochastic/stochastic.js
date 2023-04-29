@@ -7,10 +7,6 @@ const stochasticClusteringCoefficientVisualisation = (data, plotType, id) => {
 
         $.ajax({
             url: BASE_URL + data.session_id + '/clustering_coefficient' + '/' + plot_type,
-            data: {
-                dynamic_toggle: data.dynamicToggle,
-                layout: data.layout,
-            },
             type: 'GET',
             mode: 'no-cors',    
             success: function (res) {    
@@ -41,10 +37,6 @@ const stochasticShortestPathVisualisation = (data, plotType, id) => {
 
         $.ajax({
             url: BASE_URL + data.session_id + '/shortest_path' + '/' + plot_type,
-            data: {
-                dynamic_toggle: data.dynamicToggle,
-                layout: data.layout,
-            },
             type: 'GET',
             mode: 'no-cors',    
             success: function (res) {    
