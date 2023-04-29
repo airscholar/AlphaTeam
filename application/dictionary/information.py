@@ -324,7 +324,16 @@ description = {
                           "comprehensive understanding of network organization, relationships between communities, "
                           "and individual node roles, unveiling shared interests or functional clusters.",
 
-    'clustering_coefficient': "..clustering_coefficient..",
+    'clustering_coefficient': "The <b>Clustering Coefficient Estimator</b> provides a robust and efficient method for "
+                              "computing the clustering coefficient in complex networks, without the computational "
+                              "overhead of traditional techniques. Leveraging a <b>stochastic Monte Carlo "
+                              "approach</b>, our algorithm performs the metrics computation over <b>10,"
+                              "000 iterations</b>, ensuring accurate estimations while <b>significantly reducing "
+                              "processing time</b>. ",
 
-    'shortest_path': "..shortest_path..",
+    'shortest_path': "The <b>Shortest Path Length Estimator</b> provides an efficient and accurate estimation of the "
+                     "shortest path length in complex networks, without the computational burden of traditional "
+                     "methods. Utilizing a <b>stochastic Monte Carlo approach</b>, our algorithm samples the metrics "
+                     "computation over <b>10,000 iterations</b>, ensuring reliable estimations while <b>significantly "
+                     "reducing processing time</b>.",
 }
