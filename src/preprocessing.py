@@ -342,6 +342,16 @@ def preprocess_gtfs(zip_file):
 
     G = nx.MultiDiGraph()
 
+    if 'parent_station' in stops.columns:
+        map = {}
+        for index, stop in stops.iterrows():
+            if stop['parent_station'] == '':
+                map[stop['stop_id']] = stop['stop_id']
+            map[stop['stop_id']] = stop['parent_station']
+        stop_times['stop_id'] = stop_times['stop_id'].apply(lambda x: map[x])
+        stops['stop_id'] = stops['stop_id'].apply(lambda x: map[x])
+        stops.drop_duplicates(subset=['stop_id'], inplace=True)
+
     for index, stop in stops.iterrows():
         G.add_node(stop['stop_id'], pos=(stop['stop_lon'], stop['stop_lat']))
 

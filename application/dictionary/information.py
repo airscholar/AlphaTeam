@@ -78,7 +78,7 @@ tooltips = {
 
     'list_of_nodes': 'Enter a list of nodes to remove from the network for a personalized resilience analysis, '
                      'allowing you to evaluate the impact of specific node deletions on the overall network stability.',
-    
+
 }
 
 description = {
@@ -142,7 +142,8 @@ description = {
                      "<b>closed loop of three nodes</b>. By examining the number of triangles a node participates in, "
                      "one can assess its tendency to form tightly connected groups. This metric helps identify nodes "
                      "that contribute to the network's <b>cohesion and community structure</b>, revealing potential "
-                     "subgroups or areas of high connectivity.",
+                     "subgroups or areas of high connectivity.  <i>Triangle computation is not allow for Directed and "
+                     "Multi graphs.</i>",
 
     'node_pagerank': "Node PageRank is a metric that estimates a node's <b>relative importance</b> within a network, "
                      "considering both the <b>quantity and quality</b> of its connections. Inspired by the algorithm "
