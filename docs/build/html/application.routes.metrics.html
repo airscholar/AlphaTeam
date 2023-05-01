@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>application.routes.metrics package &mdash; AlphaTeam 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AlphaTeam
+              <img src="_static/favicon.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">application.routes.metrics package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-application.routes.metrics.centrality_routes">application.routes.metrics.centrality_routes module</a><ul>
+<li><a class="reference internal" href="#application.routes.metrics.centrality_routes.centrality_all"><code class="docutils literal notranslate"><span class="pre">centrality_all()</span></code></a></li>
+<li><a class="reference internal" href="#application.routes.metrics.centrality_routes.centrality_betwenness"><code class="docutils literal notranslate"><span class="pre">centrality_betwenness()</span></code></a></li>
+<li><a class="reference internal" href="#application.routes.metrics.centrality_routes.centrality_closeness"><code class="docutils literal notranslate"><span class="pre">centrality_closeness()</span></code></a></li>
+<li><a class="reference internal" href="#application.routes.metrics.centrality_routes.centrality_degree"><code class="docutils literal notranslate"><span class="pre">centrality_degree()</span></code></a></li>
+<li><a class="reference internal" href="#application.routes.metrics.centrality_routes.centrality_eigenvector"><code class="docutils literal notranslate"><span class="pre">centrality_eigenvector()</span></code></a></li>
+<li><a class="reference internal" href="#application.routes.metrics.centrality_routes.centrality_load"><code class="docutils literal notranslate"><span class="pre">centrality_load()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-application.routes.metrics.global_metrics_routes">application.routes.metrics.global_metrics_routes module</a><ul>
+<li><a class="reference internal" href="#application.routes.metrics.global_metrics_routes.globalmetrics"><code class="docutils literal notranslate"><span class="pre">globalmetrics()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-application.routes.metrics.node_routes">application.routes.metrics.node_routes module</a><ul>
+<li><a class="reference internal" href="#application.routes.metrics.node_routes.node_all"><code class="docutils literal notranslate"><span class="pre">node_all()</span></code></a></li>
+<li><a class="reference internal" href="#application.routes.metrics.node_routes.node_degree"><code class="docutils literal notranslate"><span class="pre">node_degree()</span></code></a></li>
+<li><a class="reference internal" href="#application.routes.metrics.node_routes.node_kcore"><code class="docutils literal notranslate"><span class="pre">node_kcore()</span></code></a></li>
+<li><a class="reference internal" href="#application.routes.metrics.node_routes.node_pagerank"><code class="docutils literal notranslate"><span class="pre">node_pagerank()</span></code></a></li>
+<li><a class="reference internal" href="#application.routes.metrics.node_routes.node_triangle"><code class="docutils literal notranslate"><span class="pre">node_triangle()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-application.routes.metrics">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AlphaTeam</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">application.routes.metrics package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/application.routes.metrics.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="application-routes-metrics-package">
+<h1>application.routes.metrics package<a class="headerlink" href="#application-routes-metrics-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-application.routes.metrics.centrality_routes">
+<span id="application-routes-metrics-centrality-routes-module"></span><h2>application.routes.metrics.centrality_routes module<a class="headerlink" href="#module-application.routes.metrics.centrality_routes" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="application.routes.metrics.centrality_routes.centrality_all">
+<span class="sig-prename descclassname"><span class="pre">application.routes.metrics.centrality_routes.</span></span><span class="sig-name descname"><span class="pre">centrality_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application/routes/metrics/centrality_routes.html#centrality_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#application.routes.metrics.centrality_routes.centrality_all" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Visualise the centrality</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the centrality page</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="application.routes.metrics.centrality_routes.centrality_betwenness">
+<span class="sig-prename descclassname"><span class="pre">application.routes.metrics.centrality_routes.</span></span><span class="sig-name descname"><span class="pre">centrality_betwenness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application/routes/metrics/centrality_routes.html#centrality_betwenness"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#application.routes.metrics.centrality_routes.centrality_betwenness" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Visualise the betwenness centrality</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the betwenness centrality page</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="application.routes.metrics.centrality_routes.centrality_closeness">
+<span class="sig-prename descclassname"><span class="pre">application.routes.metrics.centrality_routes.</span></span><span class="sig-name descname"><span class="pre">centrality_closeness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application/routes/metrics/centrality_routes.html#centrality_closeness"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#application.routes.metrics.centrality_routes.centrality_closeness" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Visualise the closeness centrality</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the closeness centrality page</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="application.routes.metrics.centrality_routes.centrality_degree">
+<span class="sig-prename descclassname"><span class="pre">application.routes.metrics.centrality_routes.</span></span><span class="sig-name descname"><span class="pre">centrality_degree</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application/routes/metrics/centrality_routes.html#centrality_degree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#application.routes.metrics.centrality_routes.centrality_degree" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Visualise the degree centrality</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the degree centrality page</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="application.routes.metrics.centrality_routes.centrality_eigenvector">
+<span class="sig-prename descclassname"><span class="pre">application.routes.metrics.centrality_routes.</span></span><span class="sig-name descname"><span class="pre">centrality_eigenvector</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application/routes/metrics/centrality_routes.html#centrality_eigenvector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#application.routes.metrics.centrality_routes.centrality_eigenvector" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Visualise the eigenvector centrality</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the eigenvector centrality page</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="application.routes.metrics.centrality_routes.centrality_load">
+<span class="sig-prename descclassname"><span class="pre">application.routes.metrics.centrality_routes.</span></span><span class="sig-name descname"><span class="pre">centrality_load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application/routes/metrics/centrality_routes.html#centrality_load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#application.routes.metrics.centrality_routes.centrality_load" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Visualise the load centrality</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the load centrality page</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-application.routes.metrics.global_metrics_routes">
+<span id="application-routes-metrics-global-metrics-routes-module"></span><h2>application.routes.metrics.global_metrics_routes module<a class="headerlink" href="#module-application.routes.metrics.global_metrics_routes" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="application.routes.metrics.global_metrics_routes.globalmetrics">
+<span class="sig-prename descclassname"><span class="pre">application.routes.metrics.global_metrics_routes.</span></span><span class="sig-name descname"><span class="pre">globalmetrics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application/routes/metrics/global_metrics_routes.html#globalmetrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#application.routes.metrics.global_metrics_routes.globalmetrics" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Visualise the global metrics</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the global metrics page</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-application.routes.metrics.node_routes">
+<span id="application-routes-metrics-node-routes-module"></span><h2>application.routes.metrics.node_routes module<a class="headerlink" href="#module-application.routes.metrics.node_routes" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="application.routes.metrics.node_routes.node_all">
+<span class="sig-prename descclassname"><span class="pre">application.routes.metrics.node_routes.</span></span><span class="sig-name descname"><span class="pre">node_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application/routes/metrics/node_routes.html#node_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#application.routes.metrics.node_routes.node_all" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Visualise the node metrics</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the node metrics page</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="application.routes.metrics.node_routes.node_degree">
+<span class="sig-prename descclassname"><span class="pre">application.routes.metrics.node_routes.</span></span><span class="sig-name descname"><span class="pre">node_degree</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application/routes/metrics/node_routes.html#node_degree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#application.routes.metrics.node_routes.node_degree" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Visualise the node degree</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the node degree page</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="application.routes.metrics.node_routes.node_kcore">
+<span class="sig-prename descclassname"><span class="pre">application.routes.metrics.node_routes.</span></span><span class="sig-name descname"><span class="pre">node_kcore</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application/routes/metrics/node_routes.html#node_kcore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#application.routes.metrics.node_routes.node_kcore" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Visualise the node kcore</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the node kcore page</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="application.routes.metrics.node_routes.node_pagerank">
+<span class="sig-prename descclassname"><span class="pre">application.routes.metrics.node_routes.</span></span><span class="sig-name descname"><span class="pre">node_pagerank</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application/routes/metrics/node_routes.html#node_pagerank"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#application.routes.metrics.node_routes.node_pagerank" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Visualise the node pagerank</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the node pagerank page</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="application.routes.metrics.node_routes.node_triangle">
+<span class="sig-prename descclassname"><span class="pre">application.routes.metrics.node_routes.</span></span><span class="sig-name descname"><span class="pre">node_triangle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application/routes/metrics/node_routes.html#node_triangle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#application.routes.metrics.node_routes.node_triangle" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Function<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Visualise the node triangle</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the node triangle page</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-application.routes.metrics">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-application.routes.metrics" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Alpha Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

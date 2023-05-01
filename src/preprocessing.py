@@ -1,17 +1,19 @@
 """
 :Author: Alpha Team Group Project
 :Date: March 2023
-:Purpose: Preprocess the datasets and create generals NetworkX graphs
+:Purpose: Preprocess the datasets and create custom NetworkGraphs class for general use in the project
 """
 
 # ----------------------------------------------------------------------------------------
 
+from random import randint
+
 # External imports
 import networkx as nx
 import pandas as pd
-import scipy.io as sio
 import partridge as ptg
-from random import randint
+import scipy.io as sio
+
 
 # ----------------------------------------------------------------------------------------
 
@@ -26,9 +28,8 @@ def preprocess_railway(filename_: str):
     """
     network = {}
     station_id = {}
-    excluded = 0
 
-    colormap = {
+    colormap = {  # Different colors for different trains
         "G": "red",
         "C": "yellow",
         "D": "green",
@@ -46,8 +47,7 @@ def preprocess_railway(filename_: str):
 
         for line in f:
 
-            # skip header
-            if line.startswith("train"):
+            if line.startswith("train"):  # skip header
                 continue
 
             train, st_no, st_id, date, arr_time, dep_time, stay_time, mileage, lat, lon = line.split(",")
@@ -106,8 +106,6 @@ def preprocess_railway(filename_: str):
         for station in network[train]:
             station_id[(station['lat'], station['lon'])] = station['id']
 
-    print(f"Excluded {excluded} stations")
-
     multi_di_graph = create_multi_DiGraph_railway(network, station_id)
     di_graph = convert_to_DiGraph(multi_di_graph)
 
@@ -152,10 +150,11 @@ def convert_to_DiGraph(multi_graph):
     """
     :Function: Create a DiGraph from a MultiDiGraph with the same nodes and edges containing the sum of the weights,
     and conserving the first edge's attributes
-    :param multi_graph: NetworkX MultiDiGraph
-    :type multi_graph: NetworkX MultiDiGraph
+
+    :param multi_graph: MultiDiGraph to convert
+    :type multi_graph: networkx.MultiDiGraph
     :return: NetworkX DiGraph
-    :rtype: NetworkX DiGraph
+    :rtype: networkx.DiGraph
     """
     g_directed = nx.DiGraph()
     for u, data in multi_graph.nodes(data=True):
@@ -183,54 +182,12 @@ def convert_to_DiGraph(multi_graph):
 def convert_to_undirected(g_directed):
     """
     :Function: Convert a DiGraph to an undirected graph using NetworkX to_undirected() function
-    :param g_directed: NetworkX DiGraph
-    :type g_directed: NetworkX DiGraph
+    :param g_directed: NetworkX DiGraph to convert
+    :type g_directed: networkx.DiGraph
     :return: NetworkX Graph
-    :rtype: NetworkX Graph
+    :rtype: networkx.Graph
     """
     return g_directed.to_undirected()
-
-
-# ----------------------------------------------------------------------------------------
-
-
-def create_temporal_subgraph(networkGraphs, start_time, end_time, step):
-    """
-    :Function: Create a temporal subgraph from a NetworkGraphs object using the start_time, end_time and step parameters
-    :param networkGraphs: Custom NetworkGraphs object
-    :type networkGraphs: NetworkGraphs
-    :param start_time: Start time of the temporal subgraph
-    :type start_time: int
-    :param end_time: End time of the temporal subgraph
-    :type end_time: int
-    :param step: Step size of the temporal subgraph
-    :type step: int
-    :return: List of NetworkX DiGraphs
-    :rtype: list
-    """
-    temporal_graphs = []
-    for i in range(start_time, end_time, step):
-        G = nx.DiGraph()
-        # add edges
-        for u, v, d in networkGraphs.DiGraph.edges(data=True):
-            if d['start'] is None or d['end'] is None:
-                continue
-            if d['start'] <= i and d['end'] >= i:
-                G.add_edge(u, v)
-                for k_, v_ in d.items():
-                    G.edges[u, v][k_] = v_
-        # add node positions
-        for u, d in networkGraphs.DiGraph.nodes(data=True):
-            G.add_node(u)
-            for k_, v_ in d.items():
-                G.nodes[u][k_] = v_
-
-        temporal_graphs.append(G)
-
-        print(
-            f"\rCreating temporal graphs: {i - start_time + 1}/{end_time - start_time} ({(i - start_time + 1) / (end_time - start_time) * 100:.2f}%)",
-            end="")
-    return temporal_graphs
 
 
 # ----------------------------------------------------------------------------------------
@@ -385,6 +342,16 @@ def preprocess_gtfs(zip_file):
 
     G = nx.MultiDiGraph()
 
+    if 'parent_station' in stops.columns:
+        map = {}
+        for index, stop in stops.iterrows():
+            if stop['parent_station'] == '':
+                map[stop['stop_id']] = stop['stop_id']
+            map[stop['stop_id']] = stop['parent_station']
+        stop_times['stop_id'] = stop_times['stop_id'].apply(lambda x: map[x])
+        stops['stop_id'] = stops['stop_id'].apply(lambda x: map[x])
+        stops.drop_duplicates(subset=['stop_id'], inplace=True)
+
     for index, stop in stops.iterrows():
         G.add_node(stop['stop_id'], pos=(stop['stop_lon'], stop['stop_lat']))
 
@@ -405,4 +372,3 @@ def preprocess_gtfs(zip_file):
     DiGraph.remove_edges_from(nx.selfloop_edges(DiGraph))
 
     return [DiGraph, G]
-

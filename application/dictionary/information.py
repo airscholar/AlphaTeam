@@ -78,6 +78,7 @@ tooltips = {
 
     'list_of_nodes': 'Enter a list of nodes to remove from the network for a personalized resilience analysis, '
                      'allowing you to evaluate the impact of specific node deletions on the overall network stability.',
+
 }
 
 description = {
@@ -141,7 +142,8 @@ description = {
                      "<b>closed loop of three nodes</b>. By examining the number of triangles a node participates in, "
                      "one can assess its tendency to form tightly connected groups. This metric helps identify nodes "
                      "that contribute to the network's <b>cohesion and community structure</b>, revealing potential "
-                     "subgroups or areas of high connectivity.",
+                     "subgroups or areas of high connectivity.  <i>Triangle computation is not allow for Directed and "
+                     "Multi graphs.</i>",
 
     'node_pagerank': "Node PageRank is a metric that estimates a node's <b>relative importance</b> within a network, "
                      "considering both the <b>quantity and quality</b> of its connections. Inspired by the algorithm "
@@ -322,4 +324,17 @@ description = {
                           "groups similar nodes using their embeddings. This combination provides a more "
                           "comprehensive understanding of network organization, relationships between communities, "
                           "and individual node roles, unveiling shared interests or functional clusters.",
+
+    'clustering_coefficient': "The <b>Clustering Coefficient Estimator</b> provides a robust and efficient method for "
+                              "computing the clustering coefficient in complex networks, without the computational "
+                              "overhead of traditional techniques. Leveraging a <b>stochastic Monte Carlo "
+                              "approach</b>, our algorithm performs the metrics computation over <b>10,"
+                              "000 iterations</b>, ensuring accurate estimations while <b>significantly reducing "
+                              "processing time</b>. ",
+
+    'shortest_path': "The <b>Shortest Path Length Estimator</b> provides an efficient and accurate estimation of the "
+                     "shortest path length in complex networks, without the computational burden of traditional "
+                     "methods. Utilizing a <b>stochastic Monte Carlo approach</b>, our algorithm samples the metrics "
+                     "computation over <b>10,000 iterations</b>, ensuring reliable estimations while <b>significantly "
+                     "reducing processing time</b>.",
 }

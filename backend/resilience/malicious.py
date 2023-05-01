@@ -9,6 +9,11 @@ malicious_bp = Blueprint('resilience_malicious', __name__, url_prefix="/api/v1/r
 
 
 def extract_args():
+    """
+    :Function: Extract the arguments from the request
+    :return: the arguments (attack_type, number_of_nodes_malicious, number_of_threshold, operator)
+    :rtype: tuple
+    """
     res_operator = {
         'greater_than': '>',
         'less_than': '<',
@@ -21,7 +26,7 @@ def extract_args():
     number_of_threshold = args.get('number_of_thresholds', None, type=int)
     operator = args.get('operator', None)
 
-    if (operator is not None) and (operator is not ''):
+    if (operator is not None) and (operator != ''):
         operator = res_operator[operator]
     if number_of_nodes_malicious == '':
         number_of_nodes_malicious = None
@@ -33,6 +38,13 @@ def extract_args():
 
 @malicious_bp.route('<session_id>/malicious')
 def compute_malicious(session_id):
+    """
+    :Function: Compute the clusters for the network
+    :param session_id: the session id
+    :type session_id: str
+    :return: the clusters
+    :rtype: json
+    """
     attack_type, number_of_nodes_malicious, number_of_threshold, operator = extract_args()
 
     networkGraphs = get_networkGraph(session_id)

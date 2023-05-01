@@ -1,18 +1,18 @@
 """
 Author: Alpha Team Group Project
 Date: March 2023
-Purpose: NetworkGraphs.py contains the NetworkGraphs custom class
+Purpose: NetworkGraphs.py contains the NetworkGraphs custom class to generalise complex network analysis
 """
 
 # ----------------------------------------- Imports ----------------------------------------- #
 
-# Internal imports
-from src.preprocessing import *
-from src.visualisation import *
-
 # External imports
 import scipy.io as sio
 from pandas.api.types import is_numeric_dtype
+
+# Internal imports
+from src.preprocessing import *
+from src.visualisation import *
 
 """
 ----------------------------------------------------------------------------------------
@@ -60,19 +60,21 @@ class NetworkGraphs:
     # ---------------------------------------------- CONSTRUCTOR ------------------------------------------------------
     # -----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, filename, type, session_folder=None, temporal=False, spatial=False, weighted=False, attack_vector=None):
+    def __init__(self, filename, type, session_folder=None, temporal=False, spatial=False, weighted=False,
+                 attack_vector=None):
         """
         Constructor of the NetworkGraphs class. It creates the NetworkX graphs and store the attributes of the graphs.
 
         File format accepted:
             - .csv
             - .mtx
-            - .txt
+            - .zip (for GTFS files)
         Type accepted:
             - 'RAILWAY'
             - 'CRYPTO'
             - 'MTX'
             - 'CUSTOM'
+            - 'GTFS'
         :param filename: Path to the file containing the dataset to be loaded
         :type filename: str
         :param type: Type of the dataset to be loaded
@@ -206,15 +208,16 @@ class NetworkGraphs:
             self.Graph, self.MultiGraph = self.DiGraph.to_undirected(), self.MultiDiGraph.to_undirected()
 
             self.colors = {'MultiDiGraph': nx.get_edge_attributes(self.MultiDiGraph, 'color').values(),
-                            'MultiGraph': nx.get_edge_attributes(self.MultiGraph, 'color').values(),
-                            'DiGraph': nx.get_edge_attributes(self.DiGraph, 'color').values(),
-                            'Graph': nx.get_edge_attributes(self.Graph, 'color').values()}
+                           'MultiGraph': nx.get_edge_attributes(self.MultiGraph, 'color').values(),
+                           'DiGraph': nx.get_edge_attributes(self.DiGraph, 'color').values(),
+                           'Graph': nx.get_edge_attributes(self.Graph, 'color').values()}
 
             self.df = self.DiGraph.edges(data=True)
             self.df = pd.DataFrame(self.df, columns=['source', 'target', 'data'])
 
             # check if nan in start or end
-            if self.df['data'].apply(lambda x: x['start']).isnull().values.any() or self.df['data'].apply(lambda x: x['end']).isnull().values.any():
+            if self.df['data'].apply(lambda x: x['start']).isnull().values.any() or self.df['data'].apply(
+                    lambda x: x['end']).isnull().values.any():
                 self.set_temporal(False)
             else:
                 self.df['start'] = self.df['data'].apply(lambda x: x['start'])
@@ -222,7 +225,6 @@ class NetworkGraphs:
             self.df['weight'] = self.df['data'].apply(lambda x: x['weight'])
             self.df['color'] = self.df['data'].apply(lambda x: x['color'])
             self.df = self.df.drop(columns=['data'])
-
 
         # ---------------------------------------------- SPATIAL -------------------------------------------------------
 
@@ -486,7 +488,7 @@ class NetworkGraphs:
         :return: None
         """
         self.filename = filename
-    
+
     def set_attack_vector(self, attack_vector):
         self.attack_vector = attack_vector
 

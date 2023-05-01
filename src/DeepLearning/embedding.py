@@ -6,16 +6,15 @@ Purpose: Deep learning embedding module contains functions for deep learning emb
 
 # ----------------------------------------- Imports ----------------------------------------- #
 
+import random
+
+import numpy as np
 # External imports
 import torch
 import torch.nn.functional as F
 from torch_geometric.nn import GCNConv, GATConv, SAGEConv
 from torch_geometric.utils import from_networkx
-import numpy as np
-import random
 
-
-# Internal imports
 
 # ----------------------------------------- CONSTANT ----------------------------------------- #
 
@@ -23,6 +22,9 @@ import random
 
 
 class GCN(torch.nn.Module):
+    """
+    Graph Convolutional Network
+    """
     def __init__(self, num_features, hidden_dim, embed_dim):
         super(GCN, self).__init__()
         self.encoder = GCNConv(num_features, hidden_dim)
@@ -39,6 +41,9 @@ class GCN(torch.nn.Module):
 
 
 class GAT(torch.nn.Module):
+    """
+    Graph Attention Network
+    """
     def __init__(self, num_features, hidden_dim, embed_dim):
         super(GAT, self).__init__()
         self.encoder = GATConv(num_features, hidden_dim)
@@ -55,6 +60,9 @@ class GAT(torch.nn.Module):
 
 
 class SAGE(torch.nn.Module):
+    """
+    GraphSAGE
+    """
     def __init__(self, num_features, hidden_dim, embed_dim):
         super(SAGE, self).__init__()
         self.encoder = SAGEConv(num_features, hidden_dim)
@@ -70,6 +78,15 @@ class SAGE(torch.nn.Module):
 # ------------------------------------------- LOSS ------------------------------------------- #
 
 def unsupervised_loss(recon_x, x):
+    """
+    :Function: Unsupervised loss function for deep learning embedding
+    :param recon_x: reconstructed x
+    :type recon_x: torch.Tensor
+    :param x: original x
+    :type x: torch.Tensor
+    :return: loss
+    :rtype: torch.Tensor
+    """
     mse_loss = F.mse_loss(recon_x, x)
     return mse_loss
 
@@ -78,6 +95,19 @@ def unsupervised_loss(recon_x, x):
 
 
 def contrastive_loss(embeddings, positive_pairs, negative_pairs, margin=1.0):
+    """
+    :Function: Contrastive loss function for unsupervised learning
+    :param embeddings: embeddings
+    :type embeddings: torch.Tensor
+    :param positive_pairs: positive pairs
+    :type positive_pairs: torch.Tensor
+    :param negative_pairs: negative pairs
+    :type negative_pairs: torch.Tensor
+    :param margin: margin
+    :type margin: float
+    :return: loss
+    :rtype: torch.Tensor
+    """
     positive_distances = torch.norm(embeddings[positive_pairs[:, 0]] - embeddings[positive_pairs[:, 1]], dim=1)
     negative_distances = torch.norm(embeddings[negative_pairs[:, 0]] - embeddings[negative_pairs[:, 1]], dim=1)
 
@@ -92,6 +122,21 @@ def contrastive_loss(embeddings, positive_pairs, negative_pairs, margin=1.0):
 
 
 def train(model, optimizer, data, device, proximity=False):
+    """
+    :Function: Train model for deep learning embedding
+    :param model: Deep learning model
+    :type model: torch.nn.Module
+    :param optimizer: Optimizer
+    :type optimizer: torch.optim.Optimizer
+    :param data: Data
+    :type data: torch_geometric.data.Data
+    :param device: Device
+    :type device: torch.device
+    :param proximity: Proximity
+    :type proximity: bool
+    :return: loss
+    :rtype: float
+    """
     model.train()
     optimizer.zero_grad()
     out = model(data.to(device))
@@ -108,6 +153,19 @@ def train(model, optimizer, data, device, proximity=False):
 
 
 def test(model, data, device, proximity=False):
+    """
+    :Function: Test model for deep learning embedding
+    :param model: Deep learning model
+    :type model: torch.nn.Module
+    :param data: Data
+    :type data: torch_geometric.data.Data
+    :param device: Device
+    :type device: torch.device
+    :param proximity: Proximity
+    :type proximity: bool
+    :return: loss
+    :rtype: float
+    """
     model.eval()
     out = model(data.to(device))
     if proximity:
@@ -121,6 +179,23 @@ def test(model, data, device, proximity=False):
 
 
 def train_model(model, optimizer, data, device, epochs, proximity=False):
+    """
+    :Function: Train model for deep learning embedding
+    :param model: Deep learning model
+    :type model: torch.nn.Module
+    :param optimizer: Optimizer
+    :type optimizer: torch.optim.Optimizer
+    :param data: Data
+    :type data: torch_geometric.data.Data
+    :param device: Device
+    :type device: torch.device
+    :param epochs: Epochs
+    :type epochs: int
+    :param proximity: Proximity
+    :type proximity: bool
+    :return: loss
+    :rtype: float
+    """
     best_loss = float('inf')
     best_weights = None
     for epoch in range(1, epochs + 1):
@@ -140,6 +215,15 @@ def train_model(model, optimizer, data, device, epochs, proximity=False):
 
 
 def generate_pairs(networkx_graph, num_negative_pairs=None):
+    """
+    :Function: Generate positive and negative pairs
+    :param networkx_graph: networkx graph
+    :type networkx_graph: networkx.Graph
+    :param num_negative_pairs: number of negative pairs
+    :type num_negative_pairs: int
+    :return: positive pairs, negative pairs
+    :rtype: np.array, np.array
+    """
     nodes = list(networkx_graph.nodes())
 
     positive_pairs = np.array([[u, v] for u, v in networkx_graph.edges])
@@ -161,6 +245,17 @@ def generate_pairs(networkx_graph, num_negative_pairs=None):
 
 
 def pairs_to_indices(data, positive_pairs, negative_pairs):
+    """
+    :Function: Convert pairs to indices
+    :param data: Data
+    :type data: torch_geometric.data.Data
+    :param positive_pairs: positive pairs
+    :type positive_pairs: np.array
+    :param negative_pairs: negative pairs
+    :type negative_pairs: np.array
+    :return: positive indices, negative indices
+    :rtype: np.array, np.array
+    """
     node_to_index = {node: i for i, node in enumerate(data.mapping)}
 
     positive_indices = np.array([[node_to_index.get(u), node_to_index.get(v)] for u, v in positive_pairs if
@@ -176,9 +271,11 @@ def pairs_to_indices(data, positive_pairs, negative_pairs):
 
 def preprocess_data(networkx_graph, node_features):
     """
-    :Function: Preprocess
+    :Function: Preprocess data for deep learning embedding
     :param networkx_graph: Networkx graph
+    :type networkx_graph: networkx.Graph
     :param node_features: Node features
+    :type node_features: np.array
     :return: data
     :rtype: torch_geometric.data.Data
     """
@@ -202,6 +299,15 @@ def preprocess_data(networkx_graph, node_features):
 
 
 def get_embeddings(model, data):
+    """
+    :Function: Get final embeddings
+    :param model: Deep learning model
+    :type model: torch.nn.Module
+    :param data: Data
+    :type data: torch_geometric.data.Data
+    :return: embeddings
+    :rtype: np.array
+    """
     model.eval()
     with torch.no_grad():
         x, edge_index = data.x, data.edge_index

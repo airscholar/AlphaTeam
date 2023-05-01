@@ -14,6 +14,7 @@ from application.routes.deepLearning.embedding_routes import embedding_routes
 from application.routes.hotspot.hotspot_routes import hotspot_routes
 from application.routes.metrics.global_metrics_routes import global_metrics_routes
 from application.routes.visualisation.visualisation_routes import visualisation_routes
+from application.routes.stochastic.stochastic_routes import stochastic_routes
 
 sys.path.insert(1, '../')
 from src.NetworkGraphs import *
@@ -40,6 +41,7 @@ app.register_blueprint(embedding_routes)
 app.register_blueprint(hotspot_routes)
 app.register_blueprint(global_metrics_routes)
 app.register_blueprint(visualisation_routes)
+app.register_blueprint(stochastic_routes)
 
 BASE_URL = 'http://localhost:8000/api/v1'
 

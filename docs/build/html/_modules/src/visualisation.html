@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.visualisation &mdash; AlphaTeam 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AlphaTeam
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AlphaTeam</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.visualisation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.visualisation</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Author: Alpha Team Group Project</span>
+<span class="sd">Date: May 2023</span>
+<span class="sd">Purpose: Main visualisation file wrapping sub-visualisation functionalities</span>
+<span class="sd">        this file is used to generate the API calls by the user</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="c1"># External Imports</span>
+<span class="kn">from</span> <span class="nn">pandas.api.types</span> <span class="kn">import</span> <span class="n">is_numeric_dtype</span>
+
+<span class="c1"># Internal Imports</span>
+<span class="kn">import</span> <span class="nn">src.deepLearning</span> <span class="k">as</span> <span class="nn">dl</span>
+<span class="kn">import</span> <span class="nn">src.machineLearning</span> <span class="k">as</span> <span class="nn">ml</span>
+<span class="kn">import</span> <span class="nn">src.metrics</span> <span class="k">as</span> <span class="nn">m</span>
+<span class="kn">from</span> <span class="nn">src</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">src.deepLearning</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">src.visualisation_src.DL_visualisation</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">src.visualisation_src.ML_visualisation</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">src.visualisation_src.basic_network_visualisation</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">src.visualisation_src.metrics_visualisation</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">src.visualisation_src.temporal_visualisation</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">src.visualisation_src.utils_visualisation</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="plot_network"><a class="viewcode-back" href="../../src.html#src.visualisation.plot_network">[docs]</a><span class="k">def</span> <span class="nf">plot_network</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;map&#39;</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fullPath</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Plot network on a static graph</span>
+<span class="sd">    Layouts:</span>
+<span class="sd">        - &#39;map&#39;</span>
+<span class="sd">        - &#39;twopi&#39;</span>
+<span class="sd">        - &#39;sfdp&#39;</span>
+<span class="sd">    :param networkGraphs: Network graphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param layout: Layout of the plot</span>
+<span class="sd">    :type layout: str</span>
+<span class="sd">    :param dynamic: Boolean to indicate if the plot is dynamic or not</span>
+<span class="sd">    :type dynamic: bool</span>
+<span class="sd">    :param fullPath: Boolean to indicate if the full path is required</span>
+<span class="sd">    :type fullPath: bool</span>
+<span class="sd">    :return: filename</span>
+<span class="sd">    :rtype: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">is_spatial</span><span class="p">()</span> <span class="ow">and</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;map&#39;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Graph is not spatial with coordinates&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;../application/static/no_graph.html&#39;</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Dynamic&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">dynamic</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;Static&#39;</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">layout</span><span class="si">}</span><span class="s2">.html&quot;</span>
+    <span class="k">if</span> <span class="n">dynamic</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">layout</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_file_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">dynamic</span><span class="p">:</span>
+            <span class="n">dynamic_visualisation</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">static_visualisation</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">layout_</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">filepath</span> <span class="k">if</span> <span class="n">fullPath</span> <span class="k">else</span> <span class="n">filename</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="plot_cluster"><a class="viewcode-back" href="../../src.html#src.visualisation.plot_cluster">[docs]</a><span class="k">def</span> <span class="nf">plot_cluster</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">clusterType</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;map&#39;</span><span class="p">,</span> <span class="n">fullPath</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Plot the cluster for the given network on a graph</span>
+<span class="sd">    Clusters:</span>
+<span class="sd">        - &#39;louvain&#39;</span>
+<span class="sd">        - &#39;greedy_modularity&#39;</span>
+<span class="sd">        - &#39;label_propagation&#39;</span>
+<span class="sd">        - &#39;asyn_lpa&#39;</span>
+<span class="sd">        - &#39;girvan_newman&#39;,</span>
+<span class="sd">        - &#39;k_clique&#39;</span>
+<span class="sd">        - &#39;spectral&#39;</span>
+<span class="sd">        - &#39;kmeans&#39;</span>
+<span class="sd">        - &#39;agglomerative&#39;</span>
+<span class="sd">        - &#39;dbscan&#39;</span>
+<span class="sd">        - &#39;hierarchical&#39;</span>
+<span class="sd">    Layouts:</span>
+<span class="sd">        - &#39;map&#39;</span>
+<span class="sd">        - &#39;twopi&#39;</span>
+<span class="sd">        - &#39;sfdp&#39;</span>
+<span class="sd">    :param networkGraphs: Network graphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param clusterType: Type of cluster</span>
+<span class="sd">    :type clusterType: str</span>
+<span class="sd">    :param noOfClusters: Size of the cluster</span>
+<span class="sd">    :type noOfClusters: int</span>
+<span class="sd">    :param dynamic: Boolean to indicate if the plot is dynamic or not</span>
+<span class="sd">    :type dynamic: bool</span>
+<span class="sd">    :param layout: Layout of the plot</span>
+<span class="sd">    :type layout: str</span>
+<span class="sd">    :param fullPath: Boolean to indicate if the full path is required</span>
+<span class="sd">    :type fullPath: bool</span>
+<span class="sd">    :return: Cluster and filename of the plot</span>
+<span class="sd">    :rtype: pd.DataFrame, str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">clusterType</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;louvain&#39;</span><span class="p">,</span> <span class="s1">&#39;greedy_modularity&#39;</span><span class="p">,</span> <span class="s1">&#39;label_propagation&#39;</span><span class="p">,</span> <span class="s1">&#39;asyn_lpa&#39;</span><span class="p">,</span> <span class="s1">&#39;girvan_newman&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;edge_betweenness&#39;</span><span class="p">,</span> <span class="s1">&#39;k_clique&#39;</span><span class="p">,</span> <span class="s1">&#39;spectral&#39;</span><span class="p">,</span> <span class="s1">&#39;kmeans&#39;</span><span class="p">,</span> <span class="s1">&#39;dbscan&#39;</span><span class="p">,</span> <span class="s1">&#39;hierarchical&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;agglomerative&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cluster type is not valid&quot;</span><span class="p">))</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">return_nan</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="s1">&#39;Cluster&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="s1">&#39;no_graph.html&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">is_spatial</span><span class="p">()</span> <span class="ow">and</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;map&#39;</span> <span class="ow">or</span> <span class="n">noOfClusters</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Graph is not spatial with coordinates, or max number of clusters is reached&quot;</span><span class="p">))</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">return_nan</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="s1">&#39;Cluster&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="s1">&#39;no_graph.html&#39;</span>
+
+    <span class="n">cluster</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">get_communities</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">clusterType</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="n">noOfClusters</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">cluster</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">networkGraphs</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Issue with cluster or cluster not possible for this method or graph&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">return_nan</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="s1">&#39;Cluster&#39;</span><span class="p">),</span> <span class="s1">&#39;no_graph.html&#39;</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">clusterType</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="s1">&#39;Dynamic&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">dynamic</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;Static&#39;</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">layout</span><span class="si">}</span><span class="s2">.html&quot;</span>
+    <span class="k">if</span> <span class="n">dynamic</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">layout</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_file_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span> <span class="ow">or</span> <span class="n">noOfClusters</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">dynamic</span><span class="p">:</span>
+            <span class="n">generate_dynamic_cluster</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">generate_static_cluster</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">clusterType</span><span class="p">,</span> <span class="n">layout_</span><span class="o">=</span><span class="n">layout</span><span class="p">,</span> <span class="n">nbr</span><span class="o">=</span><span class="n">noOfClusters</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">filename</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">fullPath</span> <span class="k">else</span> <span class="n">filepath</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="plot_metric"><a class="viewcode-back" href="../../src.html#src.visualisation.plot_metric">[docs]</a><span class="k">def</span> <span class="nf">plot_metric</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;map&#39;</span><span class="p">,</span> <span class="n">fullPath</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Plot the metric for the given network on a graph</span>
+<span class="sd">    Metrics:</span>
+<span class="sd">        - &#39;kcore&#39;</span>
+<span class="sd">        - &#39;degree&#39;</span>
+<span class="sd">        - &#39;triangles&#39;</span>
+<span class="sd">        - &#39;pagerank&#39;</span>
+<span class="sd">        - &#39;betweenness_centrality&#39;</span>
+<span class="sd">        - &#39;closeness_centrality&#39;</span>
+<span class="sd">        - &#39;eigenvector_centrality&#39;</span>
+<span class="sd">        - &#39;load_centrality&#39;</span>
+<span class="sd">        - &#39;degree_centrality&#39;</span>
+<span class="sd">    Layouts:</span>
+<span class="sd">        - &#39;map&#39;</span>
+<span class="sd">        - &#39;twopi&#39;</span>
+<span class="sd">        - &#39;sfdp&#39;</span>
+<span class="sd">    :param networkGraphs: Network graphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param metrics: Metrics to be plotted</span>
+<span class="sd">    :type metrics: str</span>
+<span class="sd">    :param dynamic: Boolean to indicate if the plot is dynamic or not</span>
+<span class="sd">    :type dynamic: bool</span>
+<span class="sd">    :param layout: Layout of the plot</span>
+<span class="sd">    :type layout: str</span>
+<span class="sd">    :param directed: Boolean to indicate if the graph is directed or not</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :param multi: for multi graphs</span>
+<span class="sd">    :type multi: bool</span>
+<span class="sd">    :param fullPath: Boolean to indicate if the full path is required</span>
+<span class="sd">    :type fullPath: bool</span>
+<span class="sd">    :return: Dataframe with the metric and the filename of the plot</span>
+<span class="sd">    :rtype: pd.DataFrame, str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">get_metrics</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span> <span class="ow">or</span> <span class="n">df</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="ow">not</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">is_spatial</span><span class="p">()</span> <span class="ow">and</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;map&#39;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Metric column is empty. Please select a different metric or select different layout because graphs is not spatial with coordinates &#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="s1">&#39;../application/static/no_graph.html&#39;</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metrics</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="s1">&#39;Directed&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">directed</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;Undirected&#39;</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="s1">&#39;Mutli&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">multi</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="s1">&#39;Dynamic&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">dynamic</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;Static&#39;</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">layout</span><span class="si">}</span><span class="s2">.html&quot;</span>
+    <span class="k">if</span> <span class="n">dynamic</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">layout</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_file_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">dynamic</span><span class="p">:</span>
+            <span class="n">generate_dynamic_metric</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">generate_static_metric</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">layout_</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="n">filename</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">fullPath</span> <span class="k">else</span> <span class="n">filepath</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="plot_all_metrics"><a class="viewcode-back" href="../../src.html#src.visualisation.plot_all_metrics">[docs]</a><span class="k">def</span> <span class="nf">plot_all_metrics</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;map&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Plot all the metrics for the given network on a graph</span>
+<span class="sd">    Metrics:</span>
+<span class="sd">        - &#39;centralities&#39;</span>
+<span class="sd">        - &#39;nodes&#39;</span>
+<span class="sd">    Layouts:</span>
+<span class="sd">        - &#39;map&#39;</span>
+<span class="sd">        - &#39;twopi&#39;</span>
+<span class="sd">        - &#39;sfdp&#39;</span>
+<span class="sd">    :param networkGraphs: Network graphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param metrics: Metrics to be plotted</span>
+<span class="sd">    :type metrics: str</span>
+<span class="sd">    :param directed: Boolean to indicate if the graph is directed or not</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :param multi: for multi graphs</span>
+<span class="sd">    :type multi: bool</span>
+<span class="sd">    :param layout: Layout of the plot</span>
+<span class="sd">    :type layout: str</span>
+<span class="sd">    :return: Dataframe with all the metrics and the filename of the plot</span>
+<span class="sd">    :rtype: pd.DataFrame, str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">is_spatial</span><span class="p">()</span> <span class="ow">and</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;map&#39;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Metric column is empty. Please select a different metric or select different layout because graphs is &#39;</span>
+            <span class="s1">&#39;not spatial with coordinates &#39;</span><span class="p">))</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">return_nan</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="s1">&#39;Metrics&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="s1">&#39;../application/static/no_graph.html&#39;</span>
+
+    <span class="k">if</span> <span class="n">metrics</span> <span class="o">==</span> <span class="s1">&#39;centralities&#39;</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">compute_node_centralities</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">metrics</span> <span class="o">==</span> <span class="s1">&#39;nodes&#39;</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">compute_node_metrics</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Please select a valid metric, either &quot;centralities&quot; or &quot;nodes&quot;&#39;</span><span class="p">))</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">return_nan</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="s1">&#39;Metrics&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="s1">&#39;no_graph.html&#39;</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;All_</span><span class="si">{</span><span class="n">metrics</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="s1">&#39;Directed&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">directed</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;Undirected&#39;</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="s1">&#39;Multi&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">multi</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">layout</span><span class="si">}</span><span class="s2">.html&quot;</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_file_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="n">generate_static_all_metrics</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">layout_</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="n">filename</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="plot_histogram"><a class="viewcode-back" href="../../src.html#src.visualisation.plot_histogram">[docs]</a><span class="k">def</span> <span class="nf">plot_histogram</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fullPath</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Plot the histogram distribution for a given metric</span>
+<span class="sd">    Metrics:</span>
+<span class="sd">        - &#39;kcore&#39;</span>
+<span class="sd">        - &#39;degree&#39;</span>
+<span class="sd">        - &#39;triangles&#39;</span>
+<span class="sd">        - &#39;pagerank&#39;</span>
+<span class="sd">        - &#39;betweenness_centrality&#39;</span>
+<span class="sd">        - &#39;closeness_centrality&#39;</span>
+<span class="sd">        - &#39;eigenvector_centrality&#39;</span>
+<span class="sd">        - &#39;load_centrality&#39;</span>
+<span class="sd">        - &#39;degree_centrality&#39;</span>
+<span class="sd">        - &#39;centralities&#39; - All centralities</span>
+<span class="sd">        - &#39;nodes&#39; - All node metrics</span>
+<span class="sd">    :param networkGraphs: Network graphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param metrics: Metrics to be plotted</span>
+<span class="sd">    :type metrics: str</span>
+<span class="sd">    :param directed: Boolean to indicate if the graph is directed or not</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :param multi: for multi graphs</span>
+<span class="sd">    :type multi: bool</span>
+<span class="sd">    :param fullPath: Boolean to indicate if the full path is required</span>
+<span class="sd">    :type fullPath: bool</span>
+<span class="sd">    :return: df and filename</span>
+<span class="sd">    :rtype: pd.DataFrame, str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">metrics</span> <span class="o">==</span> <span class="s1">&#39;centralities&#39;</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">compute_node_centralities</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">metrics</span> <span class="o">==</span> <span class="s1">&#39;nodes&#39;</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">compute_node_metrics</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">get_metrics</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metrics</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="s1">&#39;Directed&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">directed</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;Undirected&#39;</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="s1">&#39;Mutli&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">multi</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">_Histogram.html&quot;</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_file_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="n">generate_histogram_metric</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="n">filename</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">fullPath</span> <span class="k">else</span> <span class="n">filepath</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="plot_hotspot"><a class="viewcode-back" href="../../src.html#src.visualisation.plot_hotspot">[docs]</a><span class="k">def</span> <span class="nf">plot_hotspot</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">fullPath</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Plot the hotspot and coldspot for the given network, only for spatial graphs</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs object</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param fullPath: Boolean to indicate if the full path is required</span>
+<span class="sd">    :type fullPath: bool</span>
+<span class="sd">    :return: Dataframe with the hotspot and coldspot and filename</span>
+<span class="sd">    :rtype: pd.DataFrame, str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">is_spatial</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Graph is not spatial. Please select a spatial graph.&#39;</span><span class="p">))</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">return_nan</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="s1">&#39;Cluster&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="s1">&#39;no_graph.html&#39;</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">get_hotspot</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">)</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Density_hotspot.html&quot;</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_file_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="n">generate_hotspot</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">filename</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">fullPath</span> <span class="k">else</span> <span class="n">filepath</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="plot_boxplot"><a class="viewcode-back" href="../../src.html#src.visualisation.plot_boxplot">[docs]</a><span class="k">def</span> <span class="nf">plot_boxplot</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fullPath</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Plot the boxplot for a given metric</span>
+<span class="sd">    Metrics:</span>
+<span class="sd">        - &#39;kcore&#39;</span>
+<span class="sd">        - &#39;degree&#39;</span>
+<span class="sd">        - &#39;triangles&#39;</span>
+<span class="sd">        - &#39;pagerank&#39;</span>
+<span class="sd">        - &#39;betweenness_centrality&#39;</span>
+<span class="sd">        - &#39;closeness_centrality&#39;</span>
+<span class="sd">        - &#39;eigenvector_centrality&#39;</span>
+<span class="sd">        - &#39;load_centrality&#39;</span>
+<span class="sd">        - &#39;degree_centrality&#39;</span>
+<span class="sd">        - &#39;centralities&#39; - All centralities</span>
+<span class="sd">        - &#39;nodes&#39; - All node metrics</span>
+<span class="sd">    :param networkGraphs: Network graphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param metrics: Metrics to be plotted</span>
+<span class="sd">    :type metrics: str</span>
+<span class="sd">    :param directed: Boolean to indicate if the graph is directed or not</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :param multi: for multi graphs</span>
+<span class="sd">    :type multi: bool</span>
+<span class="sd">    :param fullPath: Boolean to indicate if the full path is required</span>
+<span class="sd">    :type fullPath: bool</span>
+<span class="sd">    :return: df and filename</span>
+<span class="sd">    :rtype: pd.DataFrame, str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">metrics</span> <span class="o">==</span> <span class="s1">&#39;centralities&#39;</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">compute_node_centralities</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">metrics</span> <span class="o">==</span> <span class="s1">&#39;nodes&#39;</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">compute_node_metrics</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">get_metrics</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metrics</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="s1">&#39;Directed&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">directed</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;Undirected&#39;</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="s1">&#39;Mutli&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">multi</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">_Boxplot.html&quot;</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_file_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="n">generate_boxplot_metric</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">filename</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">fullPath</span> <span class="k">else</span> <span class="n">filepath</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="plot_violin"><a class="viewcode-back" href="../../src.html#src.visualisation.plot_violin">[docs]</a><span class="k">def</span> <span class="nf">plot_violin</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fullPath</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Plot the violin plot for a metric</span>
+<span class="sd">    Metrics:</span>
+<span class="sd">        - &#39;kcore&#39;</span>
+<span class="sd">        - &#39;degree&#39;</span>
+<span class="sd">        - &#39;triangles&#39;</span>
+<span class="sd">        - &#39;pagerank&#39;</span>
+<span class="sd">        - &#39;betweenness_centrality&#39;</span>
+<span class="sd">        - &#39;closeness_centrality&#39;</span>
+<span class="sd">        - &#39;eigenvector_centrality&#39;</span>
+<span class="sd">        - &#39;load_centrality&#39;</span>
+<span class="sd">        - &#39;degree_centrality&#39;</span>
+<span class="sd">        - &#39;centralities&#39; - All centralities</span>
+<span class="sd">        - &#39;nodes&#39; - All node metrics</span>
+<span class="sd">    :param networkGraphs: Network graphs</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param metrics: Metrics to be plotted</span>
+<span class="sd">    :type metrics: str</span>
+<span class="sd">    :param directed: Boolean to indicate if the graph is directed or not</span>
+<span class="sd">    :type directed: bool</span>
+<span class="sd">    :param multi: for multi graphs</span>
+<span class="sd">    :type multi: bool</span>
+<span class="sd">    :param fullPath: Boolean to indicate if the full path is required</span>
+<span class="sd">    :type fullPath: bool</span>
+<span class="sd">    :return: df and filename</span>
+<span class="sd">    :rtype: pd.DataFrame, str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">metrics</span> <span class="o">==</span> <span class="s1">&#39;centralities&#39;</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">compute_node_centralities</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">metrics</span> <span class="o">==</span> <span class="s1">&#39;nodes&#39;</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">compute_node_metrics</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">get_metrics</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="n">multi</span><span class="p">)</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metrics</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="s1">&#39;Directed&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">directed</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;Undirected&#39;</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="s1">&#39;Mutli&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">multi</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">_Violin.html&quot;</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_file_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="n">generate_violin_metric</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">filename</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">fullPath</span> <span class="k">else</span> <span class="n">filepath</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="plot_heatmap"><a class="viewcode-back" href="../../src.html#src.visualisation.plot_heatmap">[docs]</a><span class="k">def</span> <span class="nf">plot_heatmap</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">fullPath</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Plot the heatmap for the given network</span>
+<span class="sd">    :param networkGraphs:</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param fullPath: Boolean to indicate if the full path is required</span>
+<span class="sd">    :type fullPath: bool</span>
+<span class="sd">    :return: filename</span>
+<span class="sd">    :rtype: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;heatmap.html&quot;</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_file_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="n">generate_heatmap</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">filename</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">fullPath</span> <span class="k">else</span> <span class="n">filepath</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="plot_temporal"><a class="viewcode-back" href="../../src.html#src.visualisation.plot_temporal">[docs]</a><span class="k">def</span> <span class="nf">plot_temporal</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;map&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Plot the temporal graph for the given network, only for temporal graphs</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs object</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param layout: Layout of the graph</span>
+<span class="sd">    :type layout: str</span>
+<span class="sd">    :return: filename</span>
+<span class="sd">    :rtype: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">is_temporal</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Graph is not temporal. Please select a temporal graph.&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;../application/static/no_graph.html&#39;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">is_spatial</span><span class="p">()</span> <span class="ow">and</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;map&#39;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Graph is not spatial. Please select a spatial graph.&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;../application/static/no_graph.html&#39;</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;temporal_</span><span class="si">{</span><span class="n">layout</span><span class="si">}</span><span class="s2">.html&quot;</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_file_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="n">generate_temporal</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">layout_</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">filename</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="plot_node2vec"><a class="viewcode-back" href="../../src.html#src.visualisation.plot_node2vec">[docs]</a><span class="k">def</span> <span class="nf">plot_node2vec</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;TSNE&#39;</span><span class="p">,</span> <span class="n">fullPath</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Plot the Node2Vec embedding for the given network</span>
+<span class="sd">    layout:</span>
+<span class="sd">        - &#39;TSNE&#39;</span>
+<span class="sd">        - &#39;UMAP&#39;</span>
+<span class="sd">        - &#39;PCA&#39;</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs object</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param p: p parameter for Node2Vec</span>
+<span class="sd">    :type p: float</span>
+<span class="sd">    :param q: q parameter for Node2Vec</span>
+<span class="sd">    :type q: float</span>
+<span class="sd">    :param layout: Visualisation method</span>
+<span class="sd">    :type layout: str</span>
+<span class="sd">    :param fullPath: Boolean to indicate if the full path is required</span>
+<span class="sd">    :type fullPath: bool</span>
+<span class="sd">    :return: df and filename</span>
+<span class="sd">    :rtype: pd.DataFrame, str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">layout</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;TSNE&#39;</span><span class="p">,</span> <span class="s1">&#39;UMAP&#39;</span><span class="p">,</span> <span class="s1">&#39;PCA&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Please select a valid visualisation method.&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;../application/static/no_graph.html&#39;</span>
+
+    <span class="n">_</span><span class="p">,</span> <span class="n">emb</span> <span class="o">=</span> <span class="n">dl</span><span class="o">.</span><span class="n">node2vec_embedding</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">)</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;node2vec_</span><span class="si">{</span><span class="n">layout</span><span class="si">}</span><span class="s2">.html&quot;</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_file_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;TSNE&#39;</span><span class="p">:</span>
+        <span class="n">TSNE_visualisation</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;UMAP&#39;</span><span class="p">:</span>
+        <span class="n">umap_visualisation</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;PCA&#39;</span><span class="p">:</span>
+        <span class="n">PCA_visualisation</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">emb</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="n">filename</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">fullPath</span> <span class="k">else</span> <span class="n">filepath</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="plot_node2vec_cluster"><a class="viewcode-back" href="../../src.html#src.visualisation.plot_node2vec_cluster">[docs]</a><span class="k">def</span> <span class="nf">plot_node2vec_cluster</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">noOfCluster</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;TSNE&#39;</span><span class="p">,</span> <span class="n">fullPath</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Plot the Node2Vec embedding with cluster on top for the given network</span>
+<span class="sd">    method:</span>
+<span class="sd">        - &#39;kmeans&#39;</span>
+<span class="sd">        - &#39;spectral&#39;</span>
+<span class="sd">        - &#39;agglomerative&#39;</span>
+<span class="sd">        - &#39;dbscan&#39;</span>
+<span class="sd">    layout:</span>
+<span class="sd">        - &#39;TSNE&#39;</span>
+<span class="sd">        - &#39;UMAP&#39;</span>
+<span class="sd">        - &#39;PCA&#39;</span>
+<span class="sd">        - &#39;sfdp&#39;</span>
+<span class="sd">        - &#39;twopi&#39;</span>
+<span class="sd">        - &#39;map&#39;</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs object</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param method: Clustering method</span>
+<span class="sd">    :type method: str</span>
+<span class="sd">    :param noOfCluster: Number of clusters</span>
+<span class="sd">    :type noOfCluster: int</span>
+<span class="sd">    :param p: p parameter for Node2Vec</span>
+<span class="sd">    :type p: float</span>
+<span class="sd">    :param q: q parameter for Node2Vec</span>
+<span class="sd">    :type q: float</span>
+<span class="sd">    :param layout: Visualisation method</span>
+<span class="sd">    :type layout: str</span>
+<span class="sd">    :param fullPath: Boolean to indicate if the full path is required</span>
+<span class="sd">    :type fullPath: bool</span>
+<span class="sd">    :return: DataFrame, filename</span>
+<span class="sd">    :rtype: pd.DataFrame, str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">layout</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;TSNE&#39;</span><span class="p">,</span> <span class="s1">&#39;UMAP&#39;</span><span class="p">,</span> <span class="s1">&#39;PCA&#39;</span><span class="p">,</span> <span class="s1">&#39;sfdp&#39;</span><span class="p">,</span> <span class="s1">&#39;twopi&#39;</span><span class="p">,</span> <span class="s1">&#39;map&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Please select a valid visualisation method.&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;../application/static/no_graph.html&#39;</span>
+
+    <span class="k">if</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;map&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">is_spatial</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Please select a valid visualisation method.&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;../application/static/no_graph.html&#39;</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;kmeans&#39;</span><span class="p">,</span> <span class="s1">&#39;spectral&#39;</span><span class="p">,</span> <span class="s1">&#39;agglomerative&#39;</span><span class="p">,</span> <span class="s1">&#39;dbscan&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Please select a valid clustering method.&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;../application/static/no_graph.html&#39;</span>
+
+    <span class="n">_</span><span class="p">,</span> <span class="n">emb</span> <span class="o">=</span> <span class="n">dl</span><span class="o">.</span><span class="n">node2vec_embedding</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">get_communities</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="n">noOfCluster</span><span class="p">,</span> <span class="n">embedding</span><span class="o">=</span><span class="n">emb</span><span class="p">)</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;node2vec_</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">layout</span><span class="si">}</span><span class="s2">.html&quot;</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_file_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;TSNE&#39;</span><span class="p">:</span>
+        <span class="n">TSNE_visualisation</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">clusters</span><span class="o">=</span><span class="n">clusters</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;UMAP&#39;</span><span class="p">:</span>
+        <span class="n">umap_visualisation</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">clusters</span><span class="o">=</span><span class="n">clusters</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;PCA&#39;</span><span class="p">:</span>
+        <span class="n">PCA_visualisation</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">clusters</span><span class="o">=</span><span class="n">clusters</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">layout</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;sfdp&#39;</span><span class="p">,</span> <span class="s1">&#39;twopi&#39;</span><span class="p">,</span> <span class="s1">&#39;map&#39;</span><span class="p">]:</span>
+        <span class="n">generate_static_cluster</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">layout_</span><span class="o">=</span><span class="n">layout</span><span class="p">,</span> <span class="n">nbr</span><span class="o">=</span><span class="n">noOfCluster</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">emb</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="n">filename</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">fullPath</span> <span class="k">else</span> <span class="n">filepath</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="plot_DL_embedding"><a class="viewcode-back" href="../../src.html#src.visualisation.plot_DL_embedding">[docs]</a><span class="k">def</span> <span class="nf">plot_DL_embedding</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;proximity&#39;</span><span class="p">],</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;SAGE&#39;</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;TSNE&#39;</span><span class="p">,</span>
+                      <span class="n">fullPath</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Plot the DL embedding for the given network</span>
+<span class="sd">    features:</span>
+<span class="sd">        Format: [&#39;feature1&#39;, &#39;feature2&#39;, ...]</span>
+<span class="sd">        If choose proximity just put [&#39;proximity&#39;] without any other features</span>
+<span class="sd">        - &#39;proximity&#39;</span>
+<span class="sd">        - &#39;kcore&#39;</span>
+<span class="sd">        - &#39;triangles&#39;</span>
+<span class="sd">        - &#39;degree&#39;</span>
+<span class="sd">        - &#39;pagerank&#39;</span>
+<span class="sd">        - &#39;degree_centrality&#39;</span>
+<span class="sd">        - &#39;closeness_centrality&#39;</span>
+<span class="sd">        - &#39;betweenness_centrality&#39;</span>
+<span class="sd">        - &#39;eigenvector_centrality&#39;</span>
+<span class="sd">        - &#39;load_centrality&#39;</span>
+<span class="sd">    layout:</span>
+<span class="sd">        - &#39;TSNE&#39;</span>
+<span class="sd">        - &#39;UMAP&#39;</span>
+<span class="sd">        - &#39;PCA&#39;</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs object</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param features: Feature list</span>
+<span class="sd">    :type features: list</span>
+<span class="sd">    :param dimension: Dimension of the embedding</span>
+<span class="sd">    :type dimension: int</span>
+<span class="sd">    :param model: GNN model</span>
+<span class="sd">    :type model: str</span>
+<span class="sd">    :param layout: Visualisation method</span>
+<span class="sd">    :type layout: str</span>
+<span class="sd">    :param fullPath: Boolean to indicate if the full path is required</span>
+<span class="sd">    :type fullPath: bool</span>
+<span class="sd">    :return: DataFrame, filename</span>
+<span class="sd">    :rtype: pd.DataFrame, str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">layout</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;TSNE&#39;</span><span class="p">,</span> <span class="s1">&#39;UMAP&#39;</span><span class="p">,</span> <span class="s1">&#39;PCA&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Please select a valid visualisation method.&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;../application/static/no_graph.html&#39;</span>
+
+    <span class="k">if</span> <span class="n">model</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;SAGE&#39;</span><span class="p">,</span> <span class="s1">&#39;GAT&#39;</span><span class="p">,</span> <span class="s1">&#39;GCN&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Please select a valid GNN.&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;../application/static/no_graph.html&#39;</span>
+
+    <span class="n">emb</span> <span class="o">=</span> <span class="n">get_DL_embedding</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;DLEmbedding_</span><span class="si">{</span><span class="n">layout</span><span class="si">}</span><span class="s2">.html&quot;</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_file_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;TSNE&#39;</span><span class="p">:</span>
+        <span class="n">TSNE_visualisation</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;UMAP&#39;</span><span class="p">:</span>
+        <span class="n">umap_visualisation</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;PCA&#39;</span><span class="p">:</span>
+        <span class="n">PCA_visualisation</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">emb</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="n">filename</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">fullPath</span> <span class="k">else</span> <span class="n">filepath</span></div>
+
+
+<span class="c1"># ----------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="plot_DL_embedding_cluster"><a class="viewcode-back" href="../../src.html#src.visualisation.plot_DL_embedding_cluster">[docs]</a><span class="k">def</span> <span class="nf">plot_DL_embedding_cluster</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">noOfCluster</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;proximity&#39;</span><span class="p">],</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;SAGE&#39;</span><span class="p">,</span>
+                              <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;TSNE&#39;</span><span class="p">,</span> <span class="n">fullPath</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Function: Plot the DL embeddings with clusters on top for the given network</span>
+<span class="sd">    method:</span>
+<span class="sd">        - &#39;kmeans&#39;</span>
+<span class="sd">        - &#39;spectral&#39;</span>
+<span class="sd">        - &#39;agglomerative&#39;</span>
+<span class="sd">        - &#39;dbscan&#39;</span>
+<span class="sd">    features:</span>
+<span class="sd">        Format: [&#39;feature1&#39;, &#39;feature2&#39;, ...]</span>
+<span class="sd">        If choose proximity just put [&#39;proximity&#39;] without any other features</span>
+<span class="sd">        - &#39;proximity&#39;</span>
+<span class="sd">        - &#39;kcore&#39;</span>
+<span class="sd">        - &#39;triangles&#39;</span>
+<span class="sd">        - &#39;degree&#39;</span>
+<span class="sd">        - &#39;pagerank&#39;</span>
+<span class="sd">        - &#39;degree_centrality&#39;</span>
+<span class="sd">        - &#39;closeness_centrality&#39;</span>
+<span class="sd">        - &#39;betweenness_centrality&#39;</span>
+<span class="sd">        - &#39;eigenvector_centrality&#39;</span>
+<span class="sd">        - &#39;load_centrality&#39;</span>
+<span class="sd">    layout:</span>
+<span class="sd">        - &#39;TSNE&#39;</span>
+<span class="sd">        - &#39;UMAP&#39;</span>
+<span class="sd">        - &#39;PCA&#39;</span>
+<span class="sd">        - &#39;sfdp&#39;</span>
+<span class="sd">        - &#39;twopi&#39;</span>
+<span class="sd">        - &#39;map&#39;</span>
+<span class="sd">    :param networkGraphs: NetworkGraphs object</span>
+<span class="sd">    :type networkGraphs: NetworkGraphs</span>
+<span class="sd">    :param method: Clustering method</span>
+<span class="sd">    :type method: str</span>
+<span class="sd">    :param noOfCluster: Number of clusters</span>
+<span class="sd">    :type noOfCluster: int</span>
+<span class="sd">    :param features: Feature list</span>
+<span class="sd">    :type features: list</span>
+<span class="sd">    :param dimension: Dimension of the embedding</span>
+<span class="sd">    :type dimension: int</span>
+<span class="sd">    :param model: GNN model</span>
+<span class="sd">    :type model: str</span>
+<span class="sd">    :param layout: Visualisation method</span>
+<span class="sd">    :type layout: str</span>
+<span class="sd">    :param fullPath: Boolean to indicate if the full path is required</span>
+<span class="sd">    :type fullPath: bool</span>
+<span class="sd">    :return: DataFrame, filename</span>
+<span class="sd">    :rtype: pd.DataFrame, str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">layout</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;TSNE&#39;</span><span class="p">,</span> <span class="s1">&#39;UMAP&#39;</span><span class="p">,</span> <span class="s1">&#39;PCA&#39;</span><span class="p">,</span> <span class="s1">&#39;sfdp&#39;</span><span class="p">,</span> <span class="s1">&#39;twopi&#39;</span><span class="p">,</span> <span class="s1">&#39;map&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Please select a valid visualisation method.&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;../application/static/no_graph.html&#39;</span>
+
+    <span class="k">if</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;map&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">networkGraphs</span><span class="o">.</span><span class="n">is_spatial</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Please select a valid visualisation method.&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;../application/static/no_graph.html&#39;</span>
+
+    <span class="k">if</span> <span class="n">model</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;SAGE&#39;</span><span class="p">,</span> <span class="s1">&#39;GAT&#39;</span><span class="p">,</span> <span class="s1">&#39;GCN&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Please select a valid GNN.&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;../application/static/no_graph.html&#39;</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;kmeans&#39;</span><span class="p">,</span> <span class="s1">&#39;spectral&#39;</span><span class="p">,</span> <span class="s1">&#39;agglomerative&#39;</span><span class="p">,</span> <span class="s1">&#39;dbscan&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Please select a valid clustering method.&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;../application/static/no_graph.html&#39;</span>
+
+    <span class="n">emb</span> <span class="o">=</span> <span class="n">get_DL_embedding</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">get_communities</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">noOfClusters</span><span class="o">=</span><span class="n">noOfCluster</span><span class="p">,</span> <span class="n">embedding</span><span class="o">=</span><span class="n">emb</span><span class="p">)</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;DLEmbedding_</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">layout</span><span class="si">}</span><span class="s2">.html&quot;</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_file_path</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;TSNE&#39;</span><span class="p">:</span>
+        <span class="n">TSNE_visualisation</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">clusters</span><span class="o">=</span><span class="n">clusters</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;UMAP&#39;</span><span class="p">:</span>
+        <span class="n">umap_visualisation</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">clusters</span><span class="o">=</span><span class="n">clusters</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">layout</span> <span class="o">==</span> <span class="s1">&#39;PCA&#39;</span><span class="p">:</span>
+        <span class="n">PCA_visualisation</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">clusters</span><span class="o">=</span><span class="n">clusters</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">layout</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;sfdp&#39;</span><span class="p">,</span> <span class="s1">&#39;twopi&#39;</span><span class="p">,</span> <span class="s1">&#39;map&#39;</span><span class="p">]:</span>
+        <span class="n">generate_static_cluster</span><span class="p">(</span><span class="n">networkGraphs</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">layout_</span><span class="o">=</span><span class="n">layout</span><span class="p">,</span> <span class="n">nbr</span><span class="o">=</span><span class="n">noOfCluster</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">emb</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="n">filename</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">fullPath</span> <span class="k">else</span> <span class="n">filepath</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Alpha Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

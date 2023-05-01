@@ -8,7 +8,6 @@ Purpose: Visualisation utilities module contains functions for visualising the n
 
 # External imports
 import os
-
 import geopandas as gpd
 import matplotlib.pyplot as plt
 from plotly import graph_objects as go
@@ -20,35 +19,7 @@ from src.utils import memoize
 # ----------------------------------------------------------------------------------------
 
 @memoize
-def plot_map(networkGraphs, background=True, edges=True):  # FOR MATPLOTLIB
-    """
-    :Function: Plot the map of the location of the graphs
-    :param networkGraphs: Network graphs
-    :type networkGraphs: NetworkGraphs
-    :param background: Boolean to indicate if the background is to be plotted or not
-    :type background: bool
-    :param edges: Boolean to indicate if the edges are to be plotted or not
-    :type edges: bool
-    :return: Matplotlib plot
-    :rtype: matplotlib.pyplot
-    """
-    if not networkGraphs.is_spatial():
-        return 0
-
-    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-    world = world[(world.pop_est > 0) & (world.name != "Antarctica")]
-    ax = world.plot(figsize=(10, 10), edgecolor='black' if edges else 'white',
-                    color='white' if background else None)
-    ax.set_xlim(networkGraphs.get_min_long(), networkGraphs.get_max_long())
-    ax.set_ylim(networkGraphs.get_min_lat(), networkGraphs.get_max_lat())
-
-    return plt
-
-
-# ----------------------------------------------------------------------------------------
-
-@memoize
-def get_layout(networkGraphs, title=None, layout_='map'):  # FOR PLOTLY
+def get_layout(networkGraphs, title=None, layout_='map'):
     """
     :Function: Get the layout of the graph
     :param networkGraphs: Network graphs

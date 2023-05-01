@@ -1,19 +1,23 @@
 import sys
 
-from application.dictionary.information import *
 from flask import Blueprint, render_template, session
 from flask import request
-from backend.common.common import process_metric
+
+from application.dictionary.information import *
 
 sys.path.insert(1, '../../')
 from src.metrics import *
 
 global_metrics_routes = Blueprint('global_metrics_routes', __name__)
 
-# -------------------------------------------GLOBAL-METRICS-----------------------------------
 
+# -------------------------------------------GLOBAL-METRICS-----------------------------------
 @global_metrics_routes.route('/global-metrics', methods=['GET', 'POST'])
 def globalmetrics():
+    """
+    :Function: Visualise the global metrics
+    :return: the global metrics page
+    """
     filename2 = session['filename2']
     networkGraphs = get_networkGraph(filename2)
     multi_toggle = False
@@ -28,5 +32,5 @@ def globalmetrics():
 
     return render_template('metrics/global_metrics.html', example=global_metrics, multi_toggle=multi_toggle,
                            directed_toggle=directed_toggle,
-                           #tooltips starts here
-                           tooltip_multi = tooltips['multi'], tooltip_directed = tooltips['directed'], description = description['global_metrics'])
+                           tooltip_multi=tooltips['multi'], tooltip_directed=tooltips['directed'],
+                           description=description['global_metrics'])
