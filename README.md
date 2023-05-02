@@ -4,6 +4,13 @@ This is the repository for the Alpha Team App.
 The application is a web application that allows users to visualise and analyse complex networks.
 The application is built using Flask.
 
+# System Architecture
+![System Architecture](docs/images/System_architecture.png)
+
+# Scientific Paper
+
+Read our scientific paper [here](Democratising_Complex_Network_Analysis.pdf).
+
 ## Running the application locally
 
 1. Clone the repository
